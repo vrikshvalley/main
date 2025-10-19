@@ -1,0 +1,29 @@
+.admin-navbar {
+  position: sticky;
+  font-family: Alumni sans sc;
+  font-size: 1.5em;
+  top: 0;
+  width: 100%;
+  background: #e8f5e9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  padding: 1rem 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(34, 139, 34, 0.08);
+
+  a {
+    color: #388e3c;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: background 0.2s, color 0.2s;
+
+    &:hover {
+      background: #c8e6c9;
+      color: #1b5e20;
+    }
+  }
+}

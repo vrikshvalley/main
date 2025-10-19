@@ -1,0 +1,27 @@
+{
+  "name": "my-next-redux-app",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "latest",
+    "@supabase/supabase-js": "^2.57.4",
+    "axios": "^1.12.2",
+    "axis": "^1.0.0",
+    "gsap": "^3.13.0",
+    "lucide-react": "^0.542.0",
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-modal": "^3.16.3",
+    "react-redux": "latest",
+    "react-toastify": "^11.0.5",
+    "sass": "latest",
+    "swiper": "^11.2.10"
+  }
+}

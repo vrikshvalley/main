@@ -1,0 +1,169 @@
+@use "sass:color";
+@use 'variables' as *;
+
+.product-page {
+  display: flex;
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+  font-family: Alumni Sans, sans-serif;
+  
+  .product-gallery {
+    flex: 1 1 50%;
+    min-width: 300px;
+
+    .main-swiper {
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: $shadow-strong;
+      border: 2px solid rgba($text-secondary, 0.2);
+
+      img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+      }
+    }
+
+    .thumbs-swiper {
+      margin-top: 1rem;
+
+      .swiper-slide {
+        cursor: pointer;
+        opacity: 0.7;
+        transition: 0.3s;
+        border-radius: 8px;
+
+        &-thumb-active {
+          opacity: 1;
+          border: 2px solid $accent-primary;
+          border-radius: 8px;
+          box-shadow: $shadow-glow;
+        }
+      }
+
+      .thumb-wrapper {
+        position: relative;
+
+        img {
+          border-radius: 8px;
+          border: 2px solid rgba($text-secondary, 0.2);
+        }
+
+        .overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 100%;
+          width: 0;
+          background: rgba($accent-primary, 0.4);
+          animation: progress 3s ease 1;
+          border-radius: 8px;
+        }
+      }
+    }
+
+    @keyframes progress {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+  }
+
+  .product-details {
+    flex: 1 1 45%;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 600;
+      color: $text-primary;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    .price {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: $accent-primary;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    .option-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      label {
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+        color: $text-primary;
+      }
+
+      .options {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+
+        button {
+          padding: 0.5rem 1rem;
+          border: 1px solid rgba($text-secondary, 0.3);
+          border-radius: 8px;
+          background: rgba($bg-secondary, 0.3);
+          cursor: pointer;
+          transition: all 0.3s;
+          color: $text-secondary;
+
+          &.active,
+          &:hover {
+            border-color: $accent-primary;
+            background: rgba($accent-primary, 0.2);
+            color: $accent-primary;
+            transform: scale(1.05);
+            box-shadow: $shadow-medium;
+          }
+        }
+      }
+    }
+
+    .actions {
+      display: flex;
+      gap: 1rem;
+
+      button {
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        border: none;
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: $shadow-strong;
+        }
+      }
+
+      .buy-now {
+        background: $accent-gradient;
+        color: $text-dark;
+
+        &:hover {
+          box-shadow: $shadow-glow;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+
+    .product-gallery,
+    .product-details {
+      flex: 1 1 100%;
+    }
+  }
+}

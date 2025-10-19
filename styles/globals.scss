@@ -1,0 +1,104 @@
+@use "sass:color";
+@use 'variables' as *;
+
+:root {
+  --bg: #{$primary-bg};
+  --fg: #{$text-primary};
+  --brand: #{$accent-primary};
+  --muted: #{$text-secondary};
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Alumni+Sans+SC:ital,wght@0,100..900;1,100..900&family=Alumni+Sans:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: Playfair Display, serif;
+  color: var(--fg);
+  background: url('/BackgroundAll-14.png') repeat center center fixed;
+  overflow-x: hidden;
+}
+
+a { 
+  color: inherit; 
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+a:hover { 
+  color: $accent-primary; 
+}
+
+.brand { 
+  color: var(--brand); 
+  font-weight: 700; 
+  letter-spacing: 0.5px; 
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.card {
+  border: 2px solid rgba($text-secondary, 0.2);
+  background: rgba($bg-secondary, 0.3);
+  border-radius: 16px;
+  padding: 1rem;
+  transition: all 0.2s ease;
+  box-shadow: $shadow-medium;
+}
+.card:hover { 
+  transform: translateY(-2px);
+  box-shadow: $shadow-strong;
+  border-color: $accent-primary;
+}
+
+.btn {
+  padding: 0.6rem 6rem;
+  border-radius: 12px;
+  border: none;
+  background: $accent-gradient;
+  color: $text-dark;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Alumni Sans', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: $shadow-glow;
+}
+.btn:disabled { 
+  opacity: 0.6; 
+  cursor: not-allowed; 
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.hero-slider {
+  width: 100%;
+  height: 60vh;
+  margin: 0;
+  padding: 0;
+
+  .swiper-pagination-bullet {
+    background: $text-primary;
+    opacity: 0.7;
+  }
+  .swiper-pagination-bullet-active {
+    background: $accent-primary;
+    opacity: 1;
+    box-shadow: $shadow-glow;
+  }
+}
+
+.hero-text {
+  text-align: center;
+  bottom: 20px;
+  left: 20px;
+  color: $text-primary;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+}

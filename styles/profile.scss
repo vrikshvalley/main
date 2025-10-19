@@ -1,0 +1,612 @@
+@use 'sass:color';
+@use './variables' as *;  
+
+.profilePage {
+  min-height: 100vh;
+  background: linear-gradient(135deg, $primary-bg 0%, color.adjust($primary-bg, $lightness: 5%) 100%);
+  padding: 2rem 1rem;
+
+  .brandHeader {
+    max-width: 1200px;
+    margin: 0 auto 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: $bg-secondary;
+    border-radius: 16px;
+    box-shadow: $shadow-medium;
+    border: 1px solid rgba($text-secondary, 0.2);
+
+    .logo {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 4px rgba($accent-primary, 0.3));
+    }
+
+    .brandInfo {
+      h1 {
+        color: $text-primary;
+        font-family: 'Merriweather', serif;
+        font-size: 1.8rem;
+        margin: 0;
+        font-weight: 700;
+        text-shadow: 0 2px 4px rgba($primary-bg, 0.3);
+      }
+
+      p {
+        color: $text-secondary;
+        margin: 0.25rem 0 0;
+        font-size: 0.9rem;
+        font-weight: 500;
+      }
+    }
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  // Name Setup Stepper
+  .setupStepper {
+    background: $bg-secondary;
+    padding: 3rem 2rem;
+    border-radius: 16px;
+    box-shadow: $shadow-strong;
+    max-width: 600px;
+    margin: 0 auto;
+    border: 1px solid rgba($text-secondary, 0.2);
+
+    .stepperHeader {
+      text-align: center;
+      margin-bottom: 2rem;
+
+      h2 {
+        color: $text-primary;
+        font-family: 'Merriweather', serif;
+        font-size: 1.8rem;
+        margin-bottom: 0.5rem;
+        text-shadow: 0 2px 4px rgba($primary-bg, 0.3);
+      }
+
+      p {
+        color: $text-secondary;
+        font-size: 1rem;
+      }
+    }
+
+    .steps {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+
+      .step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+
+        .stepNumber {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background: rgba($text-secondary, 0.2);
+          color: $text-secondary;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: bold;
+          font-size: 1.1rem;
+          transition: all 0.3s;
+
+          &.active {
+            background: $accent-primary;
+            color: $text-dark;
+            box-shadow: 0 4px 12px rgba($accent-primary, 0.4);
+          }
+
+          &.completed {
+            background: $bg-secondary;
+            color: $text-primary;
+            border: 2px solid $accent-primary;
+
+            &::after {
+              content: '✓';
+            }
+          }
+        }
+
+        .stepLabel {
+          font-size: 0.85rem;
+          color: $text-secondary;
+          font-weight: 500;
+
+          &.active {
+            color: $accent-primary;
+            font-weight: 600;
+          }
+        }
+      }
+    }
+
+    .stepperForm {
+      .formGroup {
+        margin-bottom: 1.5rem;
+
+        label {
+          display: block;
+          margin-bottom: 0.5rem;
+          color: $text-primary;
+          font-weight: 600;
+          font-size: 1rem;
+        }
+
+        input {
+          width: 100%;
+          padding: 0.875rem;
+          border: 2px solid rgba($text-secondary, 0.3);
+          border-radius: 8px;
+          font-size: 1rem;
+          background: rgba($primary-bg, 0.3);
+          color: $text-primary;
+          transition: all 0.2s;
+
+          &::placeholder {
+            color: rgba($text-secondary, 0.6);
+          }
+
+          &:focus {
+            outline: none;
+            border-color: $accent-primary;
+            box-shadow: 0 0 0 3px rgba($accent-primary, 0.15);
+            background: rgba($primary-bg, 0.5);
+          }
+        }
+      }
+
+      .submitBtn {
+        width: 100%;
+        padding: 1rem 1.5rem;
+        background: $accent-gradient;
+        color: $text-dark;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        box-shadow: $shadow-medium;
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba($accent-primary, 0.4);
+        }
+
+        &:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+          transform: none;
+        }
+      }
+    }
+  }
+
+  // Main Profile Layout
+  .profileGrid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+
+    @media (max-width: 968px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .sidebar {
+    .profileCard {
+      background: $bg-secondary;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: $shadow-medium;
+      text-align: center;
+      border: 1px solid rgba($text-secondary, 0.2);
+
+      .avatar {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: $accent-gradient;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        color: $text-dark;
+        margin: 0 auto 1rem;
+        font-weight: bold;
+        box-shadow: $shadow-glow;
+        border: 3px solid rgba($accent-primary, 0.3);
+      }
+
+      .userName {
+        font-size: 1.5rem;
+        color: $text-primary;
+        font-family: 'Merriweather', serif;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+      }
+
+      .userEmail {
+        color: $text-secondary;
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .actionButtons {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+
+        .btn {
+          padding: 0.75rem 1.5rem;
+          border: none;
+          border-radius: 8px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+          font-size: 0.95rem;
+
+          &.primary {
+            background: $primary-gradient;
+            color: $text-primary;
+
+            &:hover {
+              transform: translateY(-1px);
+              box-shadow: $shadow-medium;
+            }
+          }
+
+          &.secondary {
+            background: $accent-gradient;
+            color: $text-dark;
+
+            &:hover {
+              transform: translateY(-1px);
+              box-shadow: 0 4px 12px rgba($accent-primary, 0.4);
+            }
+          }
+
+          &.danger {
+            background: linear-gradient(135deg, #c64545 0%, #a03838 100%);
+            color: $text-primary;
+
+            &:hover {
+              transform: translateY(-1px);
+              box-shadow: 0 4px 12px rgba(198, 69, 69, 0.4);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .mainContent {
+    .section {
+      background: $bg-secondary;
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+      border-radius: 16px;
+      box-shadow: $shadow-medium;
+      border: 1px solid rgba($text-secondary, 0.2);
+
+      .sectionHeader {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid rgba($text-secondary, 0.2);
+
+        h3 {
+          color: $text-primary;
+          font-size: 1.3rem;
+          font-weight: 600;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          margin: 0;
+        }
+
+        .addBtn {
+          padding: 0.6rem 1.2rem;
+          background: $accent-gradient;
+          color: $text-dark;
+          border: none;
+          border-radius: 8px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+          font-size: 0.9rem;
+          box-shadow: $shadow-light;
+
+          &:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba($accent-primary, 0.4);
+          }
+        }
+      }
+
+      .addressGrid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1rem;
+
+        .addressCard {
+          background: rgba($primary-bg, 0.4);
+          border: 2px solid rgba($text-secondary, 0.3);
+          border-radius: 12px;
+          padding: 1.25rem;
+          position: relative;
+          transition: all 0.2s;
+
+          &:hover {
+            border-color: $accent-primary;
+            box-shadow: 0 4px 12px rgba($accent-primary, 0.2);
+            transform: translateY(-2px);
+          }
+
+          .deleteBtn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background: rgba(198, 69, 69, 0.2);
+            color: #ff6b6b;
+            border: none;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.2s;
+
+            &:hover {
+              background: #c64545;
+              color: $text-primary;
+            }
+          }
+
+          .addressInfo {
+            p {
+              margin: 0.5rem 0;
+              color: $text-secondary;
+              font-size: 0.95rem;
+
+              strong {
+                color: $text-primary;
+                font-weight: 600;
+              }
+            }
+          }
+
+          .editBtn {
+            margin-top: 1rem;
+            width: 100%;
+            padding: 0.6rem;
+            background: $primary-gradient;
+            color: $text-primary;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+
+            &:hover {
+              transform: translateY(-1px);
+              box-shadow: $shadow-light;
+            }
+          }
+        }
+
+        .noAddresses {
+          grid-column: 1 / -1;
+          text-align: center;
+          padding: 2rem;
+          color: $text-secondary;
+          font-style: italic;
+        }
+      }
+    }
+  }
+
+  // Modal Styles
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba($primary-bg, 0.85);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.2s;
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .modalContent {
+      background: $bg-secondary;
+      padding: 2rem;
+      border-radius: 16px;
+      max-width: 500px;
+      width: 90%;
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: $shadow-strong;
+      border: 1px solid rgba($text-secondary, 0.2);
+      animation: slideUp 0.3s;
+
+      @keyframes slideUp {
+        from {
+          transform: translateY(20px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      h3 {
+        color: $text-primary;
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        font-weight: 600;
+        text-shadow: 0 2px 4px rgba($primary-bg, 0.2);
+      }
+
+      .form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+
+        .formGroup {
+          label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: $text-primary;
+            font-weight: 600;
+            font-size: 0.95rem;
+          }
+
+          input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid rgba($text-secondary, 0.3);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: rgba($primary-bg, 0.3);
+            color: $text-primary;
+            transition: all 0.2s;
+
+            &::placeholder {
+              color: rgba($text-secondary, 0.6);
+            }
+
+            &:focus {
+              outline: none;
+              border-color: $accent-primary;
+              box-shadow: 0 0 0 3px rgba($accent-primary, 0.15);
+              background: rgba($primary-bg, 0.5);
+            }
+          }
+        }
+
+        .buttonGroup {
+          display: flex;
+          gap: 1rem;
+          justify-content: flex-end;
+          margin-top: 1rem;
+
+          button {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+
+            &.cancel {
+              background: rgba($text-secondary, 0.2);
+              color: $text-secondary;
+
+              &:hover {
+                background: rgba($text-secondary, 0.3);
+              }
+            }
+
+            &.submit {
+              background: $accent-gradient;
+              color: $text-dark;
+              box-shadow: $shadow-light;
+
+              &:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 4px 12px rgba($accent-primary, 0.4);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Toast Notification
+  .toast {
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+    background: $bg-secondary;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    box-shadow: $shadow-strong;
+    z-index: 2000;
+    animation: slideInRight 0.3s;
+    border: 2px solid transparent;
+
+    @keyframes slideInRight {
+      from {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    &.success {
+      border-color: $accent-secondary;
+      
+      .toastIcon {
+        color: $accent-secondary;
+      }
+    }
+
+    &.error {
+      border-color: #ff6b6b;
+      
+      .toastIcon {
+        color: #ff6b6b;
+      }
+    }
+
+    .toastContent {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+
+      .toastIcon {
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+
+      .toastMessage {
+        color: $text-primary;
+        font-weight: 500;
+      }
+    }
+  }
+}

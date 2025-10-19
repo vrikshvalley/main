@@ -1,0 +1,105 @@
+@use "sass:color";
+@use 'variables' as *;
+
+.category-circles {
+  padding: 0rem 1rem;
+  max-width: 1500px;
+  margin: 3rem auto;
+  overflow: visible; // Allow elements to scale beyond container
+  
+  h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: $accent-primary;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .circle-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 13rem;
+    padding: 1rem 0; // Add vertical padding to prevent clipping
+    overflow: visible; // Allow overflow for scaling
+    
+    &::-webkit-scrollbar {
+      display: none; // Chrome/Safari hides scrollbar
+    }
+
+    /* Prevent wrapping so it stays in one row */
+    flex-wrap: nowrap;
+  }
+
+  .circle-item {
+    flex: 0 0 auto;
+    text-align: center;
+    width: 100px;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.3s ease;
+    position: relative; // Ensure proper stacking context
+    z-index: 1; // Base z-index
+
+    &:hover {
+      transform: scale(1.1);
+      z-index: 10; // Bring to front when hovering
+    }
+
+    .circle-image {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid rgba($text-secondary, 0.3);
+      transition: all 0.3s ease;
+      box-shadow: $shadow-medium;
+    }
+
+    &:hover .circle-image {
+      border-color: $accent-primary;
+      box-shadow: $shadow-glow;
+    }
+
+    p {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: $text-primary;
+      font-weight: 500;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 0rem 0.5rem;
+    
+    .circle-container {
+      overflow-x: scroll;
+      overflow-y: visible; // Allow vertical overflow for scaling
+      gap: 4rem;
+      padding: 1.5rem 0; // Increased padding for mobile scaling
+      
+      // Show scrollbar on mobile for better UX
+      &::-webkit-scrollbar {
+        display: block;
+        height: 4px;
+      }
+      
+      &::-webkit-scrollbar-track {
+        background: rgba($text-secondary, 0.1);
+        border-radius: 2px;
+      }
+      
+      &::-webkit-scrollbar-thumb {
+        background: rgba($accent-primary, 0.5);
+        border-radius: 2px;
+        
+        &:hover {
+          background: rgba($accent-primary, 0.8);
+        }
+      }
+    }
+  }
+}

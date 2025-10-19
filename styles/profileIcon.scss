@@ -1,0 +1,96 @@
+@use "sass:color";
+@use 'variables' as *;
+
+.profile-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+
+  svg {
+    color: $bg-secondary;
+    margin-bottom: 4px;
+    transition: all 0.2s ease;
+  }
+
+  &:hover svg {
+    color: $accent-primary;
+    transform: translateY(-2px);
+    filter: drop-shadow(0 2px 4px rgba($accent-primary, 0.5));
+  }
+
+  .profile-text {
+    font-size: 0.8rem;
+    text-align: center;
+
+    .user-name {
+      font-weight: 600;
+      color: $primary-bg;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    .profile-link,
+    .auth-link {
+      color: $primary-bg;
+      text-decoration: none;
+      font-size: 1rem;
+      font-family: 'Playfair Display', serif;
+      transition: all 0.2s ease;
+      position: relative;
+
+      &:hover {
+        cursor: pointer;
+        font-weight: bold;
+        color: $text-secondary;
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 1px;
+        background: $accent-primary;
+        transition: width 0.3s ease;
+      }
+
+      &:hover::after {
+        width: 100%;
+      }
+    }
+  }
+
+  // Responsive sizing
+  @media (max-width: 768px) {
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .profile-text {
+      font-size: 0.65rem;
+
+      .profile-link,
+      .auth-link {
+        font-size: 0.75rem;
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .profile-text {
+      font-size: 0.6rem;
+
+      .profile-link,
+      .auth-link {
+        font-size: 0.7rem;
+      }
+    }
+  }
+}

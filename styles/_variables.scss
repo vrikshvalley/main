@@ -1,0 +1,76 @@
+// Import Sass color module
+@use "sass:color";
+
+// Vriksh Valley Premium Color Palette
+// Core Brand Colors
+$primary-bg: #073b22;        // Dark green - Primary Background
+$text-primary: #f9f5f1;      // White - Primary Text
+$text-secondary: #99ccad;    // Light green - Secondary Text
+$bg-secondary: #599174;      // Deep green - Secondary Background
+$accent-secondary: #b9c446;  // Yellow-green - Secondary Accent
+$accent-primary: #f8c377;    // Yellow - Primary Accent
+$bg-tertiary: #966859;       // Brown - Tertiary Background
+$text-dark: #382e2e;         // Dark brown - Dark Text
+
+// Usage-based color variables
+$primary-color: $primary-bg;
+$secondary-color: $bg-secondary;
+$accent-color: $accent-primary;
+$background-dark: $primary-bg;
+$background-light: $text-primary;
+
+// Additional derived colors
+$primary-light: color.adjust($primary-bg, $lightness: 15%);
+$primary-dark: color.adjust($primary-bg, $lightness: -5%);
+$secondary-light: color.adjust($bg-secondary, $lightness: 15%);
+$secondary-dark: color.adjust($bg-secondary, $lightness: -10%);
+$accent-light: color.adjust($accent-primary, $lightness: 10%);
+$accent-dark: color.adjust($accent-primary, $lightness: -15%);
+
+// Neutral colors
+$white: $text-primary;
+$gray-light: #e8e4e0;
+$gray-medium: #b8b4b0;
+$gray-dark: #6b6967;
+
+// Status colors
+$success-color: $bg-secondary;
+$warning-color: $accent-secondary;
+$error-color: #d64545;
+$info-color: $text-secondary;
+
+// Background variations
+$background-primary: $primary-bg;
+$background-secondary: $bg-secondary;
+$background-accent: $bg-tertiary;
+$background-soft: color.adjust($text-primary, $lightness: -2%);
+
+// Border colors
+$border-light: color.adjust($text-secondary, $alpha: -0.7);
+$border-primary: $text-secondary;
+$border-secondary: $bg-secondary;
+$border-accent: $accent-primary;
+
+// Gradients
+$primary-gradient: linear-gradient(135deg, $bg-secondary 0%, $primary-bg 100%);
+$accent-gradient: linear-gradient(135deg, $accent-primary 0%, $accent-secondary 100%);
+$background-gradient: linear-gradient(135deg, $primary-bg 0%, color.adjust($primary-bg, $lightness: 8%) 100%);
+$warm-gradient: linear-gradient(135deg, $bg-tertiary 0%, $accent-primary 100%);
+
+// Box shadows
+$shadow-light: 0 2px 8px rgba($primary-bg, 0.15);
+$shadow-medium: 0 4px 16px rgba($primary-bg, 0.25);
+$shadow-strong: 0 8px 32px rgba($primary-bg, 0.35);
+$shadow-glow: 0 0 20px rgba($accent-primary, 0.3);
+
+// Text colors
+$text-primary-color: $text-primary;
+$text-secondary-color: $text-secondary;
+$text-muted: $gray-dark;
+$text-light: $text-primary;
+$text-dark-color: $text-dark;
+
+// Hover states
+$hover-primary: color.adjust($bg-secondary, $lightness: 10%);
+$hover-secondary: color.adjust($primary-bg, $lightness: 15%);
+$hover-accent: color.adjust($accent-primary, $lightness: -8%);

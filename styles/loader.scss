@@ -1,0 +1,56 @@
+@use "sass:color";
+@use 'variables' as *;
+
+/* Enhanced Loader for Vriksh Valley */ 
+.loader {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 3em;
+  aspect-ratio: 1/2;
+  filter: url(#goo);
+  z-index: 9999;
+}
+
+#goo {
+  display: none
+}
+
+.loader:before, .loader:after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 100%;
+  aspect-ratio: 1/1;
+  animation: 1.5s ease-out infinite loader;
+  border-radius: 50%;
+  box-shadow: $shadow-glow;
+}
+
+.loader:before {
+  background: linear-gradient($accent-primary, $accent-secondary)
+}
+
+.loader:after {
+  animation-delay: 0.75s;
+  background: linear-gradient(to top, $bg-secondary, $text-secondary)
+}
+
+@keyframes loader {
+  0%, 50%, 100% {
+    transform: translateY(0)
+  }
+
+  25% {
+    transform: translateY(70%)
+  }
+
+  75% {
+    transform: translateY(-70%)
+  }
+}

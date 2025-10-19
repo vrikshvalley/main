@@ -1,0 +1,57 @@
+@use "sass:color";
+@use 'variables' as *;
+
+.why-choose-us {
+  padding: 4rem 0;
+  overflow: hidden;
+}
+
+.scroll-container {
+  width: 100%;
+  overflow: hidden;
+  cursor: pointer;
+  
+}
+
+.scroll-content {
+  display: flex;
+  gap: 2rem;
+  width: max-content;
+}
+
+.why-item {
+  background: rgba($bg-secondary, 0.1);
+  padding: 1.5rem 2rem;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+ 
+  white-space: nowrap;
+  transition: all 0.3s ease;
+  min-width: 180px;
+  
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+
+  .emoji {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    display: block;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  }
+
+  p {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: $text-secondary;
+    margin: 0;
+    line-height: 1.2;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  }
+}
+

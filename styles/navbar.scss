@@ -1,0 +1,315 @@
+@use "sass:color";
+@use 'variables' as *;
+@import url('https://fonts.googleapis.com/css2?family=Alumni+Sans+SC:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+.navbar {
+  border-bottom: 1px solid rgba($text-secondary, 0.3);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  color: $text-primary;
+  background-color: $text-primary;
+  box-shadow: $shadow-medium;
+  backdrop-filter: blur(10px);
+}
+  .nav-container {
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 0.75rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  }
+
+
+
+  .nav-categories {
+    display: flex;
+    font-size: 1.5rem;
+    gap: 1rem;
+    a {
+      font-family: Alumni Sans SC, sans-serif;
+      color: $primary-bg;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      position: relative;
+      
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: $bg-secondary;
+        transition: width 0.3s ease;
+      }
+      
+      &:hover { 
+        color: $bg-secondary;
+        &::after {
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+
+    .search-box {
+      position: relative;
+      input {
+        padding: 0.4rem 0.8rem 0.4rem 4rem;
+        border-radius: 20px;
+        font-family: Alumni Sans Sc;
+        border: 2px solid rgba($text-secondary, 0.3);
+        background-color: rgba($primary-bg, 0.4);
+        color: $text-primary;
+        transition: all 0.2s ease;
+        
+        &::placeholder {
+          font-size: 1rem;
+          color: $text-primary;
+        }
+        
+        &:focus {
+          outline: none;
+          border-color: $accent-primary;
+          box-shadow: 0 0 0 3px rgba($accent-primary, 0.2);
+          background-color: rgba($primary-bg, 0.6);
+        }
+      }
+      .search-icon {
+        position: absolute;
+        left: 0.5rem;
+        top: 50%;
+        
+        transform: translateY(-50%);
+        color: $text-primary;
+        
+
+        img{
+          margin-top: 6px;
+        }
+      }
+    }
+
+    // Cart and Profile icons styling
+    .cart-icon,
+    .profile-icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 1rem;
+      color: $primary-bg;
+      transition: all 0.2s ease;
+      cursor: pointer;
+
+      svg {
+        margin-bottom: 2px;
+      }
+
+      &:hover {
+        color: $accent-primary;
+        transform: translateY(-2px);
+      }
+    }
+
+    .hamburger {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: $primary-bg;
+      transition: color 0.2s ease;
+      
+      &:hover {
+        color: $accent-primary;
+      }
+    }
+  }
+
+  .mobile-menu {
+    display: none;
+    flex-direction: column;
+    padding: 1rem 0.4rem;
+    background: rgba($text-primary, 0.4);
+    border-top: 1px solid rgba($text-secondary, 0.2);
+    
+    a {
+      padding: 0.5rem 0;
+      color: $primary-bg;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      border-left: 3px solid transparent;
+      padding-left: 1rem;
+      
+      &:hover { 
+        color: $text-secondary;
+        border-left-color: $accent-primary;
+        background: rgba($accent-primary, 0.1);
+      }
+    }
+  }
+
+  /* Responsive */
+  .desktop-only { display: flex; }
+  .mobile-only { display: none; }
+
+  @media (max-width: 768px) {
+    .nav-container {
+      padding: 0.75rem 1rem;
+      gap: 0.5rem;
+    }
+
+    .desktop-only { display: none; }
+    .mobile-only { display: inline-flex; }
+    
+    .nav-actions {
+      gap: 1rem;
+
+      .search-box {
+        input {
+          width: 120px;
+          padding: 0.4rem 0.8rem 0.4rem 2.5rem;
+          font-size: 0.85rem;
+
+          &::placeholder {
+            font-size: 0.85rem;
+          }
+        }
+
+        .search-icon {
+          left: 0.4rem;
+          
+          img {
+            width: 16px;
+            height: 16px;
+          }
+        }
+      }
+
+      // Reduce font size for cart and profile on mobile
+      .cart-icon,
+      .profile-icon {
+        font-size: 0.7rem;
+
+        svg {
+          width: 20px;
+          height: 20px;
+        }
+
+        .profile-text,
+        .cart-link {
+          font-size: 0.65rem;
+        }
+      }
+    }
+    
+    .mobile-menu { 
+      display: flex;
+      font-size: 1.2rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .nav-container {
+      padding: 0.5rem 0.75rem;
+    }
+
+    .nav-actions {
+      gap: 0.5rem;
+
+      .search-box {
+        input {
+          width: 80px;
+          padding: 0.3rem 0.5rem 0.3rem 2rem;
+          font-size: 0.75rem;
+        }
+
+        .search-icon {
+          left: 0.3rem;
+          
+          img {
+            width: 14px;
+            height: 14px;
+          }
+        }
+      }
+
+      // Further reduce for very small screens
+      .cart-icon,
+      .profile-icon {
+        font-size: 0.6rem;
+
+        svg {
+          width: 18px;
+          height: 18px;
+        }
+
+        .profile-text,
+        .cart-link {
+          font-size: 0.6rem;
+          white-space: nowrap;
+        }
+      }
+
+      .hamburger {
+        svg {
+          width: 22px;
+          height: 22px;
+        }
+      }
+    }
+
+    .mobile-menu {
+      font-size: 1rem;
+      padding: 0.75rem 0.4rem;
+    }
+  }
+
+
+.mobile-search-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.mobile-search-bar {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: $white;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid $border-light;
+  animation: slideDown 0.3s ease forwards;
+
+  input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid $border-light;
+    border-radius: 4px;
+    background: $background-light;
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+    }
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

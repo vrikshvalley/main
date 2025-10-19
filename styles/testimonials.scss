@@ -1,0 +1,114 @@
+@use "sass:color";
+@use './variables.scss' as *;
+
+.testimonials {
+  width: 100%;
+  padding: 4rem 1rem 8px;
+  margin: 5px auto 10px;
+
+  h2 {
+    text-align: center;
+    font-size: 1.75rem;
+    margin-bottom: 3rem;
+    color: $accent-primary;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Desktop: Bento grid */
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    align-items: start;
+  }
+
+  .testimonial-card {
+    background: $text-primary;
+    padding: 1rem;
+    border-radius: 12px;
+    border: 2px solid rgba($text-secondary, 0.2);
+    box-shadow: $shadow-medium;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.28s cubic-bezier(.2,.9,.2,1), box-shadow 0.28s ease;
+    cursor: default;
+
+    &:hover {
+      transform: translateY(-6px);
+      box-shadow: $shadow-strong;
+      border-color: $accent-primary;
+    }
+
+    &.wide {
+      grid-column: span 2;
+    }
+
+    &.tall {
+      grid-row: span 2;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+      
+
+      img{
+        border: 2px solid rgba($text-secondary, 0.3);
+        border-radius: 50%;
+      }
+      h4 {
+        font-size: 1rem;
+        margin: 0;
+        color: $primary-bg;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+      }
+
+      span {
+        display: block;
+        font-size: 0.85rem;
+        color: $primary-bg;
+      }
+    }
+
+    .testimonial-text {
+      font-size: 0.95rem;
+      line-height: 1.45;
+      color: $primary-bg;
+    }
+  }
+
+  /* Mobile: convert to horizontal auto-scrolling carousel (GSAP handles motion) */
+  @media (max-width: 768px) {
+    padding: 2rem 1rem 2rem; // Increased padding to prevent chopping
+    overflow: visible; // Allow overflow for proper display
+    
+    .testimonials-grid {
+      display: flex;
+      gap: 1rem;
+      overflow: visible; // Changed from hidden to visible
+      padding: 1rem 0; // Added vertical padding
+      align-items: stretch;
+      margin: 0;
+      width: 100%; // Ensure full width
+    }
+
+    .testimonial-card {
+      flex: 0 0 82%;
+      min-width: 82%;
+      max-width: 82%;
+      border-radius: 10px;
+      padding: 0.9rem;
+      box-shadow: $shadow-medium;
+
+      &.wide, &.tall {
+        grid-column: auto;
+        grid-row: auto;
+      }
+    }
+  }
+}

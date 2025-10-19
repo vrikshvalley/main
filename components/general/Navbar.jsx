@@ -1,0 +1,68 @@
+'use client';
+
+import { useState } from 'react';
+import Link from 'next/link';
+import { useSelector } from 'react-redux';
+import { selectCount } from '@/lib/slices/cartSlice';
+import { Menu, X } from 'lucide-react';
+import Image from 'next/image';
+import ProfileIcon from '@/components/auth/ProfileIcon';
+import Cart from '@/components/cart/Cart';
+import SearchBar from '@/components/general/SearchBar';
+import "@/styles/navbar.scss";
+
+export default function Navbar() {
+  const count = useSelector(selectCount);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  return (
+    <div className="navbar">
+      <div className="nav-container">
+        {/* Left: Logo */}
+        <div className="nav-logo">
+          <Link href="/">
+            <Image src="/big-logo.png" alt="Logo" width={204} height={42} />
+          </Link>
+        </div>
+
+        {/* Center: Categories (desktop) */}
+        <nav className="nav-categories desktop-only">
+          <Link href="/category/indoor">Indoor</Link>
+          <Link href="/category/outdoor">Outdoor</Link>
+          <Link href="/category/succulents">Succulents</Link>
+          <Link href="/category/herbs">Herbs</Link>
+          <Link href="/category/flowering">Flowering</Link>
+          <Link href="/category/bonsai">Bonsai</Link>
+        </nav>
+
+        {/* Right: Search + Cart + Profile */}
+        <div className="nav-actions">
+          <SearchBar />
+          
+          <Cart />
+          <ProfileIcon />
+
+          {/* Hamburger (mobile) */}
+          <button
+            className="hamburger mobile-only"
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            {menuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile dropdown */}
+      {menuOpen && (
+        <div className="mobile-menu">
+          <Link href="/category/indoor">Indoor</Link>
+          <Link href="/category/outdoor">Outdoor</Link>
+          <Link href="/category/succulents">Succulents</Link>
+          <Link href="/category/herbs">Herbs</Link>
+          <Link href="/category/flowering">Flowering</Link>
+          <Link href="/category/bonsai">Bonsai</Link>
+        </div>
+      )}
+    </div>
+  );
+}

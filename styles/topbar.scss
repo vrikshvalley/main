@@ -1,0 +1,57 @@
+@use "sass:color";
+@use 'variables' as *;
+@import url('https://fonts.googleapis.com/css2?family=Alumni+Sans:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+.topbar {
+  background: $text-secondary;
+  font-size: 1.5rem;
+  color: $text-secondary;
+  box-shadow: $shadow-light;
+}
+  .topbar-container {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 0.4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .topbar-logo {
+    display: flex;
+    align-items: center;
+  }
+
+  .topbar-links {
+    font-family: Alumni Sans SC, sans-serif;
+    display: flex;
+    gap: 1rem;
+    font-weight: bold;
+
+    a {
+      color: $primary-bg;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      position: relative;
+
+      &:hover {
+        color: $bg-secondary;
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: $bg-secondary;
+        transition: width 0.3s ease;
+      }
+
+      &:hover::after {
+        width: 100%;
+      }
+    }
+  }
+
