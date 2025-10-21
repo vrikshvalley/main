@@ -2,11 +2,12 @@
 @use 'variables' as *;
   
   .product-card {
-    background: $bg-secondary;
+    background: rgba($bg-secondary, 0.9);
     border: 2px solid rgba($text-secondary, 0.2);
     border-radius: 12px;
     padding: 1rem;
     width: calc(25% - 1.5rem);
+    max-width: 320px;
     box-shadow: $shadow-medium;
     text-align: left;
     transition: all 0.3s ease;
@@ -35,7 +36,7 @@
 
     .price {
       font-weight: 600;
-      color: $accent-primary;
+      color: $text-primary;
       font-size: 1.1rem;
     }
 

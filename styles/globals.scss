@@ -17,7 +17,7 @@ body {
   margin: 0;
   font-family: Playfair Display, serif;
   color: var(--fg);
-  background: url('/BackgroundAll-14.png') repeat center center fixed;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/backgroundAll.png') repeat center center fixed;
   overflow-x: hidden;
 }
 
