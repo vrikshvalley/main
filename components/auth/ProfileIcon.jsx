@@ -29,7 +29,9 @@ export default function ProfileIcon() {
 
   return (
     <div className="profile-icon">
-      <CircleUserRound size={24} />
+      <div className="icon-wrapper">
+        <CircleUserRound size={24} />
+      </div>
       <div className="profile-text">
         {user ? (
           <>

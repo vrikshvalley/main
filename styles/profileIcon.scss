@@ -7,13 +7,19 @@
   align-items: center;
   cursor: pointer;
 
-  svg {
-    color: $bg-secondary;
-    margin-bottom: 4px;
-    transition: all 0.2s ease;
+  .icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2px;
+
+    svg {
+      color: $bg-secondary;
+      transition: all 0.2s ease;
+    }
   }
 
-  &:hover svg {
+  &:hover .icon-wrapper svg {
     color: $accent-primary;
     transform: translateY(-2px);
     filter: drop-shadow(0 2px 4px rgba($accent-primary, 0.5));
@@ -23,6 +29,8 @@
     font-size: 0.8rem;
     text-align: center;
     margin-top: 2px;
+    line-height: 1;
+    
     .user-name {
       font-weight: 600;
       color: $primary-bg;
@@ -37,6 +45,7 @@
       font-family: 'Playfair Display', serif;
       transition: all 0.2s ease;
       position: relative;
+      display: inline-block;
 
       &:hover {
         cursor: pointer;
@@ -63,7 +72,7 @@
 
   // Responsive sizing
   @media (max-width: 768px) {
-    svg {
+    .icon-wrapper svg {
       width: 20px;
       height: 20px;
     }
@@ -79,7 +88,7 @@
   }
 
   @media (max-width: 480px) {
-    svg {
+    .icon-wrapper svg {
       width: 18px;
       height: 18px;
     }

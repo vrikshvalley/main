@@ -17,7 +17,8 @@ import {
   loadUserCart 
 } from '@/lib/slices/cartSlice';
 import { useState, useEffect } from 'react';
-import { X, ShoppingCart, Plus, Minus, Trash2 } from 'lucide-react';
+import { X, Plus, Minus, Trash2 } from 'lucide-react';
+import Image from 'next/image';
 import { supabase } from '../../lib/supabaseClient';
 import { 
   loadCartFromLocalStorage,
@@ -144,7 +145,7 @@ export default function Cart() {
     <>
       <div className='cart-icon' onClick={() => setCartOpen(true)}>
         <div className="icon-wrapper">
-          <ShoppingCart size={23} />
+          <Image src="/cart.png" alt="Cart" width={24} height={24} />
           {count > 0 && <span className="cart-count">{count}</span>}
         </div>
         <div className="cart-link">Cart</div>
