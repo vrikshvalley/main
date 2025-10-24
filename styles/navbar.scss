@@ -19,13 +19,22 @@
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  gap: 10rem;
+  gap: 5rem;
   min-height: 60px; // Ensure consistent height
   }
 
   .nav-logo {
     display: flex;
     align-items: center;
+    flex-shrink: 0;
+
+    img {
+      width: auto;
+      height: auto;
+      max-width: 204px;
+      max-height: 42px;
+      object-fit: contain;
+    }
   }
 
 
@@ -178,6 +187,13 @@
       gap: 0.5rem;
     }
 
+    .nav-logo {
+      img {
+        max-width: 150px;
+        max-height: 32px;
+      }
+    }
+
     .desktop-only { display: none; }
     .mobile-only { display: inline-flex; }
     
@@ -231,6 +247,13 @@
   @media (max-width: 480px) {
     .nav-container {
       padding: 0.5rem 0.75rem;
+    }
+
+    .nav-logo {
+      img {
+        max-width: 120px;
+        max-height: 28px;
+      }
     }
 
     .nav-actions {

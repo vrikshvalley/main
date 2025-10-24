@@ -9,6 +9,7 @@
   margin: 0 auto;
   flex-wrap: wrap;
   font-family: Alumni Sans, sans-serif;
+  will-change: auto; // Only animate when needed
   
   .product-gallery {
     flex: 1 1 50%;

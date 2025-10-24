@@ -1,8 +1,27 @@
+'use client';
 import React from 'react'
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 
 import AddToCartButton from '@/components/cart/AddToCartButton';
 import "@/styles/featuredProductCard.scss";
+
+const cardVariants = {
+  hidden: { 
+    opacity: 0, 
+    y: 40,
+    scale: 0.95
+  },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.8,
+      ease: [0.22, 1, 0.36, 1]
+    }
+  }
+};
 
 function ProductCard() {
 
@@ -15,13 +34,16 @@ function ProductCard() {
   return (
       <>
        {products.map((product) => (
-          <div className="product-card" key={product.id}>
+          <motion.div 
+            className="product-card" 
+            key={product.id}
+            variants={cardVariants}
+          >
             <Link href={`/product/${product.slug}`}>
               <div className="product-image">
-                <img src={product.image}
+                <img 
+                  src={product.image}
                   alt={product.title}
-                  width={280}
-                  height={300}
                   loading="lazy"
                 />
               </div>
@@ -29,7 +51,7 @@ function ProductCard() {
               <p className="price">₹{product.price}</p>
             </Link>
             <AddToCartButton product={product} />
-          </div>
+          </motion.div>
         ))}
       </>
   )

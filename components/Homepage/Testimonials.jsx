@@ -1,11 +1,12 @@
 'use client';
-import { useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { EffectCards, Autoplay } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/effect-cards';
 import '@/styles/testimonials.scss';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const testimonialsData = [
   {
@@ -66,168 +67,145 @@ const testimonialsData = [
   },
 ];
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.2
+    }
+  }
+};
+
+const cardVariants = {
+  hidden: { 
+    opacity: 0, 
+    y: 50,
+    scale: 0.95
+  },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.6,
+      ease: [0.22, 1, 0.36, 1]
+    }
+  }
+};
+
 export default function Testimonials() {
-  const scrollRef = useRef(null);
-  const tlRef = useRef(null);
-  const sectionRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(false);
+  const gridRef = useRef(null);
 
   useEffect(() => {
-    const el = scrollRef.current;
-    const section = sectionRef.current;
-    if (!el || !section) return;
-
-    // Check if mobile or desktop
-    const isMobile = window.innerWidth <= 768;
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
     
-    if (!isMobile) {
-      // ===== DESKTOP: Bento grid with fade-up animation =====
-      const cards = el.querySelectorAll('.testimonial-card');
-      
-      // Set initial state: invisible and slightly below
-      gsap.set(cards, {
-        opacity: 0,
-        y: 50,
-        scale: 0.95
-      });
-
-      // Staggered animation when scrolled into view - REPEATABLE
-      ScrollTrigger.create({
-        trigger: section,
-        start: 'top 80%',
-        end: 'bottom 20%',
-        toggleActions: 'play reverse play reverse', // Animate both on enter and leave
-        onEnter: () => {
-          gsap.to(cards, {
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            duration: 0.6,
-            stagger: {
-              amount: 1.2,
-              from: 'start',
-              ease: 'power2.out'
-            },
-            ease: 'back.out(1.2)'
-          });
-        },
-        onLeaveBack: () => {
-          gsap.to(cards, {
-            opacity: 0,
-            y: 50,
-            scale: 0.95,
-            duration: 0.4,
-            stagger: {
-              amount: 0.6,
-              from: 'end'
-            }
-          });
-        }
-      });
-
-      // Calculate masonry grid-row-end for each card
-      cards.forEach((card) => {
-        const height = card.offsetHeight;
-        const rowSpan = Math.ceil((height + 20) / 20); // 20px is grid-auto-rows
-        card.style.gridRowEnd = `span ${rowSpan}`;
-      });
-
-      // Cleanup function for desktop
-      return () => {
-        ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-      };
-      
-    } else {
-      // ===== MOBILE: Horizontal to-and-fro scroll animation =====
-      const cards = Array.from(el.querySelectorAll('.testimonial-card'));
-      
-      // Clone cards multiple times for seamless to-and-fro effect
-      for (let i = 0; i < 2; i++) {
-        cards.forEach((card) => {
-          const clone = card.cloneNode(true);
-          el.appendChild(clone);
-        });
-      }
-
-      const allCards = Array.from(el.querySelectorAll('.testimonial-card'));
-      
-      // Set initial state for mobile - all visible, no transform
-      gsap.set(allCards, {
-        opacity: 1,
-      });
-      
-      gsap.set(el, {
-        x: 0
-      });
-
-      // Calculate total width for animation (only original cards)
-      const cardWidth = cards[0].offsetWidth;
-      const gap = 16; // 1rem gap
-      const totalWidth = (cardWidth + gap) * cards.length;
-
-      // Start animation immediately after setup
-      requestAnimationFrame(() => {
-        // Create seamless to-and-fro timeline using yoyo
-        const tl = gsap.timeline({ 
-          repeat: -1,
-          yoyo: true, // This makes it go back smoothly
-        });
-        
-        // Move left (A to B) with smooth transition
-        tl.to(el, {
-          x: -totalWidth,
-          duration: 20,
-          ease: 'sine.inOut' // Smooth easing for natural motion
-        });
-
-        tlRef.current = tl;
-
-        // Hover to slow down
-        const handleEnter = () => {
-          if (tlRef.current) tlRef.current.timeScale(0.3);
-        };
-        const handleLeave = () => {
-          if (tlRef.current) tlRef.current.timeScale(1);
-        };
-
-        el.addEventListener('mouseenter', handleEnter);
-        el.addEventListener('mouseleave', handleLeave);
-
-        // Store cleanup handlers for later
-        el._cleanupHandlers = { handleEnter, handleLeave };
-      });
-
-      // Cleanup function for mobile
-      return () => {
-        if (el._cleanupHandlers) {
-          el.removeEventListener('mouseenter', el._cleanupHandlers.handleEnter);
-          el.removeEventListener('mouseleave', el._cleanupHandlers.handleLeave);
-        }
-        if (tlRef.current) tlRef.current.kill();
-        ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-      };
-    }
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  return (
-    <section className="testimonials" ref={sectionRef}>
-      <h2>What Our Customers Say</h2>
+  // Calculate masonry layout after cards are rendered
+  useEffect(() => {
+    if (!isMobile && gridRef.current) {
+      const resizeGridItems = () => {
+        const cards = gridRef.current.querySelectorAll('.testimonial-card');
+        cards.forEach((card) => {
+          const cardHeight = card.getBoundingClientRect().height;
+          const rowHeight = 10; // Match grid-auto-rows value
+          const rowGap = 24; // 1.5rem = 24px gap
+          const rowSpan = Math.ceil((cardHeight + rowGap) / (rowHeight + rowGap));
+          card.style.gridRowEnd = `span ${rowSpan}`;
+        });
+      };
 
-      <div className="testimonials-grid" ref={scrollRef}>
-        {testimonialsData.map((testimonial) => (
-          <div key={testimonial.id} className="testimonial-card">
-            <div className="user-info">
-              <Image src={testimonial.avatar} alt={testimonial.name} width={48} height={48} />
-              <div>
-                <h4>{testimonial.name}</h4>
-                <span>{testimonial.username}</span>
+      // Initial calculation
+      setTimeout(resizeGridItems, 100);
+      
+      // Recalculate on window resize
+      window.addEventListener('resize', resizeGridItems);
+      
+      return () => window.removeEventListener('resize', resizeGridItems);
+    }
+  }, [isMobile]);
+
+  return (
+    <section className="testimonials-section">
+      <h2 className="testimonials-title">What Our Customers Say</h2>
+      
+      {isMobile ? (
+        <div className="testimonials-swiper-container">
+          <Swiper
+            effect={'cards'}
+            grabCursor={true}
+            modules={[EffectCards, Autoplay]}
+            className="testimonials-swiper"
+            autoplay={{
+              delay: 3000,
+              disableOnInteraction: false,
+            }}
+            loop={true}
+          >
+            {testimonialsData.map((testimonial) => (
+              <SwiperSlide key={testimonial.id}>
+                <div className="testimonial-card">
+                  <div className="card-header">
+                    <Image
+                      src={testimonial.avatar}
+                      alt={testimonial.name}
+                      width={50}
+                      height={50}
+                      className="avatar"
+                    />
+                    <div className="user-info">
+                      <h4>{testimonial.name}</h4>
+                      <p className="username">{testimonial.username}</p>
+                    </div>
+                  </div>
+                  <p className="testimonial-text">{testimonial.text}</p>
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+      ) : (
+        <motion.div 
+          ref={gridRef}
+          className="testimonials-grid"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: false, amount: 0.2, margin: "0px 0px -100px 0px" }}
+          variants={containerVariants}
+        >
+          {testimonialsData.map((testimonial) => (
+            <motion.div 
+              key={testimonial.id} 
+              className="testimonial-card"
+              variants={cardVariants}
+            >
+              <div className="card-header">
+                <Image
+                  src={testimonial.avatar}
+                  alt={testimonial.name}
+                  width={50}
+                  height={50}
+                  className="avatar"
+                />
+                <div className="user-info">
+                  <h4>{testimonial.name}</h4>
+                  <p className="username">{testimonial.username}</p>
+                </div>
               </div>
-            </div>
-            <p className="testimonial-text">
-              {testimonial.text}
-            </p>
-          </div>
-        ))}
-      </div>
+              <p className="testimonial-text">{testimonial.text}</p>
+            </motion.div>
+          ))}
+        </motion.div>
+      )}
     </section>
   );
 }

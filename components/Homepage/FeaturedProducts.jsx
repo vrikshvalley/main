@@ -1,69 +1,58 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 import ProductCard from '../products/ProductCard';
-import gsap from 'gsap';
-import ScrollTrigger from 'gsap/ScrollTrigger';
 import "@/styles/featuredProducts.scss";
 
-gsap.registerPlugin(ScrollTrigger);
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15, // Slightly slower stagger
+      delayChildren: 0.15
+    }
+  }
+};
+
+const cardVariants = {
+  hidden: { 
+    opacity: 0, 
+    y: 40,
+    scale: 0.95
+  },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.8, // Slower animation (was 0.6)
+      ease: [0.22, 1, 0.36, 1]
+    }
+  }
+};
 
 export default function FeaturedProducts({ title}) {
-  const sectionRef = useRef(null);
-  
-  
-  useEffect(() => {
-    if (sectionRef.current) {
-      const cards = sectionRef.current.querySelectorAll('.product-card');
-      
-      // Set initial state
-      gsap.set(cards, {
-        opacity: 0,
-        y: 40
-      });
-
-      // Create ScrollTrigger animation
-      ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: 'top 80%',
-        end: 'bottom 20%',
-        toggleActions: 'play reverse play reverse', // Repeatable animation
-        onEnter: () => {
-          gsap.to(cards, {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            stagger: 0.15,
-            ease: 'power3.out'
-          });
-        },
-        onLeaveBack: () => {
-          gsap.to(cards, {
-            opacity: 0,
-            y: 40,
-            duration: 0.5,
-            stagger: {
-              amount: 0.3,
-              from: 'end'
-            }
-          });
-        }
-      });
-    }
-
-    return () => {
-      // Cleanup ScrollTriggers on unmount
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-    };
-  }, []);
-
   return (
-    <section className="featured-products" ref={sectionRef}>
-      <h2 className="featured-title">{title}</h2>
-      <div className="products-container">
+    <motion.section 
+      className="featured-products"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: false, amount: 0.2, margin: "0px 0px -100px 0px" }}
+      variants={containerVariants}
+    >
+      <motion.h2 
+        className="featured-title"
+        variants={cardVariants}
+      >
+        {title}
+      </motion.h2>
+      <motion.div 
+        className="products-container"
+        variants={containerVariants}
+      >
         <ProductCard />
-        
-      </div>
-    </section>
+      </motion.div>
+    </motion.section>
   );
 }

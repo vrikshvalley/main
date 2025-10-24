@@ -13,6 +13,7 @@
     "@supabase/supabase-js": "^2.57.4",
     "axios": "^1.12.2",
     "axis": "^1.0.0",
+    "framer-motion": "^12.23.24",
     "gsap": "^3.13.0",
     "lucide-react": "^0.542.0",
     "next": "latest",
@@ -21,6 +22,7 @@
     "react-modal": "^3.16.3",
     "react-redux": "latest",
     "react-toastify": "^11.0.5",
+    "react-use-measure": "^2.1.7",
     "sass": "latest",
     "swiper": "^11.2.10"
   }

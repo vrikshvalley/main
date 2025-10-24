@@ -1,14 +1,19 @@
 'use client';
-import { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-
+import { useState, useEffect } from 'react';
+import { motion, useMotionValue, animate } from 'framer-motion';
+import useMeasure from 'react-use-measure';
 import '@/styles/whyChooseUs.scss';
 
-
+const FAST_DURATION = 25;
+const SLOW_DURATION = 75;
 
 export default function WhyChooseUs() {
-  const containerRef = useRef(null);
-  const contentRef = useRef(null);
+  const [duration, setDuration] = useState(FAST_DURATION);
+  const [mustFinish, setMustFinish] = useState(false);
+  const [rerender, setRerender] = useState(false);
+  
+  const [ref, { width }] = useMeasure();
+  const xTranslation = useMotionValue(0);
 
   const items = [
     { emoji: '🌱', text: 'Fresh & Healthy Plants' },
@@ -20,62 +25,59 @@ export default function WhyChooseUs() {
   ];
 
   useEffect(() => {
-    const scrollContainer = containerRef.current;
-    const scrollContent = contentRef.current;
-    const itemElements = Array.from(scrollContent.querySelectorAll('.why-item'));
+    let controls;
+    const gap = 32; // 2rem = 32px
+    let finalPosition = -width / 2 - gap;
 
-    // Clone items for seamless looping
-    itemElements.forEach((item) => {
-      const clone = item.cloneNode(true);
-      scrollContent.appendChild(clone);
-    });
+    if (mustFinish) {
+      const currentPosition = xTranslation.get();
+      const progressRatio = Math.abs(currentPosition / finalPosition);
+      
+      controls = animate(xTranslation, [currentPosition, finalPosition], {
+        ease: "linear",
+        duration: duration * (1 - progressRatio),
+        onComplete: () => {
+          setMustFinish(false);
+          setRerender(!rerender);
+        },
+      });
+    } else {
+      controls = animate(xTranslation, [0, finalPosition], {
+        ease: "linear",
+        duration: duration,
+        repeat: Infinity,
+        repeatType: "loop",
+        repeatDelay: 0,
+      });
+    }
 
-    // Calculate total width of original set
-    const itemWidth = itemElements.reduce(
-      (total, item) => total + item.offsetWidth + 32, // 32px = gap (2rem)
-      0
-    );
-
-    // GSAP seamless looping using ModifiersPlugin
-    const tl = gsap.to(scrollContent, {
-      x: `-=${itemWidth}`,
-      duration: 25,
-      ease: 'none',
-      repeat: -1,
-      modifiers: {
-        x: gsap.utils.unitize((x) => parseFloat(x) % itemWidth),
-      },
-    });
-
-    // Hover to slow down
-    const handleMouseEnter = () => {
-      gsap.to(tl, { timeScale: 0.25, duration: 1, ease: 'power2.out' });
-    };
-    const handleMouseLeave = () => {
-      gsap.to(tl, { timeScale: 1, duration: 1, ease: 'power2.in' });
-    };
-
-    scrollContainer.addEventListener('mouseenter', handleMouseEnter);
-    scrollContainer.addEventListener('mouseleave', handleMouseLeave);
-
-    return () => {
-      scrollContainer.removeEventListener('mouseenter', handleMouseEnter);
-      scrollContainer.removeEventListener('mouseleave', handleMouseLeave);
-      tl.kill();
-    };
-  }, []);
+    return () => controls?.stop();
+  }, [xTranslation, width, duration, mustFinish, rerender]);
 
   return (
     <section className="why-choose-us">
-      <div className="scroll-container" ref={containerRef}>
-        <div className="scroll-content" ref={contentRef}>
-          {items.map((item, idx) => (
+      <div className="scroll-container">
+        <motion.div 
+          className="scroll-content"
+          ref={ref}
+          style={{ x: xTranslation }}
+          onHoverStart={() => {
+            setMustFinish(true);
+            setDuration(SLOW_DURATION);
+          }}
+          onHoverEnd={() => {
+            setMustFinish(true);
+            setDuration(FAST_DURATION);
+          }}
+        >
+          {/* Render items 4 times for large screens */}
+          {[...items, ...items, ...items, ...items].map((item, idx) => (
             <div className="why-item" key={idx}>
               <span className="emoji">{item.emoji}</span>
               <p>{item.text}</p>
             </div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

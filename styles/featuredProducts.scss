@@ -25,6 +25,10 @@
   // Responsive padding
   @media (max-width: 992px) {
     padding: 3rem 1.5rem;
+    
+    .products-container {
+      gap: 1.5rem;
+    }
   }
 
   @media (max-width: 768px) {
@@ -34,6 +38,10 @@
       font-size: 1.75rem;
       margin-bottom: 40px;
     }
+    
+    .products-container {
+      gap: 2.5rem; // Increased gap for mobile
+    }
   }
 
   @media (max-width: 480px) {
@@ -42,6 +50,10 @@
     .featured-title {
       font-size: 1.5rem;
       margin-bottom: 30px;
+    }
+    
+    .products-container {
+      gap: 3rem; // Even more gap for small mobile
     }
   }
 }

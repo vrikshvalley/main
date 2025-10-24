@@ -11,14 +11,69 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Alumni+Sans+SC:ital,wght@0,100..900;1,100..900&family=Alumni+Sans:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 
-* { box-sizing: border-box; }
-html, body { height: 100%; }
+* { 
+  box-sizing: border-box; 
+  margin: 0;
+  padding: 0;
+}
+
+// Hardware acceleration for smooth animations
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  overflow-x: hidden;
+  width: 100%;
+  scroll-behavior: smooth;
+  
+  @media (max-width: 768px) {
+    // Disable smooth scroll on mobile for better performance
+    scroll-behavior: auto;
+  }
+}
+
+html, body { 
+  height: 100%;
+  width: 100%;
+  min-height: 100vh; // Ensure full viewport height
+}
+
 body {
   margin: 0;
   font-family: Playfair Display, serif;
   color: var(--fg);
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/backgroundAll.png') repeat center center fixed;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/backgroundAll.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   overflow-x: hidden;
+  width: 100%;
+  position: relative;
+  
+  @media (max-width: 768px) {
+    background-attachment: scroll; // Better performance on mobile
+    background-size: cover;
+    min-height: 100vh; // Ensure background covers full height on mobile
+  }
+}
+
+// Add a pseudo-element to ensure background extends to bottom
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: inherit;
+  z-index: -1;
+  
+  @media (max-width: 768px) {
+    position: absolute;
+  }
 }
 
 a { 
