@@ -105,6 +105,25 @@
     transition: all 0.2s ease;
     font-weight: 600;
     box-shadow: $shadow-medium;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    .coming-soon-badge {
+      position: absolute;
+      top: -8px;
+      right: 8px;
+      background: $text-secondary;
+      color: $text-dark;
+      font-size: 0.65rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-weight: 700;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      animation: pulse 2s ease-in-out infinite;
+    }
 
     &:hover:not(:disabled) { 
       transform: translateY(-2px);
@@ -112,9 +131,8 @@
     }
 
     &:disabled {
-      opacity: 0.6;
+      opacity: 0.7;
       cursor: not-allowed;
-      background: $gray-medium;
     }
   }
 }

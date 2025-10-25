@@ -1,10 +1,11 @@
 'use client';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Pagination, EffectFade } from 'swiper/modules';
+import { Autoplay, Pagination, Navigation, EffectFade } from 'swiper/modules';
 import { useRouter } from 'next/navigation';
 import 'swiper/css';
 import 'swiper/css/pagination';
+import 'swiper/css/navigation';
 import 'swiper/css/effect-fade';
 import '@/styles/heroSlider.scss';
 
@@ -36,13 +37,21 @@ export default function HeroSlider() {
   return (
     <div className="heroContainer">
       <div className="sliderWrapper">
+        {/* Custom Navigation Arrows - Must be inside sliderWrapper */}
+        <div className="swiper-button-prev"></div>
+        <div className="swiper-button-next"></div>
+        
         <Swiper
-          modules={[Autoplay, Pagination, EffectFade]}
+          modules={[Autoplay, Pagination, Navigation, EffectFade]}
           spaceBetween={0}
           slidesPerView={1}
           loop
           effect="fade"
           fadeEffect={{ crossFade: true }}
+          navigation={{
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          }}
           autoplay={{ 
             delay: 3000, 
             disableOnInteraction: false,

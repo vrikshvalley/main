@@ -41,7 +41,7 @@ export default function BringNatureHome() {
           Bring Nature Home, <span className="highlight">One Leaf at a Time</span> 🌿
         </motion.h2>
         <motion.p variants={textVariants}>
-          Transform your space into a green sanctuary. Every plant brings life, freshness, and a touch of nature's tranquility to your home.
+          We don't just deliver plants-we bring the essence of nature into your life. Each plant is handpicked, nurtured with care, and packed with the freshness of earth. From lush greens to vibrant blooms, let nature breathe life into your space. Grow nature, and connect with the beauty that surrounds us-because every leaf tells a story, and yours is just beginning.
         </motion.p>
       </div>
     </motion.section>

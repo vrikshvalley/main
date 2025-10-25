@@ -50,7 +50,13 @@ function ProductCard() {
               <h3>{product.title}</h3>
               <p className="price">₹{product.price}</p>
             </Link>
-            <AddToCartButton product={product} />
+            <div className="product-actions">
+              <AddToCartButton product={product} />
+              <button className="buy-now-btn" disabled>
+                Buy Now
+                <span className="coming-soon-badge">Coming Soon</span>
+              </button>
+            </div>
           </motion.div>
         ))}
       </>

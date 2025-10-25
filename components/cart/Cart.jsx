@@ -234,15 +234,11 @@ export default function Cart() {
               )}
               <button 
                 className="checkout-btn"
-                disabled={!user}
-                onClick={() => {
-                  if (user) {
-                    // Navigate to checkout
-                    window.location.href = '/checkout';
-                  }
-                }}
+                disabled
+                title="Coming Soon"
               >
-                {user ? 'Proceed to Checkout' : 'Login to Checkout'}
+                <span>Proceed to Checkout</span>
+                <span className="coming-soon-badge">Coming Soon</span>
               </button>
             </div>
           </>

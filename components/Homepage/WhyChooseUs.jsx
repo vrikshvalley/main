@@ -16,12 +16,12 @@ export default function WhyChooseUs() {
   const xTranslation = useMotionValue(0);
 
   const items = [
-    { emoji: '🌱', text: 'Fresh & Healthy Plants' },
+    { emoji: '🌱', text: 'Handpicked, Thriving, Fresh & Healthy Plants' },
     { emoji: '🚚', text: 'Fast & Safe Delivery' },
-    { emoji: '💧', text: 'Low Maintenance' },
-    { emoji: '🪴', text: 'Wide Variety of Pots' },
-    { emoji: '🌿', text: 'Eco-Friendly Practices' },
-    { emoji: '💳', text: 'Easy Payments' },
+    { emoji: '💧', text: 'Expert Guidance & Personalized Care' },
+    { emoji: '🪴', text: 'Bespoke Plant Decor Solutions' },
+    { emoji: '🌿', text: 'Sustainable and Recyclable Packaging' },
+    { emoji: '☘️', text: 'More Than Just Plants - A Green Lifestyle' },
   ];
 
   useEffect(() => {

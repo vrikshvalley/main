@@ -9,6 +9,7 @@ import WhyChooseUs from "@/components/Homepage/WhyChooseUs";
 import BringNatureHome from "@/components/Homepage/BringNatureHome";
 import Testimonials from "@/components/Homepage/Testimonials";
 import KnowYourPlants from "@/components/Homepage/KnowYourPlants";
+import OurLocation from "@/components/Homepage/OurLocation";
 import About from "@/components/Homepage/AboutUs";
 import Footer from "@/components/general/Footer";
 
@@ -43,6 +44,7 @@ export default function Home() {
       <BringNatureHome />
       <Testimonials />
       <KnowYourPlants />
+      <OurLocation />
       <About />
       <Footer />
     </>
