@@ -1,0 +1,251 @@
+@use 'variables' as *;
+
+.know-your-plants {
+  padding: 5rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+
+    h2 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: $text-primary;
+      margin-bottom: 0.75rem;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    p {
+      font-size: 1.15rem;
+      color: $text-primary;
+      font-family: 'Playfair Display', serif;
+    }
+  }
+
+  .guides-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .guide-card {
+    background: rgba(255, 255, 255, 0.9);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    border: 2px solid rgba($primary-bg, 0.1);
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+
+    &:hover {
+      border-color: rgba($accent-primary, 0.3);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    &.active {
+      border-color: $accent-primary;
+      box-shadow: 0 8px 32px rgba($accent-primary, 0.2);
+    }
+
+    .guide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 2rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: rgba($primary-bg, 0.02);
+
+      &:hover {
+        background: rgba($accent-primary, 0.05);
+      }
+
+      .guide-title {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        .icon {
+          font-size: 2rem;
+          filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+
+        h3 {
+          font-size: 1.5rem;
+          font-weight: 600;
+          color: $primary-bg;
+          margin: 0;
+        }
+      }
+
+      .chevron {
+        color: $accent-primary;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: color 0.3s ease;
+      }
+    }
+
+    .guide-content {
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.5);
+
+      .content-inner {
+        padding: 2rem;
+        display: grid;
+        gap: 2rem;
+
+        .care-item {
+          padding: 1.5rem;
+          background: white;
+          border-radius: 12px;
+          border: 1px solid rgba($primary-bg, 0.1);
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+          transition: all 0.3s ease;
+
+          &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            border-color: rgba($accent-primary, 0.3);
+          }
+
+          h4 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: $accent-primary;
+            margin-bottom: 0.75rem;
+          }
+
+          .description {
+            font-size: 1rem;
+            color: $primary-bg;
+            margin-bottom: 0.75rem;
+            line-height: 1.6;
+          }
+
+          .examples {
+            font-size: 0.95rem;
+            color: rgba($primary-bg, 0.7);
+            margin-bottom: 1rem;
+            font-style: italic;
+
+            strong {
+              font-weight: 600;
+              color: $primary-bg;
+              font-style: normal;
+            }
+          }
+
+          .image-placeholder {
+            background: linear-gradient(
+              135deg,
+              rgba($bg-secondary, 0.1) 0%,
+              rgba($accent-primary, 0.05) 100%
+            );
+            border: 2px dashed rgba($primary-bg, 0.2);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            color: rgba($primary-bg, 0.5);
+            font-size: 0.95rem;
+            margin-top: 1rem;
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 3rem 1.5rem;
+
+    .section-header {
+      margin-bottom: 3rem;
+
+      h2 {
+        font-size: 2rem;
+      }
+
+      p {
+        font-size: 1rem;
+      }
+    }
+
+    .guide-card {
+      .guide-header {
+        padding: 1.25rem 1.5rem;
+
+        .guide-title {
+          gap: 0.75rem;
+
+          .icon {
+            font-size: 1.5rem;
+          }
+
+          h3 {
+            font-size: 1.25rem;
+          }
+        }
+
+        .chevron svg {
+          width: 20px;
+          height: 20px;
+        }
+      }
+
+      .guide-content .content-inner {
+        padding: 1.5rem;
+        gap: 1.5rem;
+
+        .care-item {
+          padding: 1.25rem;
+
+          h4 {
+            font-size: 1.1rem;
+          }
+
+          .description {
+            font-size: 0.95rem;
+          }
+
+          .examples {
+            font-size: 0.9rem;
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    padding: 2.5rem 1rem;
+
+    .section-header {
+      margin-bottom: 2rem;
+
+      h2 {
+        font-size: 1.75rem;
+      }
+    }
+
+    .guide-card {
+      .guide-header {
+        padding: 1rem;
+
+        .guide-title h3 {
+          font-size: 1.1rem;
+        }
+      }
+
+      .guide-content .content-inner {
+        padding: 1rem;
+
+        .care-item {
+          padding: 1rem;
+        }
+      }
+    }
+  }
+}

@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { handleGoogleLogin, handleEmailAuth } from '@/lib/authHandlers';
 import { Shield, Lock, CheckCircle, Mail, Clock, ArrowLeft } from 'lucide-react';
 import '@/styles/login.scss';
@@ -71,13 +72,26 @@ export default function LoginPage() {
 
   return (
     <div className="login-page">
+      {/* Animated background */}
+      <div className="background-animation">
+        <div className="leaf leaf-1">🌿</div>
+        <div className="leaf leaf-2">🍃</div>
+        <div className="leaf leaf-3">🌱</div>
+        <div className="leaf leaf-4">🌿</div>
+        <div className="leaf leaf-5">🍃</div>
+      </div>
+
       <div className="login-container">
         {!emailSent ? (
           <>
+            {/* Logo */}
+            <div className="brand-logo">
+              <Image src="/big-logo.png" alt="Vriksh Valley" width={220} height={60} priority />
+            </div>
+
             {/* Header */}
             <div className="login-header">
-              <div className="brand-icon">🌱</div>
-              <h1>Welcome to Vriksh Valley</h1>
+              <h1>Welcome Back</h1>
               <p>Sign in to continue your green journey</p>
             </div>
 
@@ -97,7 +111,9 @@ export default function LoginPage() {
             </button>
 
             {/* Divider */}
-            <div className="divider">OR</div>
+            <div className="divider">
+              <span>OR</span>
+            </div>
 
             {/* Email Magic Link Form */}
             <form className="login-form" onSubmit={handleEmailSubmit}>
@@ -113,16 +129,10 @@ export default function LoginPage() {
               </div>
               
               <button type="submit" className="submit-btn">
+                <Mail size={18} />
                 Send Magic Link
               </button>
             </form>
-
-            {/* Footer */}
-            <div className="login-footer">
-              <p>
-                Don't have an account? <a href="/auth/signup">Sign up</a>
-              </p>
-            </div>
 
             {/* Trust Badges */}
             <div className="trust-badges">
@@ -198,7 +208,9 @@ export default function LoginPage() {
                 )}
               </div>
 
-              <div className="divider">OR</div>
+              <div className="divider">
+                <span>OR</span>
+              </div>
 
               <button 
                 type="button" 
