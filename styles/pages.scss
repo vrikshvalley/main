@@ -1,0 +1,205 @@
+@use 'variables' as *;
+
+.page-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, 
+    rgba($bg-secondary, 0.3) 0%, 
+    transparent 50%,
+    rgba($bg-tertiary, 0.3) 100%
+  );
+}
+
+.page-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+
+  @media (max-width: 768px) {
+    padding: 2rem 1.5rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 1.5rem 1rem;
+  }
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 3rem;
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    font-weight: 700;
+    color: $text-primary;
+    margin-bottom: 1rem;
+    text-shadow: 0 2px 8px rgba($primary-bg, 0.1);
+
+    @media (max-width: 768px) {
+      font-size: 2.5rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 2rem;
+    }
+  }
+
+  p {
+    font-size: 1.1rem;
+    color: rgba($text-primary, 0.7);
+    max-width: 600px;
+    margin: 0 auto;
+
+    @media (max-width: 480px) {
+      font-size: 1rem;
+    }
+  }
+}
+
+.content-section {
+  background: rgba($text-primary, 0.6);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 2.5rem;
+  margin-bottom: 2rem;
+  border: 1px solid rgba($accent-primary, 0.2);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+
+  @media (max-width: 768px) {
+    padding: 2rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 1.5rem;
+    border-radius: 12px;
+  }
+
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: $primary-bg;
+    margin-bottom: 1.5rem;
+
+    @media (max-width: 480px) {
+      font-size: 1.6rem;
+    }
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    color: $primary-bg;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+
+    @media (max-width: 480px) {
+      font-size: 1.3rem;
+    }
+  }
+
+  p {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: rgba($primary-bg, 0.8);
+    margin-bottom: 1rem;
+
+    @media (max-width: 480px) {
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+  }
+
+  ul, ol {
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+
+    li {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: rgba($primary-bg, 0.8);
+      margin-bottom: 0.5rem;
+
+      @media (max-width: 480px) {
+        font-size: 0.95rem;
+      }
+    }
+  }
+
+  strong {
+    color: $text-secondary;
+    font-weight: 700;
+  }
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+
+  @media (max-width: 480px) {
+    gap: 1.5rem;
+  }
+}
+
+.contact-card {
+  background: rgba($text-primary, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  border: 2px solid rgba($accent-primary, 0.2);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba($accent-primary, 0.2);
+    border-color: $accent-primary;
+  }
+
+  @media (max-width: 480px) {
+    padding: 1.5rem;
+  }
+
+  .icon-wrapper {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 1.5rem;
+    background: rgba($bg-secondary, 0.7);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $text-primary;
+
+    @media (max-width: 480px) {
+      width: 50px;
+      height: 50px;
+      margin-bottom: 1rem;
+    }
+  }
+
+  h3 {
+    font-size: 1.3rem;
+    color: $primary-bg;
+    margin-bottom: 1rem;
+
+    @media (max-width: 480px) {
+      font-size: 1.1rem;
+    }
+  }
+
+  p, a {
+    color: rgba($primary-bg, 0.7);
+    font-size: 1rem;
+    text-decoration: none;
+    transition: color 0.2s ease;
+
+    @media (max-width: 480px) {
+      font-size: 0.9rem;
+    }
+  }
+
+  a:hover {
+    color: $text-secondary;
+  }
+}

@@ -1,15 +1,31 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { handleGoogleLogin, handleEmailAuth } from '@/lib/authHandlers';
 import { Shield, Lock, CheckCircle, Mail, Clock, ArrowLeft } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import '@/styles/login.scss';
+
+const slides = [
+  { src: '/hero1.jpg', alt: 'Premium Plant Collection', title: 'Premium Plants', subtitle: 'Handpicked for your space' },
+  { src: '/hero2.jpg', alt: 'Indoor Green Paradise', title: 'Indoor Paradise', subtitle: 'Bring nature inside' },
+  { src: '/hero3.jpg', alt: 'Outdoor Garden Dreams', title: 'Garden Dreams', subtitle: 'Create your own oasis' }
+];
 
 export default function LoginPage() {
   const [emailSent, setEmailSent] = useState(false);
   const [email, setEmail] = useState('');
   const [canResend, setCanResend] = useState(false);
   const [countdown, setCountdown] = useState(60);
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  // Auto-advance slideshow
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
 
   const handleEmailSubmit = async (e) => {
     e.preventDefault();
@@ -72,17 +88,54 @@ export default function LoginPage() {
 
   return (
     <div className="login-page">
-      {/* Animated background */}
-      <div className="background-animation">
-        <div className="leaf leaf-1">🌿</div>
-        <div className="leaf leaf-2">🍃</div>
-        <div className="leaf leaf-3">🌱</div>
-        <div className="leaf leaf-4">🌿</div>
-        <div className="leaf leaf-5">🍃</div>
+      {/* Left Side - Image Slideshow */}
+      <div className="login-slideshow">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentSlide}
+            className="slide-wrapper"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1 }}
+          >
+            <Image 
+              src={slides[currentSlide].src} 
+              alt={slides[currentSlide].alt}
+              fill
+              style={{ objectFit: 'cover' }}
+              priority={currentSlide === 0}
+            />
+            <div className="slide-overlay">
+              <motion.div 
+                className="slide-content"
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.3, duration: 0.8 }}
+              >
+                <h2>{slides[currentSlide].title}</h2>
+                <p>{slides[currentSlide].subtitle}</p>
+              </motion.div>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Slide Indicators */}
+        <div className="slide-indicators">
+          {slides.map((_, index) => (
+            <button
+              key={index}
+              className={`indicator ${index === currentSlide ? 'active' : ''}`}
+              onClick={() => setCurrentSlide(index)}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
+        </div>
       </div>
 
-      <div className="login-container">
-        {!emailSent ? (
+      {/* Right Side - Login Form */}
+      <div className="login-form-section">
+        <div className="login-container">{!emailSent ? (
           <>
             {/* Logo */}
             <div className="brand-logo">
@@ -228,6 +281,7 @@ export default function LoginPage() {
             </div>
           </>
         )}
+        </div>
       </div>
     </div>
   );

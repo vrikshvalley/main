@@ -24,6 +24,7 @@
     "react-toastify": "^11.0.5",
     "react-use-measure": "^2.1.7",
     "sass": "latest",
+    "simple-icons": "^15.18.0",
     "swiper": "^11.2.10"
   }
 }

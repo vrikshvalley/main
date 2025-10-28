@@ -7,11 +7,15 @@ import CategoryCircles from "../components/Homepage/CategoryCircles";
 import FeaturedProducts from "../components/Homepage/FeaturedProducts";
 import WhyChooseUs from "@/components/Homepage/WhyChooseUs";
 import BringNatureHome from "@/components/Homepage/BringNatureHome";
+import ImpactCounter from "@/components/Homepage/ImpactCounter";
 import Testimonials from "@/components/Homepage/Testimonials";
-import KnowYourPlants from "@/components/Homepage/KnowYourPlants";
+import PlantFAQs from "@/components/Homepage/PlantFAQs";
 import OurLocation from "@/components/Homepage/OurLocation";
+import Gallery from "@/components/Homepage/Gallery";
 import About from "@/components/Homepage/AboutUs";
 import Footer from "@/components/general/Footer";
+import WhatsAppButton from "@/components/general/WhatsAppButton";
+import Ads from "@/components/general/Ads";
 
 import { React, use } from "react";
 import { useEffect } from "react";
@@ -37,16 +41,29 @@ export default function Home() {
       <TopBar />
       <Navbar />
       <HeroSlider />
+      <Ads 
+        items={['New Arrivals', 'Premium Collection', 'Indoor Plants', 'Outdoor Gardens', 'Succulents', 'Bonsai']} 
+        bgColor="primary" 
+        speed={25}
+      />
       <CategoryCircles />
       <FeaturedProducts title="Featured Products"  />
+      <Ads 
+        items={['Free Shipping', 'Expert Care Tips', '100% Organic', 'Healthy Plants Guaranteed']} 
+        bgColor="secondary" 
+        speed={30}
+      />
       <WhyChooseUs />
       <FeaturedProducts title="New Arrivals"/>
       <BringNatureHome />
+      <ImpactCounter />
       <Testimonials />
-      <KnowYourPlants />
+      <PlantFAQs />
       <OurLocation />
+      <Gallery />
       <About />
       <Footer />
+      <WhatsAppButton />
     </>
   );
 }

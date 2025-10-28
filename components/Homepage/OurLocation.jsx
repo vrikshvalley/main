@@ -1,10 +1,18 @@
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, Phone, Mail, Clock } from 'lucide-react';
+import { MapPin, Phone, Clock, ExternalLink } from 'lucide-react';
+import Image from 'next/image';
 import '@/styles/ourLocation.scss';
 
 export default function OurLocation() {
+  const [isHovered, setIsHovered] = useState(false);
+
+  const openMaps = () => {
+    window.open('https://maps.app.goo.gl/AEXGmLGHaFWEfcCfA', '_blank', 'noopener,noreferrer');
+  };
+
   return (
     <section className="our-location">
       <div className="location-container">
@@ -17,96 +25,68 @@ export default function OurLocation() {
         >
           <h2 className="section-title">
             <MapPin className="title-icon" />
-            Visit Our Garden
+            Our Store Location
           </h2>
           <p className="section-subtitle">
-            Come experience nature's beauty at our location
+            Visit our beautiful nursery and explore nature's finest collection
           </p>
         </motion.div>
 
-        <div className="location-content">
-          <motion.div 
-            className="map-container"
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            <div className="map-wrapper">
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d4620.0099134865895!2d85.27531209515716!3d23.210153466211683!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjPCsDEyJzM3LjAiTiA4NcKwMTYnMjYuNyJF!5e0!3m2!1sen!2sin!4v1761420045037!5m2!1sen!2sin"
-                width="100%"
-                height="100%"
-                style={{ border: 0, borderRadius: '16px' }}
-                allowFullScreen=""
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title="Vriksh Valley Location"
-              ></iframe>
-              <a 
-                href="https://maps.app.goo.gl/qZk8sckjVWRJtr8Q8"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="map-overlay-link"
-              >
-                <span>Open in Google Maps</span>
-              </a>
-            </div>
-          </motion.div>
-
-          <motion.div 
-            className="contact-info"
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-          >
-            <div className="info-card">
-              <div className="card-icon">
-                <MapPin />
-              </div>
-              <div className="card-content">
-                <h3>Address</h3>
-                <p>Vriksh Valley Nursery<br />Dungra, Ranchi<br />Jharkhand, India</p>
+        <motion.div 
+          className="store-card"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          onHoverStart={() => setIsHovered(true)}
+          onHoverEnd={() => setIsHovered(false)}
+          onClick={openMaps}
+        >
+          <div className="store-image-container">
+            <img 
+              src="/hero1.jpg" 
+              alt="Vriksh Valley Store" 
+              className="store-image"
+            />
+            <div className={`image-overlay ${isHovered ? 'visible' : ''}`}>
+              <div className="overlay-content">
+                <div className="detail-item">
+                  <MapPin size={24} />
+                  <div>
+                    <h4>Address</h4>
+                    <p>Vriksh Valley Nursery<br />Indirapuram, Ghaziabad<br />Uttar Pradesh, India</p>
+                  </div>
+                </div>
+                <div className="detail-item">
+                  <Clock size={24} />
+                  <div>
+                    <h4>Opening Hours</h4>
+                    <p>Mon - Sat: 9:00 AM - 7:00 PM<br />Sunday: 10:00 AM - 6:00 PM</p>
+                  </div>
+                </div>
+                <div className="detail-item">
+                  <Phone size={24} />
+                  <div>
+                    <h4>Contact</h4>
+                    <p>+91 98765 43210<br />contact@vrikshvalley.com</p>
+                  </div>
+                </div>
               </div>
             </div>
-
-            <div className="info-card">
-              <div className="card-icon">
-                <Clock />
-              </div>
-              <div className="card-content">
-                <h3>Opening Hours</h3>
-                <p>Monday - Saturday<br />9:00 AM - 7:00 PM<br />Sunday: 10:00 AM - 6:00 PM</p>
-              </div>
+          </div>
+          
+          <div className="store-info">
+            <h3>Vriksh Valley Nursery</h3>
+            <p className="location-text">
+              <MapPin size={18} />
+              Indirapuram, Ghaziabad, Uttar Pradesh
+            </p>
+            <div className="click-hint">
+              <ExternalLink size={16} />
+              <span>Click to view on Google Maps</span>
             </div>
-
-            <div className="info-card">
-              <div className="card-icon">
-                <Phone />
-              </div>
-              <div className="card-content">
-                <h3>Phone</h3>
-                <p><a href="tel:+919876543210">+91 98765 43210</a></p>
-              </div>
-            </div>
-
-            <div className="info-card">
-              <div className="card-icon">
-                <Mail />
-              </div>
-              <div className="card-content">
-                <h3>Email</h3>
-                <p><a href="mailto:contact@vrikshvalley.com">contact@vrikshvalley.com</a></p>
-              </div>
-            </div>
-
-            <div className="visit-message">
-              <div className="message-icon">🌿</div>
-              <p>Visit us to explore our wide collection of plants and get expert gardening advice!</p>
-            </div>
-          </motion.div>
-        </div>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

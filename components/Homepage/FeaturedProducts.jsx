@@ -1,6 +1,8 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
 import ProductCard from '../products/ProductCard';
 import "@/styles/featuredProducts.scss";
 
@@ -41,12 +43,20 @@ export default function FeaturedProducts({ title}) {
       viewport={{ once: false, amount: 0.2, margin: "0px 0px -100px 0px" }}
       variants={containerVariants}
     >
-      <motion.h2 
-        className="featured-title"
-        variants={cardVariants}
-      >
-        {title}
-      </motion.h2>
+      <div className="featured-header">
+        <motion.h2 
+          className="featured-title"
+          variants={cardVariants}
+        >
+          {title}
+        </motion.h2>
+        <motion.div variants={cardVariants}>
+          <Link href="/products" className="view-all-link">
+            View All Products
+            <ArrowRight size={18} />
+          </Link>
+        </motion.div>
+      </div>
       <motion.div 
         className="products-container"
         variants={containerVariants}

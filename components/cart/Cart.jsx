@@ -17,7 +17,7 @@ import {
   loadUserCart 
 } from '@/lib/slices/cartSlice';
 import { useState, useEffect } from 'react';
-import { X, Plus, Minus, Trash2 } from 'lucide-react';
+import { X, Plus, Minus, Trash2, MessageCircle } from 'lucide-react';
 import Image from 'next/image';
 import { supabase } from '../../lib/supabaseClient';
 import { 
@@ -239,6 +239,23 @@ export default function Cart() {
               >
                 <span>Proceed to Checkout</span>
                 <span className="coming-soon-badge">Coming Soon</span>
+              </button>
+              
+              <button 
+                className="whatsapp-order-btn"
+                onClick={() => {
+                  const phoneNumber = '919876543210';
+                  let message = 'Hi! I would like to order:\n\n';
+                  items.forEach(item => {
+                    message += `${item.name} - Qty: ${item.qty} - ₹${(item.price * item.qty).toFixed(2)}\n`;
+                  });
+                  message += `\nTotal: ₹${subtotal.toFixed(2)}`;
+                  const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+                  window.open(url, '_blank', 'noopener,noreferrer');
+                }}
+              >
+                <MessageCircle size={20} />
+                <span>Order on WhatsApp</span>
               </button>
             </div>
           </>

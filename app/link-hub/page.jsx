@@ -2,55 +2,64 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
+import { 
+  siInstagram, 
+  siFacebook, 
+  siWhatsapp, 
+  siYoutube, 
+  siX, 
+  siPinterest 
+} from 'simple-icons';
+import { Sparkles } from 'lucide-react';
 import '@/styles/linkHub.scss';
 
 const socialLinks = [
   {
     id: 1,
     name: 'Instagram',
-    icon: '📸',
-    url: 'https://instagram.com/vrikshvalley',
-    color: '#E4405F'
+    iconPath: siInstagram.path,
+    url: 'http://www.instagram.com/vrikshvalley/',
+    color: `#${siInstagram.hex}`
   },
   {
     id: 2,
     name: 'Facebook',
-    icon: '👥',
-    url: 'https://facebook.com/vrikshvalley',
-    color: '#1877F2'
+    iconPath: siFacebook.path,
+    url: 'http://www.facebook.com/people/Vriksh-Valley/61569081213347/',
+    color: `#${siFacebook.hex}`
   },
   {
     id: 3,
     name: 'WhatsApp',
-    icon: '💬',
-    url: 'https://wa.me/yourphonenumber',
-    color: '#25D366'
+    iconPath: siWhatsapp.path,
+    url: 'https://wa.me/+919204745612',
+    color: `#${siWhatsapp.hex}`
   },
   {
     id: 4,
     name: 'YouTube',
-    icon: '🎥',
-    url: 'https://youtube.com/@vrikshvalley',
-    color: '#FF0000'
+    iconPath: siYoutube.path,
+    url: 'https://youtube.com/@vrikshvalley?si=Bb5SIkCKUsj7u7s8',
+    color: `#${siYoutube.hex}`
   },
   {
     id: 5,
-    name: 'Twitter/X',
-    icon: '🐦',
-    url: 'https://twitter.com/vrikshvalley',
-    color: '#1DA1F2'
+    name: 'X',
+    iconPath: siX.path,
+    url: 'http://x.com/VrikshValley',
+    color: `#${siX.hex}`
   },
   {
     id: 6,
     name: 'Pinterest',
-    icon: '📌',
-    url: 'https://pinterest.com/vrikshvalley',
-    color: '#E60023'
+    iconPath: siPinterest.path,
+    url: 'https://in.pinterest.com/vrikshvalley/',
+    color: `#${siPinterest.hex}`
   },
   {
     id: 7,
     name: 'Shop Now',
-    icon: '🌿',
+    icon: Sparkles,
     url: '/',
     color: '#073b22',
     featured: true
@@ -128,21 +137,31 @@ export default function LinkHub() {
 
         {/* Links Grid */}
         <motion.div className="links-grid" variants={containerVariants}>
-          {socialLinks.map((link) => (
-            <motion.div key={link.id} variants={itemVariants}>
-              <Link
-                href={link.url}
-                target={link.featured ? '_self' : '_blank'}
-                rel={link.featured ? '' : 'noopener noreferrer'}
-                className={`link-card ${link.featured ? 'featured' : ''}`}
-                style={{ '--hover-color': link.color }}
-              >
-                <span className="link-icon">{link.icon}</span>
-                <span className="link-name">{link.name}</span>
-                <span className="link-arrow">→</span>
-              </Link>
-            </motion.div>
-          ))}
+          {socialLinks.map((link) => {
+            return (
+              <motion.div key={link.id} variants={itemVariants}>
+                <Link
+                  href={link.url}
+                  target={link.featured ? '_self' : '_blank'}
+                  rel={link.featured ? '' : 'noopener noreferrer'}
+                  className={`link-card ${link.featured ? 'featured' : ''}`}
+                  style={{ '--hover-color': link.color }}
+                >
+                  <span className="link-icon">
+                    {link.featured ? (
+                      <link.icon size={24} strokeWidth={2} />
+                    ) : (
+                      <svg role="img" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                        <path d={link.iconPath} />
+                      </svg>
+                    )}
+                  </span>
+                  <span className="link-name">{link.name}</span>
+                  <span className="link-arrow">→</span>
+                </Link>
+              </motion.div>
+            );
+          })}
         </motion.div>
 
         {/* Footer */}
