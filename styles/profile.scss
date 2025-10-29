@@ -28,7 +28,7 @@
     .brandInfo {
       h1 {
         color: $text-primary;
-        font-family: 'Merriweather', serif;
+        font-family: $font-primary;
         font-size: 1.8rem;
         margin: 0;
         font-weight: 700;
@@ -65,7 +65,7 @@
 
       h2 {
         color: $text-primary;
-        font-family: 'Merriweather', serif;
+        font-family: $font-primary;
         font-size: 1.8rem;
         margin-bottom: 0.5rem;
         text-shadow: 0 2px 4px rgba($primary-bg, 0.3);
@@ -233,7 +233,7 @@
       .userName {
         font-size: 1.5rem;
         color: $text-primary;
-        font-family: 'Merriweather', serif;
+        font-family: $font-primary;
         margin-bottom: 0.5rem;
         font-weight: 600;
       }
@@ -279,12 +279,12 @@
           }
 
           &.danger {
-            background: linear-gradient(135deg, #c64545 0%, #a03838 100%);
-            color: $text-primary;
+            background: $gradient-yellow;
+            color: $dark-green;
 
             &:hover {
               transform: translateY(-1px);
-              box-shadow: 0 4px 12px rgba(198, 69, 69, 0.4);
+              box-shadow: 0 4px 12px rgba($yellow, 0.4);
             }
           }
         }
@@ -361,8 +361,8 @@
             position: absolute;
             top: 0.75rem;
             right: 0.75rem;
-            background: rgba(198, 69, 69, 0.2);
-            color: #ff6b6b;
+            background: rgba($yellow, 0.2);
+            color: $yellow;
             border: none;
             border-radius: 50%;
             width: 28px;
@@ -373,8 +373,8 @@
             transition: all 0.2s;
 
             &:hover {
-              background: #c64545;
-              color: $text-primary;
+              background: $yellow;
+              color: $dark-green;
             }
           }
 
@@ -578,18 +578,18 @@
     }
 
     &.success {
-      border-color: $accent-secondary;
+      border-color: $teal;
       
       .toastIcon {
-        color: $accent-secondary;
+        color: $teal;
       }
     }
 
     &.error {
-      border-color: #ff6b6b;
+      border-color: $yellow;
       
       .toastIcon {
-        color: #ff6b6b;
+        color: $yellow;
       }
     }
 

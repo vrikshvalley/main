@@ -166,26 +166,26 @@
 
     &.water {
       background: linear-gradient(135deg,
-        rgba(59, 130, 246, 0.15),
-        rgba(37, 99, 235, 0.1)
+        rgba($teal, 0.15),
+        rgba($teal, 0.1)
       );
-      color: #3b82f6;
+      color: $teal;
     }
 
     &.organic {
       background: linear-gradient(135deg,
-        rgba($accent-primary, 0.15),
-        rgba($accent-secondary, 0.1)
+        rgba($teal, 0.15),
+        rgba($teal, 0.1)
       );
-      color: $accent-primary;
+      color: $teal;
     }
 
     &.trees {
       background: linear-gradient(135deg,
-        rgba(34, 197, 94, 0.15),
-        rgba(22, 163, 74, 0.1)
+        rgba($teal, 0.15),
+        rgba($teal, 0.1)
       );
-      color: #22c55e;
+      color: $teal;
     }
   }
 

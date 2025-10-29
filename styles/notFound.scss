@@ -6,11 +6,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, 
-    rgba($bg-secondary, 0.95) 0%, 
-    rgba($primary-bg, 0.9) 50%,
-    rgba($bg-tertiary, 0.95) 100%
-  );
+  background: $gradient-dark;
   position: relative;
   overflow: hidden;
   padding: 2rem;
@@ -87,17 +83,17 @@
     .sign-post {
       width: 8px;
       height: 80px;
-      background: linear-gradient(to bottom, #8B4513, #654321);
+      background: $gradient-dark;
       margin: 0 auto 5px;
       border-radius: 4px;
     }
 
     .sign-board {
-      background: linear-gradient(135deg, $text-secondary, $accent-secondary);
+      background: $gradient-teal;
       padding: 0.75rem 1.5rem;
       border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-      border: 3px solid #654321;
+      box-shadow: 0 4px 12px rgba($dark-green, 0.2);
+      border: 3px solid $deep-green;
       display: flex;
       align-items: center;
       gap: 0.5rem;

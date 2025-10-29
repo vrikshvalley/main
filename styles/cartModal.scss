@@ -141,15 +141,15 @@
 
   .whatsapp-order-btn {
     width: 100%;
-    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
-    color: white;
+    background: $gradient-teal;
+    color: $white;
     padding: 0.75rem;
     border: none;
     border-radius: 6px;
     cursor: pointer;
     transition: all 0.3s ease;
     font-weight: 600;
-    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+    box-shadow: 0 4px 12px rgba($teal, 0.3);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -157,8 +157,8 @@
 
     &:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5);
-      background: linear-gradient(135deg, #128C7E 0%, #075E54 100%);
+      box-shadow: 0 6px 20px rgba($teal, 0.5);
+      background: $gradient-dark;
     }
 
     &:active {
@@ -380,19 +380,19 @@
       width: 36px;
       height: 36px;
       border: none;
-      background: rgba(220, 53, 69, 0.1);
-      color: #ff6b6b;
+      background: rgba($yellow, 0.1);
+      color: $yellow;
       border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       transition: all 0.2s;
-      border: 1px solid rgba(220, 53, 69, 0.3);
+      border: 1px solid rgba($yellow, 0.3);
 
       &:hover {
-        background: rgba(220, 53, 69, 0.2);
-        border-color: #ff6b6b;
+        background: rgba($yellow, 0.2);
+        border-color: $yellow;
         transform: scale(1.1);
       }
     }

@@ -8,16 +8,16 @@
   z-index: 1000;
   width: 60px;
   height: 60px;
-  background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+  background: $gradient-teal;
   border-radius: 50%;
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4),
-              0 8px 40px rgba(0, 0, 0, 0.2);
+  color: $white;
+  box-shadow: 0 4px 20px rgba($teal, 0.4),
+              0 8px 40px rgba($dark-green, 0.2);
   transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 
   @media (max-width: 768px) {
@@ -46,8 +46,8 @@
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 6px 28px rgba(37, 211, 102, 0.5),
-                0 12px 48px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 6px 28px rgba($teal, 0.5),
+                0 12px 48px rgba($dark-green, 0.25);
   }
 
   &:active {
@@ -59,7 +59,7 @@
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    border: 3px solid #25D366;
+    border: 3px solid $teal;
     animation: whatsapp 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     pointer-events: none;
   }

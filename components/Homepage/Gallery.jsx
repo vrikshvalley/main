@@ -22,8 +22,8 @@ export default function Gallery() {
           className="section-header"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
         >
           <Camera className="header-icon" />
           <h2 className="section-title">Our Gallery</h2>
@@ -37,17 +37,25 @@ export default function Gallery() {
             <motion.div
               key={image.id}
               className="gallery-item"
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              whileHover={{ scale: 1.05 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ 
+                duration: 0.4, 
+                delay: index * 0.05,
+                ease: "easeOut"
+              }}
             >
               <div className="image-wrapper">
-                <img
+                <Image
                   src={image.src}
                   alt={image.alt}
+                  width={600}
+                  height={450}
                   className="gallery-image"
+                  loading="lazy"
+                  quality={85}
+                  sizes="(max-width: 640px) 100vw, (max-width: 992px) 50vw, 33vw"
                 />
                 <div className="image-overlay">
                   <p>{image.alt}</p>

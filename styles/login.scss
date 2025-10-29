@@ -127,11 +127,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, 
-    rgba($bg-secondary, 0.95) 0%, 
-    rgba($primary-bg, 0.9) 50%,
-    rgba($bg-tertiary, 0.95) 100%
-  );
+  background: $gradient-dark;
   padding: 2rem;
   overflow-y: auto;
 
@@ -428,12 +424,12 @@
     width: 80px;
     height: 80px;
     margin: 0 auto 1.5rem;
-    background: linear-gradient(135deg, $accent-primary, $accent-secondary);
+    background: $gradient-teal;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: $text-primary;
+    color: $white;
     animation: bounce 0.6s ease-out;
 
     @media (max-width: 480px) {
@@ -775,7 +771,7 @@
     transition: all 0.2s ease;
 
     &:hover {
-      color: $accent-secondary;
+      color: $teal;
       text-decoration: underline;
     }
 
@@ -899,9 +895,9 @@
 }
 
 .error-message {
-  background: rgba(220, 53, 69, 0.1);
-  border: 2px solid rgba(220, 53, 69, 0.3);
-  color: #dc3545;
+  background: rgba($yellow, 0.1);
+  border: 2px solid rgba($yellow, 0.3);
+  color: $yellow;
   padding: 0.875rem 1rem;
   border-radius: 8px;
   font-size: 0.9rem;

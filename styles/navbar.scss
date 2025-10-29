@@ -46,7 +46,7 @@
     align-items: center; // Ensure vertical centering
     margin-left: 10rem;
     a {
-      font-family: Alumni Sans, sans-serif;
+      font-family: 'Alumni Sans', sans-serif;
       color: $primary-bg;
       text-decoration: none;
       font-weight: 500;
@@ -263,6 +263,42 @@
   /* Responsive */
   .desktop-only { display: flex; }
   .mobile-only { display: none; }
+
+  // Medium Desktop - Fix overflow on screens under 1400px
+  @media (max-width: 1400px) {
+    .nav-container {
+      gap: 2rem;
+      padding: 0.75rem 1.5rem;
+      justify-content: space-between;
+    }
+
+    .nav-categories {
+      margin-left: 0;
+      gap: 0.75rem;
+      font-size: 1.3rem;
+    }
+
+    .nav-actions {
+      gap: 1.5rem;
+    }
+  }
+
+  // Small Desktop/Tablet
+  @media (max-width: 1024px) {
+    .nav-container {
+      gap: 1.5rem;
+      padding: 0.75rem 1.25rem;
+    }
+
+    .nav-categories {
+      gap: 0.6rem;
+      font-size: 1.2rem;
+    }
+
+    .nav-actions {
+      gap: 1rem;
+    }
+  }
 
   @media (max-width: 768px) {
     .nav-container {

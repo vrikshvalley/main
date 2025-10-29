@@ -4,8 +4,8 @@
 .plant-faqs {
   padding: 5rem 2rem;
   background: linear-gradient(135deg,
-    rgba($bg-secondary, 0.3) 0%,
-    rgba($bg-tertiary, 0.2) 100%
+    rgba($deep-green, 0.2) 0%,
+    rgba($dark-green, 0.15) 100%
   );
   position: relative;
 
@@ -97,19 +97,19 @@
   }
 
   &.active {
-    border-color: $accent-primary;
-    box-shadow: 0 8px 24px rgba($accent-primary, 0.2);
+    border-color: $teal;
+    box-shadow: 0 8px 24px rgba($teal, 0.2);
 
     .faq-question {
       background: linear-gradient(135deg,
-        rgba($accent-primary, 0.08) 0%,
-        rgba($accent-secondary, 0.05) 100%
+        rgba($teal, 0.08) 0%,
+        rgba($teal, 0.05) 100%
       );
-      color: $accent-primary;
+      color: $teal;
 
       .question-number {
-        background: $accent-gradient;
-        color: $text-dark;
+        background: $gradient-teal;
+        color: $white;
       }
     }
   }
@@ -243,15 +243,15 @@
     }
 
     a {
-      color: $bg-secondary;
+      color: $deep-green;
       text-decoration: none;
       font-weight: 600;
       transition: all 0.2s ease;
       border-bottom: 2px solid transparent;
 
       &:hover {
-        color: $accent-secondary;
-        border-bottom-color: $accent-secondary;
+        color: $teal;
+        border-bottom-color: $teal;
       }
     }
   }

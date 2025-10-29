@@ -34,10 +34,10 @@
     bottom: 0;
     background: linear-gradient(
       135deg,
-      rgba($primary-bg, 0.6) 0%,
-      rgba($bg-secondary, 0.4) 30%,
-      rgba($bg-tertiary, 0.3) 60%,
-      rgba($primary-bg, 0.5) 100%
+      rgba($dark-green, 0.6) 0%,
+      rgba($deep-green, 0.4) 30%,
+      rgba($dark-green, 0.3) 60%,
+      rgba($dark-green, 0.5) 100%
     );
     z-index: 2;
     pointer-events: none;
@@ -80,9 +80,9 @@
     }
 
     &:hover {
-      background: rgba($accent-secondary, 0.95);
+      background: rgba($yellow, 0.95);
       transform: scale(1.1);
-      box-shadow: 0 6px 20px rgba($accent-primary, 0.5);
+      box-shadow: 0 6px 20px rgba($teal, 0.5);
       border-color: $text-primary;
     }
 
@@ -277,10 +277,10 @@
     justify-content: center;
     width: 24px;
     height: 24px;
-    background: $accent-secondary;
+    background: $yellow;
     border-radius: 50%;
     font-weight: bold;
-    color: $text-dark;
+    color: $dark-green;
   }
 
   @media (max-width: 768px) {
@@ -342,9 +342,9 @@
   }
 
   &:hover {
-    background: linear-gradient(135deg, $accent-secondary 0%, $accent-primary 100%);
+    background: $gradient-yellow;
     transform: translateY(-3px);
-    box-shadow: 0 10px 30px rgba($accent-primary, 0.6);
+    box-shadow: 0 10px 30px rgba($teal, 0.6);
 
     &::before {
       width: 300px;

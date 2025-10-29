@@ -4,8 +4,8 @@
 .our-location {
   padding: 5rem 2rem;
   background: linear-gradient(135deg, 
-    rgba($bg-secondary, 0.3) 0%, 
-    rgba($bg-tertiary, 0.2) 100%
+    rgba($deep-green, 0.2) 0%, 
+    rgba($dark-green, 0.15) 100%
   );
   position: relative;
   overflow: hidden;
@@ -316,7 +316,7 @@
   padding: 5rem 2rem;
   background: linear-gradient(135deg, 
     rgba($bg-secondary, 0.3) 0%, 
-    rgba($bg-tertiary, 0.2) 100%
+    rgba($primary-bg, 0.2) 100%
   );
   position: relative;
   overflow: hidden;
@@ -348,7 +348,7 @@
     left: -150px;
     width: 500px;
     height: 500px;
-    background: radial-gradient(circle, rgba($accent-secondary, 0.08) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba($teal, 0.08) 0%, transparent 70%);
     border-radius: 50%;
     pointer-events: none;
   }
@@ -479,7 +479,7 @@
       }
 
       &:hover {
-        background: $accent-secondary;
+        background: $yellow;
         transform: translateX(-50%) translateY(-2px);
         box-shadow: 0 6px 20px rgba($primary-bg, 0.4);
       }
@@ -578,7 +578,7 @@
         transition: all 0.2s ease;
 
         &:hover {
-          color: $accent-secondary;
+          color: $teal;
           text-decoration: underline;
         }
       }
