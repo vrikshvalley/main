@@ -140,6 +140,7 @@
         align-items: center;
         justify-content: center;
         margin-right: 0.5rem;
+        flex-shrink: 0;
       }
 
       input {
@@ -158,12 +159,69 @@
         }
       }
 
+      @media (max-width: 1024px) {
+        min-width: 280px;
+        padding: 0.6rem 1rem;
+
+        input {
+          font-size: 0.9rem;
+        }
+      }
+
       @media (max-width: 768px) {
+        position: fixed;
         right: auto;
-        left: 50%;
-        transform: translateX(-50%);
-        min-width: calc(100vw - 2rem);
-        max-width: 400px;
+        left: 0;
+        top: 80px;
+        transform: none;
+        width: 100%;
+        max-width: none;
+        min-width: auto;
+        margin: 0;
+        padding: 1.25rem 1.5rem;
+        border-radius: 0;
+        box-shadow: 0 8px 40px rgba($primary-bg, 0.3);
+        border-left: none;
+        border-right: none;
+
+        .search-icon {
+          margin-right: 0.75rem;
+
+          img {
+            width: 20px;
+            height: 20px;
+          }
+        }
+
+        input {
+          font-size: 1.05rem;
+
+          &::placeholder {
+            font-size: 1.05rem;
+          }
+        }
+      }
+
+      @media (max-width: 480px) {
+        width: calc(100vw - 2rem);
+        padding: 1rem 1.25rem;
+
+        .search-icon {
+          margin-right: 0.5rem;
+
+          img {
+            width: 18px;
+            height: 18px;
+          }
+        }
+
+        input {
+          font-size: 0.95rem;
+
+          &::placeholder {
+            font-size: 0.95rem;
+          }
+        }
       }
     }
 
@@ -416,6 +474,21 @@
     .nav-actions {
       gap: 0.75rem;
 
+      .search-icon-button {
+        font-size: 0.7rem;
+
+        .icon-wrapper {
+          img, svg {
+            width: 20px;
+            height: 20px;
+          }
+        }
+
+        .search-text {
+          font-size: 0.65rem;
+        }
+      }
+
       .search-box {
         input {
           width: 120px;
@@ -479,8 +552,19 @@
       order: 2;
       gap: 0.5rem;
 
-      .expanded-search-bar {
-        min-width: calc(100vw - 1.5rem);
+      .search-icon-button {
+        font-size: 0.6rem;
+
+        .icon-wrapper {
+          img, svg {
+            width: 18px;
+            height: 18px;
+          }
+        }
+
+        .search-text {
+          font-size: 0.6rem;
+        }
       }
 
       // Further reduce for very small screens

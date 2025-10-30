@@ -2,12 +2,12 @@
 import { Leaf } from 'lucide-react';
 import '@/styles/ads.scss';
 
-export default function Ads({ items = [], bgColor = 'primary', speed = 30 }) {
+export default function Ads({ items = [], bgColor = 'primary', speed = 30, textColor }) {
   // Duplicate items for seamless loop
-  const duplicatedItems = [...items, ...items];
+  const duplicatedItems = [...items, ...items, ...items, ...items];
 
   return (
-    <div className={`ads-banner bg-${bgColor}`}>
+    <div className={`ads-banner bg-${bgColor} text-${textColor}`}>
       <div 
         className="ads-marquee"
         style={{ '--speed': `${speed}s` }}

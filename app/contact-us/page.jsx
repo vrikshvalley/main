@@ -27,7 +27,7 @@ export default function ContactUs() {
                 <Phone size={28} />
               </div>
               <h3>Call Us</h3>
-              <p><a href="tel:+911234567890">+91 12345 67890</a></p>
+              <p><a href="tel:+91 92047 45612">+91 92047 45612</a></p>
               <p>Mon-Sat: 9 AM - 7 PM</p>
             </div>
 
@@ -45,7 +45,7 @@ export default function ContactUs() {
                 <MessageCircle size={28} />
               </div>
               <h3>WhatsApp</h3>
-              <p><a href="https://wa.me/911234567890" target="_blank">+91 12345 67890</a></p>
+              <p><a href="https://wa.me/+919204745612" target="_blank">+91 92047 45612</a></p>
               <p>Quick responses guaranteed</p>
             </div>
 
@@ -54,8 +54,8 @@ export default function ContactUs() {
                 <MapPin size={28} />
               </div>
               <h3>Visit Us</h3>
-              <p>123 Green Street</p>
-              <p>Garden District, City - 123456</p>
+              <p>Vriksh Valley Store</p>
+              <p>Dungra, Ranchi, Jharkhand</p>
             </div>
           </div>
         </div>

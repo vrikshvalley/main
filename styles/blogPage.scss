@@ -95,7 +95,7 @@
 
 .category-btn {
   padding: 0.6rem 1.5rem;
-  background: rgba($white, 0.05);
+  background: rgba($white, 0.4);
   border: 2px solid rgba($teal, 0.3);
   border-radius: 50px;
   font-family: $font-secondary;
@@ -107,7 +107,7 @@
 
   &:hover {
     border-color: $teal;
-    background: rgba($teal, 0.1);
+    background: $white;
     color: $teal;
   }
 

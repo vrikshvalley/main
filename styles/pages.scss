@@ -2,24 +2,34 @@
 
 .page-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, 
-    rgba($deep-green, 0.2) 0%, 
-    transparent 50%,
-    rgba($dark-green, 0.2) 100%
-  );
+  padding: 0;
+
+  @media (max-width: 768px) {
+    padding: 0;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0;
+  }
 }
 
 .page-content {
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 2rem auto;
   padding: 3rem 2rem;
+  background: $white;
+  border-radius: 16px;
+  box-shadow: 0 8px 40px rgba($dark-green, 0.2);
 
   @media (max-width: 768px) {
     padding: 2rem 1.5rem;
+    margin: 0 1rem;
+    border-radius: 12px;
   }
 
   @media (max-width: 480px) {
     padding: 1.5rem 1rem;
+    margin: 0 0.5rem;
   }
 }
 
@@ -31,9 +41,8 @@
     font-family: 'Playfair Display', serif;
     font-size: 3rem;
     font-weight: 700;
-    color: $text-primary;
+    color: $dark-green;
     margin-bottom: 1rem;
-    text-shadow: 0 2px 8px rgba($primary-bg, 0.1);
 
     @media (max-width: 768px) {
       font-size: 2.5rem;
@@ -46,7 +55,7 @@
 
   p {
     font-size: 1.1rem;
-    color: rgba($text-primary, 0.7);
+    color: rgba($dark-green, 0.7);
     max-width: 600px;
     margin: 0 auto;
 
@@ -57,28 +66,20 @@
 }
 
 .content-section {
-  background: rgba($text-primary, 0.6);
-  backdrop-filter: blur(10px);
-  border-radius: 16px;
-  padding: 2.5rem;
+  background: transparent;
+  padding: 0;
   margin-bottom: 2rem;
-  border: 1px solid rgba($accent-primary, 0.2);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 
   @media (max-width: 768px) {
-    padding: 2rem;
-  }
-
-  @media (max-width: 480px) {
-    padding: 1.5rem;
-    border-radius: 12px;
+    margin-bottom: 1.5rem;
   }
 
   h2 {
     font-family: 'Playfair Display', serif;
     font-size: 2rem;
-    color: $primary-bg;
+    color: $dark-green;
     margin-bottom: 1.5rem;
+    margin-top: 2rem;
 
     @media (max-width: 480px) {
       font-size: 1.6rem;
@@ -87,7 +88,7 @@
 
   h3 {
     font-size: 1.5rem;
-    color: $primary-bg;
+    color: $dark-green;
     margin-top: 2rem;
     margin-bottom: 1rem;
 
@@ -99,7 +100,7 @@
   p {
     font-size: 1.05rem;
     line-height: 1.8;
-    color: rgba($primary-bg, 0.8);
+    color: $dark-green;
     margin-bottom: 1rem;
 
     @media (max-width: 480px) {
@@ -115,7 +116,7 @@
     li {
       font-size: 1.05rem;
       line-height: 1.8;
-      color: rgba($primary-bg, 0.8);
+      color: $dark-green;
       margin-bottom: 0.5rem;
 
       @media (max-width: 480px) {
@@ -125,7 +126,7 @@
   }
 
   strong {
-    color: $text-secondary;
+    color: $teal;
     font-weight: 700;
   }
 }
@@ -142,18 +143,17 @@
 }
 
 .contact-card {
-  background: rgba($text-primary, 0.8);
-  backdrop-filter: blur(10px);
+  background: rgba($teal, 0.05);
   border-radius: 12px;
   padding: 2rem;
   text-align: center;
-  border: 2px solid rgba($accent-primary, 0.2);
+  border: 2px solid rgba($teal, 0.2);
   transition: all 0.3s ease;
 
   &:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 24px rgba($accent-primary, 0.2);
-    border-color: $accent-primary;
+    box-shadow: 0 8px 24px rgba($teal, 0.2);
+    border-color: $teal;
   }
 
   @media (max-width: 480px) {
@@ -164,12 +164,12 @@
     width: 60px;
     height: 60px;
     margin: 0 auto 1.5rem;
-    background: rgba($bg-secondary, 0.7);
+    background: $teal;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: $text-primary;
+    color: $white;
 
     @media (max-width: 480px) {
       width: 50px;
@@ -180,7 +180,7 @@
 
   h3 {
     font-size: 1.3rem;
-    color: $primary-bg;
+    color: $dark-green;
     margin-bottom: 1rem;
 
     @media (max-width: 480px) {
@@ -189,7 +189,7 @@
   }
 
   p, a {
-    color: rgba($primary-bg, 0.7);
+    color: $dark-green;
     font-size: 1rem;
     text-decoration: none;
     transition: color 0.2s ease;
@@ -200,7 +200,7 @@
   }
 
   a:hover {
-    color: $text-secondary;
+    color: $teal;
   }
 }
 

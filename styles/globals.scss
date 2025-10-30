@@ -40,6 +40,18 @@ html, body {
   min-height: 100vh; // Ensure full viewport height
 }
 
+#__next {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 body {
   margin: 0;
   font-family: Playfair Display, serif;

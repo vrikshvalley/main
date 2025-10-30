@@ -45,13 +45,15 @@ export default function Home() {
       <Ads 
         items={['New Arrivals', 'Premium Collection', 'Indoor Plants', 'Outdoor Gardens', 'Succulents', 'Bonsai']} 
         bgColor="primary" 
+        textColor="light"
         speed={25}
       />
       <CategoryCircles />
       <FeaturedProducts title="Featured Products"  />
       <Ads 
         items={['Free Shipping', 'Expert Care Tips', '100% Organic', 'Healthy Plants Guaranteed']} 
-        bgColor="secondary" 
+        bgColor="yellow" 
+        textColor="dark" 
         speed={30}
       />
       <WhyChooseUs />

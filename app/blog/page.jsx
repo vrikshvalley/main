@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Calendar, Clock, User, Search, ArrowRight } from 'lucide-react';
+import { Calendar, Clock, User, ArrowRight } from 'lucide-react';
 import TopBar from '@/components/general/Topbar';
 import Navbar from '@/components/general/Navbar';
 import Footer from '@/components/general/Footer';
@@ -14,16 +14,12 @@ import '@/styles/blogPage.scss';
 
 export default function BlogPage() {
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [searchQuery, setSearchQuery] = useState('');
   
   const categories = ['All', ...getAllCategories()];
   
   const filteredBlogs = blogPosts.filter(blog => {
     const matchesCategory = selectedCategory === 'All' || blog.category === selectedCategory;
-    const matchesSearch = blog.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         blog.excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         blog.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
-    return matchesCategory && matchesSearch;
+    return matchesCategory;
   });
 
   return (
@@ -39,16 +35,6 @@ export default function BlogPage() {
         </div>
 
         <div className="blog-filters">
-          <div className="search-bar">
-            <Search size={20} />
-            <input 
-              type="text"
-              placeholder="Search articles..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-
           <div className="category-filters">
             {categories.map(category => (
               <button
@@ -115,7 +101,7 @@ export default function BlogPage() {
           ) : (
             <div className="no-results">
               <p>No articles found matching your criteria.</p>
-              <button onClick={() => { setSearchQuery(''); setSelectedCategory('All'); }}>
+              <button onClick={() => { setSelectedCategory('All'); }}>
                 Clear Filters
               </button>
             </div>

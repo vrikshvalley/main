@@ -11,6 +11,7 @@ const nextConfig = {
   },
   images: {
     remotePatterns: [new URL("https://avatar.iran.liara.run/public/**")],
+    qualities: [75, 85, 90, 95, 100],
   },
 };
 

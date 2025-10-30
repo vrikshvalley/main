@@ -1,5 +1,4 @@
 'use client';
-import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { 
   siFacebook, 
@@ -9,36 +8,11 @@ import {
   siPinterest,
   siThreads,
 } from 'simple-icons';
-import gsap from 'gsap';
-import ScrollTrigger from 'gsap/ScrollTrigger';
 import '@/styles/footer.scss';
 
-gsap.registerPlugin(ScrollTrigger);
-
 export default function Footer() {
-  const footerRef = useRef(null);
-
-  useEffect(() => {
-    if (footerRef.current) {
-      gsap.fromTo(
-        footerRef.current,
-        { opacity: 0, y: 50 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 1,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: footerRef.current,
-            start: 'top 85%',
-          },
-        }
-      );
-    }
-  }, []);
-
   return (
-    <footer className="footer" ref={footerRef}>
+    <footer className="footer">
       <div className="footer-container">
         <div className="footer-section">
           <h3>About</h3>
@@ -65,8 +39,8 @@ export default function Footer() {
           <h3>Get in Touch</h3>
           <ul>
             <li><a href="tel:+91 92047 45612">Call: +91 92047 45612</a></li>
-            <li><a href="mailto:support@example.com">Email: support@example.com</a></li>
-            <li><a href="https://wa.me/919204745612" target="_blank">WhatsApp: +91 92047 45612</a></li>
+            <li><a href="mailto:support@vrikshvalley.com">Email: support@vrikshvalley.com</a></li>
+            <li><a href="https://wa.me/+919204745612" target="_blank">WhatsApp: +91 92047 45612</a></li>
           </ul>
         </div>
 
