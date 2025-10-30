@@ -125,7 +125,7 @@ export default function LinkHub() {
         <motion.div className="logo-section" variants={logoVariants}>
           <div className="logo-wrapper">
             <Image
-              src="/big-logo.png"
+              src="/white-biglogo.png"
               alt="Vriksh Valley"
               width={250}
               height={80}

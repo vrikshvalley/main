@@ -13,6 +13,7 @@ import PlantFAQs from "@/components/Homepage/PlantFAQs";
 import OurLocation from "@/components/Homepage/OurLocation";
 import Gallery from "@/components/Homepage/Gallery";
 import About from "@/components/Homepage/AboutUs";
+import OurBlogs from "@/components/Homepage/OurBlogs";
 import Footer from "@/components/general/Footer";
 import WhatsAppButton from "@/components/general/WhatsAppButton";
 import Ads from "@/components/general/Ads";
@@ -62,6 +63,7 @@ export default function Home() {
       <OurLocation />
       <Gallery />
       <About />
+      <OurBlogs />
       <Footer />
       <WhatsAppButton />
     </>

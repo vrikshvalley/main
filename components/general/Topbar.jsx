@@ -24,7 +24,7 @@ export default function TopBar() {
     <div className="topbar">
       <div className="topbar-container">
         <div className="topbar-logo">
-          <Image src="/logo.png" alt="Logo" width={30} height={30} />
+          <Image src="/white-logo.png" alt="Logo" width={30} height={30} />
         </div>
         
         {isMobile ? (

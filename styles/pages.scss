@@ -203,3 +203,27 @@
     color: $text-secondary;
   }
 }
+
+.agreement-notice,
+.thank-you-note {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: rgba($teal, 0.1);
+  border-left: 4px solid $teal;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: $dark-green;
+  line-height: 1.6;
+
+  @media (max-width: 480px) {
+    padding: 1rem;
+    font-size: 0.95rem;
+  }
+}
+
+.thank-you-note {
+  border-left-color: $deep-green;
+  background: rgba($deep-green, 0.1);
+  font-style: italic;
+}

@@ -1,73 +1,79 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Search } from 'lucide-react';
+import { X } from 'lucide-react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function SearchBar() {
-  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const searchRef = useRef(null);
 
-  // Close mobile search on outside click
+  // Close search on outside click
   useEffect(() => {
     function handleClickOutside(e) {
       if (searchRef.current && !searchRef.current.contains(e.target)) {
-        setMobileSearchOpen(false);
+        setSearchOpen(false);
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Toggle mobile search (fixes the issue where it doesn't close on 2nd click)
-  const toggleMobileSearch = () => {
-    setMobileSearchOpen(prev => !prev);
+  // Toggle search
+  const toggleSearch = () => {
+    setSearchOpen(prev => !prev);
   };
 
   return (
     <>
-      {/* Desktop search */}
-      <motion.div 
-        className={`search-box desktop-only ${isFocused ? 'focused' : ''}`}
-        initial={{ opacity: 0, width: 0 }}
-        animate={{ opacity: 1, width: 'auto' }}
-        transition={{ duration: 0.3, ease: 'easeOut' }}
-      >
-        <div className="search-icon">
-          <Search size={18} />
-        </div>
-        <input 
-          type="text" 
-          placeholder="Search plants..." 
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
-        />
-      </motion.div>
-
-      {/* Mobile search icon */}
+      {/* Search icon (always visible) */}
       <button
-        className="mobile-search-icon mobile-only"
-        onClick={toggleMobileSearch}
+        className="search-icon-button"
+        onClick={toggleSearch}
       >
-        <Search size={22} />
+        <div className="icon-wrapper">
+          {searchOpen ? (
+            <X size={22} />
+          ) : (
+            <Image 
+              src="/search-icon.png" 
+              alt="Search" 
+              width={22} 
+              height={22}
+            />
+          )}
+        </div>
+        <span className="search-text">Search</span>
       </button>
 
-      {/* Mobile search bar (slides down) */}
+      {/* Expanded search bar */}
       <AnimatePresence>
-        {mobileSearchOpen && (
+        {searchOpen && (
           <motion.div 
             ref={searchRef} 
-            className="mobile-search-bar"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
+            className="expanded-search-bar"
+            initial={{ opacity: 0, scale: 0.9, x: 20 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
+            exit={{ opacity: 0, scale: 0.9, x: 20 }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
           >
             <div className="search-icon">
-              <Search size={18} />
+              <Image 
+                src="/search-icon.png" 
+                alt="Search" 
+                width={18} 
+                height={18}
+              />
             </div>
-            <input type="text" placeholder="Search plants..." autoFocus />
+            <input 
+              type="text" 
+              placeholder="Search plants..." 
+              autoFocus 
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => setIsFocused(false)}
+            />
           </motion.div>
         )}
       </AnimatePresence>

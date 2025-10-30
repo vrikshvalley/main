@@ -39,13 +39,13 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    color: $text-secondary;
+    color: $text-primary;
     text-decoration: none;
     font-weight: 600;
     font-size: 1.05rem;
     padding: 0.75rem 1.5rem;
     border-radius: 8px;
-    border: 2px solid $accent-primary;
+    border: 2px solid $text-primary;
     background: rgba($bg-secondary, 0.1);
     transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 

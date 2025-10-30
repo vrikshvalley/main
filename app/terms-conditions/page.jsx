@@ -9,111 +9,67 @@ export default function TermsConditions() {
       
       <div className="page-content">
         <div className="page-header">
-          <h1>Terms and Conditions</h1>
-          <p>Last updated: {new Date().toLocaleDateString()}</p>
+          <h1>Terms and Conditions – Vriksh Valley</h1>
+          <p>Please read carefully before using our services</p>
         </div>
 
         <div className="content-section">
-          <h2>Agreement to Terms</h2>
           <p>
-            These Terms and Conditions constitute a legally binding agreement between you and Vriksh Valley 
-            regarding your use of our website and services.
+            We welcome you to Vriksh Valley. Accessing or purchasing from our website indicates that you agree to the following Terms and Conditions. Please read them carefully before using our services.
           </p>
 
-          <h3>1. Definitions</h3>
-          <ul>
-            <li><strong>"Website"</strong> refers to Vriksh Valley's online platform</li>
-            <li><strong>"Services"</strong> refers to all products and services offered</li>
-            <li><strong>"User"</strong> refers to anyone accessing our website</li>
-            <li><strong>"Products"</strong> refers to plants and related items</li>
-          </ul>
-
-          <h3>2. Eligibility</h3>
+          <h2>General</h2>
           <p>
-            You must be at least 18 years old to make purchases. By using our services, you represent 
-            that you meet this requirement.
+            Vriksh Valley ("we", "us", "our") operates this website to provide plant products, gardening tools, and related accessories. Using our products indicates that you agree to comply with and be bound by these terms. We reserve the right to update or modify these terms at any time without prior notice.
           </p>
 
-          <h3>3. Account Registration</h3>
-          <ul>
-            <li>You may need to create an account to access certain features</li>
-            <li>Provide accurate and complete information</li>
-            <li>Maintain the security of your account credentials</li>
-            <li>Notify us immediately of unauthorized access</li>
-          </ul>
-
-          <h3>4. Orders and Purchases</h3>
-          <ul>
-            <li>All orders are subject to acceptance and availability</li>
-            <li>We reserve the right to refuse or cancel orders</li>
-            <li>Prices are subject to change without notice</li>
-            <li>Payment must be completed before dispatch</li>
-          </ul>
-
-          <h3>5. Product Descriptions</h3>
+          <h2>Product Availability</h2>
           <p>
-            We strive for accuracy in product descriptions and images. As plants are living organisms, 
-            actual products may vary slightly. We guarantee quality and health.
+            All products listed are subject to availability. Plants are living entities and may vary slightly in size, color, or appearance from images shown. We make every effort to maintain accurate product descriptions and stock levels. But we cannot guarantee availability at all times.
           </p>
 
-          <h3>6. Intellectual Property</h3>
+          <h2>Pricing and Payment</h2>
           <p>
-            All content on our website, including images, text, logos, and designs, is owned by 
-            Vriksh Valley and protected by copyright laws.
+            All prices are listed in INR and inclusive of applicable taxes unless otherwise stated. Payments can be made securely through approved online payment gateways. Orders are confirmed only upon successful transaction.
           </p>
 
-          <h3>7. User Conduct</h3>
-          <p>You agree not to:</p>
-          <ul>
-            <li>Use the website for unlawful purposes</li>
-            <li>Violate any applicable laws or regulations</li>
-            <li>Infringe on intellectual property rights</li>
-            <li>Transmit harmful code or malware</li>
-            <li>Impersonate others or provide false information</li>
-          </ul>
-
-          <h3>8. Privacy</h3>
+          <h2>Shipping and Delivery</h2>
           <p>
-            Your use of our services is also governed by our Privacy Policy. We collect and use 
-            information as described in that policy.
+            We aim to dispatch all orders promptly. However, delivery times may vary depending on location, weather, or courier constraints. Customers will be informed of any significant delay. Plants are carefully packaged to ensure they arrive healthy and intact.
           </p>
 
-          <h3>9. Disclaimers</h3>
-          <ul>
-            <li>Services are provided "as is" without warranties</li>
-            <li>We don't guarantee uninterrupted or error-free service</li>
-            <li>Plant care results may vary based on individual circumstances</li>
-          </ul>
-
-          <h3>10. Limitation of Liability</h3>
+          <h2>Returns and Replacements</h2>
           <p>
-            Vriksh Valley shall not be liable for indirect, incidental, or consequential damages 
-            arising from use of our products or services.
+            Due to the perishable nature of plants, returns are accepted only in cases of transit damage or incorrect delivery. Customers must report such issues within 48 hours of receiving the product with photographic proof. Replacement or store credit will be offered at our discretion.
           </p>
 
-          <h3>11. Indemnification</h3>
+          <h2>Intellectual Property</h2>
           <p>
-            You agree to indemnify and hold Vriksh Valley harmless from claims arising from your 
-            violation of these terms or misuse of services.
+            All content on the Vriksh Valley website, including images, logos, and text, is our property and protected by applicable copyright laws. Unauthorized use is strictly prohibited.
           </p>
 
-          <h3>12. Modifications</h3>
+          <h2>Liability</h2>
           <p>
-            We reserve the right to modify these terms at any time. Changes will be effective 
-            immediately upon posting. Continued use constitutes acceptance.
+            Vriksh Valley shall not be liable for any indirect, incidental, or consequential damages arising from the use of our products or website. Users are responsible for ensuring plants are suitable for their specific environment.
           </p>
 
-          <h3>13. Governing Law</h3>
+          <h2>Governing Law</h2>
           <p>
-            These terms are governed by the laws of India. Disputes shall be subject to the 
-            exclusive jurisdiction of courts in [Your City].
+            The laws of India govern these Terms and Conditions. Any dispute will be subject to the jurisdiction of the courts in Kolkata.
           </p>
 
-          <h3>14. Contact Information</h3>
+          <h2>Order Cancellations</h2>
           <p>
-            For questions about these terms:<br />
-            Email: legal@vrikshvalley.com<br />
-            Phone: +91 12345 67890
+            Customers can request order cancellations before dispatch by contacting our support team. Once the order has been shipped, it cannot be canceled. In case of failed delivery attempts or incorrect address entries, additional delivery charges may apply. Vriksh Valley reserves the right to cancel any order due to unforeseen circumstances such as product unavailability, fraudulent activity, or payment irregularities. Refunds, if applicable, will be processed within 7-10 working days.
+          </p>
+
+          <h2>User Responsibility</h2>
+          <p>
+            Using our website indicates that you agree to provide accurate and complete information during registration, checkout, and communication. You must not use the website for unlawful or fraudulent purposes. Any misuse, data tampering, or attempt to disrupt website functionality will lead to immediate account termination. Users are also responsible for maintaining the confidentiality of their account credentials and notifying us immediately in case of unauthorized use.
+          </p>
+
+          <p className="agreement-notice">
+            Using Vriksh Valley indicates that you acknowledge having read, understood, and agreed to these Terms and Conditions.
           </p>
         </div>
       </div>

@@ -3,9 +3,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Alumni+Sans:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 
 .topbar {
-  background: $text-secondary;
+  background: $dark-green;
   font-size: 1.5rem;
-  color: $text-secondary;
+  color: $primary-bg;
   box-shadow: $shadow-light;
   position: relative;
   overflow: hidden;
@@ -13,7 +13,7 @@
   .topbar-container {
     max-width: 1500px;
     margin: 0 auto;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -28,8 +28,8 @@
 
   .impact-text {
     font-family: 'Playfair Display', serif;
-    font-size: 0.9rem;
-    color: $primary-bg;
+    font-size: 0.8rem;
+    color: $text-primary;
     font-weight: 500;
     display: flex;
     align-items: center;
@@ -38,7 +38,7 @@
     justify-content: center;
 
     .impact-icon {
-      font-size: 1.1rem;
+      font-size: 1rem;
     }
   }
 
@@ -81,23 +81,23 @@
     gap: 0.75rem;
     align-items: center;
     font-weight: bold;
-    color: $primary-bg;
+    color: $text-primary;
     flex-shrink: 0;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
 
     .separator {
-      color: $primary-bg;
+      color: $text-primary;
       opacity: 0.5;
     }
 
     a {
-      color: $primary-bg;
+      color: $text-primary;
       text-decoration: none;
       transition: all 0.2s ease;
       position: relative;
 
       &:hover {
-        color: $bg-secondary;
+        color: $yellow;
       }
 
       &::after {
@@ -107,7 +107,7 @@
         left: 0;
         width: 0;
         height: 2px;
-        background: $bg-secondary;
+        background: $teal;
         transition: width 0.3s ease;
       }
 
@@ -119,7 +119,7 @@
 
   @media (max-width: 768px) {
     .topbar-container {
-      padding: 0.4rem 0.75rem;
+      padding: 0.4rem 1rem;
       gap: 0.5rem;
     }
 
@@ -130,7 +130,7 @@
     }
 
     .topbar-links {
-      font-size: 1.1rem;
+      font-size: 1rem;
       gap: 0.5rem;
 
       .separator {
@@ -141,7 +141,7 @@
 
   @media (max-width: 480px) {
     .topbar-container {
-      padding: 0.35rem 0.5rem;
+      padding: 0.35rem 0.75rem;
     }
 
     .topbar-logo img {
@@ -158,11 +158,11 @@
     }
 
     .topbar-links {
-      font-size: 0.95rem;
+      font-size: 0.85rem;
       gap: 0.4rem;
 
       .separator {
-        font-size: 0.75rem;
+        font-size: 0.7rem;
       }
     }
   }

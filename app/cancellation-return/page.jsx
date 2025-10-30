@@ -9,76 +9,55 @@ export default function CancellationReturn() {
       
       <div className="page-content">
         <div className="page-header">
-          <h1>Cancellation & Return Policy</h1>
-          <p>Your satisfaction is our priority</p>
+          <h1>Cancellation and Refund Policy – Vriksh Valley</h1>
+          <p>Clear and transparent policies for your peace of mind</p>
         </div>
 
         <div className="content-section">
-          <h2>Cancellation Policy</h2>
-          
-          <h3>Before Dispatch</h3>
+          <h2>Refund Eligibility</h2>
           <p>
-            You may cancel your order at any time before it has been dispatched. To cancel, contact our 
-            customer support team immediately. Full refund will be processed within 5-7 business days.
+            Refunds are eligible for all Vriksh Valley live plants, planters, tools, and accessories if requested within <strong>7 days of delivery</strong>.
           </p>
 
-          <h3>After Dispatch</h3>
+          <h2>Refund Process</h2>
           <p>
-            Once an order has been dispatched, it cannot be cancelled. However, you may refuse delivery 
-            and contact us for a return.
+            Refunds are issued via reversal to the original payment method. Once approved, the refund will be processed within 7-10 working days.
           </p>
 
-          <h2>Return Policy</h2>
+          <h2>Replacement Policy</h2>
+          <p>
+            Replacements are provided only if you share an <strong>unboxing video</strong> showing the item's damage or defect. This helps us verify the condition of the product at the time of delivery and process your request promptly.
+          </p>
 
-          <h3>Eligibility for Returns</h3>
+          <h2>Important Guidelines</h2>
           <ul>
-            <li>Plants received in damaged or unhealthy condition</li>
-            <li>Wrong plant delivered</li>
-            <li>Plants not matching the description</li>
+            <li>Inspect your order immediately upon delivery</li>
+            <li>Record an unboxing video for high-value or fragile items</li>
+            <li>Report any damage or defect within 48 hours of delivery</li>
+            <li>Contact our support team with photographic or video evidence</li>
           </ul>
 
-          <h3>Return Process</h3>
-          <ol>
-            <li>Contact us within <strong>24 hours</strong> of delivery</li>
-            <li>Provide photos of the plant showing the issue</li>
-            <li>Our team will review and approve the return</li>
-            <li>We'll arrange pickup or provide return instructions</li>
-          </ol>
-
-          <h3>Non-Returnable Items</h3>
+          <h2>Non-Refundable Items</h2>
+          <p>
+            The following items are not eligible for refund or replacement:
+          </p>
           <ul>
             <li>Plants damaged due to improper care after delivery</li>
-            <li>Plants returned after 24 hours without prior approval</li>
-            <li>Accessories and pots (unless damaged)</li>
+            <li>Products not reported within the stipulated timeframe</li>
+            <li>Items without proper documentation (photos/videos)</li>
           </ul>
 
-          <h2>Refund Policy</h2>
-          
-          <h3>Refund Timeline</h3>
+          <h2>Order Cancellation</h2>
           <p>
-            Approved refunds will be processed within 7-10 business days of receiving the returned product. 
-            The refund will be credited to your original payment method.
+            You can cancel your order before it has been dispatched by contacting our customer support team. Once the order is shipped, cancellation is not possible. However, you may initiate a return as per our return policy.
           </p>
 
-          <h3>Replacement Option</h3>
+          <h2>Contact for Cancellations and Returns</h2>
           <p>
-            Instead of a refund, you may choose to receive a replacement plant of the same or equivalent 
-            value, subject to availability.
-          </p>
-
-          <h2>Important Notes</h2>
-          <ul>
-            <li>Inspect plants immediately upon delivery</li>
-            <li>Take photos/videos during unboxing</li>
-            <li>Keep packaging materials for potential returns</li>
-            <li>Contact us immediately for any issues</li>
-          </ul>
-
-          <h2>Contact for Returns</h2>
-          <p>
-            Email: returns@vrikshvalley.com<br />
-            Phone: +91 12345 67890<br />
-            WhatsApp: +91 12345 67890
+            For all cancellation and return queries, reach us at:<br />
+            <strong>Phone:</strong> +91 92047 45612<br />
+            <strong>Email:</strong> vrikshvalley@gmail.com<br />
+            Our team is available to assist you with your concerns.
           </p>
         </div>
       </div>
