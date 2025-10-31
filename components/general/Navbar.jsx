@@ -7,11 +7,11 @@ import { selectCount } from '@/lib/slices/cartSlice';
 import { Menu, X } from 'lucide-react';
 import Image from 'next/image';
 import ProfileIcon from '@/components/auth/ProfileIcon';
-import Cart from '@/components/cart/Cart';
+import CartIcon from '@/components/cart/CartIcon';
 import SearchBar from '@/components/general/SearchBar';
 import "@/styles/navbar.scss";
 
-export default function Navbar() {
+export default function Navbar({ onCartClick }) {
   const count = useSelector(selectCount);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -39,7 +39,7 @@ export default function Navbar() {
         <div className="nav-actions">
           <SearchBar />
           
-          <Cart />
+          <CartIcon onCartClick={onCartClick} />
           <ProfileIcon />
 
           {/* Hamburger (mobile) */}

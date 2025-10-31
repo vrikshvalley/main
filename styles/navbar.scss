@@ -359,10 +359,14 @@
       font-weight: 500;
       text-decoration: none;
       border-left: 3px solid transparent;
+      border-bottom: 1px solid rgba($primary-bg, 0.1);
       border-radius: 4px;
       transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
       position: relative;
       overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
 
       &::before {
         content: '';
@@ -377,6 +381,15 @@
         );
         transition: width 0.3s ease;
       }
+
+      &::after {
+        content: '→';
+        font-size: 1.2rem;
+        opacity: 0;
+        transform: translateX(-10px);
+        transition: all 0.3s ease;
+        color: $accent-primary;
+      }
       
       &:hover {
         color: $accent-primary;
@@ -386,6 +399,11 @@
         
         &::before {
           width: 100%;
+        }
+
+        &::after {
+          opacity: 1;
+          transform: translateX(0);
         }
       }
 
@@ -530,6 +548,7 @@
     .mobile-menu { 
       display: flex;
       font-size: 1.2rem;
+      align-items: flex-end;
     }
   }
 

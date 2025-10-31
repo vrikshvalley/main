@@ -2,19 +2,16 @@
 @use 'variables' as *;
 
 .plant-faqs {
-  padding: 5rem 2rem;
-  background: linear-gradient(135deg,
-    rgba($deep-green, 0.2) 0%,
-    rgba($dark-green, 0.15) 100%
-  );
+  padding: 8rem 2rem;
+  background: transparent;
   position: relative;
 
   @media (max-width: 768px) {
-    padding: 3rem 1.5rem;
+    padding: 6rem 1.5rem;
   }
 
   @media (max-width: 480px) {
-    padding: 2rem 1rem;
+    padding: 5rem 1rem;
   }
 }
 

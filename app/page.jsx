@@ -16,15 +16,18 @@ import About from "@/components/Homepage/AboutUs";
 import OurBlogs from "@/components/Homepage/OurBlogs";
 import Footer from "@/components/general/Footer";
 import WhatsAppButton from "@/components/general/WhatsAppButton";
+import CartModal from "@/components/cart/CartModal";
 import Ads from "@/components/general/Ads";
 
-import { React, use } from "react";
+import { React, useState } from "react";
 import { useEffect } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { useRouter } from "next/navigation";  
 
 export default function Home() {
   const router = useRouter();
+  const [cartOpen, setCartOpen] = useState(false);
+
   useEffect(() => {
     async function checkAuth() {
     const { data, error } = await supabase.auth.getSession();
@@ -39,8 +42,9 @@ export default function Home() {
 
   return (
     <>
+      <CartModal isOpen={cartOpen} onClose={() => setCartOpen(false)} />
       <TopBar />
-      <Navbar />
+      <Navbar onCartClick={() => setCartOpen(true)} />
       <HeroSlider />
       <Ads 
         items={['New Arrivals', 'Premium Collection', 'Indoor Plants', 'Outdoor Gardens', 'Succulents', 'Bonsai']} 
@@ -68,6 +72,7 @@ export default function Home() {
       <OurBlogs />
       <Footer />
       <WhatsAppButton />
+      
     </>
   );
 }

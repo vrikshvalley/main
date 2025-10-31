@@ -1,32 +1,54 @@
 @use "sass:color";
 @use 'variables' as *;
 
+// Backdrop overlay
 .cart-overlay {
   position: fixed;
   inset: 0;
   background: rgba($primary-bg, 0.85);
   backdrop-filter: blur(4px);
-  display: flex;
-  justify-content: flex-end;
   z-index: 9999;
+  pointer-events: none; // allow background to scroll and interactions pass through
 }
 
+// Modal wrapper - centers the modal with pointer-events-none trick
+.cart-modal-wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  pointer-events: none;
+}
+
+// The actual modal content
 .cart-modal {
   background: $text-primary;
-  width: 800px;
-  max-width: 90%;
-  height: 100%;
-  padding: 1rem;
+  width: 90%;
+  max-width: 600px;
+  max-height: 85vh;
+  padding: 1.5rem;
   box-shadow: $shadow-strong;
   display: flex;
   flex-direction: column;
-  animation: slideIn 0.3s ease;
-  border-left: 2px solid rgba($accent-primary, 0.3);
+  font-family: 'Playfair Display', serif;
+  border-radius: 16px;
+  overflow-y: auto;
+  pointer-events: auto;
+  animation: scaleIn 0.3s ease;
 }
 
-@keyframes slideIn {
-  from { transform: translateX(100%); }
-  to { transform: translateX(0); }
+@keyframes scaleIn {
+  from { 
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to { 
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .cart-header {
@@ -40,6 +62,7 @@
     font-size: 1.2rem; 
     color: $primary-bg;
     text-shadow: 0 2px 4px rgba($primary-bg, 0.3);
+    font-family: 'Playfair Display', serif;
   }
   
   .close-btn {
@@ -78,9 +101,34 @@
 
 .empty {
   text-align: center;
-  margin-top: 2rem;
+  margin-top: 4rem;
   color: $primary-bg;
-  font-style: italic;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  
+  .empty-icon {
+    font-size: 4rem;
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  p {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin: 0;
+  }
+  
+  .empty-subtitle {
+    font-size: 0.95rem;
+    opacity: 0.7;
+    font-style: italic;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
 
 .cart-footer {
@@ -141,7 +189,7 @@
 
   .whatsapp-order-btn {
     width: 100%;
-    background: $gradient-teal;
+    background: #25D366;
     color: $white;
     padding: 0.75rem;
     border: none;
@@ -149,16 +197,24 @@
     cursor: pointer;
     transition: all 0.3s ease;
     font-weight: 600;
-    box-shadow: 0 4px 12px rgba($teal, 0.3);
+    box-shadow: 0 4px 12px rgba(#25D366, 0.3);
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
 
+    svg {
+      transition: transform 0.3s ease;
+    }
+
     &:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba($teal, 0.5);
-      background: $gradient-dark;
+      box-shadow: 0 6px 20px rgba(#25D366, 0.5);
+      background: #20ba5a;
+
+      svg {
+        transform: scale(1.1);
+      }
     }
 
     &:active {
@@ -256,6 +312,14 @@
     .cart-link {
       font-size: 0.75rem;
     }
+
+    .cart-modal {
+      width: 95%;
+      max-width: none;
+      max-height: 90vh;
+      padding: 1rem;
+      border-radius: 12px;
+    }
   }
 
   @media (max-width: 480px) {
@@ -273,6 +337,17 @@
 
     .cart-link {
       font-size: 0.7rem;
+    }
+
+    .cart-modal {
+      width: 98%;
+      max-height: 95vh;
+      padding: 0.75rem;
+      border-radius: 8px;
+    }
+
+    .cart-overlay {
+      padding: 0.5rem;
     }
   }
 
@@ -380,19 +455,19 @@
       width: 36px;
       height: 36px;
       border: none;
-      background: rgba($yellow, 0.1);
-      color: $yellow;
+      background: rgba(#ef4444, 0.1);
+      color: #ef4444;
       border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       transition: all 0.2s;
-      border: 1px solid rgba($yellow, 0.3);
+      border: 1px solid rgba(#ef4444, 0.3);
 
       &:hover {
-        background: rgba($yellow, 0.2);
-        border-color: $yellow;
+        background: rgba(#ef4444, 0.2);
+        border-color: #ef4444;
         transform: scale(1.1);
       }
     }

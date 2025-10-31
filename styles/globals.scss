@@ -56,7 +56,7 @@ body {
   margin: 0;
   font-family: Playfair Display, serif;
   color: var(--fg);
-  background: url('/backgroundAll.png');
+  background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url('/background-11.jpeg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -69,31 +69,6 @@ body {
     background-attachment: scroll; // Better performance on mobile
     background-size: cover;
     min-height: 100vh; // Ensure background covers full height on mobile
-  }
-}
-
-// Add a pseudo-element with blur and darkening overlay
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url('/backgroundAll.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  -webkit-backdrop-filter: blur(2px) saturate(140%);
-  backdrop-filter: blur(2px) saturate(140%);
-  z-index: -1;
-  
-  @media (max-width: 768px) {
-    position: absolute;
-    background-attachment: scroll;
-    -webkit-backdrop-filter: blur(1.5px) saturate(130%);
-    backdrop-filter: blur(1.5px) saturate(130%);
   }
 }
 
@@ -177,4 +152,16 @@ a:hover {
   left: 20px;
   color: $text-primary;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.ReactModal__Overlay {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.ReactModal__Content {
+  position: relative !important;
+  inset: auto !important;
+  margin: auto !important;
 }

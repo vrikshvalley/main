@@ -2,10 +2,10 @@
 @use 'variables' as *;
 
 .whatsapp-float {
-  position: fixed;
+  position: sticky;
   bottom: 30px;
   left: 30px;
-  z-index: 1000;
+  z-index: 999;
   width: 60px;
   height: 60px;
   background: $gradient-teal;

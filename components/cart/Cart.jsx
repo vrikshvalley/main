@@ -157,6 +157,20 @@ export default function Cart() {
         overlayClassName="cart-overlay"
         className="cart-modal"
         closeTimeoutMS={200}
+        style={{
+          overlay: {
+            position: 'fixed',
+            inset: 0,
+            zIndex: 9999
+          },
+          content: {
+            position: 'fixed',
+            right: 0,
+            top: 0,
+            bottom: 0,
+            left: 'auto'
+          }
+        }}
       >
         <div className="cart-header">
           <h2>Your Cart ({count} {count === 1 ? 'item' : 'items'})</h2>

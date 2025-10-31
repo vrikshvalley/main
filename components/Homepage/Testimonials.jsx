@@ -114,7 +114,12 @@ export default function Testimonials() {
   useEffect(() => {
     if (!isMobile && gridRef.current) {
       const resizeGridItems = () => {
-        const cards = gridRef.current.querySelectorAll('.testimonial-card');
+        const grid = gridRef.current;
+        if (!grid) return;
+        
+        const cards = grid.querySelectorAll('.testimonial-card');
+        if (!cards || cards.length === 0) return;
+        
         cards.forEach((card) => {
           const cardHeight = card.getBoundingClientRect().height;
           const rowHeight = 10; // Match grid-auto-rows value

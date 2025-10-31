@@ -3,14 +3,13 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Phone, Clock, ExternalLink } from 'lucide-react';
-import Image from 'next/image';
 import '@/styles/ourLocation.scss';
 
 export default function OurLocation() {
   const [isHovered, setIsHovered] = useState(false);
 
   const openMaps = () => {
-    window.open('https://maps.app.goo.gl/AEXGmLGHaFWEfcCfA', '_blank', 'noopener,noreferrer');
+    window.open('https://maps.app.goo.gl/qZk8sckjVWRJtr8Q8', '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -54,7 +53,7 @@ export default function OurLocation() {
                   <MapPin size={24} />
                   <div>
                     <h4>Address</h4>
-                    <p>Vriksh Valley Nursery<br />Indirapuram, Ghaziabad<br />Uttar Pradesh, India</p>
+                    <p>Vriksh Valley Nursery<br />Ranchi<br />Jharkhand, India</p>
                   </div>
                 </div>
                 <div className="detail-item">
@@ -68,7 +67,7 @@ export default function OurLocation() {
                   <Phone size={24} />
                   <div>
                     <h4>Contact</h4>
-                    <p>+91 98765 43210<br />contact@vrikshvalley.com</p>
+                    <p>+91 92047 45612<br />contact@vrikshvalley.com</p>
                   </div>
                 </div>
               </div>
@@ -79,7 +78,7 @@ export default function OurLocation() {
             <h3>Vriksh Valley Nursery</h3>
             <p className="location-text">
               <MapPin size={18} />
-              Indirapuram, Ghaziabad, Uttar Pradesh
+              Dungra, Ranchi, Jharkhand
             </p>
             <div className="click-hint">
               <ExternalLink size={16} />
