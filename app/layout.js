@@ -1,6 +1,8 @@
 import "../styles/globals.scss";
 import Providers from "./providers";
 import AutoLogoutProvider from "@/components/general/AutoLogoutProvider";
+import InitialLoader from "@/components/general/InitialLoader";
+import PageLoader from "@/components/general/PageLoader";
 
 export const metadata = {
   metadataBase: new URL("https://vrikshvalley.com"),
@@ -82,6 +84,8 @@ export default function RootLayout({ children }) {
         <link rel="apple-touch-icon" href="/logo.png" />
       </head>
       <body>
+        <InitialLoader />
+        <PageLoader />
         <Providers>
           <AutoLogoutProvider>
             <div className="container">{children}</div>

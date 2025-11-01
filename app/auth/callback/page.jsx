@@ -41,6 +41,6 @@ export default function AuthCallback() {
   }, [router]);
 
   return (
-   <Loader/>
+    <Loader fullscreen />
   );
 }

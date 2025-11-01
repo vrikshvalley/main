@@ -232,7 +232,7 @@ const ProfilePage = () => {
     });
   };
 
-  if (loading) return <Loader />;
+  if (loading) return <Loader fullscreen />;
 
   // Initial setup stepper if name is missing
   if (!profile?.name) {

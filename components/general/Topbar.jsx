@@ -48,6 +48,10 @@ export default function TopBar() {
           <Link href="/consulting">Consulting</Link>
           <span className="separator">|</span>
           <Link href="/offers">Offers</Link>
+          <span className="separator">|</span>
+          <Link href="/testimonials">Testimonials</Link>
+          <span className="separator">|</span>
+          <Link href="/faq">FAQ</Link>
         </nav>
       </div>
     </div>
