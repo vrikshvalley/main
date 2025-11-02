@@ -1,23 +1,25 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
 import { getProducts, getPriceRange } from '@/lib/productHelpers';
 import { categories } from '@/lib/sampleProducts';
 import { ChevronDown, X, SlidersHorizontal, Grid, List } from 'lucide-react';
 import TheLoader from '@/components/general/TheLoader';
 import ProductListCard from '@/components/products/ProductListCard';
-import WhyChooseUs from '@/components/products/WhyChooseUs';
 import '@/styles/products.scss';
 
-export default function ProductsPage() {
+export default function CategoryPage() {
+  const params = useParams();
+  const categorySlug = params.slug;
+  const category = categories.find(c => c.slug === categorySlug);
+
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
+  const [viewMode, setViewMode] = useState('grid');
   
-  // Filter states
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  // Filter states (excluding category since it's fixed)
   const [priceRange, setPriceRange] = useState([0, 10000]);
   const [maxPossiblePrice, setMaxPossiblePrice] = useState(10000);
   const [inStockOnly, setInStockOnly] = useState(false);
@@ -37,22 +39,22 @@ export default function ProductsPage() {
   // Fetch price range on mount
   useEffect(() => {
     const fetchPriceRange = async () => {
-      const range = await getPriceRange(selectedCategory);
+      const range = await getPriceRange(categorySlug);
       setMaxPossiblePrice(range.max);
       setPriceRange([range.min, range.max]);
     };
     fetchPriceRange();
-  }, [selectedCategory]);
+  }, [categorySlug]);
 
   // Fetch products when filters change
   useEffect(() => {
     fetchProducts();
-  }, [selectedCategory, priceRange, inStockOnly, sortBy, sortOrder, currentPage]);
+  }, [categorySlug, priceRange, inStockOnly, sortBy, sortOrder, currentPage]);
 
   const fetchProducts = async () => {
     setLoading(true);
     const result = await getProducts({
-      category: selectedCategory,
+      category: categorySlug,
       minPrice: priceRange[0],
       maxPrice: priceRange[1],
       inStock: inStockOnly ? true : null,
@@ -68,11 +70,6 @@ export default function ProductsPage() {
     setLoading(false);
   };
 
-  const handleCategoryChange = (category) => {
-    setSelectedCategory(category === selectedCategory ? null : category);
-    setCurrentPage(1);
-  };
-
   const handlePriceChange = (index, value) => {
     const newRange = [...priceRange];
     newRange[index] = parseInt(value);
@@ -81,7 +78,6 @@ export default function ProductsPage() {
   };
 
   const handleClearFilters = () => {
-    setSelectedCategory(null);
     setPriceRange([0, maxPossiblePrice]);
     setInStockOnly(false);
     setSortBy('created_at');
@@ -91,7 +87,6 @@ export default function ProductsPage() {
 
   const getActiveFiltersCount = () => {
     let count = 0;
-    if (selectedCategory) count++;
     if (priceRange[0] > 0 || priceRange[1] < maxPossiblePrice) count++;
     if (inStockOnly) count++;
     return count;
@@ -118,15 +113,31 @@ export default function ProductsPage() {
     return labels[sortBy] || 'Sort By';
   };
 
+  if (!category) {
+    return (
+      <div className="category-not-found">
+        <h1>Category Not Found</h1>
+        <p>The category you're looking for doesn't exist.</p>
+        <a href="/products" className="back-to-products">View All Products</a>
+      </div>
+    );
+  }
+
   return (
     <div className="products-page">
-      <Breadcrumbs items={[{ label: 'Products' }]} />
+      <Breadcrumbs 
+        items={[
+          { label: 'Products', href: '/products' },
+          { label: category.name }
+        ]} 
+      />
       
-      {/* Page Header */}
+      {/* Category Header */}
       <div className="products-header">
         <div className="header-content">
-          <h1>Our Products</h1>
-          <p>Discover our curated collection of plants, seeds, and gardening essentials</p>
+          <div className="category-icon">{category.icon}</div>
+          <h1>{category.name}</h1>
+          <p>{category.description}</p>
         </div>
       </div>
 
@@ -156,12 +167,6 @@ export default function ProductsPage() {
                 </button>
               </div>
               <div className="active-filter-tags">
-                {selectedCategory && (
-                  <span className="filter-tag">
-                    {categories.find(c => c.slug === selectedCategory)?.name}
-                    <X size={14} onClick={() => setSelectedCategory(null)} />
-                  </span>
-                )}
                 {(priceRange[0] > 0 || priceRange[1] < maxPossiblePrice) && (
                   <span className="filter-tag">
                     ₹{priceRange[0]/100} - ₹{priceRange[1]/100}
@@ -177,24 +182,6 @@ export default function ProductsPage() {
               </div>
             </div>
           )}
-
-          {/* Category Filter */}
-          <div className="filter-section">
-            <h4>Categories</h4>
-            <div className="category-list">
-              {categories.map((cat) => (
-                <label key={cat.slug} className="category-item">
-                  <input
-                    type="checkbox"
-                    checked={selectedCategory === cat.slug}
-                    onChange={() => handleCategoryChange(cat.slug)}
-                  />
-                  <span className="category-icon">{cat.icon}</span>
-                  <span className="category-name">{cat.name}</span>
-                </label>
-              ))}
-            </div>
-          </div>
 
           {/* Price Filter */}
           <div className="filter-section">
@@ -377,7 +364,7 @@ export default function ProductsPage() {
             </>
           ) : (
             <div className="no-products">
-              <p>No products found matching your criteria.</p>
+              <p>No products found in this category.</p>
               <button onClick={handleClearFilters} className="clear-filters-button">
                 Clear Filters
               </button>
@@ -385,9 +372,6 @@ export default function ProductsPage() {
           )}
         </main>
       </div>
-
-      {/* Why Choose Us Section */}
-      <WhyChooseUs />
     </div>
   );
 }

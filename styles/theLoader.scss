@@ -1,0 +1,84 @@
+@use "sass:color";
+@use 'variables' as *;
+
+/* The Unified Loader for Vriksh Valley */
+
+.the-loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  width: 100%;
+  
+  &.fullscreen {
+    position: fixed;
+    inset: 0;
+    background: rgba($primary-bg, 0.95);
+    backdrop-filter: blur(8px);
+    z-index: 99999;
+    min-height: 100vh;
+  }
+}
+
+.goo-filter {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.blob-spinner {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  filter: url('#goo-effect');
+}
+
+.blob {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00ffd5 0%, $teal 50%, #0d9488 100%);
+  
+  &.blob-1 {
+    top: 0;
+    left: 0;
+    animation: moveBlob1 1.5s ease-in-out infinite;
+  }
+
+  &.blob-2 {
+    top: 0;
+    right: 0;
+    animation: moveBlob2 1.5s ease-in-out infinite;
+  }
+}
+
+@keyframes moveBlob1 {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(30px, 0);
+  }
+  50% {
+    transform: translate(30px, 30px);
+  }
+  75% {
+    transform: translate(0, 30px);
+  }
+}
+
+@keyframes moveBlob2 {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(0, 30px);
+  }
+  50% {
+    transform: translate(-30px, 30px);
+  }
+  75% {
+    transform: translate(-30px, 0);
+  }
+}

@@ -5,7 +5,7 @@ import '@/styles/initialLoader.scss';
 
 export default function InitialLoader() {
   const [isLoading, setIsLoading] = useState(true);
-
+  const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
   useEffect(() => {
     // Always show loader on homepage - no session check
     const timer = setTimeout(() => {
@@ -16,6 +16,7 @@ export default function InitialLoader() {
   }, []);
 
   if (!isLoading) return null;
+  if(pathname !== '/') return null;
 
   return (
     <div className="initial-loader">

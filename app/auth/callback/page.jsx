@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
-import Loader from '@/components/general/Loader';
+import TheLoader from '@/components/general/TheLoader';
 
 export default function AuthCallback() {
   const router = useRouter();
@@ -41,6 +41,6 @@ export default function AuthCallback() {
   }, [router]);
 
   return (
-    <Loader fullscreen />
+    <TheLoader fullscreen />
   );
 }

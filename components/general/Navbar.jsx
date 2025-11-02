@@ -9,6 +9,7 @@ import Image from 'next/image';
 import ProfileIcon from '@/components/auth/ProfileIcon';
 import CartIcon from '@/components/cart/CartIcon';
 import SearchBar from '@/components/general/SearchBar';
+import { categories } from '@/lib/sampleProducts';
 import "@/styles/navbar.scss";
 
 export default function Navbar({ onCartClick }) {
@@ -27,12 +28,11 @@ export default function Navbar({ onCartClick }) {
 
         {/* Center: Categories (desktop) */}
         <nav className="nav-categories desktop-only">
-          <Link href="/category/indoor">Indoor</Link>
-          <Link href="/category/outdoor">Outdoor</Link>
-          <Link href="/category/succulents">Succulents</Link>
-          <Link href="/category/herbs">Herbs</Link>
-          <Link href="/category/flowering">Flowering</Link>
-          <Link href="/category/bonsai">Bonsai</Link>
+          {categories.map((category) => (
+            <Link key={category.slug} href={`/category/${category.slug}`}>
+              {category.name}
+            </Link>
+          ))}
         </nav>
 
         {/* Right: Search + Cart + Profile */}
@@ -55,12 +55,11 @@ export default function Navbar({ onCartClick }) {
       {/* Mobile dropdown */}
       {menuOpen && (
         <div className="mobile-menu">
-          <Link href="/category/indoor">Indoor</Link>
-          <Link href="/category/outdoor">Outdoor</Link>
-          <Link href="/category/succulents">Succulents</Link>
-          <Link href="/category/herbs">Herbs</Link>
-          <Link href="/category/flowering">Flowering</Link>
-          <Link href="/category/bonsai">Bonsai</Link>
+          {categories.map((category) => (
+            <Link key={category.slug} href={`/category/${category.slug}`}>
+              {category.name}
+            </Link>
+          ))}
         </div>
       )}
     </div>

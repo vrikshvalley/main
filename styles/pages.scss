@@ -3,6 +3,7 @@
 .page-container {
   min-height: 100vh;
   padding: 0;
+  background: linear-gradient(180deg, rgba($teal, 0.03) 0%, rgba($primary-bg, 0.5) 100%);
 
   @media (max-width: 768px) {
     padding: 0;
@@ -14,50 +15,81 @@
 }
 
 .page-content {
-  max-width: 1200px;
-  margin: 2rem auto;
-  padding: 3rem 2rem;
-  background: $white;
-  border-radius: 16px;
-  box-shadow: 0 8px 40px rgba($dark-green, 0.2);
+  max-width: 1000px;
+  margin: 3rem auto;
+  padding: 4rem 3rem;
+  background: $text-primary;
+  border-radius: 24px;
+  box-shadow: 
+    0 4px 24px rgba($primary-bg, 0.08),
+    0 16px 48px rgba($teal, 0.05);
+  border: 1px solid rgba($teal, 0.1);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, $teal 0%, $accent-primary 100%);
+  }
 
   @media (max-width: 768px) {
-    padding: 2rem 1.5rem;
-    margin: 0 1rem;
-    border-radius: 12px;
+    padding: 2.5rem 2rem;
+    margin: 2rem 1rem;
+    border-radius: 20px;
   }
 
   @media (max-width: 480px) {
-    padding: 1.5rem 1rem;
-    margin: 0 0.5rem;
+    padding: 2rem 1.5rem;
+    margin: 1.5rem 0.75rem;
+    border-radius: 16px;
   }
 }
 
 .page-header {
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 4rem;
+  position: relative;
+
+  &::after {
+    content: '';
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, $teal, $accent-primary);
+    display: block;
+    margin: 2rem auto 0;
+    border-radius: 2px;
+  }
 
   h1 {
     font-family: 'Playfair Display', serif;
-    font-size: 3rem;
+    font-size: 3.5rem;
     font-weight: 700;
-    color: $dark-green;
-    margin-bottom: 1rem;
+    color: $primary-bg;
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
 
     @media (max-width: 768px) {
-      font-size: 2.5rem;
+      font-size: 2.75rem;
     }
 
     @media (max-width: 480px) {
-      font-size: 2rem;
+      font-size: 2.25rem;
     }
   }
 
   p {
-    font-size: 1.1rem;
-    color: rgba($dark-green, 0.7);
+    font-size: 1.15rem;
+    color: rgba($primary-bg, 0.65);
     max-width: 600px;
     margin: 0 auto;
+    font-weight: 400;
+    line-height: 1.6;
 
     @media (max-width: 480px) {
       font-size: 1rem;
@@ -68,59 +100,92 @@
 .content-section {
   background: transparent;
   padding: 0;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
 
   @media (max-width: 768px) {
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
   }
 
   h2 {
     font-family: 'Playfair Display', serif;
-    font-size: 2rem;
-    color: $dark-green;
-    margin-bottom: 1.5rem;
-    margin-top: 2rem;
+    font-size: 2.25rem;
+    color: $primary-bg;
+    margin-bottom: 1.75rem;
+    margin-top: 3rem;
+    font-weight: 700;
+    position: relative;
+    padding-left: 1.5rem;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.5rem;
+      width: 4px;
+      height: calc(100% - 1rem);
+      background: linear-gradient(180deg, $teal, $accent-primary);
+      border-radius: 2px;
+    }
 
     @media (max-width: 480px) {
-      font-size: 1.6rem;
+      font-size: 1.75rem;
+      padding-left: 1rem;
     }
   }
 
   h3 {
-    font-size: 1.5rem;
-    color: $dark-green;
-    margin-top: 2rem;
-    margin-bottom: 1rem;
+    font-size: 1.65rem;
+    color: $primary-bg;
+    margin-top: 2.5rem;
+    margin-bottom: 1.25rem;
+    font-weight: 600;
+    font-family: 'Alumni Sans', sans-serif;
 
     @media (max-width: 480px) {
-      font-size: 1.3rem;
+      font-size: 1.4rem;
     }
   }
 
   p {
-    font-size: 1.05rem;
-    line-height: 1.8;
-    color: $dark-green;
-    margin-bottom: 1rem;
+    font-size: 1.0625rem;
+    line-height: 1.85;
+    color: rgba($primary-bg, 0.85);
+    margin-bottom: 1.5rem;
+    font-weight: 400;
 
     @media (max-width: 480px) {
-      font-size: 0.95rem;
-      line-height: 1.7;
+      font-size: 1rem;
+      line-height: 1.75;
     }
   }
 
   ul, ol {
-    margin-left: 1.5rem;
-    margin-bottom: 1rem;
+    margin-left: 2rem;
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+    background: rgba($teal, 0.03);
+    border-radius: 12px;
+    border-left: 3px solid rgba($teal, 0.3);
+
+    @media (max-width: 480px) {
+      margin-left: 0.5rem;
+      padding: 1.25rem;
+    }
 
     li {
-      font-size: 1.05rem;
-      line-height: 1.8;
-      color: $dark-green;
-      margin-bottom: 0.5rem;
+      font-size: 1.0625rem;
+      line-height: 1.85;
+      color: rgba($primary-bg, 0.85);
+      margin-bottom: 0.875rem;
+      position: relative;
+      padding-left: 0.5rem;
+
+      &::marker {
+        color: $teal;
+      }
 
       @media (max-width: 480px) {
-        font-size: 0.95rem;
+        font-size: 1rem;
       }
     }
   }
@@ -129,73 +194,117 @@
     color: $teal;
     font-weight: 700;
   }
+
+  a {
+    color: $teal;
+    text-decoration: none;
+    font-weight: 600;
+    border-bottom: 1px solid transparent;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-bottom-color: $teal;
+      color: $accent-primary;
+    }
+  }
 }
 
 .contact-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 2rem;
-  margin-top: 3rem;
+  margin-top: 3.5rem;
 
   @media (max-width: 480px) {
     gap: 1.5rem;
+    grid-template-columns: 1fr;
   }
 }
 
 .contact-card {
-  background: rgba($teal, 0.05);
-  border-radius: 12px;
-  padding: 2rem;
+  background: linear-gradient(135deg, rgba($teal, 0.04) 0%, rgba($accent-primary, 0.02) 100%);
+  border-radius: 16px;
+  padding: 2.5rem;
   text-align: center;
-  border: 2px solid rgba($teal, 0.2);
-  transition: all 0.3s ease;
+  border: 1.5px solid rgba($teal, 0.15);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, $teal, $accent-primary);
+    transform: scaleX(0);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
 
   &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 24px rgba($teal, 0.2);
-    border-color: $teal;
+    transform: translateY(-8px);
+    box-shadow: 
+      0 12px 32px rgba($teal, 0.15),
+      0 4px 16px rgba($primary-bg, 0.1);
+    border-color: rgba($teal, 0.4);
+
+    &::before {
+      transform: scaleX(1);
+    }
+
+    .icon-wrapper {
+      transform: scale(1.1) rotate(5deg);
+      background: linear-gradient(135deg, $teal, $accent-primary);
+    }
   }
 
   @media (max-width: 480px) {
-    padding: 1.5rem;
+    padding: 2rem 1.5rem;
   }
 
   .icon-wrapper {
-    width: 60px;
-    height: 60px;
-    margin: 0 auto 1.5rem;
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 1.75rem;
     background: $teal;
-    border-radius: 50%;
+    border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: $white;
+    color: $text-primary;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 16px rgba($teal, 0.2);
 
     @media (max-width: 480px) {
-      width: 50px;
-      height: 50px;
-      margin-bottom: 1rem;
+      width: 60px;
+      height: 60px;
+      margin-bottom: 1.5rem;
     }
   }
 
   h3 {
-    font-size: 1.3rem;
-    color: $dark-green;
+    font-size: 1.4rem;
+    color: $primary-bg;
     margin-bottom: 1rem;
+    font-weight: 700;
+    font-family: 'Alumni Sans', sans-serif;
 
     @media (max-width: 480px) {
-      font-size: 1.1rem;
+      font-size: 1.25rem;
     }
   }
 
   p, a {
-    color: $dark-green;
-    font-size: 1rem;
+    color: rgba($primary-bg, 0.75);
+    font-size: 1.05rem;
     text-decoration: none;
-    transition: color 0.2s ease;
+    transition: all 0.2s ease;
+    font-weight: 500;
 
     @media (max-width: 480px) {
-      font-size: 0.9rem;
+      font-size: 0.95rem;
     }
   }
 
@@ -206,24 +315,26 @@
 
 .agreement-notice,
 .thank-you-note {
-  margin-top: 2rem;
-  padding: 1.5rem;
-  background: rgba($teal, 0.1);
+  margin-top: 3rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, rgba($teal, 0.06) 0%, rgba($accent-primary, 0.03) 100%);
   border-left: 4px solid $teal;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  color: $dark-green;
-  line-height: 1.6;
+  border-radius: 12px;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: rgba($primary-bg, 0.9);
+  line-height: 1.75;
+  box-shadow: 0 2px 12px rgba($teal, 0.08);
 
   @media (max-width: 480px) {
-    padding: 1rem;
-    font-size: 0.95rem;
+    padding: 1.5rem;
+    font-size: 1rem;
   }
 }
 
 .thank-you-note {
-  border-left-color: $deep-green;
-  background: rgba($deep-green, 0.1);
+  border-left-color: $accent-primary;
+  background: linear-gradient(135deg, rgba($accent-primary, 0.06) 0%, rgba($teal, 0.03) 100%);
   font-style: italic;
+  font-weight: 400;
 }

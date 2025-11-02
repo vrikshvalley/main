@@ -49,20 +49,29 @@
       z-index: 10;
     }
 
-    .circle-image {
+    .circle-icon {
       width: 100px;
       height: 100px;
       margin: 0 auto;
       border-radius: 50%;
-      overflow: hidden;
-      border: 3px solid rgba($text-secondary, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, rgba($teal, 0.1) 0%, rgba($accent-primary, 0.05) 100%);
+      border: 3px solid rgba($teal, 0.3);
       transition: all 0.3s ease;
       box-shadow: $shadow-medium;
+      
+      .category-emoji {
+        font-size: 3rem;
+        line-height: 1;
+      }
     }
 
-    &:hover .circle-image {
+    &:hover .circle-icon {
       border-color: $accent-primary;
       box-shadow: $shadow-glow;
+      background: linear-gradient(135deg, rgba($teal, 0.15) 0%, rgba($accent-primary, 0.1) 100%);
     }
 
     p {
@@ -112,6 +121,15 @@
     .circle-item {
       scroll-snap-align: center;
       min-width: 100px;
+      
+      .circle-icon {
+        width: 90px;
+        height: 90px;
+        
+        .category-emoji {
+          font-size: 2.75rem;
+        }
+      }
     }
   }
 
@@ -126,9 +144,13 @@
     .circle-item {
       width: 90px;
 
-      .circle-image {
+      .circle-icon {
         width: 90px;
         height: 90px;
+        
+        .category-emoji {
+          font-size: 2.5rem;
+        }
       }
 
       p {

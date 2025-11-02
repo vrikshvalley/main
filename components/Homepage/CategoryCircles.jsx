@@ -1,7 +1,7 @@
 'use client';
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 import Link from 'next/link';
+import { categories } from '@/lib/sampleProducts';
 import "@/styles/categoryCircles.scss";
 
 const containerVariants = {
@@ -43,85 +43,16 @@ export default function CategoryCircles() {
     >
       <motion.div className="circle-container" variants={containerVariants}>
 
-        <Link href="/category/indoor-plants" passHref>
-          <motion.div className="circle-item" variants={circleVariants}>
-            <div className="circle-image">
-              <Image
-                src="/indoor.jpg"
-                alt="Indoor Plants"
-                width={100}
-                height={100}
-                loading="lazy"
-                style={{ borderRadius: '50%' }}
-              />
-            </div>
-            <p>Indoor Plants</p>
-          </motion.div>
-        </Link>
-
-        <Link href="/category/outdoor-plants" passHref>
-          <motion.div className="circle-item" variants={circleVariants}>
-            <div className="circle-image">
-              <Image
-                src="/outdoor.jpg"
-                alt="Outdoor Plants"
-                width={100}
-                height={100}
-                loading="lazy"
-                style={{ borderRadius: '50%' }}
-              />
-            </div>
-            <p>Outdoor Plants</p>
-          </motion.div>
-        </Link>
-
-        <Link href="/category/succulents" passHref>
-          <motion.div className="circle-item" variants={circleVariants}>
-            <div className="circle-image">
-              <Image
-                src="/succulents.jpg"
-                alt="Succulents"
-                width={100}
-                height={100}
-                loading="lazy"
-                style={{ borderRadius: '50%' }}
-              />
-            </div>
-            <p>Succulents</p>
-          </motion.div>
-        </Link>
-
-        <Link href="/category/flowering" passHref>
-          <motion.div className="circle-item" variants={circleVariants}>
-            <div className="circle-image">
-              <Image
-                src="/flowering.jpg"
-                alt="Flowering"
-                width={100}
-                height={100}
-                loading="lazy"
-                style={{ borderRadius: '50%' }}
-              />
-            </div>
-            <p>Flowering</p>
-          </motion.div>
-        </Link>
-
-        <Link href="/category/herbs" passHref>
-          <motion.div className="circle-item" variants={circleVariants}>
-            <div className="circle-image">
-              <Image
-                src="/herbs.jpg"
-                alt="Herbs"
-                width={100}
-                height={100}
-                loading="lazy"
-                style={{ borderRadius: '50%' }}
-              />
-            </div>
-            <p>Herbs</p>
-          </motion.div>
-        </Link>
+        {categories.map((category) => (
+          <Link key={category.slug} href={`/category/${category.slug}`} passHref>
+            <motion.div className="circle-item" variants={circleVariants}>
+              <div className="circle-icon">
+                <span className="category-emoji">{category.icon}</span>
+              </div>
+              <p>{category.name}</p>
+            </motion.div>
+          </Link>
+        ))}
 
       </motion.div>
     </motion.section>

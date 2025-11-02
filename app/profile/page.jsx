@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabaseClient';
 import { useRouter } from 'next/navigation';
-import Loader from '@/components/general/Loader';
+import TheLoader from '@/components/general/TheLoader';
 import Image from 'next/image';
 import '@/styles/profile.scss';
 
@@ -232,7 +232,7 @@ const ProfilePage = () => {
     });
   };
 
-  if (loading) return <Loader fullscreen />;
+  if (loading) return <TheLoader fullscreen />;
 
   // Initial setup stepper if name is missing
   if (!profile?.name) {

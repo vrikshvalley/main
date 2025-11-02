@@ -22,7 +22,7 @@ import {
   loadCartFromLocalStorage,
   mergeAndSyncCart 
 } from '@/lib/cartUtils';
-import Loader from '@/components/general/Loader';
+import TheLoader from '@/components/general/TheLoader';
 import "@/styles/cartModal.scss";
 
 export default function CartModal({ isOpen, onClose }) {
@@ -184,7 +184,7 @@ export default function CartModal({ isOpen, onClose }) {
           </div>
 
           {isLoading ? (
-            <Loader />
+            <TheLoader />
           ) : items.length === 0 ? (
             <div className="empty">
               <div className="empty-icon">🛍️</div>

@@ -2,7 +2,7 @@ import "../styles/globals.scss";
 import Providers from "./providers";
 import AutoLogoutProvider from "@/components/general/AutoLogoutProvider";
 import InitialLoader from "@/components/general/InitialLoader";
-import PageLoader from "@/components/general/PageLoader";
+import TheLoader from "@/components/general/TheLoader";
 
 export const metadata = {
   metadataBase: new URL("https://vrikshvalley.com"),
@@ -85,7 +85,7 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <InitialLoader />
-        <PageLoader />
+        <TheLoader fullscreen showOnRouteChange />
         <Providers>
           <AutoLogoutProvider>
             <div className="container">{children}</div>
