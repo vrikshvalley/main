@@ -90,6 +90,7 @@
   list-style: none;
   padding: 0;
   overflow-y: auto;
+  overflow-x: hidden;
 
   .cart-item {
     display: flex;
