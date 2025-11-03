@@ -1,0 +1,116 @@
+@use 'sass:color';
+@use 'variables' as *;
+
+.home-sidebar {
+  position: fixed;
+  left: 15px;
+  top: 15%;
+  transform: translateY(-50%);
+  z-index: 900;
+  background: rgba($white, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 16px 8px;
+  box-shadow: 0 8px 32px rgba($dark-green, 0.3);
+  border: 1px solid rgba($white, 0.1);
+  overflow: visible;
+  max-height: 80vh;
+
+  @media (max-width: 1024px) {
+    display: none;
+  }
+
+  .sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .sidebar-item {
+    position: relative;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    color: rgba($dark-green, 0.7);
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    overflow: visible;
+
+    svg {
+      position: relative;
+      z-index: 2;
+      transition: all 0.3s ease;
+    }
+
+    &:hover {
+      background: rgba($white, 0.1);
+      color: $teal;
+      transform: translateX(2px);
+
+      svg {
+        transform: scale(1.15);
+      }
+    }
+
+    &.active {
+      color: $accent-primary;
+
+      svg {
+        transform: scale(1.1);
+      }
+    }
+
+    .active-indicator {
+      position: absolute;
+      inset: 0;
+      background: rgba($teal, 0.15);
+      border-radius: 12px;
+      z-index: 1;
+    }
+
+    .sidebar-tooltip {
+      position: absolute;
+      left: calc(100% + 16px);
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba($white, 0.98);
+      color: $dark-green;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 999999;
+      box-shadow: 0 4px 12px rgba($dark-green, 0.4);
+      animation: tooltipSlide 0.2s ease-out;
+
+      &::before {
+        content: '';
+        position: absolute;
+        right: 100%;
+        top: 50%;
+        transform: translateY(-50%);
+        border: 6px solid transparent;
+        border-right-color: rgba($dark-green, 0.98);
+      }
+    }
+  }
+}
+
+@keyframes tooltipSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+}
+

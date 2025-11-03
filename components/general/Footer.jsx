@@ -1,4 +1,5 @@
 'use client';
+import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { 
   siFacebook, 
@@ -11,10 +12,22 @@ import {
 import '@/styles/footer.scss';
 
 export default function Footer() {
+  const fadeUpVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0 }
+  };
+
   return (
     <footer className="footer">
       <div className="footer-container">
-        <div className="footer-section">
+        <motion.div 
+          className="footer-section"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={fadeUpVariants}
+          transition={{ duration: 0.6 }}
+        >
           <h3>About</h3>
           <ul>
             <li><Link href="/about-us">About Us</Link></li>
@@ -23,9 +36,16 @@ export default function Footer() {
             <li><Link href="/contact-us">Contact Us</Link></li>
             <li><Link href="/cancellation-return">Cancellation & Return Policy</Link></li>
           </ul>
-        </div>
+        </motion.div>
 
-        <div className="footer-section">
+        <motion.div 
+          className="footer-section"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={fadeUpVariants}
+          transition={{ duration: 0.6, delay: 0.1 }}
+        >
           <h3>Customer Care</h3>
           <ul>
             <li><Link href="/track-order">Track Order</Link></li>
@@ -33,18 +53,32 @@ export default function Footer() {
             <li><Link href="/shipping-policies">Shipping Policies</Link></li>
             <li><Link href="/terms-conditions">Terms and Conditions</Link></li>
           </ul>
-        </div>
+        </motion.div>
 
-        <div className="footer-section">
+        <motion.div 
+          className="footer-section"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={fadeUpVariants}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
           <h3>Get in Touch</h3>
           <ul>
             <li><a href="tel:+91 92047 45612">Call: +91 92047 45612</a></li>
             <li><a href="mailto:support@vrikshvalley.com">Email: support@vrikshvalley.com</a></li>
             <li><a href="https://wa.me/+919204745612" target="_blank">WhatsApp: +91 92047 45612</a></li>
           </ul>
-        </div>
+        </motion.div>
 
-        <div className="footer-section newsletter">
+        <motion.div 
+          className="footer-section newsletter"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={fadeUpVariants}
+          transition={{ duration: 0.6, delay: 0.3 }}
+        >
           <h3>Sign up for Newsletter</h3>
           <form>
             <input type="email" placeholder="Enter your email" />
@@ -82,12 +116,19 @@ export default function Footer() {
               </svg>
             </a>
           </div>
-        </div>
+        </motion.div>
       </div>
 
-      <div className="footer-bottom">
+      <motion.div 
+        className="footer-bottom"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={fadeUpVariants}
+        transition={{ duration: 0.6, delay: 0.4 }}
+      >
         <p>© {new Date().getFullYear()} Vriksh Valley. All rights reserved.</p>
-      </div>
+      </motion.div>
     </footer>
   );
 }

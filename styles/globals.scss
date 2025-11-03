@@ -9,7 +9,7 @@
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Alumni+Sans+SC:ital,wght@0,100..900;1,100..900&family=Alumni+Sans:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
 
 * { 
   box-sizing: border-box; 
@@ -27,10 +27,12 @@ html {
   overflow-x: hidden;
   width: 100%;
   scroll-behavior: smooth;
+  scroll-snap-type: y proximity;
   
   @media (max-width: 768px) {
-    // Disable smooth scroll on mobile for better performance
-    scroll-behavior: auto;
+    // Keep smooth scroll on mobile for better UX
+    scroll-behavior: smooth;
+    scroll-snap-type: none; // Disable snap on mobile
   }
 }
 
@@ -50,6 +52,7 @@ html, body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow: visible;
 }
 
 body {
@@ -74,7 +77,7 @@ body {
 
 body {
   --sb-track-color: #2d4634;
-  --sb-thumb-color: #6e9d5e;
+  --sb-thumb-color: #3a7f22;
   --sb-size: 15px;
 }
 
@@ -89,8 +92,7 @@ body::-webkit-scrollbar-track {
 
 body::-webkit-scrollbar-thumb {
   background: var(--sb-thumb-color);
-  border-radius: 15px;
-  border: 3px solid #a7a037;
+  border-radius: 6px;
 }
 
 @supports not selector(::-webkit-scrollbar) {
@@ -137,7 +139,7 @@ a:hover {
   color: $text-dark;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-family: 'Alumni Sans', sans-serif;
+  font-family: $font-secondary sans-serif;
   font-size: 1.1rem;
   font-weight: 600;
 }
@@ -191,4 +193,14 @@ a:hover {
   position: relative !important;
   inset: auto !important;
   margin: auto !important;
+}
+
+// Scroll snapping for sections
+.scroll-section {
+  scroll-snap-align: start;
+  scroll-snap-stop: normal;
+
+  @media (max-width: 768px) {
+    scroll-snap-align: none; // Disable on mobile
+  }
 }

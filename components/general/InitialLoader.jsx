@@ -5,8 +5,12 @@ import '@/styles/initialLoader.scss';
 
 export default function InitialLoader() {
   const [isLoading, setIsLoading] = useState(true);
-  const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
+  const [pathname, setPathname] = useState('');
+
   useEffect(() => {
+    // Set pathname on client side only
+    setPathname(window.location.pathname);
+
     // Always show loader on homepage - no session check
     const timer = setTimeout(() => {
       setIsLoading(false);
@@ -15,8 +19,7 @@ export default function InitialLoader() {
     return () => clearTimeout(timer);
   }, []);
 
-  if (!isLoading) return null;
-  if(pathname !== '/') return null;
+  if (!isLoading || pathname !== '/') return null;
 
   return (
     <div className="initial-loader">
