@@ -3,9 +3,9 @@
 
 .home-sidebar {
   position: fixed;
-  left: 15px;
-  top: 15%;
-  transform: translateY(-50%);
+  left: 33%;
+  bottom: 5%;
+  transform: translateY(50%);
   z-index: 900;
   background: rgba($white, 0.95);
   backdrop-filter: blur(10px);
@@ -22,7 +22,7 @@
 
   .sidebar-nav {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 8px;
   }
 
@@ -75,8 +75,7 @@
 
     .sidebar-tooltip {
       position: absolute;
-      left: calc(100% + 16px);
-      top: 50%;
+      top: -5%;
       transform: translateY(-50%);
       background: rgba($white, 0.98);
       color: $dark-green;
@@ -90,15 +89,6 @@
       box-shadow: 0 4px 12px rgba($dark-green, 0.4);
       animation: tooltipSlide 0.2s ease-out;
 
-      &::before {
-        content: '';
-        position: absolute;
-        right: 100%;
-        top: 50%;
-        transform: translateY(-50%);
-        border: 6px solid transparent;
-        border-right-color: rgba($dark-green, 0.98);
-      }
     }
   }
 }

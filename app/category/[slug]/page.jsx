@@ -2,6 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
+import TopBar from '@/components/general/Topbar';
+import Navbar from '@/components/general/Navbar';
+import Footer from '@/components/general/Footer';
+import WhatsAppButton from '@/components/general/WhatsAppButton';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
 import { getProducts, getPriceRange } from '@/lib/productHelpers';
 import { categories } from '@/lib/sampleProducts';
@@ -115,16 +119,25 @@ export default function CategoryPage() {
 
   if (!category) {
     return (
-      <div className="category-not-found">
-        <h1>Category Not Found</h1>
-        <p>The category you're looking for doesn't exist.</p>
-        <a href="/products" className="back-to-products">View All Products</a>
-      </div>
+      <>
+        <TopBar />
+        <Navbar />
+        <div className="category-not-found">
+          <h1>Category Not Found</h1>
+          <p>The category you're looking for doesn't exist.</p>
+          <a href="/products" className="back-to-products">View All Products</a>
+        </div>
+        <Footer />
+        <WhatsAppButton />
+      </>
     );
   }
 
   return (
-    <div className="products-page">
+    <>
+      <TopBar />
+      <Navbar />
+      <div className="products-page">
       <Breadcrumbs 
         items={[
           { label: 'Products', href: '/products' },
@@ -373,5 +386,8 @@ export default function CategoryPage() {
         </main>
       </div>
     </div>
+    <Footer />
+    <WhatsAppButton />
+    </>
   );
 }

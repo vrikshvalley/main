@@ -2,13 +2,16 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import TopBar from '@/components/general/Topbar';
+import Navbar from '@/components/general/Navbar';
+import Footer from '@/components/general/Footer';
+import WhatsAppButton from '@/components/general/WhatsAppButton';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
 import { getProducts, getPriceRange } from '@/lib/productHelpers';
 import { categories } from '@/lib/sampleProducts';
 import { ChevronDown, X, SlidersHorizontal, Grid, List } from 'lucide-react';
 import TheLoader from '@/components/general/TheLoader';
 import ProductListCard from '@/components/products/ProductListCard';
-import WhyChooseUs from '@/components/products/WhyChooseUs';
 import '@/styles/products.scss';
 
 export default function ProductsPage() {
@@ -31,7 +34,7 @@ export default function ProductsPage() {
   const productsPerPage = 12;
   
   // UI states
-  const [showFilters, setShowFilters] = useState(true);
+  const [showFilters, setShowFilters] = useState(false);
   const [showSortDropdown, setShowSortDropdown] = useState(false);
 
   // Fetch price range on mount
@@ -119,9 +122,11 @@ export default function ProductsPage() {
   };
 
   return (
-    <div className="products-page">
-      <Breadcrumbs items={[{ label: 'Products' }]} />
-      
+    <>
+      <TopBar />
+      <Navbar />
+      <div className="products-page">
+        <Breadcrumbs items={[{ label: 'Products' }]} />
       {/* Page Header */}
       <div className="products-header">
         <div className="header-content">
@@ -385,9 +390,9 @@ export default function ProductsPage() {
           )}
         </main>
       </div>
-
-      {/* Why Choose Us Section */}
-      <WhyChooseUs />
     </div>
+    <Footer />
+    <WhatsAppButton />
+    </>
   );
 }

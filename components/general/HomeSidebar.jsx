@@ -79,9 +79,9 @@ export default function HomeSidebar() {
   return (
     <motion.aside 
       className="home-sidebar"
-      initial={{ x: -100, opacity: 0 }}
-      animate={{ x: 0, opacity: 1 }}
-      transition={{ duration: 0.6, delay: 0.5 }}
+      initial={{ y: 50, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
     >
       <nav className="sidebar-nav">
         {sections.map((section) => {

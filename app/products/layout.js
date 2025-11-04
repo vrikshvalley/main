@@ -2,6 +2,7 @@ import TopBar from "@/components/general/Topbar";
 import Navbar from "@/components/general/Navbar";
 import Footer from "@/components/general/Footer";
 import WhatsAppButton from "@/components/general/WhatsAppButton";
+import WhyChooseUs from "@/components/products/WhyChooseUs";
 
 export const metadata = {
   title: "Shop Plants Online - Indoor & Outdoor Plants",
@@ -30,6 +31,7 @@ export default function ProductsLayout({ children }) {
       <TopBar />
       <Navbar />
       {children}
+      <WhyChooseUs />
       <Footer />
       <WhatsAppButton />
     </>

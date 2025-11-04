@@ -7,7 +7,7 @@
   width: 100%;
   margin: 2rem auto;
   padding: 2rem;
-  background: rgba($teal, 0.2);
+  background: $dark-green;
   border-radius: 16px;
   box-sizing: border-box;
 
@@ -73,7 +73,7 @@
   width: 100%;
   margin: 0 auto 2rem;
   flex-wrap: wrap;
-  font-family: Alumni Sans, sans-serif;
+  font-family: $font-secondary, sans-serif;
   will-change: auto;
   box-sizing: border-box;
   overflow: hidden;

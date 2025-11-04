@@ -42,20 +42,22 @@
   .nav-categories {
     display: flex;
     font-size: 1.3rem;
-    gap: 1rem;
+    gap: 3rem;
     align-items: center; // Ensure vertical centering
     justify-content: center;
     flex: 1;
     
     a {
-      font-family: 'Alumni Sans', sans-serif;
+      font-family: $font-secondary, sans-serif;
       color: $primary-bg;
+      font-size: 1.3rem;
       text-decoration: none;
       font-weight: 500;
       transition: all 0.2s ease;
       position: relative;
       line-height: 1; // Prevent extra spacing from line-height
       display: inline-block;
+      
       
       &::after {
         content: '';

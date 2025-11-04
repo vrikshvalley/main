@@ -2,6 +2,7 @@
 
 import { Shield, Truck, Headset } from 'lucide-react';
 import { motion } from 'framer-motion';
+import '@/styles/products.scss';
 
 const features = [
   {
@@ -48,7 +49,7 @@ export default function WhyChooseUs() {
     <section className="why-choose-us">
       <div className="why-choose-container">
         <motion.div
-          className="section-header"
+          className="why-section-header"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
