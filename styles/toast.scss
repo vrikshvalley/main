@@ -1,0 +1,202 @@
+@use 'sass:color';
+@use 'variables' as *;
+
+// Custom Toast Container Styles for Plant Website
+.custom-toast-container {
+  z-index: 99999 !important;
+  
+  @media (max-width: 768px) {
+    width: calc(100% - 2rem) !important;
+    left: 1rem !important;
+    right: 1rem !important;
+    margin: 0 !important;
+  }
+}
+
+.custom-toast {
+  font-family: 'Playfair Display', serif;
+  background: rgba($white, 0.98) !important;
+  backdrop-filter: blur(10px);
+  border-radius: 16px !important;
+  box-shadow: 0 8px 32px rgba($dark-green, 0.15),
+              0 4px 16px rgba($teal, 0.1) !important;
+  border: 2px solid rgba($teal, 0.2) !important;
+  padding: 1rem 1.25rem !important;
+  min-height: 70px !important;
+  margin-bottom: 1rem !important;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, $teal 0%, $dark-green 100%);
+  }
+
+  // Success Toast
+  &.Toastify__toast--success {
+    border-color: rgba($teal, 0.4) !important;
+    
+    &::before {
+      background: linear-gradient(180deg, $teal 0%, color.adjust($teal, $lightness: -10%) 100%);
+    }
+    
+    .Toastify__toast-icon {
+      svg {
+        fill: $teal !important;
+      }
+    }
+  }
+
+  // Error Toast
+  &.Toastify__toast--error {
+    border-color: rgba(#dc2626, 0.4) !important;
+    
+    &::before {
+      background: linear-gradient(180deg, #dc2626 0%, #b91c1c 100%);
+    }
+    
+    .Toastify__toast-icon {
+      svg {
+        fill: #dc2626 !important;
+      }
+    }
+  }
+
+  // Warning Toast
+  &.Toastify__toast--warning {
+    border-color: rgba($accent-primary, 0.4) !important;
+    
+    &::before {
+      background: linear-gradient(180deg, $accent-primary 0%, color.adjust($accent-primary, $lightness: -10%) 100%);
+    }
+    
+    .Toastify__toast-icon {
+      svg {
+        fill: $accent-primary !important;
+      }
+    }
+  }
+
+  // Info Toast
+  &.Toastify__toast--info {
+    border-color: rgba(#3b82f6, 0.4) !important;
+    
+    &::before {
+      background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%);
+    }
+    
+    .Toastify__toast-icon {
+      svg {
+        fill: #3b82f6 !important;
+      }
+    }
+  }
+}
+
+.custom-toast-body {
+  color: $dark-green !important;
+  font-size: 0.9375rem !important;
+  font-weight: 500;
+  line-height: 1.5;
+  padding: 0.25rem 0.5rem !important;
+  margin-left: 0.75rem;
+  
+  strong {
+    color: $teal;
+    font-weight: 600;
+  }
+}
+
+// Progress Bar
+.custom-toast-progress {
+  height: 4px !important;
+  background: linear-gradient(90deg, 
+    rgba($teal, 0.2) 0%, 
+    rgba($teal, 0.8) 50%, 
+    rgba($teal, 1) 100%) !important;
+  
+  .Toastify__toast--success & {
+    background: linear-gradient(90deg, 
+      rgba($teal, 0.3) 0%, 
+      rgba($teal, 0.9) 50%, 
+      $teal 100%) !important;
+  }
+  
+  .Toastify__toast--error & {
+    background: linear-gradient(90deg, 
+      rgba(#dc2626, 0.3) 0%, 
+      rgba(#dc2626, 0.9) 50%, 
+      #dc2626 100%) !important;
+  }
+  
+  .Toastify__toast--warning & {
+    background: linear-gradient(90deg, 
+      rgba($accent-primary, 0.3) 0%, 
+      rgba($accent-primary, 0.9) 50%, 
+      $accent-primary 100%) !important;
+  }
+  
+  .Toastify__toast--info & {
+    background: linear-gradient(90deg, 
+      rgba(#3b82f6, 0.3) 0%, 
+      rgba(#3b82f6, 0.9) 50%, 
+      #3b82f6 100%) !important;
+  }
+}
+
+// Close Button
+.Toastify__close-button {
+  color: $dark-green !important;
+  opacity: 0.5 !important;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    opacity: 1 !important;
+    color: $teal !important;
+  }
+}
+
+// Toast Icon
+.Toastify__toast-icon {
+  width: 24px !important;
+  margin-right: 0.5rem;
+  
+  svg {
+    transition: transform 0.2s ease;
+  }
+}
+
+// Animation Override
+@keyframes slideInRight {
+  from {
+    transform: translate3d(110%, 0, 0);
+    opacity: 0;
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+  to {
+    transform: translate3d(110%, 0, 0);
+    opacity: 0;
+  }
+}
+
+.Toastify__toast--top-right {
+  animation: slideInRight 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.Toastify__toast--top-right.Toastify__toast--close {
+  animation: slideOutRight 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}

@@ -3,12 +3,11 @@
 
 .home-sidebar {
   position: fixed;
-  left: 33%;
+  transform: translate(-50%, 0);
+  left: calc(100%/3);
   bottom: 5%;
-  transform: translateY(50%);
   z-index: 900;
   background: rgba($white, 0.95);
-  backdrop-filter: blur(10px);
   border-radius: 16px;
   padding: 16px 8px;
   box-shadow: 0 8px 32px rgba($dark-green, 0.3);

@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { addItem, addItemAsync } from '@/lib/slices/cartSlice';
 import { supabase } from '@/lib/supabaseClient';
 import { useState, useEffect } from 'react';
+import { showSuccessToast, showErrorToast } from '@/lib/toastHelpers';
 
 export default function AddToCartButton({ product, qty = 1 }) {
   const dispatch = useDispatch();
@@ -28,12 +29,19 @@ export default function AddToCartButton({ product, qty = 1 }) {
   }, []);
 
   const handleAddToCart = () => {
-    if (user) {
-      // User is logged in - save to Supabase
-      dispatch(addItemAsync({ item: { ...product, qty }, userId: user.id }));
-    } else {
-      // Guest user - save to localStorage via reducer
-      dispatch(addItem({ ...product, qty }));
+    try {
+      if (user) {
+        // User is logged in - save to Supabase
+        dispatch(addItemAsync({ item: { ...product, qty }, userId: user.id }));
+        showSuccessToast(`${product.name} added to cart! 🌱`);
+      } else {
+        // Guest user - save to localStorage via reducer
+        dispatch(addItem({ ...product, qty }));
+        showSuccessToast(`${product.name} added to cart! 🌱`);
+      }
+    } catch (error) {
+      showErrorToast('Failed to add item to cart. Please try again.');
+      console.error('Error adding to cart:', error);
     }
   };
 

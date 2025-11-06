@@ -6,6 +6,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Thumbs, Autoplay } from 'swiper/modules';
 import { useDispatch } from 'react-redux';
 import { addItem } from '@/lib/slices/cartSlice';
+import { showSuccessToast, showWarningToast } from '@/lib/toastHelpers';
 import ProductPageTabs from '@/components/products/ProductPageTabs';
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -41,11 +42,15 @@ export default function ProductPage({ product }) {
       color: selectedColor,
       size: selectedSize,
     }));
+    showSuccessToast(`${product.name} added to cart! 🌿`);
   };
 
   const handleBuyNow = () => {
     handleAddToCart();
-    window.location.href = '/cart';
+    showSuccessToast('Redirecting to checkout... 🛒');
+    setTimeout(() => {
+      window.location.href = '/cart';
+    }, 500);
   };
 
   return (

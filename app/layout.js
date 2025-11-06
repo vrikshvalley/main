@@ -4,6 +4,7 @@ import AutoLogoutProvider from "@/components/general/AutoLogoutProvider";
 import InitialLoader from "@/components/general/InitialLoader";
 import TheLoader from "@/components/general/TheLoader";
 
+
 export const metadata = {
   metadataBase: new URL("https://vrikshvalley.com"),
   title: {
@@ -78,6 +79,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
+        <meta name="apple-mobile-web-app-title" content="Vriksh Valley" />
         <link rel="canonical" href="https://vrikshvalley.com" />
         <meta name="theme-color" content="#073b22" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
@@ -91,6 +93,7 @@ export default function RootLayout({ children }) {
             <div className="container">{children}</div>
           </AutoLogoutProvider>
         </Providers>
+       
       </body>
     </html>
   );

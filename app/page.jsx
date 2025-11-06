@@ -16,7 +16,7 @@ import About from "@/components/Homepage/AboutUs";
 import OurBlogs from "@/components/Homepage/OurBlogs";
 import Footer from "@/components/general/Footer";
 import WhatsAppButton from "@/components/general/WhatsAppButton";
-
+import  ToastContainer  from "@/components/general/ToastContainer";
 
 import HomeSidebar from "@/components/general/HomeSidebar";
 import CartModal from "@/components/cart/CartModal";
@@ -66,6 +66,7 @@ export default function Home() {
     <>
       <CartModal isOpen={cartOpen} onClose={() => setCartOpen(false)} />
       <TopBar />
+      <ToastContainer />
       <Navbar onCartClick={() => setCartOpen(true)} />
       <HomeSidebar />
       
