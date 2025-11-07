@@ -1,0 +1,32 @@
+# Robots.txt for Vriksh Valley
+# https://vrikshvalley.com/robots.txt
+
+User-agent: *
+Allow: /
+
+# Allow all search engine crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+# Disallow admin and internal pages
+Disallow: /admin/
+Disallow: /api/
+Disallow: /_next/
+Disallow: /profile/
+
+# Allow important pages
+Allow: /products
+Allow: /category
+Allow: /blog
+Allow: /about
+Allow: /contact-us
+Allow: /faqs
+
+# Sitemap location
+Sitemap: https://vrikshvalley.com/sitemap.xml

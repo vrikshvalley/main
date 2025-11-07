@@ -4,7 +4,6 @@ import AutoLogoutProvider from "@/components/general/AutoLogoutProvider";
 import InitialLoader from "@/components/general/InitialLoader";
 import TheLoader from "@/components/general/TheLoader";
 
-
 export const metadata = {
   metadataBase: new URL("https://vrikshvalley.com"),
   title: {
@@ -75,12 +74,18 @@ export const metadata = {
   },
   icons: {
     icon: [
-      { url: '/favicon.ico' },
-      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
-      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/logo.png", sizes: "192x192", type: "image/png" },
     ],
-    apple: '/apple-touch-icon.png',
+    apple: [{ url: "/logo.png", sizes: "180x180", type: "image/png" }],
+    other: [
+      {
+        rel: "mask-icon",
+        url: "/logo.png",
+      },
+    ],
   },
+  manifest: "/manifest.json",
 };
 
 export default function RootLayout({ children }) {
@@ -90,7 +95,7 @@ export default function RootLayout({ children }) {
         <meta name="apple-mobile-web-app-title" content="Vriksh Valley" />
         <link rel="canonical" href="https://vrikshvalley.com" />
         <meta name="theme-color" content="#073b22" />
-        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/logo.png" />
       </head>
       <body>
@@ -101,7 +106,6 @@ export default function RootLayout({ children }) {
             <div className="container">{children}</div>
           </AutoLogoutProvider>
         </Providers>
-       
       </body>
     </html>
   );
