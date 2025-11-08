@@ -1,10 +1,21 @@
-'use client';
+"use client";
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabaseClient';
 import { useRouter } from 'next/navigation';
 import TheLoader from '@/components/general/TheLoader';
 import Image from 'next/image';
 import '@/styles/profile.scss';
+import '@/styles/profileComponents.scss';
+
+import ProfileOverview from '@/components/profile/ProfileOverview';
+import Addresses from '@/components/profile/Addresses';
+import OrderHistory from '@/components/profile/OrderHistory';
+import Payments from '@/components/profile/Payments';
+import Wishlist from '@/components/profile/Wishlist';
+import SecuritySettings from '@/components/profile/SecuritySettings';
+
+import * as userService from '@/lib/services/userService';
+import { showSuccessToast, showErrorToast } from '@/lib/toastHelpers';
 
 const ProfilePage = () => {
   const [profile, setProfile] = useState(null);
@@ -12,20 +23,16 @@ const ProfilePage = () => {
   const [user, setUser] = useState(null);
   const router = useRouter();
   
-  // Form states
+  // UI states
   const [nameForm, setNameForm] = useState('');
-  const [addressForm, setAddressForm] = useState({ line1: '', line2: '', locality: '', pincode: '' });
+  const [editingAddress, setEditingAddress] = useState(null);
   const [showAddAddress, setShowAddAddress] = useState(false);
   const [showUpdateName, setShowUpdateName] = useState(false);
-  const [editingAddress, setEditingAddress] = useState(null);
-  const [toast, setToast] = useState(null);
   const [currentStep, setCurrentStep] = useState(1);
 
-  // Toast notification helper
-  const showToast = (message, type = 'success') => {
-    setToast({ message, type });
-    setTimeout(() => setToast(null), 3000);
-  };
+  // local helper uses centralized toast helpers
+  const toastSuccess = (msg) => showSuccessToast(msg);
+  const toastError = (msg) => showErrorToast(msg);
 
   useEffect(() => {
     const getUserAndProfile = async () => {
@@ -36,162 +43,69 @@ const ProfilePage = () => {
       }
       setUser(userData.user);
 
-      // Fetch profile from database
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userData.user.id)
-        .single();
-
-      if (data) {
-        // Profile exists
-        setProfile(data);
-        setLoading(false);
+      // Fetch profile via service
+      const { data, error } = await userService.getProfile(userData.user.id);
+      if (error) {
+        // try creating minimal profile
+        const oauthName = userData.user.user_metadata?.full_name || userData.user.user_metadata?.name || null;
+        const newProfileData = { id: userData.user.id, email: userData.user.email, name: oauthName, address: [] };
+        const created = await userService.createProfile(newProfileData);
+        if (!created.error) setProfile(created.data?.[0] || newProfileData);
+        else setProfile(newProfileData);
       } else {
-        // Profile doesn't exist, create new one
-        
-        // Get name from Google/OAuth metadata if available
-        const oauthName = userData.user.user_metadata?.full_name || 
-                          userData.user.user_metadata?.name || 
-                          null;
-        
-        const newProfileData = {
-          id: userData.user.id,
-          email: userData.user.email,
-          name: oauthName,  // Will be null for email login
-          address: []
-        };
-
-        const { data: newProfile, error: insertError } = await supabase
-          .from('profiles')
-          .insert([newProfileData])
-          .select();
-
-        if (!insertError && newProfile && newProfile.length > 0) {
-          setProfile(newProfile[0]);
-        } else {
-          // Fallback if insert fails
-          setProfile(newProfileData);
-        }
-        setLoading(false);
+        setProfile(data);
       }
+      setLoading(false);
     };
     getUserAndProfile();
   }, [router]);
 
   const handleUpdateName = async (e) => {
-  e.preventDefault();
-  if (!nameForm.trim()) {
-    showToast('Please enter a valid name', 'error');
-    return;
-  }
-
-  // First, update the profile
-  const { error: updateError } = await supabase
-    .from('profiles')
-    .update({ name: nameForm.trim() })
-    .eq('id', user.id);
-
-  if (updateError) {
-    console.error('Update error:', updateError);
-    showToast('Error updating name', 'error');
-    return;
-  }
-
-  // Update local state immediately
-  setProfile({ ...profile, name: nameForm.trim() });
-  setShowUpdateName(false);
-  setCurrentStep(3);
-  showToast('Name updated successfully!', 'success');
-
-  // Optionally refresh from DB in background (no error if fails)
-  supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', user.id)
-    .single()
-    .then(({ data }) => {
-      if (data) setProfile(data);
-    });
-};
-
-  const handleAddAddress = async (e) => {
-  e.preventDefault();
-  const newAddress = {
-    id: Date.now(),
-    line1: addressForm.line1.trim(),
-    line2: addressForm.line2.trim(),
-    locality: addressForm.locality.trim(),
-    pincode: addressForm.pincode.trim()
+    e?.preventDefault?.();
+    if (!nameForm.trim()) return toastError('Please enter a valid name');
+    const res = await userService.updateProfile(user.id, { name: nameForm.trim() });
+    if (res.error) return toastError('Error updating name');
+    // update local state using returned record if present
+    const updated = res.data?.[0] || { ...profile, name: nameForm.trim() };
+    setProfile(updated);
+    setShowUpdateName(false);
+    setCurrentStep(3);
+    toastSuccess('Name updated successfully!');
   };
 
-  const updatedAddresses = [...(profile.address || []), newAddress];
-  
-  // Update the profile
-  const { error: updateError } = await supabase
-    .from('profiles')
-    .update({ address: updatedAddresses })
-    .eq('id', user.id);
+  const handleAddAddress = async (newAddress) => {
+    // newAddress expected to contain id, line1, locality, pincode etc.
+    const res = await userService.addAddress(user.id, newAddress);
+    if (res.error) {
+      toastError('Error adding address');
+      return res;
+    }
+    // Supabase returns array of updated profiles; use first
+    const updatedProfile = res.data?.[0] || { ...profile, address: [...(profile.address||[]), newAddress] };
+    setProfile(updatedProfile);
+    return res;
+  };
 
-  if (updateError) {
-    console.error('Add address error:', updateError);
-    showToast('Error adding address', 'error');
-    return;
-  }
-
-  // Update local state immediately
-  setProfile({ ...profile, address: updatedAddresses });
-  setAddressForm({ line1: '', line2: '', locality: '', pincode: '' });
-  setShowAddAddress(false);
-  showToast('Address added successfully!', 'success');
-};
-
-  const handleUpdateAddress = async (e) => {
-  e.preventDefault();
-  const updatedAddresses = profile.address.map(addr => 
-    addr.id === editingAddress.id ? { ...addr, ...addressForm } : addr
-  );
-
-  // Update the profile
-  const { error: updateError } = await supabase
-    .from('profiles')
-    .update({ address: updatedAddresses })
-    .eq('id', user.id);
-
-  if (updateError) {
-    console.error('Update address error:', updateError);
-    showToast('Error updating address', 'error');
-    return;
-  }
-
-  // Update local state immediately
-  setProfile({ ...profile, address: updatedAddresses });
-  setEditingAddress(null);
-  setAddressForm({ line1: '', line2: '', locality: '', pincode: '' });
-  showToast('Address updated successfully!', 'success');
-};
+  const handleUpdateAddress = async (updatedAddress) => {
+    const res = await userService.updateAddress(user.id, updatedAddress);
+    if (res.error) {
+      toastError('Error updating address');
+      return res;
+    }
+    const updatedProfile = res.data?.[0] || profile;
+    setProfile(updatedProfile);
+    setEditingAddress(null);
+    return res;
+  };
 
  const handleDeleteAddress = async (addressId) => {
-  if (!confirm('Delete this address?')) return;
-  
-  const updatedAddresses = profile.address.filter(addr => addr.id !== addressId);
-  
-  // Update the profile
-  const { error: updateError } = await supabase
-    .from('profiles')
-    .update({ address: updatedAddresses })
-    .eq('id', user.id);
-
-  if (updateError) {
-    console.error('Delete address error:', updateError);
-    showToast('Error deleting address', 'error');
-    return;
-  }
-
-  // Update local state immediately
-  setProfile({ ...profile, address: updatedAddresses });
-  showToast('Address deleted successfully!', 'success');
-};
+    if (!confirm('Delete this address?')) return;
+    const res = await userService.deleteAddress(user.id, addressId);
+    if (res.error) return toastError('Error deleting address');
+    const updatedProfile = res.data?.[0] || profile;
+    setProfile(updatedProfile);
+    toastSuccess('Address deleted');
+ };
 
   
 
@@ -224,12 +138,7 @@ const ProfilePage = () => {
 
   const openEditAddress = (address) => {
     setEditingAddress(address);
-    setAddressForm({
-      line1: address.line1,
-      line2: address.line2,
-      locality: address.locality,
-      pincode: address.pincode
-    });
+    // child component will handle editing form
   };
 
   if (loading) return <TheLoader fullscreen />;
@@ -326,66 +235,23 @@ const ProfilePage = () => {
       </div>
 
       <div className="container">
-        <div className="profileGrid">
-          {/* Sidebar */}
-          <div className="sidebar">
-            <div className="profileCard">
-              <div className="avatar">{getInitials(profile.name)}</div>
-              <h2 className="userName">{profile.name}</h2>
-              <p className="userEmail">{profile.email}</p>
-              
-              <div className="actionButtons">
-                <button className="btn secondary" onClick={() => {
-                  setNameForm(profile.name);
-                  setShowUpdateName(true);
-                }}>
-                  Update Name
-                </button>
-                <button className="btn primary" onClick={handleLogout}>
-                  Logout
-                </button>
-                <button className="btn danger" onClick={handleDeactivateAccount}>
-                  Deactivate Account
-                </button>
-              </div>
-            </div>
-          </div>
+        <div className="profile-grid">
+          <aside>
+            <ProfileOverview profile={profile} onEdit={() => { setNameForm(profile.name); setShowUpdateName(true); }} />
+            <SecuritySettings onLogout={handleLogout} />
+          </aside>
 
-          {/* Main Content */}
-          <div className="mainContent">
-            {/* Addresses Section */}
-            <div className="section">
-              <div className="sectionHeader">
-                <h3>📍 My Addresses</h3>
-                <button className="addBtn" onClick={() => setShowAddAddress(true)}>
-                  + Add Address
-                </button>
-              </div>
+          <main>
+            <OrderHistory userId={user?.id} />
+            <Addresses addresses={profile?.address || []}
+                       onAdd={handleAddAddress}
+                       onEdit={openEditAddress}
+                       onDelete={handleDeleteAddress} />
 
-              <div className="addressGrid">
-                {profile.address && profile.address.length > 0 ? (
-                  profile.address.map((address) => (
-                    <div className="addressCard" key={address.id}>
-                      <button className="deleteBtn" onClick={() => handleDeleteAddress(address.id)}>
-                        ×
-                      </button>
-                      <div className="addressInfo">
-                        <p><strong>Address:</strong> {address.line1}</p>
-                        {address.line2 && <p>{address.line2}</p>}
-                        <p><strong>Locality:</strong> {address.locality}</p>
-                        <p><strong>Pincode:</strong> {address.pincode}</p>
-                      </div>
-                      <button className="editBtn" onClick={() => openEditAddress(address)}>
-                        Edit Address
-                      </button>
-                    </div>
-                  ))
-                ) : (
-                  <p className="noAddresses">No addresses added yet. Add your first address to get started!</p>
-                )}
-              </div>
-            </div>
-          </div>
+            <Payments payments={profile?.payments || []} onSetDefault={(id) => { /* implement if needed */ }} />
+
+            <Wishlist items={profile?.wishlist || []} onRemove={async (id) => { await userService.removeWishlistItem(user.id, id); const refreshed = await userService.getProfile(user.id); if (!refreshed.error) setProfile(refreshed.data); }} onAddToCart={(item) => { /* wire to cart */ }} />
+          </main>
         </div>
       </div>
 
@@ -413,140 +279,6 @@ const ProfilePage = () => {
                 <button type="submit" className="submit">Update</button>
               </div>
             </form>
-          </div>
-        </div>
-      )}
-
-      {/* Add Address Modal */}
-      {showAddAddress && (
-        <div className="modal" onClick={() => setShowAddAddress(false)}>
-          <div className="modalContent" onClick={(e) => e.stopPropagation()}>
-            <h3>Add New Address</h3>
-            <form className="form" onSubmit={handleAddAddress}>
-              <div className="formGroup">
-                <label htmlFor="line1">Address Line 1 *</label>
-                <input
-                  id="line1"
-                  type="text"
-                  placeholder="House No., Street Name"
-                  value={addressForm.line1}
-                  onChange={(e) => setAddressForm({...addressForm, line1: e.target.value})}
-                  required
-                />
-              </div>
-              <div className="formGroup">
-                <label htmlFor="line2">Address Line 2</label>
-                <input
-                  id="line2"
-                  type="text"
-                  placeholder="Apartment, Building (Optional)"
-                  value={addressForm.line2}
-                  onChange={(e) => setAddressForm({...addressForm, line2: e.target.value})}
-                />
-              </div>
-              <div className="formGroup">
-                <label htmlFor="locality">Locality/Area *</label>
-                <input
-                  id="locality"
-                  type="text"
-                  placeholder="Locality or Area"
-                  value={addressForm.locality}
-                  onChange={(e) => setAddressForm({...addressForm, locality: e.target.value})}
-                  required
-                />
-              </div>
-              <div className="formGroup">
-                <label htmlFor="pincode">Pincode *</label>
-                <input
-                  id="pincode"
-                  type="text"
-                  placeholder="6-digit pincode"
-                  value={addressForm.pincode}
-                  onChange={(e) => setAddressForm({...addressForm, pincode: e.target.value})}
-                  required
-                  pattern="[0-9]{6}"
-                  maxLength={6}
-                />
-              </div>
-              <div className="buttonGroup">
-                <button type="button" className="cancel" onClick={() => setShowAddAddress(false)}>
-                  Cancel
-                </button>
-                <button type="submit" className="submit">Add Address</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* Edit Address Modal */}
-      {editingAddress && (
-        <div className="modal" onClick={() => setEditingAddress(null)}>
-          <div className="modalContent" onClick={(e) => e.stopPropagation()}>
-            <h3>Edit Address</h3>
-            <form className="form" onSubmit={handleUpdateAddress}>
-              <div className="formGroup">
-                <label htmlFor="editLine1">Address Line 1 *</label>
-                <input
-                  id="editLine1"
-                  type="text"
-                  placeholder="House No., Street Name"
-                  value={addressForm.line1}
-                  onChange={(e) => setAddressForm({...addressForm, line1: e.target.value})}
-                  required
-                />
-              </div>
-              <div className="formGroup">
-                <label htmlFor="editLine2">Address Line 2</label>
-                <input
-                  id="editLine2"
-                  type="text"
-                  placeholder="Apartment, Building (Optional)"
-                  value={addressForm.line2}
-                  onChange={(e) => setAddressForm({...addressForm, line2: e.target.value})}
-                />
-              </div>
-              <div className="formGroup">
-                <label htmlFor="editLocality">Locality/Area *</label>
-                <input
-                  id="editLocality"
-                  type="text"
-                  placeholder="Locality or Area"
-                  value={addressForm.locality}
-                  onChange={(e) => setAddressForm({...addressForm, locality: e.target.value})}
-                  required
-                />
-              </div>
-              <div className="formGroup">
-                <label htmlFor="editPincode">Pincode *</label>
-                <input
-                  id="editPincode"
-                  type="text"
-                  placeholder="6-digit pincode"
-                  value={addressForm.pincode}
-                  onChange={(e) => setAddressForm({...addressForm, pincode: e.target.value})}
-                  required
-                  pattern="[0-9]{6}"
-                  maxLength={6}
-                />
-              </div>
-              <div className="buttonGroup">
-                <button type="button" className="cancel" onClick={() => setEditingAddress(null)}>
-                  Cancel
-                </button>
-                <button type="submit" className="submit">Update Address</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* Toast Notification */}
-      {toast && (
-        <div className={`toast ${toast.type}`}>
-          <div className="toastContent">
-            <span className="toastIcon">{toast.type === 'success' ? '✓' : '✕'}</span>
-            <span className="toastMessage">{toast.message}</span>
           </div>
         </div>
       )}

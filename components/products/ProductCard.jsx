@@ -4,7 +4,9 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 
 import AddToCartButton from '@/components/cart/AddToCartButton';
+import WishlistButton from '@/components/general/WishlistButton';
 import "@/styles/featuredProductCard.scss";
+import "@/styles/wishlistButton.scss";
 
 const cardVariants = {
   hidden: { 
@@ -41,6 +43,7 @@ function ProductCard() {
           >
             <Link href={`/product/${product.slug}`}>
               <div className="product-image">
+                <WishlistButton product={product} />
                 <img 
                   src={product.image}
                   alt={product.title}

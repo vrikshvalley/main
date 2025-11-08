@@ -7,12 +7,14 @@ import { Navigation, Thumbs, Autoplay } from 'swiper/modules';
 import { useDispatch } from 'react-redux';
 import { addItem } from '@/lib/slices/cartSlice';
 import { showSuccessToast, showWarningToast } from '@/lib/toastHelpers';
+import WishlistButton from '@/components/general/WishlistButton';
 import ProductPageTabs from '@/components/products/ProductPageTabs';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
 import 'swiper/css/autoplay';
 import '@/styles/productPage.scss';
+import '@/styles/wishlistButton.scss';
 
 export default function ProductPage({ product }) {
   const dispatch = useDispatch();
@@ -58,6 +60,7 @@ export default function ProductPage({ product }) {
       <section className="product-page">
         {/* Left: Image Gallery */}
         <div className="product-gallery">
+          <WishlistButton product={product} />
           <Swiper
             modules={[Navigation, Thumbs, Autoplay]}
             spaceBetween={10}

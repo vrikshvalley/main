@@ -1,0 +1,72 @@
+'use client';
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Heart, HeartFill } from 'lucide-react';
+import { supabase } from '@/lib/supabaseClient';
+import * as userService from '@/lib/services/userService';
+import { showSuccessToast, showErrorToast } from '@/lib/toastHelpers';
+
+const WishlistButton = ({ product, className = '' }) => {
+  const [isWishlisted, setIsWishlisted] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkWishlistStatus = async () => {
+      const { data: { user: currentUser } } = await supabase.auth.getUser();
+      if (!currentUser) {
+        setLoading(false);
+        return;
+      }
+      setUser(currentUser);
+      const { data: wishlist } = await userService.getWishlist(currentUser.id);
+      setIsWishlisted(wishlist?.some(item => item.id === product.id));
+      setLoading(false);
+    };
+    checkWishlistStatus();
+  }, [product.id]);
+
+  const handleWishlistToggle = async () => {
+    if (!user) {
+      router.push('/auth/login');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const { error } = await userService.toggleWishlistItem(user.id, {
+        id: product.id,
+        name: product.name || product.title,
+        price: product.price,
+        image: product.images?.[0] || product.image
+      });
+
+      if (error) throw error;
+      
+      setIsWishlisted(!isWishlisted);
+      showSuccessToast(isWishlisted ? 'Removed from wishlist' : 'Added to wishlist 🌱');
+    } catch (err) {
+      console.error('Wishlist error:', err);
+      showErrorToast('Could not update wishlist');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <button
+      onClick={handleWishlistToggle}
+      className={`wishlist-button ${className} ${isWishlisted ? 'active' : ''}`}
+      disabled={loading}
+      aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
+    >
+      {isWishlisted ? 
+        <HeartFill className="heart-icon" /> : 
+        <Heart className="heart-icon" />
+      }
+    </button>
+  );
+};
+
+export default WishlistButton;
