@@ -9,47 +9,57 @@ export default function PlantFAQs() {
   const [openFAQ, setOpenFAQ] = useState(null);
 
   const faqs = [
-    {
-      id: 1,
-      question: "How often should I water my indoor plants?",
-      answer: "The watering frequency depends on the plant type, pot size, and environmental conditions. Generally, most indoor plants need watering once a week. Check the top 2 inches of soil - if it's dry, it's time to water. Overwatering is more harmful than underwatering, so always err on the side of caution."
-    },
-    {
-      id: 2,
-      question: "What are the best plants for beginners?",
-      answer: "Snake plants, pothos, ZZ plants, and spider plants are excellent choices for beginners. They're low-maintenance, forgiving of occasional neglect, and can thrive in various light conditions. These plants are also great air purifiers and add a beautiful green touch to any space."
-    },
-    {
-      id: 3,
-      question: "How do I know if my plant is getting enough light?",
-      answer: "Signs of insufficient light include slow growth, pale leaves, and leggy stems. If your plant is getting too much light, you'll notice brown, crispy leaf edges or bleached spots. Most houseplants prefer bright, indirect light. Place them near windows with sheer curtains for optimal lighting."
-    },
-    {
-      id: 4,
-      question: "Why are my plant's leaves turning yellow?",
-      answer: "Yellow leaves can indicate several issues: overwatering (most common), underwatering, nutrient deficiency, or natural aging. Check the soil moisture, ensure proper drainage, and consider the plant's age. Lower leaves naturally yellow and drop as plants grow. Adjust your care routine accordingly."
-    },
-    {
-      id: 5,
-      question: "Do I need to fertilize my plants?",
-      answer: "Yes, fertilizing helps plants grow healthy and vibrant. During the growing season (spring and summer), feed most plants every 2-4 weeks with a balanced liquid fertilizer diluted to half strength. In fall and winter, reduce or stop fertilizing as plant growth slows down."
-    },
-    {
-      id: 6,
-      question: "How can I increase humidity for my tropical plants?",
-      answer: "Tropical plants thrive in humid environments. Increase humidity by grouping plants together, using a pebble tray with water, misting regularly, or using a humidifier. Bathrooms and kitchens naturally have higher humidity and can be ideal spots for humidity-loving plants."
-    },
-    {
-      id: 7,
-      question: "When should I repot my plant?",
-      answer: "Repot when roots are growing out of drainage holes, the plant is top-heavy and tipping over, or growth has slowed significantly. Spring is the best time for repotting. Choose a pot 2-3 inches larger in diameter, use fresh potting soil, and water thoroughly after repotting."
-    },
-    {
-      id: 8,
-      question: "How do I deal with common plant pests?",
-      answer: "Common pests include spider mites, mealybugs, and aphids. Inspect plants regularly, isolate affected plants, and treat with insecticidal soap or neem oil. Wipe leaves with a damp cloth, increase air circulation, and avoid overwatering. Prevention through good plant hygiene is key."
-    }
-  ];
+  {
+    "id": 1,
+    "question": "Which plants are best for beginners?",
+    "answer": "Great beginner-friendly plants include Snake Plant, Money Plant (Pothos), ZZ Plant, Aloe Vera, Spider Plant and Areca Palm. They require very little care and adapt well to most conditions."
+  },
+  {
+    "id": 2,
+    "question": "How often should I water my plants?",
+    "answer": "Most indoor plants need watering once or twice a week. It depends on the temperature and pot drainage. Follow the finger test. Water only when the top 1 to 2 inches of soil feel dry."
+  },
+  {
+    "id": 3,
+    "question": "What type of soil is best for indoor plants?",
+    "answer": "Use a well-draining soil mix. The ideal mix involves 50% hardened soil with 25% cocopeat and 25% perlite or coarse sand."
+  },
+  {
+    "id": 4,
+    "question": "How much sunlight do indoor plants need?",
+    "answer": "Most indoor plants prefer bright and indirect sunlight. Low-light-tolerant plants are the Snake plant and the ZZ plant. The sun-loving plants include Cactus and Jade, along with Succulents."
+  },
+  {
+    "id": 5,
+    "question": "Why are my plant’s leaves turning yellow?",
+    "answer": "Common reasons can include overwatering or poor lighting. It can even be because of nutrient deficiency or poor drainage, as well as natural aging."
+  },
+  {
+    "id": 6,
+    "question": "What should I do if my plant has pests?",
+    "answer": "Common pests include mealybugs, aphids, and spider mites. The solutions involve spraying neem oil mixed with water or wiping off pests with a soft cloth. You can also remove infected leaves or keep the plants in a well-ventilated area."
+  },
+  {
+    "id": 7,
+    "question": "How often should I fertilize my plants?",
+    "answer": "Fertilize indoor plants every 3 to 4 weeks during the growing season. The growing season is from spring to early autumn. Use liquid or organic fertilizers like compost tea or seaweed extract."
+  },
+  {
+    "id": 8,
+    "question": "Can I grow herbs at home? Which ones are the easiest?",
+    "answer": "Yes. You can grow herbs at home even in small spaces like balconies, kitchens, windows, or indoor shelves with good light. Some of the easiest herbs to grow include basil, coriander, rosemary, thyme, parsley, tulsi, and curry leaves."
+  },
+  {
+    "id": 9,
+    "question": "Why is my plant not growing well?",
+    "answer": "The possible causes can be insufficient light, lack of nutrients, root-bound plants, compacted soil, or an incorrect pot size."
+  },
+  {
+    "id": 10,
+    "question": "How do I repot a plant correctly?",
+    "answer": "First gently remove the plant from its pot. Shake off the old soil. Place it in a slightly larger pot, add fresh soil mix, and water lightly. Repot every 12 to 18 months."
+  }
+];
 
   const toggleFAQ = (id) => {
     setOpenFAQ(openFAQ === id ? null : id);

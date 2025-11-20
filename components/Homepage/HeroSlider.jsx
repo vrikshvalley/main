@@ -79,7 +79,7 @@ export default function HeroSlider() {
       
       <div className="heroContent">
         <div className="badge">
-          🌿 Premium Plant Collection
+          🌿 Where Nature Meets Nurture
         </div>
         
         <h1 className="heroTitle">
@@ -87,22 +87,21 @@ export default function HeroSlider() {
         </h1>
         
         <p className="heroSubtitle">
-          Discover nature's finest treasures with our curated collection of premium plants. 
-          Transform your space into a green paradise.
+          Every home deserves a touch of green. Transform your space into a sanctuary where plants thrive and life slows down to the gentle rhythm of growth.
         </p>
 
         <div className="features">
-          <div className="feature">100% Organic</div>
-          <div className="feature">Free Delivery</div>
-          <div className="feature">Expert Care Tips</div>
+          <div className="feature">Healthy Plants</div>
+          <div className="feature">Eco Packaging</div>
+          <div className="feature">Expert Support</div>
         </div>
 
         <div className="ctaButtons">
           <button className="ctaButton" onClick={handleShopNow}>
-            Shop Now & Grow Green
+            Join the Green Movement
           </button>
           <button className="ctaButtonSecondary" onClick={handleLearnMore}>
-            Learn More
+            Our Story
           </button>
         </div>
       </div>

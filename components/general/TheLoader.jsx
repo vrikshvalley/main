@@ -2,6 +2,8 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { usePathname } from 'next/navigation';
+import Lottie from 'lottie-react';
+import leavesAnimation from '@/public/leaves.json';
 import '@/styles/theLoader.scss';
 
 export default function TheLoader({ fullscreen = false, showOnRouteChange = false }) {
@@ -36,25 +38,12 @@ export default function TheLoader({ fullscreen = false, showOnRouteChange = fals
 
   return (
     <div className={`the-loader-container ${fullscreen ? 'fullscreen' : ''}`}>
-      {/* SVG filter for goo effect */}
-      <svg className="goo-filter">
-        <defs>
-          <filter id="goo-effect">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
-            <feColorMatrix
-              in="blur"
-              mode="matrix"
-              values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -8"
-              result="goo"
-            />
-            <feBlend in="SourceGraphic" in2="goo" />
-          </filter>
-        </defs>
-      </svg>
-
-      <div className="blob-spinner">
-        <div className="blob blob-1"></div>
-        <div className="blob blob-2"></div>
+      <div className="lottie-loader">
+        <Lottie 
+          animationData={leavesAnimation} 
+          loop={true}
+          style={{ width: 200, height: 200 }}
+        />
       </div>
     </div>
   );

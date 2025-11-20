@@ -38,11 +38,11 @@ export default function About() {
     >
       <motion.h2 variants={sectionVariants}>About Us</motion.h2>
       <motion.p variants={textVariants}>
-        At Vriksh Valley, we believe plants are more than just greenery—they’re a way of life. Whether you’re creating a lush indoor oasis or an outdoor paradise, we bring you handpicked plants, exquisite bonsai, kokedama, moss walls, and terrariums, along with high-quality seeds, soil, organic fertilizers, and eco-friendly pots.
+        Welcome to Vriksh Valley, where nature meets nurture. We believe that every home, balcony and workspace deserves a touch of green. It is not just for beauty—it is also for balance and well-being, along with harmony. Our journey began with a simple thought: What if plants were not just decor? What if they were daily companions that inspire mindfulness and joy?
         <br /><br />
-        Need guidance? Our Plant consultation ensures you find the perfect green companions for your space. With sustainability at our core, every purchase supports a greener planet.
+        We are more than an online plant destination at Vriksh Valley. We are a community that celebrates growth in every form. From lush indoor plants to air purifiers to flowering varieties and garden essentials, we bring the best of nature to your doorstep. Each plant is handpicked and nurtured with care—delivered with the same love we would give our own.
         <br /><br />
-        Join us in making the world more vibrant—one plant at a time!
+        Join the Vriksh Valley family. Let us grow happiness, one leaf at a time.
       </motion.p>
     </motion.section>
   );

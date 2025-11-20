@@ -63,10 +63,18 @@
       border: 3px solid rgba($yellow, 0.3);
       transition: all 0.3s ease;
       box-shadow: $shadow-medium;
+      overflow: hidden;
       
       .category-emoji {
         font-size: 3rem;
         line-height: 1;
+      }
+
+      .category-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
       }
     }
 
@@ -131,6 +139,11 @@
         .category-emoji {
           font-size: 2.75rem;
         }
+
+        .category-image {
+          width: 100%;
+          height: 100%;
+        }
       }
     }
   }
@@ -152,6 +165,11 @@
         
         .category-emoji {
           font-size: 2.5rem;
+        }
+
+        .category-image {
+          width: 100%;
+          height: 100%;
         }
       }
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import '@/styles/initialLoader.scss';
 
 export default function InitialLoader() {
@@ -11,40 +12,107 @@ export default function InitialLoader() {
     // Set pathname on client side only
     setPathname(window.location.pathname);
 
-    // Always show loader on homepage - no session check
+    // Animation duration: 4 seconds total
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 5500); // 5.5 seconds - full animation
+    }, 4000);
 
     return () => clearTimeout(timer);
   }, []);
 
-  if (!isLoading || pathname !== '/') return null;
+  // Only show on homepage
+  if (pathname !== '/' && pathname !== '') return null;
 
   return (
-    <div className="initial-loader">
-      <div className="plant-container">
-        {/* Pot */}
-        <div className="pot">
-          <div className="pot-top"></div>
-          <div className="pot-body"></div>
-        </div>
-        
-        {/* Plant stem and leaves */}
-        <div className="plant">
-          <div className="stem"></div>
-          <div className="leaf left-leaf-1"></div>
-          <div className="leaf right-leaf-1"></div>
-          <div className="leaf left-leaf-2"></div>
-          <div className="leaf right-leaf-2"></div>
-          <div className="leaf top-leaf"></div>
-        </div>
-      </div>
-      
-      <div className="brand-container">
-        <div className="brand-name">Vriksh Valley</div>
-        <div className="tagline">Growing Naturally</div>
-      </div>
-    </div>
+    <AnimatePresence mode="wait">
+      {isLoading && (
+        <motion.div
+          className="initialLoader"
+          initial={{ opacity: 1 }}
+          exit={{ 
+            opacity: 0,
+            transition: { duration: 0.5, ease: 'easeOut' }
+          }}
+        >
+          {/* Animated Mist Layers */}
+          <div className="mistLayer mist1" />
+          <div className="mistLayer mist2" />
+          <div className="mistLayer mist3" />
+
+          {/* Content Container */}
+          <div className="loaderContent">
+            {/* VRIKSH - White Layer */}
+            <motion.h1 
+              className="brandText brandWord whiteLayer vriksh"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ 
+                opacity: [0, 1, 1, 0, 0],
+                y: [30, 0, 0, -20, -20],
+                transition: {
+                  duration: 4,
+                  times: [0, 0.4, 0.65, 1, 1],
+                  ease: [0.22, 1, 0.36, 1]
+                }
+              }}
+            >
+              VRIKSH
+            </motion.h1>
+
+            {/* VRIKSH - Masked Layer */}
+            <motion.h1 
+              className="brandText brandWord maskedLayer vriksh"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ 
+                opacity: [0, 0, 1, 1, 0],
+                y: [30, 0, 0, 0, -20],
+                transition: {
+                  duration: 4,
+                  times: [0, 0.4, 0.45, 0.65, 1],
+                  ease: [0.22, 1, 0.36, 1]
+                }
+              }}
+            >
+              VRIKSH
+            </motion.h1>
+
+            {/* VALLEY - White Layer */}
+            <motion.h1 
+              className="brandText brandWord whiteLayer valley"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ 
+                opacity: [0, 1, 1, 0, 0],
+                y: [30, 0, 0, -20, -20],
+                transition: {
+                  duration: 4,
+                  times: [0, 0.4, 0.65, 1, 1],
+                  ease: [0.22, 1, 0.36, 1],
+                  delay: 0.3
+                }
+              }}
+            >
+              VALLEY
+            </motion.h1>
+
+            {/* VALLEY - Masked Layer */}
+            <motion.h1 
+              className="brandText brandWord maskedLayer valley"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ 
+                opacity: [0, 0, 1, 1, 0],
+                y: [30, 0, 0, 0, -20],
+                transition: {
+                  duration: 4,
+                  times: [0, 0.4, 0.45, 0.65, 1],
+                  ease: [0.22, 1, 0.36, 1],
+                  delay: 0.3
+                }
+              }}
+            >
+              VALLEY
+            </motion.h1>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }

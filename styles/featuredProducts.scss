@@ -68,10 +68,9 @@
   }
 
   .products-container {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     gap: 1.5rem;
-    justify-content: center;
   }
 
   // Responsive padding
@@ -79,12 +78,13 @@
     padding: 3rem 1.5rem;
     
     .products-container {
+      grid-template-columns: repeat(3, 1fr);
       gap: 1.5rem;
     }
   }
 
   @media (max-width: 768px) {
-    padding: 2rem 3rem;
+    padding: 2rem 1.5rem;
     
     .featured-title {
       font-size: 1.75rem;
@@ -92,7 +92,8 @@
     }
     
     .products-container {
-      gap: 2.5rem; // Increased gap for mobile
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
     }
   }
 
@@ -105,7 +106,8 @@
     }
     
     .products-container {
-      gap: 3rem; // Even more gap for small mobile
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
     }
   }
 }

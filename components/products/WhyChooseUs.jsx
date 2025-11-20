@@ -7,18 +7,28 @@ import '@/styles/products.scss';
 const features = [
   {
     icon: Shield,
-    title: 'Quality Guaranteed',
-    description: 'All our plants are carefully inspected and come with a health guarantee',
+    title: 'Handpicked and Thriving Plants',
+    description: 'Every plant is carefully selected and nurtured to ensure it arrives healthy and ready to flourish',
   },
   {
     icon: Truck,
-    title: 'Fast Delivery',
-    description: 'Safe and secure delivery to your doorstep within 3-5 business days',
+    title: 'Bespoke Plant Décor Solutions',
+    description: 'Customized plant arrangements and décor solutions tailored to your unique space and style',
   },
   {
     icon: Headset,
-    title: 'Expert Support',
-    description: '24/7 plant care support from our team of expert horticulturists',
+    title: 'Sustainable and Recyclable Packaging',
+    description: 'Eco-friendly packaging that protects your plants while caring for our planet',
+  },
+  {
+    icon: Shield,
+    title: 'Expert Guidance and Personalized Care',
+    description: 'Professional plant care advice and ongoing support to help your green companions thrive',
+  },
+  {
+    icon: Truck,
+    title: 'More than Just Plants - A Green Lifestyle',
+    description: 'Join our community in embracing sustainable living and creating greener, healthier spaces',
   },
 ];
 
@@ -46,10 +56,10 @@ const cardVariants = {
 
 export default function WhyChooseUs() {
   return (
-    <section className="why-choose-us">
-      <div className="why-choose-container">
+    <section className="why-choose-us-products">
+      <div className="why-choose-us-products-container">
         <motion.div
-          className="why-section-header"
+          className="why-choose-us-products-header"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}

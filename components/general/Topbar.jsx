@@ -28,6 +28,15 @@ export default function TopBar() {
           <Link href="#testimonials">Testimonials</Link>
           <span className="separator">|</span>
           <Link href="#faqs">FAQ</Link>
+          <span className="separator">|</span>
+          <Link 
+            href="https://wa.me/919876543210?text=Hi,%20I'm%20interested%20in%20corporate%20bulk%20orders"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="corporate-link"
+          >
+            Corporate Orders 🌿
+          </Link>
         </nav>
       </div>
     </div>

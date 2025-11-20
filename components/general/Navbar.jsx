@@ -4,8 +4,9 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import { selectCount } from '@/lib/slices/cartSlice';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ChevronDown, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
+import { motion, AnimatePresence } from 'framer-motion';
 import ProfileIcon from '@/components/auth/ProfileIcon';
 import CartIcon from '@/components/cart/CartIcon';
 import SearchBar from '@/components/general/SearchBar';
@@ -15,6 +16,49 @@ import "@/styles/navbar.scss";
 export default function Navbar({ onCartClick }) {
   const count = useSelector(selectCount);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [hoveredCategory, setHoveredCategory] = useState(null);
+  const [expandedMobileCategory, setExpandedMobileCategory] = useState(null);
+
+  const dropdownVariants = {
+    hidden: { 
+      opacity: 0, 
+      y: -10,
+      scale: 0.95
+    },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 0.2,
+        ease: [0.22, 1, 0.36, 1]
+      }
+    },
+    exit: {
+      opacity: 0,
+      y: -10,
+      scale: 0.95,
+      transition: {
+        duration: 0.15
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, x: -10 },
+    visible: (i) => ({
+      opacity: 1,
+      x: 0,
+      transition: {
+        delay: i * 0.03,
+        duration: 0.2
+      }
+    })
+  };
+
+  const toggleMobileCategory = (slug) => {
+    setExpandedMobileCategory(expandedMobileCategory === slug ? null : slug);
+  };
 
   return (
     <div className="navbar">
@@ -29,9 +73,48 @@ export default function Navbar({ onCartClick }) {
         {/* Center: Categories (desktop) */}
         <nav className="nav-categories desktop-only">
           {categories.map((category) => (
-            <Link key={category.slug} href={`/category/${category.slug}`}>
-              {category.name}
-            </Link>
+            <div 
+              key={category.slug}
+              className="category-item"
+              onMouseEnter={() => setHoveredCategory(category.slug)}
+              onMouseLeave={() => setHoveredCategory(null)}
+            >
+              <Link href={`/category/${category.slug}`} className="category-link">
+                {category.name}
+              </Link>
+
+              {/* Dropdown Menu */}
+              <AnimatePresence>
+                {hoveredCategory === category.slug && category.subcategories && (
+                  <motion.div
+                    className="dropdown-menu"
+                    variants={dropdownVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                  >
+                    <div className="dropdown-content">
+                      {category.subcategories.map((subcategory, index) => (
+                        <motion.div
+                          key={subcategory.slug}
+                          custom={index}
+                          variants={itemVariants}
+                          initial="hidden"
+                          animate="visible"
+                        >
+                          <Link 
+                            href={`/category/${category.slug}/${subcategory.slug}`}
+                            className="dropdown-item"
+                          >
+                            {subcategory.name}
+                          </Link>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           ))}
         </nav>
 
@@ -56,9 +139,51 @@ export default function Navbar({ onCartClick }) {
       {menuOpen && (
         <div className="mobile-menu">
           {categories.map((category) => (
-            <Link key={category.slug} href={`/category/${category.slug}`}>
-              {category.name}
-            </Link>
+            <div key={category.slug} className="mobile-category">
+              <div className="mobile-category-header">
+                <Link 
+                  href={`/category/${category.slug}`}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {category.name}
+                </Link>
+                {category.subcategories && category.subcategories.length > 0 && (
+                  <button
+                    className="mobile-expand-btn"
+                    onClick={() => toggleMobileCategory(category.slug)}
+                  >
+                    <ChevronRight 
+                      size={18} 
+                      className={expandedMobileCategory === category.slug ? 'rotated' : ''}
+                    />
+                  </button>
+                )}
+              </div>
+              
+              {/* Mobile Subcategories */}
+              <AnimatePresence>
+                {expandedMobileCategory === category.slug && category.subcategories && (
+                  <motion.div
+                    className="mobile-subcategories"
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    {category.subcategories.map((subcategory) => (
+                      <Link
+                        key={subcategory.slug}
+                        href={`/category/${category.slug}/${subcategory.slug}`}
+                        className="mobile-subcategory-item"
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        {subcategory.name}
+                      </Link>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           ))}
         </div>
       )}

@@ -95,8 +95,8 @@ export default function RootLayout({ children }) {
         <meta name="apple-mobile-web-app-title" content="Vriksh Valley" />
         <link rel="canonical" href="https://vrikshvalley.com" />
         <meta name="theme-color" content="#073b22" />
-        <link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="any" />
-        <link rel="apple-touch-icon" href="/logo.png" />
+        <link rel="icon" type="image/x-icon" href="https://vrikshvalley.com/favicon.ico" sizes="any" />
+        <link rel="apple-touch-icon" href="https://vrikshvalley.com/favicon.ico" />
       </head>
       <body>
         <InitialLoader />

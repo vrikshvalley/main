@@ -9,6 +9,7 @@ import { addItem } from '@/lib/slices/cartSlice';
 import { showSuccessToast, showWarningToast } from '@/lib/toastHelpers';
 import WishlistButton from '@/components/general/WishlistButton';
 import ProductPageTabs from '@/components/products/ProductPageTabs';
+import Ads from '@/components/general/Ads';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
@@ -215,6 +216,14 @@ export default function ProductPage({ product }) {
 
       {/* Product Page Tabs - Additional Info, Reviews, Gallery */}
       <ProductPageTabs product={product} />
+      
+      {/* Ads Section */}
+      <Ads 
+        items={['Bring nature home, one leaf at a time']}
+        bgColor="dark"
+        textColor="light"
+        speed={15}
+      />
     </>
   );
 }

@@ -135,7 +135,7 @@ export default function ProductsPage() {
         </div>
       </div>
 
-      <div className="products-container">
+      <div className="main-products-container">
         {/* Filters Sidebar */}
         <aside className={`filters-sidebar ${showFilters ? 'show' : 'hide'}`}>
           <div className="filters-header">

@@ -82,7 +82,12 @@ body {
 }
 
 body::-webkit-scrollbar {
-  width: var(--sb-size)
+  width: var(--sb-size);
+  
+  @media (max-width: 768px) {
+    display: none;
+    width: 0;
+  }
 }
 
 body::-webkit-scrollbar-track {
@@ -99,6 +104,10 @@ body::-webkit-scrollbar-thumb {
   body {
     scrollbar-color: var(--sb-thumb-color)
                      var(--sb-track-color);
+    
+    @media (max-width: 768px) {
+      scrollbar-width: none;
+    }
   }
 }
 a { 

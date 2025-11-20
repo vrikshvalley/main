@@ -1,339 +1,225 @@
-@use "sass:color";
+@use "sass:color"; 
 @use 'variables' as *;
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Alumni+Sans:wght@300;400&display=swap');
 
-.initial-loader {
+// Keyframe Animations
+@keyframes drift {
+  0% {
+    transform: translateX(-100%) translateY(0);
+    opacity: 0.15;
+  }
+  50% {
+    opacity: 0.25;
+  }
+  100% {
+    transform: translateX(100vw) translateY(-20px);
+    opacity: 0.15;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+@keyframes mistFade {
+  0%, 100% {
+    opacity: 0.15;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+
+// Main Loader Container
+.initialLoader {
   position: fixed;
   inset: 0;
-  background: linear-gradient(135deg, $primary-bg 0%, color.adjust($primary-bg, $lightness: -5%) 100%);
-  display: grid;
-  place-items: center;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(
+    135deg,
+    #0a2818 0%,
+    #073b22 35%,
+    #0d5030 65%,
+    #073b22 100%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: 999999;
-  animation: fadeOut 0.5s ease 4s forwards;
+  overflow: hidden;
 
-  > * {
-    grid-column: 1;
-    grid-row: 1;
+  // Mist / Fog Layers
+  .mistLayer {
+    position: absolute;
+    width: 200%;
+    height: 150%;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(255, 255, 255, 0.03) 40%,
+      transparent 70%
+    );
+    pointer-events: none;
+    animation: mistFade 4s ease-in-out infinite;
+
+    &.mist1 {
+      top: -25%;
+      left: -50%;
+      animation: drift 25s linear infinite, mistFade 3s ease-in-out infinite;
+      animation-delay: 0s;
+    }
+
+    &.mist2 {
+      top: 10%;
+      left: -50%;
+      animation: drift 30s linear infinite, mistFade 4s ease-in-out infinite;
+      animation-delay: -8s;
+      opacity: 0.2;
+    }
+
+    &.mist3 {
+      top: 40%;
+      left: -50%;
+      animation: drift 35s linear infinite, mistFade 5s ease-in-out infinite;
+      animation-delay: -15s;
+      opacity: 0.18;
+    }
   }
 
-  .plant-container {
-    width: 200px;
-    height: 200px;
+  // Content Container
+  .loaderContent {
     position: relative;
-    margin-bottom: 250px;
-  }
-
-  .brand-container {
+    z-index: 10;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 250px;
+    justify-content: center;
+    width: 100%;
+    padding: 0 2rem;
+    gap: 1.5rem;
 
-    .brand-name {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: $text-primary;
-      margin: 0;
-      padding: 0;
-      opacity: 0;
-      animation: fadeInUp 0.6s ease 3.2s forwards;
-      text-shadow: 0 2px 8px rgba($accent-primary, 0.3);
-      white-space: nowrap;
+    @media (max-width: 768px) {
+      padding: 0 1.5rem;
+      gap: 1rem;
     }
 
-    .tagline {
-      font-family: 'Alumni Sans', sans-serif;
-      font-size: 1.1rem;
-      color: $text-secondary;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      margin: 0.5rem 0 0 0;
-      padding: 0;
-      opacity: 0;
-      animation: fadeInUp 0.6s ease 3.5s forwards;
-      white-space: nowrap;
+    @media (max-width: 480px) {
+      padding: 0 1rem;
+      gap: 0.75rem;
     }
   }
 
-  // Pot styling
-  .pot {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1;
+  // Brand Text Styling
+  .brandText {
+    position: relative;
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 12vw, 8rem);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    line-height: 1;
+    margin: 0;
+    white-space: nowrap;
+    text-align: center;
 
-    .pot-top {
-      width: 80px;
-      height: 12px;
-      background: linear-gradient(to right, $bg-secondary, color.adjust($bg-secondary, $lightness: 10%));
-      border-radius: 4px 4px 0 0;
-      margin-bottom: -2px;
+    @media (max-width: 768px) {
+      font-size: clamp(2.5rem, 10vw, 5rem);
+      letter-spacing: -0.01em;
     }
 
-    .pot-body {
-      width: 70px;
-      height: 60px;
-      margin-left: 5px;
-      background: linear-gradient(to bottom, $bg-secondary, color.adjust($bg-secondary, $lightness: -10%));
-      clip-path: polygon(10% 0, 90% 0, 100% 100%, 0 100%);
-      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
+    @media (max-width: 480px) {
+      font-size: clamp(2rem, 9vw, 3.5rem);
+    }
+
+    // White Layer with Shimmer
+    &.whiteLayer {
+      color: #ffffff;
+      z-index: 2;
+      text-shadow: 
+        0 0 30px rgba(255, 255, 255, 0.4),
+        0 0 60px rgba(255, 255, 255, 0.2),
+        0 4px 20px rgba(0, 0, 0, 0.3);
+      
+      // Shimmer effect
+      background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.8) 0%,
+        rgba(255, 255, 255, 1) 25%,
+        rgba(255, 255, 255, 1.2) 50%,
+        rgba(255, 255, 255, 1) 75%,
+        rgba(255, 255, 255, 0.8) 100%
+      );
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      animation: shimmer 3s linear infinite;
+      animation-delay: 0.4s;
+    }
+
+    // Masked Forest Texture Layer
+    &.maskedLayer {
+      color: transparent;
+      background-image: url('/hero1.jpg');
+      background-size: cover;
+      background-position: center;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      z-index: 1;
+      filter: brightness(1.3) contrast(1.2) saturate(1.1);
     }
   }
 
-  // Plant growing animation
-  .plant {
-    position: absolute;
-    bottom: 60px;
-    left: 50%;
-    transform: translateX(-50%);
-    animation: growPlant 2s ease forwards;
+  // Mobile Optimizations
+  @media (max-width: 768px) {
+    background: linear-gradient(
+      135deg,
+      #0a2818 0%,
+      #073b22 50%,
+      #0a2818 100%
+    );
 
-    .stem {
-      width: 4px;
-      height: 0;
-      background: linear-gradient(to top, color.adjust($teal, $lightness: -15%), $teal);
-      margin: 0 auto;
-      border-radius: 2px;
-      position: relative;
-      animation: growStem 2.5s ease forwards;
-    }
-
-    .leaf {
-      position: absolute;
-      width: 30px;
-      height: 40px;
-      background: linear-gradient(135deg, $accent-primary 0%, $teal 100%);
-      border-radius: 0 100% 0 100%;
-      opacity: 0;
-
-      &::before {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 0;
-        width: 100%;
-        height: 1.5px;
-        background: rgba($primary-bg, 0.2);
-        transform: rotate(45deg);
+    .mistLayer {
+      width: 250%;
+      
+      &.mist1 {
+        animation-duration: 20s;
       }
-
-      &.left-leaf-1 {
-        left: 2px;
-        top: 50px;
-        transform-origin: right center;
-        animation: growLeafLeft 0.5s ease 1.3s forwards;
+      
+      &.mist2 {
+        animation-duration: 25s;
       }
-
-      &.right-leaf-1 {
-        left: 2px;
-        top: 50px;
-        transform-origin: left center;
-        animation: growLeafRight 0.5s ease 1.7s forwards;
-      }
-
-      &.left-leaf-2 {
-        left: 2px;
-        top: 25px;
-        transform-origin: right center;
-        animation: growLeafLeft 0.5s ease 2.1s forwards;
-      }
-
-      &.right-leaf-2 {
-        left: 2px;
-        top: 25px;
-        transform-origin: left center;
-        animation: growLeafRight 0.5s ease 2.5s forwards;
-      }
-
-      &.top-leaf {
-        left: 50%;
-        top: 0;
-        transform: translateX(-50%);
-        width: 25px;
-        height: 35px;
-        transform-origin: bottom center;
-        animation: growLeafTop 0.5s ease 2.9s forwards;
+      
+      &.mist3 {
+        animation-duration: 30s;
       }
     }
   }
-}
 
-@keyframes growStem {
-  from {
-    height: 0;
+  @media (max-width: 480px) {
+    .mistLayer {
+      width: 300%;
+      opacity: 0.12;
+    }
   }
-  to {
-    height: 80px;
-  }
-}
 
-@keyframes growLeafLeft {
-  from {
-    opacity: 0;
-    transform: translateX(0) rotate(0deg) scale(0);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(-28px) rotate(-30deg) scale(1);
-  }
-}
-
-@keyframes growLeafRight {
-  from {
-    opacity: 0;
-    transform: translateX(0) rotate(0deg) scale(0);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(28px) rotate(30deg) scaleX(-1) scale(1);
-  }
-}
-
-@keyframes growLeafTop {
-  from {
-    opacity: 0;
-    transform: translateX(-50%) translateY(0) rotate(0deg) scale(0);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(-50%) translateY(-10px) rotate(0deg) scale(1);
-  }
-}
-
-@keyframes growPlant {
-  from {
-    transform: translateX(-50%) translateY(20px);
-    opacity: 0.5;
-  }
-  to {
-    transform: translateX(-50%) translateY(0);
-    opacity: 1;
-  }
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeOut {
-  from {
-    opacity: 1;
-    visibility: visible;
-  }
-  to {
-    opacity: 0;
-    visibility: hidden;
-  }
-}
-
-@media (max-width: 768px) {
-  .initial-loader {
-    .plant-container {
-      width: 120px;
-      height: 120px;
+  // Performance Optimization
+  @media (prefers-reduced-motion: reduce) {
+    .mistLayer {
+      animation: none;
+      opacity: 0.15;
     }
 
-    .brand-container {
-      margin-top: 1.5rem;
-      max-width: 90%;
-    }
-
-    .pot {
-      .pot-top {
-        width: 60px;
-        height: 10px;
+    .brandText {
+      &.whiteLayer {
+        animation: none;
       }
-
-      .pot-body {
-        width: 52px;
-        height: 45px;
-        margin-left: 4px;
-      }
-    }
-
-    .plant {
-      .stem {
-        width: 3px;
-      }
-
-      .leaf {
-        width: 20px;
-        height: 28px;
-
-        &.top-leaf {
-          width: 18px;
-          height: 25px;
-        }
-      }
-    }
-
-    .brand-name {
-      font-size: 1.8rem;
-    }
-
-    .tagline {
-      font-size: 0.85rem;
-      letter-spacing: 2px;
-    }
-  }
-}
-
-@media (max-width: 480px) {
-  .initial-loader {
-    .plant-container {
-      width: 100px;
-      height: 100px;
-    }
-
-    .brand-container {
-      margin-top: 1rem;
-      max-width: 90%;
-    }
-
-    .pot {
-      .pot-top {
-        width: 50px;
-        height: 8px;
-      }
-
-      .pot-body {
-        width: 44px;
-        height: 38px;
-        margin-left: 3px;
-      }
-    }
-
-    .plant {
-      .stem {
-        width: 2px;
-      }
-
-      .leaf {
-        width: 18px;
-        height: 24px;
-
-        &.top-leaf {
-          width: 15px;
-          height: 20px;
-        }
-      }
-    }
-
-    .brand-name {
-      font-size: 1.5rem;
-    }
-
-    .tagline {
-      font-size: 0.75rem;
-      letter-spacing: 1.5px;
     }
   }
 }

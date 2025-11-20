@@ -1,6 +1,7 @@
 'use client';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 import { categories } from '@/lib/sampleProducts';
 import "@/styles/categoryCircles.scss";
 
@@ -47,7 +48,13 @@ export default function CategoryCircles() {
           <Link key={category.slug} href={`/category/${category.slug}`} passHref>
             <motion.div className="circle-item" variants={circleVariants}>
               <div className="circle-icon">
-                <span className="category-emoji">{category.icon}</span>
+                <Image 
+                  src={category.image} 
+                  alt={category.name}
+                  width={120}
+                  height={120}
+                  className="category-image"
+                />
               </div>
               <p>{category.name}</p>
             </motion.div>

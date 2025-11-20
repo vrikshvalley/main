@@ -65,9 +65,9 @@ export default function Footer() {
         >
           <h3>Get in Touch</h3>
           <ul>
-            <li><a href="tel:+91 92047 45612">Call: +91 92047 45612</a></li>
-            <li><a href="mailto:support@vrikshvalley.com">Email: support@vrikshvalley.com</a></li>
-            <li><a href="https://wa.me/+919204745612" target="_blank">WhatsApp: +91 92047 45612</a></li>
+            <li><a href="tel:+919204745612">Call: +91 92047 45612</a></li>
+            <li><a href="mailto:vrikshvalley@gmail.com">Email: vrikshvalley@gmail.com</a></li>
+            <li><a href="https://wa.me/919204745612" target="_blank">WhatsApp: +91 92047 45612</a></li>
           </ul>
         </motion.div>
 
