@@ -3,8 +3,8 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { orderService } from '@/lib/services/orderService';
-import { shiprocketService } from '@/lib/services/shiprocketService';
+import orderService from '@/lib/services/orderService';
+import shiprocketService from '@/lib/services/shiprocketService';
 import { toast } from 'react-toastify';
 import Image from 'next/image';
 import { Check, Package, Truck, MapPin, X, RotateCcw } from 'lucide-react';

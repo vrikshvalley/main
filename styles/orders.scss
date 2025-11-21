@@ -3,7 +3,13 @@
 
 // Import global variables
 @import './globals.scss';
+@use 'variables' as *;
+@use 'sass:color';
 
+// Additional text color variables for this file
+$text-primary: $dark-green;
+$text-secondary: $deep-green;
+$text-muted: rgba($dark-green, 0.6);
 // ========================================
 // Orders Listing Page
 // ========================================

@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Heart, HeartFill } from 'lucide-react';
+import { Heart } from 'lucide-react';
 import { supabase } from '@/lib/supabaseClient';
 import * as userService from '@/lib/services/userService';
 import { showSuccessToast, showErrorToast } from '@/lib/toastHelpers';
@@ -61,10 +61,7 @@ const WishlistButton = ({ product, className = '' }) => {
       disabled={loading}
       aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
     >
-      {isWishlisted ? 
-        <HeartFill className="heart-icon" /> : 
-        <Heart className="heart-icon" />
-      }
+      <Heart className="heart-icon" fill={isWishlisted ? 'currentColor' : 'none'} />
     </button>
   );
 };
