@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation';
 import { getProductBySlug } from '@/lib/productHelpers';
 import TheLoader from '@/components/general/TheLoader';
 import ProductPage from '@/components/products/ProductPage';
+import Ads from '@/components/general/Ads';
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -41,8 +42,18 @@ export default function ProductDetailPage() {
   }
 
   return (
-    <div className="product-page-wrapper">
-      <ProductPage product={product} />
-    </div>
+    <>
+      <div className="product-page-wrapper">
+        <ProductPage product={product} />
+      </div>
+      
+      {/* Ads Section */}
+      <Ads 
+        items={['Bring nature home, one leaf at a time']}
+        bgColor="dark"
+        textColor="light"
+        speed={15}
+      />
+    </>
   );
 }
