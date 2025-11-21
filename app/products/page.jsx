@@ -123,8 +123,6 @@ export default function ProductsPage() {
 
   return (
     <>
-      <TopBar />
-      <Navbar />
       <div className="products-page">
         <Breadcrumbs items={[{ label: 'Products' }]} />
       {/* Page Header */}
@@ -391,8 +389,6 @@ export default function ProductsPage() {
         </main>
       </div>
     </div>
-    <Footer />
-    <WhatsAppButton />
     </>
   );
 }

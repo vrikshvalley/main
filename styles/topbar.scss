@@ -142,6 +142,10 @@
       gap: 0.5rem;
     }
 
+    .hide-on-mobile {
+      display: none !important;
+    }
+
     .impact-marquee {
       .marquee-content span {
         font-size: 0.7rem;

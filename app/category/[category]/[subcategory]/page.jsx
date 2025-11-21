@@ -40,7 +40,7 @@ export default function SubcategoryPage() {
   const productsPerPage = 12;
   
   // UI states
-  const [showFilters, setShowFilters] = useState(true);
+  const [showFilters, setShowFilters] = useState(false);
   const [showSortDropdown, setShowSortDropdown] = useState(false);
 
   // Fetch price range on mount
@@ -160,6 +160,14 @@ export default function SubcategoryPage() {
         </div>
 
         <div className="main-products-container">
+          {/* Backdrop Overlay */}
+          {showFilters && (
+            <div 
+              className="filters-backdrop"
+              onClick={() => setShowFilters(false)}
+            />
+          )}
+
           {/* Filters Sidebar */}
           <aside className={`filters-sidebar ${showFilters ? 'show' : 'hide'}`}>
             <div className="filters-header">

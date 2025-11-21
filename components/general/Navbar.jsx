@@ -141,22 +141,24 @@ export default function Navbar({ onCartClick }) {
           {categories.map((category) => (
             <div key={category.slug} className="mobile-category">
               <div className="mobile-category-header">
-                <Link 
-                  href={`/category/${category.slug}`}
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {category.name}
-                </Link>
-                {category.subcategories && category.subcategories.length > 0 && (
+                {category.subcategories && category.subcategories.length > 0 ? (
                   <button
-                    className="mobile-expand-btn"
+                    className="mobile-category-btn"
                     onClick={() => toggleMobileCategory(category.slug)}
                   >
+                    <span>{category.name}</span>
                     <ChevronRight 
                       size={18} 
                       className={expandedMobileCategory === category.slug ? 'rotated' : ''}
                     />
                   </button>
+                ) : (
+                  <Link 
+                    href={`/category/${category.slug}`}
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    {category.name}
+                  </Link>
                 )}
               </div>
               

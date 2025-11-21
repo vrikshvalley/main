@@ -1,351 +1,402 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useParams, useSearchParams } from 'next/navigation';
-import Link from 'next/link';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
+import { useParams } from 'next/navigation';
+import TopBar from '@/components/general/Topbar';
+import Navbar from '@/components/general/Navbar';
+import Footer from '@/components/general/Footer';
+import WhatsAppButton from '@/components/general/WhatsAppButton';
+import Breadcrumbs from '@/components/general/Breadcrumbs';
 import { getProducts, getPriceRange } from '@/lib/productHelpers';
 import { categories } from '@/lib/sampleProducts';
-import AddToCartButton from '@/components/cart/AddToCartButton';
-import WishlistButton from '@/components/general/WishlistButton';
-import '@/styles/productPage.scss';
-import '@/styles/featuredProductCard.scss';
-import '@/styles/breadcrumbs.scss';
+import { ChevronDown, X, SlidersHorizontal, Grid, List } from 'lucide-react';
+import TheLoader from '@/components/general/TheLoader';
+import ProductListCard from '@/components/products/ProductListCard';
+import '@/styles/products.scss';
 
 export default function CategoryPage() {
   const params = useParams();
-  const searchParams = useSearchParams();
   const categorySlug = params.category;
+  
+  const category = categories.find(c => c.slug === categorySlug);
 
   const [products, setProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
+  const [viewMode, setViewMode] = useState('grid');
+  
   // Filter states
   const [priceRange, setPriceRange] = useState([0, 10000]);
-  const [selectedColors, setSelectedColors] = useState([]);
-  const [selectedSizes, setSelectedSizes] = useState([]);
-  const [sortBy, setSortBy] = useState('default');
+  const [maxPossiblePrice, setMaxPossiblePrice] = useState(10000);
+  const [inStockOnly, setInStockOnly] = useState(false);
+  const [sortBy, setSortBy] = useState('created_at');
+  const [sortOrder, setSortOrder] = useState('desc');
+  
+  // Pagination
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalProducts, setTotalProducts] = useState(0);
   const productsPerPage = 12;
+  
+  // UI states
+  const [showFilters, setShowFilters] = useState(false);
+  const [showSortDropdown, setShowSortDropdown] = useState(false);
 
-  // Get category details
-  const category = categories.find(cat => cat.slug === categorySlug);
-
+  // Fetch price range on mount
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        setLoading(true);
-        const data = await getProducts({ category: categorySlug });
-        const productsList = data.products || [];
-        setProducts(productsList);
-        setFilteredProducts(productsList);
-
-        // Get price range for this category
-        const { min, max } = await getPriceRange(categorySlug);
-        setPriceRange([min, max]);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
+    const fetchPriceRange = async () => {
+      const range = await getPriceRange(categorySlug);
+      setMaxPossiblePrice(range.max);
+      setPriceRange([range.min, range.max]);
     };
-
-    if (categorySlug) {
-      fetchProducts();
-    }
+    fetchPriceRange();
   }, [categorySlug]);
 
-  // Apply filters
+  // Fetch products when filters change
   useEffect(() => {
-    let result = [...products];
+    fetchProducts();
+  }, [categorySlug, priceRange, inStockOnly, sortBy, sortOrder, currentPage]);
 
-    // Price filter
-    result = result.filter(
-      product => product.price >= priceRange[0] && product.price <= priceRange[1]
-    );
+  const fetchProducts = async () => {
+    setLoading(true);
+    const result = await getProducts({
+      category: categorySlug,
+      minPrice: priceRange[0],
+      maxPrice: priceRange[1],
+      inStock: inStockOnly ? true : null,
+      sortBy,
+      sortOrder,
+      page: currentPage,
+      limit: productsPerPage,
+    });
 
-    // Color filter
-    if (selectedColors.length > 0) {
-      result = result.filter(product =>
-        product.color?.some(c => selectedColors.includes(c))
-      );
-    }
-
-    // Size filter
-    if (selectedSizes.length > 0) {
-      result = result.filter(product =>
-        product.size?.some(s => selectedSizes.includes(s))
-      );
-    }
-
-    // Sorting
-    switch (sortBy) {
-      case 'price-low':
-        result.sort((a, b) => a.price - b.price);
-        break;
-      case 'price-high':
-        result.sort((a, b) => b.price - a.price);
-        break;
-      case 'name-az':
-        result.sort((a, b) => a.name.localeCompare(b.name));
-        break;
-      case 'name-za':
-        result.sort((a, b) => b.name.localeCompare(a.name));
-        break;
-      default:
-        break;
-    }
-
-    setFilteredProducts(result);
-    setCurrentPage(1); // Reset to first page when filters change
-  }, [products, priceRange, selectedColors, selectedSizes, sortBy]);
-
-  // Pagination
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
-  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
-
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setProducts(result.products);
+    setTotalPages(result.totalPages);
+    setTotalProducts(result.total);
+    setLoading(false);
   };
 
-  // Get unique colors and sizes from products
-  const availableColors = [...new Set(products.flatMap(p => p.color || []))];
-  const availableSizes = [...new Set(products.flatMap(p => p.size || []))];
+  const handlePriceChange = (index, value) => {
+    const newRange = [...priceRange];
+    newRange[index] = parseInt(value);
+    setPriceRange(newRange);
+    setCurrentPage(1);
+  };
 
-  if (loading) {
-    return (
-      <div className="loading-container">
-        <div className="loader"></div>
-        <p>Loading products...</p>
-      </div>
-    );
-  }
+  const handleClearFilters = () => {
+    setPriceRange([0, maxPossiblePrice]);
+    setInStockOnly(false);
+    setSortBy('created_at');
+    setSortOrder('desc');
+    setCurrentPage(1);
+  };
 
-  if (error) {
-    return (
-      <div className="error-container">
-        <h2>Error loading products</h2>
-        <p>{error}</p>
-      </div>
-    );
-  }
+  const getActiveFiltersCount = () => {
+    let count = 0;
+    if (priceRange[0] > 0 || priceRange[1] < maxPossiblePrice) count++;
+    if (inStockOnly) count++;
+    return count;
+  };
+
+  const handleSortChange = (newSortBy) => {
+    if (sortBy === newSortBy) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortBy(newSortBy);
+      setSortOrder(newSortBy === 'price' ? 'asc' : 'desc');
+    }
+    setShowSortDropdown(false);
+    setCurrentPage(1);
+  };
+
+  const getSortLabel = () => {
+    const labels = {
+      'created_at': 'Newest First',
+      'name': 'Name',
+      'price': sortOrder === 'asc' ? 'Price: Low to High' : 'Price: High to Low',
+      'rating': 'Highest Rated',
+    };
+    return labels[sortBy] || 'Sort By';
+  };
 
   if (!category) {
     return (
-      <div className="error-container">
-        <h2>Category not found</h2>
-        <p>The category you're looking for doesn't exist.</p>
-      </div>
+      <>
+        <TopBar />
+        <Navbar />
+        <div className="category-not-found">
+          <h1>Category Not Found</h1>
+          <p>The category you're looking for doesn't exist.</p>
+          <a href="/products" className="back-to-products">View All Products</a>
+        </div>
+        <Footer />
+        <WhatsAppButton />
+      </>
     );
   }
 
   return (
-    <div className="category-page">
-      <div className="category-header">
-        <nav className="breadcrumbs">
-          <ul className="breadcrumbs-list">
-            <li className="breadcrumb-item">
-              <Link href="/">Home</Link>
-            </li>
-            <li className="breadcrumb-item">
-              <span className="separator">/</span>
-            </li>
-            <li className="breadcrumb-item">
-              <span className="current">{category.name}</span>
-            </li>
-          </ul>
-        </nav>
-        <h1>{category.name}</h1>
-        {category.description && <p className="category-description">{category.description}</p>}
-      </div>
-
-      <div className="product-page-container">
-        {/* Filters Sidebar */}
-        <aside className="filters-sidebar">
-          <div className="filter-section">
-            <h3>Price Range</h3>
-            <div className="price-inputs">
-              <input
-                type="number"
-                value={priceRange[0]}
-                onChange={(e) => setPriceRange([parseInt(e.target.value) || 0, priceRange[1]])}
-                min="0"
-              />
-              <span>to</span>
-              <input
-                type="number"
-                value={priceRange[1]}
-                onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value) || 10000])}
-                min="0"
-              />
-            </div>
+    <>
+      <TopBar />
+      <Navbar />
+      <div className="products-page">
+        <Breadcrumbs 
+          items={[
+            { label: 'Products', href: '/products' },
+            { label: category.name }
+          ]} 
+        />
+        
+        {/* Category Header */}
+        <div className="products-header">
+          <div className="header-content">
+            <div className="category-icon">{category.icon}</div>
+            <h1>{category.name}</h1>
+            <p>Browse our collection of {category.name.toLowerCase()}</p>
           </div>
+        </div>
 
-          {availableColors.length > 0 && (
-            <div className="filter-section">
-              <h3>Colors</h3>
-              <div className="filter-options">
-                {availableColors.map(color => (
-                  <label key={color} className="filter-option">
-                    <input
-                      type="checkbox"
-                      checked={selectedColors.includes(color)}
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          setSelectedColors([...selectedColors, color]);
-                        } else {
-                          setSelectedColors(selectedColors.filter(c => c !== color));
-                        }
-                      }}
-                    />
-                    <span>{color}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
+        <div className="main-products-container">
+          {/* Backdrop Overlay */}
+          {showFilters && (
+            <div 
+              className="filters-backdrop"
+              onClick={() => setShowFilters(false)}
+            />
           )}
 
-          {availableSizes.length > 0 && (
-            <div className="filter-section">
-              <h3>Sizes</h3>
-              <div className="filter-options">
-                {availableSizes.map(size => (
-                  <label key={size} className="filter-option">
-                    <input
-                      type="checkbox"
-                      checked={selectedSizes.includes(size)}
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          setSelectedSizes([...selectedSizes, size]);
-                        } else {
-                          setSelectedSizes(selectedSizes.filter(s => s !== size));
-                        }
-                      }}
-                    />
-                    <span>{size}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <button
-            className="clear-filters-btn"
-            onClick={() => {
-              setPriceRange([0, 10000]);
-              setSelectedColors([]);
-              setSelectedSizes([]);
-              setSortBy('default');
-            }}
-          >
-            Clear All Filters
-          </button>
-        </aside>
-
-        {/* Products Grid */}
-        <div className="products-section">
-          <div className="products-header">
-            <div className="results-info">
-              <p>
-                Showing {indexOfFirstProduct + 1}-{Math.min(indexOfLastProduct, filteredProducts.length)} of{' '}
-                {filteredProducts.length} products
-              </p>
+          {/* Filters Sidebar */}
+          <aside className={`filters-sidebar ${showFilters ? 'show' : 'hide'}`}>
+            <div className="filters-header">
+              <h3>
+                <SlidersHorizontal size={20} />
+                Filters
+              </h3>
+              <button 
+                className="toggle-filters-mobile"
+                onClick={() => setShowFilters(!showFilters)}
+              >
+                <X size={20} />
+              </button>
             </div>
 
-            <div className="sort-dropdown">
-              <label>Sort by:</label>
-              <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-                <option value="default">Default</option>
-                <option value="price-low">Price: Low to High</option>
-                <option value="price-high">Price: High to Low</option>
-                <option value="name-az">Name: A-Z</option>
-                <option value="name-za">Name: Z-A</option>
-              </select>
-            </div>
-          </div>
-
-          {currentProducts.length === 0 ? (
-            <div className="no-products">
-              <p>No products found matching your filters.</p>
-            </div>
-          ) : (
-            <>
-              <div className="products-grid">
-                {currentProducts.map(product => (
-                  <motion.div 
-                    className="product-card" 
-                    key={product.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <Link href={`/products/${product.slug}`}>
-                      <div className="product-image">
-                        <WishlistButton product={product} />
-                        <Image 
-                          src={product.images?.[0] || '/placeholder.jpg'}
-                          alt={product.name}
-                          width={300}
-                          height={300}
-                          loading="lazy"
-                        />
-                      </div>
-                      <h3>{product.name}</h3>
-                      <p className="price">₹{(product.price / 100).toFixed(2)}</p>
-                    </Link>
-                    <div className="product-actions">
-                      <AddToCartButton product={product} />
-                      <button className="buy-now-btn" disabled>
-                        Buy Now
-                        <span className="coming-soon-badge">Coming Soon</span>
-                      </button>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-
-              {/* Pagination */}
-              {totalPages > 1 && (
-                <div className="pagination">
-                  <button
-                    className="pagination-btn"
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                  >
-                    Previous
-                  </button>
-
-                  <div className="pagination-numbers">
-                    {[...Array(totalPages)].map((_, index) => (
-                      <button
-                        key={index + 1}
-                        className={`pagination-number ${currentPage === index + 1 ? 'active' : ''}`}
-                        onClick={() => handlePageChange(index + 1)}
-                      >
-                        {index + 1}
-                      </button>
-                    ))}
-                  </div>
-
-                  <button
-                    className="pagination-btn"
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                  >
-                    Next
+            {/* Active Filters */}
+            {getActiveFiltersCount() > 0 && (
+              <div className="active-filters">
+                <div className="active-filters-header">
+                  <span>{getActiveFiltersCount()} active filter{getActiveFiltersCount() > 1 ? 's' : ''}</span>
+                  <button onClick={handleClearFilters} className="clear-all">
+                    Clear all
                   </button>
                 </div>
-              )}
-            </>
-          )}
+                <div className="active-filter-tags">
+                  {(priceRange[0] > 0 || priceRange[1] < maxPossiblePrice) && (
+                    <span className="filter-tag">
+                      ₹{priceRange[0]/100} - ₹{priceRange[1]/100}
+                      <X size={14} onClick={() => setPriceRange([0, maxPossiblePrice])} />
+                    </span>
+                  )}
+                  {inStockOnly && (
+                    <span className="filter-tag">
+                      In Stock Only
+                      <X size={14} onClick={() => setInStockOnly(false)} />
+                    </span>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Price Filter */}
+            <div className="filter-section">
+              <h4>Price Range</h4>
+              <div className="price-inputs">
+                <div className="price-input-group">
+                  <label>Min</label>
+                  <input
+                    type="number"
+                    value={priceRange[0]}
+                    onChange={(e) => handlePriceChange(0, e.target.value)}
+                    min="0"
+                    max={priceRange[1]}
+                  />
+                </div>
+                <span className="price-separator">-</span>
+                <div className="price-input-group">
+                  <label>Max</label>
+                  <input
+                    type="number"
+                    value={priceRange[1]}
+                    onChange={(e) => handlePriceChange(1, e.target.value)}
+                    min={priceRange[0]}
+                    max={maxPossiblePrice}
+                  />
+                </div>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max={maxPossiblePrice}
+                value={priceRange[1]}
+                onChange={(e) => handlePriceChange(1, e.target.value)}
+                className="price-slider"
+              />
+              <div className="price-range-display">
+                ₹{(priceRange[0]/100).toFixed(0)} - ₹{(priceRange[1]/100).toFixed(0)}
+              </div>
+            </div>
+
+            {/* Availability Filter */}
+            <div className="filter-section">
+              <h4>Availability</h4>
+              <label className="checkbox-label">
+                <input
+                  type="checkbox"
+                  checked={inStockOnly}
+                  onChange={(e) => setInStockOnly(e.target.checked)}
+                />
+                <span>In Stock Only</span>
+              </label>
+            </div>
+          </aside>
+
+          {/* Main Content */}
+          <main className="products-main">
+            {/* Toolbar */}
+            <div className="products-toolbar">
+              <div className="toolbar-left">
+                <button 
+                  className="mobile-filter-toggle"
+                  onClick={() => setShowFilters(!showFilters)}
+                >
+                  <SlidersHorizontal size={18} />
+                  Filters {getActiveFiltersCount() > 0 && `(${getActiveFiltersCount()})`}
+                </button>
+                <p className="results-count">
+                  Showing <strong>{products.length}</strong> of <strong>{totalProducts}</strong> products
+                </p>
+              </div>
+              
+              <div className="toolbar-right">
+                {/* View Toggle */}
+                <div className="view-toggle">
+                  <button
+                    className={viewMode === 'grid' ? 'active' : ''}
+                    onClick={() => setViewMode('grid')}
+                    title="Grid View"
+                  >
+                    <Grid size={18} />
+                  </button>
+                  <button
+                    className={viewMode === 'list' ? 'active' : ''}
+                    onClick={() => setViewMode('list')}
+                    title="List View"
+                  >
+                    <List size={18} />
+                  </button>
+                </div>
+
+                {/* Sort Dropdown */}
+                <div className="sort-dropdown">
+                  <button
+                    className="sort-button"
+                    onClick={() => setShowSortDropdown(!showSortDropdown)}
+                  >
+                    {getSortLabel()}
+                    <ChevronDown size={16} />
+                  </button>
+                  {showSortDropdown && (
+                    <div className="sort-options">
+                      <button onClick={() => handleSortChange('created_at')}>
+                        Newest First
+                      </button>
+                      <button onClick={() => handleSortChange('name')}>
+                        Name (A-Z)
+                      </button>
+                      <button onClick={() => handleSortChange('price')}>
+                        Price: Low to High
+                      </button>
+                      <button onClick={() => handleSortChange('price')}>
+                        Price: High to Low
+                      </button>
+                      <button onClick={() => handleSortChange('rating')}>
+                        Highest Rated
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Products Grid/List */}
+            {loading ? (
+              <div className="products-loading">
+                <TheLoader />
+              </div>
+            ) : products.length > 0 ? (
+              <>
+                <div className={`products-grid ${viewMode}`}>
+                  {products.map((product) => (
+                    <ProductListCard key={product.id} product={product} viewMode={viewMode} />
+                  ))}
+                </div>
+
+                {/* Pagination */}
+                {totalPages > 1 && (
+                  <div className="pagination">
+                    <button
+                      onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                      disabled={currentPage === 1}
+                      className="pagination-button"
+                    >
+                      Previous
+                    </button>
+                    
+                    <div className="page-numbers">
+                      {[...Array(totalPages)].map((_, index) => {
+                        const page = index + 1;
+                        if (
+                          page === 1 ||
+                          page === totalPages ||
+                          (page >= currentPage - 1 && page <= currentPage + 1)
+                        ) {
+                          return (
+                            <button
+                              key={page}
+                              onClick={() => setCurrentPage(page)}
+                              className={currentPage === page ? 'active' : ''}
+                            >
+                              {page}
+                            </button>
+                          );
+                        } else if (page === currentPage - 2 || page === currentPage + 2) {
+                          return <span key={page}>...</span>;
+                        }
+                        return null;
+                      })}
+                    </div>
+
+                    <button
+                      onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                      disabled={currentPage === totalPages}
+                      className="pagination-button"
+                    >
+                      Next
+                    </button>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="no-products">
+                <p>No products found in this category.</p>
+                <button onClick={handleClearFilters} className="clear-filters-button">
+                  Clear Filters
+                </button>
+              </div>
+            )}
+          </main>
         </div>
       </div>
-    </div>
+      <Footer />
+      <WhatsAppButton />
+    </>
   );
 }

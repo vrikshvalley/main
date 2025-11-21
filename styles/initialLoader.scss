@@ -157,33 +157,11 @@
     width: 120px;
     height: 120px;
     border-radius: 50%;
-    background: rgba($white, 0.1);
     backdrop-filter: blur(10px);
-    box-shadow: 
-      0 0 40px rgba($teal, 0.5),
-      0 0 80px rgba($teal, 0.3),
-      inset 0 0 20px rgba($white, 0.1);
-    animation: logoGlow 2s ease-in-out infinite;
 
-    img {
-      filter: drop-shadow(0 4px 12px rgba($teal, 0.6));
-    }
   }
 
-  @keyframes logoGlow {
-    0%, 100% {
-      box-shadow: 
-        0 0 40px rgba($teal, 0.5),
-        0 0 80px rgba($teal, 0.3),
-        inset 0 0 20px rgba($white, 0.1);
-    }
-    50% {
-      box-shadow: 
-        0 0 60px rgba($teal, 0.7),
-        0 0 120px rgba($teal, 0.5),
-        inset 0 0 30px rgba($white, 0.2);
-    }
-  }
+ 
 
   // Brand Container
   .brandContainer {

@@ -90,37 +90,51 @@ $grey-dark: #374151;
     }
   }
 
+  // Backdrop Overlay
+  .filters-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba($dark-green, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 9997;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
   // Filters Sidebar
   .filters-sidebar {
     background: $white;
-    border-radius: 12px;
-    padding: 1rem;
-    box-shadow: 0 2px 12px rgba($teal, 0.06);
-    border: 1px solid rgba($teal, 0.1);
+    padding: 1.5rem;
+    box-shadow: 0 4px 24px rgba($teal, 0.15);
+    border-right: 3px solid $teal;
     position: fixed;
-    left: 1rem;
-    top: 140px;
-    width: 200px;
-    max-height: calc(100vh - 180px);
+    top: 0;
+    left: 0;
+    width: 360px;
+    height: 100vh;
+    z-index: 9998;
     overflow-y: auto;
-    z-index: 40;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
-    @media (max-width: 1024px) {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 320px;
-      height: 100vh;
-      z-index: 9998;
-      overflow-y: auto;
-      transform: translateX(-100%);
-      transition: transform 0.3s ease;
-      border-radius: 0;
-      border-right: 3px solid $teal;
+    &.show {
+      transform: translateX(0);
+    }
 
-      &.show {
-        transform: translateX(0);
-      }
+    @media (max-width: 480px) {
+      width: 300px;
+      padding: 1.25rem;
     }
 
     .filters-header {
@@ -149,19 +163,17 @@ $grey-dark: #374151;
       }
 
       .toggle-filters-mobile {
-        display: none;
+        display: block;
         background: none;
         border: none;
         cursor: pointer;
         color: $grey-dark;
         padding: 0.25rem;
-
-        @media (max-width: 1024px) {
-          display: block;
-        }
+        transition: all 0.2s ease;
 
         &:hover {
           color: $teal;
+          transform: scale(1.1);
         }
       }
     }
@@ -399,16 +411,11 @@ $grey-dark: #374151;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 2rem;
-      margin-left: 220px;
       padding: 1.25rem;
       background: $white;
       border-radius: 12px;
       box-shadow: 0 2px 12px rgba($teal, 0.06);
       border: 1.5px solid rgba($teal, 0.1);
-
-      @media (max-width: 1024px) {
-        margin-left: 0;
-      }
 
       @media (max-width: 768px) {
         flex-direction: column;
@@ -428,7 +435,6 @@ $grey-dark: #374151;
         }
 
         .mobile-filter-toggle {
-          display: none;
           padding: 0.625rem 1rem;
           background: linear-gradient(135deg, $teal 0%, color.adjust($teal, $lightness: 5%) 100%);
           color: $white;
@@ -441,10 +447,6 @@ $grey-dark: #374151;
           align-items: center;
           gap: 0.5rem;
           transition: transform 0.2s;
-
-          @media (max-width: 1024px) {
-            display: flex;
-          }
 
           &:hover {
             transform: translateY(-2px);
@@ -574,21 +576,19 @@ $grey-dark: #374151;
     // Products Grid
     .products-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 1.5rem;
       margin-bottom: 3rem;
-      margin-left: 220px;
 
       &.list {
         grid-template-columns: 1fr;
       }
 
-      @media (max-width: 1200px) {
-        grid-template-columns: repeat(2, 1fr);
+      @media (max-width: 1400px) {
+        grid-template-columns: repeat(3, 1fr);
       }
 
       @media (max-width: 1024px) {
-        margin-left: 0;
         grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
       }
 

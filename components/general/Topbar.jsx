@@ -24,10 +24,10 @@ export default function TopBar() {
           <Link onClick={handleClick} href="#">Consulting</Link>
           <span className="separator">|</span>
           <Link onClick={handleClick} href="#">Offers</Link>
-          <span className="separator">|</span>
-          <Link href="#testimonials">Testimonials</Link>
-          <span className="separator">|</span>
-          <Link href="#faqs">FAQ</Link>
+          <span className="separator hide-on-mobile">|</span>
+          <Link href="#testimonials" className="hide-on-mobile">Testimonials</Link>
+          <span className="separator hide-on-mobile">|</span>
+          <Link href="#faqs" className="hide-on-mobile">FAQ</Link>
           <span className="separator">|</span>
           <Link 
             href="https://wa.me/919876543210?text=Hi,%20I'm%20interested%20in%20corporate%20bulk%20orders"

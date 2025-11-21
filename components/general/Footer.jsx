@@ -34,7 +34,7 @@ export default function Footer() {
             <li><Link href="/our-story">Our Story</Link></li>
             <li><Link href="/terms-of-services">Terms of Services</Link></li>
             <li><Link href="/contact-us">Contact Us</Link></li>
-            <li><Link href="/cancellation-return">Cancellation & Return Policy</Link></li>
+            <li><Link href="/cancellation-refund">Cancellation & Refund Policy</Link></li>
           </ul>
         </motion.div>
 
