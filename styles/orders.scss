@@ -1,10 +1,10 @@
 // Orders Page Styles
 // Styles for orders listing and individual order details pages
-
-// Import global variables
-@import './globals.scss';
 @use 'variables' as *;
 @use 'sass:color';
+// Import global variables
+@import './globals.scss';
+
 
 // Additional text color variables for this file
 $text-primary: $dark-green;

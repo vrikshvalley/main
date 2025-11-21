@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { orderService } from '@/lib/services/orderService';
+import orderService from '@/lib/services/orderService';
 import { toast } from 'react-toastify';
 
 export default function OrderHistory({ userId }) {

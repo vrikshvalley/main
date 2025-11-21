@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { orderService } from '@/lib/services/orderService';
+import orderService from '@/lib/services/orderService';
 import { toast } from 'react-toastify';
 import Image from 'next/image';
 import '@/styles/orders.scss';
