@@ -1,94 +1,138 @@
-@use "sass:color"; 
 @use 'variables' as *;
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Alumni+Sans:wght@300;400&display=swap');
+@use 'sass:color';
 
-// Keyframe Animations
-@keyframes drift {
-  0% {
-    transform: translateX(-100%) translateY(0);
-    opacity: 0.15;
-  }
-  50% {
-    opacity: 0.25;
-  }
-  100% {
-    transform: translateX(100vw) translateY(-20px);
-    opacity: 0.15;
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: -200% center;
-  }
-  100% {
-    background-position: 200% center;
-  }
-}
-
-@keyframes mistFade {
-  0%, 100% {
-    opacity: 0.15;
-  }
-  50% {
-    opacity: 0.25;
-  }
-}
-
-// Main Loader Container
 .initialLoader {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(
-    135deg,
-    #0a2818 0%,
-    #073b22 35%,
-    #0d5030 65%,
-    #073b22 100%
-  );
+  z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 999999;
   overflow: hidden;
+  
+  // Animated Background
+  .loaderBackground {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, 
+      $dark-green 0%,
+      $deep-green 40%,
+      color.adjust($teal, $lightness: -15%) 70%,
+      $deep-green 100%
+    );
+    background-size: 200% 200%;
+    animation: gradientShift 8s ease infinite;
+  }
 
-  // Mist / Fog Layers
-  .mistLayer {
+  @keyframes gradientShift {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  // Floating Leaves
+  .leavesContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .leaf {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: linear-gradient(135deg, rgba($teal, 0.6) 0%, rgba($teal, 0.3) 100%);
+    clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+    filter: blur(1px);
+    animation: leafSwing 3s ease-in-out infinite;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60%;
+      height: 60%;
+      background: rgba($white, 0.3);
+      clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+    }
+  }
+
+  @keyframes leafSwing {
+    0%, 100% {
+      transform: translateX(0) rotate(0deg);
+    }
+    25% {
+      transform: translateX(20px) rotate(10deg);
+    }
+    75% {
+      transform: translateX(-20px) rotate(-10deg);
+    }
+  }
+
+  // Mist/Fog Effect
+  .mistContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  .mist {
     position: absolute;
     width: 200%;
-    height: 150%;
-    background: radial-gradient(
-      ellipse at center,
-      rgba(255, 255, 255, 0.08) 0%,
-      rgba(255, 255, 255, 0.03) 40%,
+    height: 100%;
+    background: radial-gradient(ellipse at center, 
+      rgba($white, 0.05) 0%, 
       transparent 70%
     );
-    pointer-events: none;
-    animation: mistFade 4s ease-in-out infinite;
+    animation: mistFloat 15s ease-in-out infinite;
+  }
 
-    &.mist1 {
-      top: -25%;
-      left: -50%;
-      animation: drift 25s linear infinite, mistFade 3s ease-in-out infinite;
-      animation-delay: 0s;
+  .mist1 {
+    top: -50%;
+    left: -50%;
+    animation-delay: 0s;
+  }
+
+  .mist2 {
+    top: 20%;
+    left: -30%;
+    animation-delay: 5s;
+    animation-duration: 20s;
+  }
+
+  .mist3 {
+    top: 50%;
+    left: -60%;
+    animation-delay: 10s;
+    animation-duration: 25s;
+  }
+
+  @keyframes mistFloat {
+    0%, 100% {
+      transform: translateX(0) translateY(0);
+      opacity: 0.5;
     }
-
-    &.mist2 {
-      top: 10%;
-      left: -50%;
-      animation: drift 30s linear infinite, mistFade 4s ease-in-out infinite;
-      animation-delay: -8s;
-      opacity: 0.2;
-    }
-
-    &.mist3 {
-      top: 40%;
-      left: -50%;
-      animation: drift 35s linear infinite, mistFade 5s ease-in-out infinite;
-      animation-delay: -15s;
-      opacity: 0.18;
+    50% {
+      transform: translateX(100px) translateY(-50px);
+      opacity: 0.8;
     }
   }
 
@@ -100,126 +144,244 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 100%;
-    padding: 0 2rem;
-    gap: 1.5rem;
+    gap: 2rem;
+    padding: 2rem;
+  }
 
-    @media (max-width: 768px) {
-      padding: 0 1.5rem;
-      gap: 1rem;
-    }
+  // Logo Container
+  .logoContainer {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: rgba($white, 0.1);
+    backdrop-filter: blur(10px);
+    box-shadow: 
+      0 0 40px rgba($teal, 0.5),
+      0 0 80px rgba($teal, 0.3),
+      inset 0 0 20px rgba($white, 0.1);
+    animation: logoGlow 2s ease-in-out infinite;
 
-    @media (max-width: 480px) {
-      padding: 0 1rem;
-      gap: 0.75rem;
+    img {
+      filter: drop-shadow(0 4px 12px rgba($teal, 0.6));
     }
   }
 
-  // Brand Text Styling
-  .brandText {
+  @keyframes logoGlow {
+    0%, 100% {
+      box-shadow: 
+        0 0 40px rgba($teal, 0.5),
+        0 0 80px rgba($teal, 0.3),
+        inset 0 0 20px rgba($white, 0.1);
+    }
+    50% {
+      box-shadow: 
+        0 0 60px rgba($teal, 0.7),
+        0 0 120px rgba($teal, 0.5),
+        inset 0 0 30px rgba($white, 0.2);
+    }
+  }
+
+  // Brand Container
+  .brandContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .brandWord {
     position: relative;
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(3rem, 12vw, 8rem);
-    font-weight: 900;
-    letter-spacing: -0.02em;
+    overflow: hidden;
+  }
+
+  .brandText {
+    font-family: $font-primary;
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    font-weight: 700;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
-    line-height: 1;
-    margin: 0;
-    white-space: nowrap;
-    text-align: center;
-
-    @media (max-width: 768px) {
-      font-size: clamp(2.5rem, 10vw, 5rem);
-      letter-spacing: -0.01em;
-    }
-
-    @media (max-width: 480px) {
-      font-size: clamp(2rem, 9vw, 3.5rem);
-    }
-
-    // White Layer with Shimmer
-    &.whiteLayer {
-      color: #ffffff;
-      z-index: 2;
-      text-shadow: 
-        0 0 30px rgba(255, 255, 255, 0.4),
-        0 0 60px rgba(255, 255, 255, 0.2),
-        0 4px 20px rgba(0, 0, 0, 0.3);
-      
-      // Shimmer effect
+    position: relative;
+    display: block;
+    
+    &.gradient-text {
       background: linear-gradient(
-        90deg,
-        rgba(255, 255, 255, 0.8) 0%,
-        rgba(255, 255, 255, 1) 25%,
-        rgba(255, 255, 255, 1.2) 50%,
-        rgba(255, 255, 255, 1) 75%,
-        rgba(255, 255, 255, 0.8) 100%
+        135deg,
+        $white 0%,
+        $teal 30%,
+        $white 50%,
+        $teal 70%,
+        $white 100%
       );
       background-size: 200% auto;
       -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
       background-clip: text;
       animation: shimmer 3s linear infinite;
-      animation-delay: 0.4s;
-    }
-
-    // Masked Forest Texture Layer
-    &.maskedLayer {
-      color: transparent;
-      background-image: url('/hero1.jpg');
-      background-size: cover;
-      background-position: center;
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      z-index: 1;
-      filter: brightness(1.3) contrast(1.2) saturate(1.1);
+      filter: drop-shadow(0 0 20px rgba($teal, 0.6));
     }
   }
 
-  // Mobile Optimizations
-  @media (max-width: 768px) {
-    background: linear-gradient(
-      135deg,
-      #0a2818 0%,
-      #073b22 50%,
-      #0a2818 100%
-    );
+  @keyframes shimmer {
+    0% {
+      background-position: 0% center;
+    }
+    100% {
+      background-position: 200% center;
+    }
+  }
 
-    .mistLayer {
-      width: 250%;
-      
-      &.mist1 {
-        animation-duration: 20s;
+  // Tagline
+  .tagline {
+    font-family: $font-secondary;
+    font-size: clamp(0.875rem, 2vw, 1.25rem);
+    color: rgba($white, 0.9);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin: 0;
+    text-shadow: 0 2px 10px rgba($teal, 0.5);
+    font-weight: 300;
+  }
+
+  // Vine Decoration
+  .vineDecoration {
+    position: absolute;
+    bottom: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    transform-origin: top center;
+    width: 3px;
+    height: 100px;
+    background: linear-gradient(
+      to bottom,
+      rgba($teal, 0.8),
+      rgba($teal, 0)
+    );
+    border-radius: 2px;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      background: linear-gradient(135deg, 
+        rgba($teal, 0.7) 0%, 
+        rgba($teal, 0.4) 100%
+      );
+      clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+      animation: leafGrow 1s ease-out forwards;
+    }
+
+    &::before {
+      top: 30%;
+      left: -20px;
+      animation-delay: 2s;
+    }
+
+    &::after {
+      top: 60%;
+      right: -20px;
+      animation-delay: 2.3s;
+    }
+  }
+
+  @keyframes leafGrow {
+    from {
+      transform: scale(0) rotate(-90deg);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1) rotate(0deg);
+      opacity: 1;
+    }
+  }
+
+  // Sparkles
+  .sparklesContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  .sparkle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: $white;
+    border-radius: 50%;
+    box-shadow: 
+      0 0 10px $white,
+      0 0 20px $teal,
+      0 0 30px $teal;
+    animation: sparkleFloat 2s ease-in-out;
+  }
+
+  @keyframes sparkleFloat {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+
+  // Mobile Responsiveness
+  @media (max-width: 768px) {
+    .loaderContent {
+      gap: 1.5rem;
+      padding: 1.5rem;
+    }
+
+    .logoContainer {
+      width: 90px;
+      height: 90px;
+
+      img {
+        width: 70px !important;
+        height: 70px !important;
       }
-      
-      &.mist2 {
-        animation-duration: 25s;
-      }
-      
-      &.mist3 {
-        animation-duration: 30s;
-      }
+    }
+
+    .brandText {
+      font-size: clamp(2rem, 10vw, 3rem);
+      letter-spacing: 0.1em;
+    }
+
+    .tagline {
+      font-size: clamp(0.7rem, 2.5vw, 1rem);
+      letter-spacing: 0.2em;
+    }
+
+    .leaf {
+      width: 15px;
+      height: 15px;
     }
   }
 
   @media (max-width: 480px) {
-    .mistLayer {
-      width: 300%;
-      opacity: 0.12;
-    }
-  }
-
-  // Performance Optimization
-  @media (prefers-reduced-motion: reduce) {
-    .mistLayer {
-      animation: none;
-      opacity: 0.15;
+    .loaderContent {
+      gap: 1rem;
     }
 
-    .brandText {
-      &.whiteLayer {
-        animation: none;
+    .logoContainer {
+      width: 70px;
+      height: 70px;
+
+      img {
+        width: 55px !important;
+        height: 55px !important;
       }
+    }
+
+    .brandContainer {
+      gap: 0.25rem;
     }
   }
 }

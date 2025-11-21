@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 import '@/styles/initialLoader.scss';
 
 export default function InitialLoader() {
@@ -12,16 +13,25 @@ export default function InitialLoader() {
     // Set pathname on client side only
     setPathname(window.location.pathname);
 
-    // Animation duration: 4 seconds total
+    // Animation duration: 5 seconds total
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 4000);
+    }, 5000);
 
     return () => clearTimeout(timer);
   }, []);
 
   // Only show on homepage
   if (pathname !== '/' && pathname !== '') return null;
+
+  // Generate leaf positions
+  const leaves = Array.from({ length: 20 }, (_, i) => ({
+    id: i,
+    left: Math.random() * 100,
+    delay: Math.random() * 2,
+    duration: 3 + Math.random() * 2,
+    rotate: Math.random() * 360
+  }));
 
   return (
     <AnimatePresence mode="wait">
@@ -31,85 +41,159 @@ export default function InitialLoader() {
           initial={{ opacity: 1 }}
           exit={{ 
             opacity: 0,
-            transition: { duration: 0.5, ease: 'easeOut' }
+            transition: { duration: 0.6, ease: 'easeOut' }
           }}
         >
-          {/* Animated Mist Layers */}
-          <div className="mistLayer mist1" />
-          <div className="mistLayer mist2" />
-          <div className="mistLayer mist3" />
+          {/* Animated Background Gradient */}
+          <div className="loaderBackground" />
+
+          {/* Floating Leaves */}
+          <div className="leavesContainer">
+            {leaves.map((leaf) => (
+              <motion.div
+                key={leaf.id}
+                className="leaf"
+                style={{
+                  left: `${leaf.left}%`,
+                  rotate: leaf.rotate
+                }}
+                initial={{ y: -100, opacity: 0 }}
+                animate={{ 
+                  y: '100vh',
+                  opacity: [0, 0.7, 0.7, 0],
+                  rotate: [leaf.rotate, leaf.rotate + 180]
+                }}
+                transition={{
+                  duration: leaf.duration,
+                  delay: leaf.delay,
+                  ease: 'linear',
+                  repeat: 0
+                }}
+              />
+            ))}
+          </div>
+
+          {/* Mist/Fog Effect */}
+          <div className="mistContainer">
+            <div className="mist mist1" />
+            <div className="mist mist2" />
+            <div className="mist mist3" />
+          </div>
 
           {/* Content Container */}
           <div className="loaderContent">
-            {/* VRIKSH - White Layer */}
-            <motion.h1 
-              className="brandText brandWord whiteLayer vriksh"
-              initial={{ opacity: 0, y: 30 }}
+            {/* Logo Animation */}
+            <motion.div
+              className="logoContainer"
+              initial={{ scale: 0, opacity: 0, rotate: -180 }}
               animate={{ 
-                opacity: [0, 1, 1, 0, 0],
-                y: [30, 0, 0, -20, -20],
-                transition: {
-                  duration: 4,
-                  times: [0, 0.4, 0.65, 1, 1],
-                  ease: [0.22, 1, 0.36, 1]
-                }
+                scale: [0, 1.2, 1],
+                opacity: [0, 1, 1],
+                rotate: [- 180, 0, 0]
+              }}
+              transition={{
+                duration: 1.5,
+                times: [0, 0.7, 1],
+                ease: [0.22, 1, 0.36, 1]
               }}
             >
-              VRIKSH
-            </motion.h1>
+              <Image
+                src="/white-logo.png"
+                alt="Vriksh Valley"
+                width={120}
+                height={120}
+                priority
+              />
+            </motion.div>
 
-            {/* VRIKSH - Masked Layer */}
-            <motion.h1 
-              className="brandText brandWord maskedLayer vriksh"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ 
-                opacity: [0, 0, 1, 1, 0],
-                y: [30, 0, 0, 0, -20],
-                transition: {
-                  duration: 4,
-                  times: [0, 0.4, 0.45, 0.65, 1],
-                  ease: [0.22, 1, 0.36, 1]
-                }
-              }}
-            >
-              VRIKSH
-            </motion.h1>
-
-            {/* VALLEY - White Layer */}
-            <motion.h1 
-              className="brandText brandWord whiteLayer valley"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ 
-                opacity: [0, 1, 1, 0, 0],
-                y: [30, 0, 0, -20, -20],
-                transition: {
-                  duration: 4,
-                  times: [0, 0.4, 0.65, 1, 1],
+            {/* Brand Name Container */}
+            <div className="brandContainer">
+              {/* VRIKSH */}
+              <motion.div
+                className="brandWord"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ 
+                  opacity: [0, 1, 1, 1],
+                  y: [30, 0, 0, 0]
+                }}
+                transition={{
+                  duration: 2,
+                  times: [0, 0.3, 0.7, 1],
                   ease: [0.22, 1, 0.36, 1],
-                  delay: 0.3
-                }
-              }}
-            >
-              VALLEY
-            </motion.h1>
+                  delay: 0.8
+                }}
+              >
+                <span className="brandText gradient-text">VRIKSH</span>
+              </motion.div>
 
-            {/* VALLEY - Masked Layer */}
-            <motion.h1 
-              className="brandText brandWord maskedLayer valley"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ 
-                opacity: [0, 0, 1, 1, 0],
-                y: [30, 0, 0, 0, -20],
-                transition: {
-                  duration: 4,
-                  times: [0, 0.4, 0.45, 0.65, 1],
+              {/* VALLEY */}
+              <motion.div
+                className="brandWord"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ 
+                  opacity: [0, 1, 1, 1],
+                  y: [30, 0, 0, 0]
+                }}
+                transition={{
+                  duration: 2,
+                  times: [0, 0.3, 0.7, 1],
                   ease: [0.22, 1, 0.36, 1],
-                  delay: 0.3
-                }
+                  delay: 1.2
+                }}
+              >
+                <span className="brandText gradient-text">VALLEY</span>
+              </motion.div>
+            </div>
+
+            {/* Tagline */}
+            <motion.p
+              className="tagline"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: [0, 1, 1] }}
+              transition={{
+                duration: 1.5,
+                times: [0, 0.5, 1],
+                delay: 2
               }}
             >
-              VALLEY
-            </motion.h1>
+              Bring Nature Home
+            </motion.p>
+
+            {/* Growing Vine Effect */}
+            <motion.div
+              className="vineDecoration"
+              initial={{ scaleY: 0 }}
+              animate={{ scaleY: 1 }}
+              transition={{
+                duration: 2.5,
+                delay: 1.5,
+                ease: 'easeOut'
+              }}
+            />
+          </div>
+
+          {/* Particles/Sparkles */}
+          <div className="sparklesContainer">
+            {[...Array(15)].map((_, i) => (
+              <motion.div
+                key={i}
+                className="sparkle"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`
+                }}
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{
+                  scale: [0, 1, 0],
+                  opacity: [0, 1, 0]
+                }}
+                transition={{
+                  duration: 2,
+                  delay: Math.random() * 3,
+                  repeat: 0
+                }}
+              />
+            ))}
           </div>
         </motion.div>
       )}
