@@ -1,10 +1,12 @@
 'use client';
 import React from 'react'
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 
 import AddToCartButton from '@/components/cart/AddToCartButton';
 import WishlistButton from '@/components/general/WishlistButton';
+import { sampleProducts } from '@/lib/sampleProducts';
 import "@/styles/featuredProductCard.scss";
 import "@/styles/wishlistButton.scss";
 
@@ -26,13 +28,8 @@ const cardVariants = {
 };
 
 function ProductCard() {
-
-    const products = [
-    { id: "p1", image:"/indoor.jpg", title: "Snake Plant", price: 499 },
-    { id: "p2", image:"/outdoor.jpg", title: "Peace Lily", price: 699 },
-    { id: "p3", image:"/flowering.jpg", title: "Areca Palm", price: 1199 },
-    { id: "p4", image:"/herbs.jpg", title: "ZZ Plant", price: 899 },  
-  ];
+  // Get featured products
+  const products = sampleProducts.filter(p => p.featured).slice(0, 4);
   return (
       <>
        {products.map((product) => (
@@ -41,17 +38,19 @@ function ProductCard() {
             key={product.id}
             variants={cardVariants}
           >
-            <Link href={`/product/${product.slug}`}>
+            <Link href={`/products/${product.slug}`}>
               <div className="product-image">
                 <WishlistButton product={product} />
-                <img 
-                  src={product.image}
-                  alt={product.title}
+                <Image 
+                  src={product.images?.[0] || '/placeholder.jpg'}
+                  alt={product.name}
+                  width={300}
+                  height={300}
                   loading="lazy"
                 />
               </div>
-              <h3>{product.title}</h3>
-              <p className="price">₹{product.price}</p>
+              <h3>{product.name}</h3>
+              <p className="price">₹{(product.price / 100).toFixed(2)}</p>
             </Link>
             <div className="product-actions">
               <AddToCartButton product={product} />

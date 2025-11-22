@@ -23,6 +23,10 @@ export default function CancellationReturn() {
           <p>
             Refunds are issued via reversal to the original payment method. Once approved, the refund will be processed within 7-10 working days.
           </p>
+           <h2>Return Period</h2>
+          <p>
+            Customers must request a return or refund within <strong>7 days of delivery</strong>. Requests made after this period will not be eligible.
+          </p>
 
           <h2>Replacement Policy</h2>
           <p>

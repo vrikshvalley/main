@@ -31,7 +31,7 @@ export default function HeroSlider() {
   };
 
   const handleLearnMore = () => {
-    router.push('/about');
+    router.push('/our-story');  
   };
 
   return (
