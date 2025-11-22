@@ -3,7 +3,7 @@
 import TopBar from "../components/general/Topbar";
 import Navbar from "../components/general/Navbar";
 import HeroSlider from "../components/Homepage/HeroSlider";
-import CategoryCircles from "../components/Homepage/CategoryCircles";
+// import CategoryCircles from "../components/Homepage/CategoryCircles";
 import FeaturedProducts from "../components/Homepage/FeaturedProducts";
 import WhyChooseUs from "@/components/Homepage/WhyChooseUs";
 import BringNatureHome from "@/components/Homepage/BringNatureHome";
@@ -97,7 +97,7 @@ export default function Home() {
         viewport={{ once: true, amount: 0.3 }}
         variants={sectionVariants}
       >
-        <CategoryCircles />
+        {/* <CategoryCircles /> */}
       </motion.section>
 
       {/* Featured Products Section */}

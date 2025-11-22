@@ -9,7 +9,7 @@ export default function PrivacyPolicy() {
       
       <div className="page-content">
         <div className="page-header">
-          <h1>Privacy Policy – Vriksh Valley</h1>
+          <h1>Privacy Policy – <b>Vriksh Valley Garden</b></h1>
           <p>Your privacy grows with our care - secure, transparent, and rooted in trust</p>
         </div>
 

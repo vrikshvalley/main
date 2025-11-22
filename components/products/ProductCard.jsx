@@ -56,7 +56,7 @@ function ProductCard() {
               <AddToCartButton product={product} />
               <button className="buy-now-btn" disabled>
                 Buy Now
-                <span className="coming-soon-badge">Coming Soon</span>
+                {/* <span className="coming-soon-badge">Coming Soon</span> */}
               </button>
             </div>
           </motion.div>
