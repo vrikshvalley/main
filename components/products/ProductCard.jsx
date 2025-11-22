@@ -29,7 +29,8 @@ const cardVariants = {
 
 function ProductCard() {
   // Get featured products
-  const products = sampleProducts.filter(p => p.featured).slice(0, 4);
+  // const products = sampleProducts.filter(p => p.featured).slice(0, 4);
+  const products = sampleProducts.slice(0, 4);
   return (
       <>
        {products.map((product) => (
