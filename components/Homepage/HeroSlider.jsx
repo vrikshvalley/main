@@ -18,16 +18,8 @@ const slides = [
 export default function HeroSlider() {
   const router = useRouter();
 
-  const handleShopNow = () => {
-    // Scroll to products section or navigate to products page
-    const productsSection = document.getElementById('products');
-    if (productsSection) {
-      productsSection.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      // Fallback: navigate to products page if it exists
-      // router.push('/products');
-      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-    }
+  const handleJoinMovement = () => {
+    router.push('/join-green-movement');
   };
 
   const handleLearnMore = () => {
@@ -97,7 +89,7 @@ export default function HeroSlider() {
         </div>
 
         <div className="ctaButtons">
-          <button className="ctaButton" onClick={handleShopNow}>
+          <button className="ctaButton" onClick={handleJoinMovement}>
             Join the Green Movement
           </button>
           <button className="ctaButtonSecondary" onClick={handleLearnMore}>
