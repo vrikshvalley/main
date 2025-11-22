@@ -18,6 +18,7 @@ export default function ShippingPolicies() {
           <p>
             We ship across India to most pin codes. During checkout, you can verify if we deliver 
             to your location.
+            Products will be delivered within 7-10 business days.
           </p>
 
           <h3>Delivery Timeline</h3>
