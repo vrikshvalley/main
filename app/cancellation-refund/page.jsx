@@ -16,7 +16,7 @@ export default function CancellationReturn() {
         <div className="content-section">
           <h2>Refund Eligibility</h2>
           <p>
-            Refunds are eligible for all Vriksh Valley live plants, planters, tools, and accessories if requested within <strong>7 days of delivery</strong>.
+            Refunds are eligible for all Vriksh Valley live plants, planters, tools, and accessories if requested within <strong>7 days of delivery. Approved refunds will be credited nto original payment method within 5-7 days.</strong>.
           </p>
 
           <h2>Refund Process</h2>
