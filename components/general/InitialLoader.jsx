@@ -13,10 +13,10 @@ export default function InitialLoader() {
     // Set pathname on client side only
     setPathname(window.location.pathname);
 
-    // Animation duration: 5 seconds total
+    // Animation duration: 3.5 seconds total (reduced for better performance)
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 5000);
+    }, 3500);
 
     return () => clearTimeout(timer);
   }, []);
@@ -24,8 +24,8 @@ export default function InitialLoader() {
   // Only show on homepage
   if (pathname !== '/' && pathname !== '') return null;
 
-  // Generate leaf positions
-  const leaves = Array.from({ length: 20 }, (_, i) => ({
+  // Generate leaf positions - reduced from 20 to 8 for better performance
+  const leaves = Array.from({ length: 8 }, (_, i) => ({
     id: i,
     left: Math.random() * 100,
     delay: Math.random() * 2,
@@ -77,7 +77,6 @@ export default function InitialLoader() {
           <div className="mistContainer">
             <div className="mist mist1" />
             <div className="mist mist2" />
-            <div className="mist mist3" />
           </div>
 
           {/* Content Container */}
@@ -174,7 +173,7 @@ export default function InitialLoader() {
 
           {/* Particles/Sparkles */}
           <div className="sparklesContainer">
-            {[...Array(15)].map((_, i) => (
+            {[...Array(6)].map((_, i) => (
               <motion.div
                 key={i}
                 className="sparkle"

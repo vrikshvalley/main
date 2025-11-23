@@ -13,6 +13,7 @@ import {
   MapPin, 
   ImageIcon, 
   Info,
+  Users,
   BookOpen
 } from 'lucide-react';
 import '@/styles/homeSidebar.scss';
@@ -33,6 +34,7 @@ export default function HomeSidebar() {
     { id: 'location', label: 'Location', icon: MapPin },
     { id: 'gallery', label: 'Gallery', icon: ImageIcon },
     { id: 'about', label: 'About', icon: Info },
+    { id: 'team', label: 'Team', icon: Users },
     { id: 'blogs', label: 'Blogs', icon: BookOpen },
   ];
 

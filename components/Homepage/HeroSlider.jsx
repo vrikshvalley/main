@@ -69,34 +69,37 @@ export default function HeroSlider() {
         </Swiper>
       </div>
       
-      <div className="heroContent">
-        <div className="badge">
+      <motion.div 
+        className="heroContent"
+        variants={contentVariants}
+      >
+        <motion.div className="badge" variants={itemVariants}>
           🌿 Where Nature Meets Nurture
-        </div>
+        </motion.div>
         
-        <h1 className="heroTitle">
+        <motion.h1 className="heroTitle" variants={itemVariants}>
           Welcome to Vriksh Valley
-        </h1>
+        </motion.h1>
         
-        <p className="heroSubtitle">
+        <motion.p className="heroSubtitle" variants={itemVariants}>
           Every home deserves a touch of green. Transform your space into a sanctuary where plants thrive and life slows down to the gentle rhythm of growth.
-        </p>
+        </motion.p>
 
-        <div className="features">
+        <motion.div className="features" variants={itemVariants}>
           <div className="feature">Healthy Plants</div>
           <div className="feature">Eco Packaging</div>
           <div className="feature">Expert Support</div>
-        </div>
+        </motion.div>
 
-        <div className="ctaButtons">
+        <motion.div className="ctaButtons" variants={itemVariants}>
           <button className="ctaButton" onClick={handleJoinMovement}>
             Join the Green Movement
           </button>
           <button className="ctaButtonSecondary" onClick={handleLearnMore}>
             Our Story
           </button>
-        </div>
-      </div>
-    </div>
+        </motion.div>
+      </motion.div>
+    </motion.div>
   );
 }

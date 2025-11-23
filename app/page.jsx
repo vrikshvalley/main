@@ -3,7 +3,7 @@
 import TopBar from "../components/general/Topbar";
 import Navbar from "../components/general/Navbar";
 import HeroSlider from "../components/Homepage/HeroSlider";
-// import CategoryCircles from "../components/Homepage/CategoryCircles";
+import CategoryCircles from "../components/Homepage/CategoryCircles";
 import FeaturedProducts from "../components/Homepage/FeaturedProducts";
 import WhyChooseUs from "@/components/Homepage/WhyChooseUs";
 import BringNatureHome from "@/components/Homepage/BringNatureHome";
@@ -13,6 +13,7 @@ import PlantFAQs from "@/components/Homepage/PlantFAQs";
 import OurLocation from "@/components/Homepage/OurLocation";
 import Gallery from "@/components/Homepage/Gallery";
 import About from "@/components/Homepage/AboutUs";
+import MeetOurTeam from "@/components/Homepage/MeetOurTeam";
 import OurBlogs from "@/components/Homepage/OurBlogs";
 import Footer from "@/components/general/Footer";
 import WhatsAppButton from "@/components/general/WhatsAppButton";
@@ -97,7 +98,7 @@ export default function Home() {
         viewport={{ once: true, amount: 0.3 }}
         variants={sectionVariants}
       >
-        {/* <CategoryCircles /> */}
+        <CategoryCircles />
       </motion.section>
 
       {/* Featured Products Section */}
@@ -223,6 +224,18 @@ export default function Home() {
         variants={sectionVariants}
       >
         <About />
+      </motion.section>
+
+      {/* Meet Our Team Section */}
+      <motion.section
+        id="team"
+        className="scroll-section"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={sectionVariants}
+      >
+        <MeetOurTeam />
       </motion.section>
 
       {/* Blogs Section */}

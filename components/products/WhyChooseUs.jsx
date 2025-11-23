@@ -1,32 +1,32 @@
 'use client';
 
-import { Shield, Truck, Headset } from 'lucide-react';
+import { Leaf, Palette, PackageCheck, UserCheck, Heart } from 'lucide-react';
 import { motion } from 'framer-motion';
 import '@/styles/products.scss';
 
 const features = [
   {
-    icon: Shield,
+    icon: Leaf,
     title: 'Handpicked and Thriving Plants',
     description: 'Every plant is carefully selected and nurtured to ensure it arrives healthy and ready to flourish',
   },
   {
-    icon: Truck,
+    icon: Palette,
     title: 'Bespoke Plant Décor Solutions',
     description: 'Customized plant arrangements and décor solutions tailored to your unique space and style',
   },
   {
-    icon: Headset,
+    icon: PackageCheck,
     title: 'Sustainable and Recyclable Packaging',
     description: 'Eco-friendly packaging that protects your plants while caring for our planet',
   },
   {
-    icon: Shield,
+    icon: UserCheck,
     title: 'Expert Guidance and Personalized Care',
     description: 'Professional plant care advice and ongoing support to help your green companions thrive',
   },
   {
-    icon: Truck,
+    icon: Heart,
     title: 'More than Just Plants - A Green Lifestyle',
     description: 'Join our community in embracing sustainable living and creating greener, healthier spaces',
   },

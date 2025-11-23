@@ -208,8 +208,19 @@ a:hover {
 .scroll-section {
   scroll-snap-align: start;
   scroll-snap-stop: normal;
+  scroll-margin-top: 100px; // Offset for navbar height
 
   @media (max-width: 768px) {
     scroll-snap-align: none; // Disable on mobile
+    scroll-margin-top: 80px; // Smaller offset on mobile
+  }
+}
+
+// Product page scroll behavior
+.product-page-container {
+  scroll-margin-top: 120px;
+  
+  @media (max-width: 768px) {
+    scroll-margin-top: 90px;
   }
 }

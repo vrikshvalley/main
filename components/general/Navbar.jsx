@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import { selectCount } from '@/lib/slices/cartSlice';
-import { Menu, X,  ChevronRight } from 'lucide-react';
+import { Menu, X, ChevronDown, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import ProfileIcon from '@/components/auth/ProfileIcon';
@@ -14,47 +14,47 @@ import { categories } from '@/lib/sampleProducts';
 import "@/styles/navbar.scss";
 
 export default function Navbar({ onCartClick }) {
-  // const count = useSelector(selectCount);
+  const count = useSelector(selectCount);
   const [menuOpen, setMenuOpen] = useState(false);
-  // const [hoveredCategory, setHoveredCategory] = useState(null);
+  const [hoveredCategory, setHoveredCategory] = useState(null);
   const [expandedMobileCategory, setExpandedMobileCategory] = useState(null);
 
-  // const dropdownVariants = {
-  //   hidden: { 
-  //     opacity: 0, 
-  //     y: -10,
-  //     scale: 0.95
-  //   },
-  //   visible: { 
-  //     opacity: 1, 
-  //     y: 0,
-  //     scale: 1,
-  //     transition: {
-  //       duration: 0.2,
-  //       ease: [0.22, 1, 0.36, 1]
-  //     }
-  //   },
-  //   exit: {
-  //     opacity: 0,
-  //     y: -10,
-  //     scale: 0.95,
-  //     transition: {
-  //       duration: 0.15
-  //     }
-  //   }
-  // };
+  const dropdownVariants = {
+    hidden: { 
+      opacity: 0, 
+      y: -10,
+      scale: 0.95
+    },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 0.2,
+        ease: [0.22, 1, 0.36, 1]
+      }
+    },
+    exit: {
+      opacity: 0,
+      y: -10,
+      scale: 0.95,
+      transition: {
+        duration: 0.15
+      }
+    }
+  };
 
-  // const itemVariants = {
-  //   hidden: { opacity: 0, x: -10 },
-  //   visible: (i) => ({
-  //     opacity: 1,
-  //     x: 0,
-  //     transition: {
-  //       delay: i * 0.03,
-  //       duration: 0.2
-  //     }
-  //   })
-  // };
+  const itemVariants = {
+    hidden: { opacity: 0, x: -10 },
+    visible: (i) => ({
+      opacity: 1,
+      x: 0,
+      transition: {
+        delay: i * 0.03,
+        duration: 0.2
+      }
+    })
+  };
 
   const toggleMobileCategory = (slug) => {
     setExpandedMobileCategory(expandedMobileCategory === slug ? null : slug);
@@ -72,7 +72,7 @@ export default function Navbar({ onCartClick }) {
 
         {/* Center: Categories (desktop) */}
         <nav className="nav-categories desktop-only">
-          {/* {categories.map((category) => (
+          {categories.map((category) => (
             <div 
               key={category.slug}
               className="category-item"
@@ -84,7 +84,7 @@ export default function Navbar({ onCartClick }) {
               </Link>
 
               {/* Dropdown Menu */}
-              {/* <AnimatePresence>
+              <AnimatePresence>
                 {hoveredCategory === category.slug && category.subcategories && (
                   <motion.div
                     className="dropdown-menu"
@@ -114,8 +114,8 @@ export default function Navbar({ onCartClick }) {
                   </motion.div>
                 )}
               </AnimatePresence>
-            </div> */}
-          
+            </div>
+          ))}
         </nav>
 
         {/* Right: Search + Cart + Profile */}
@@ -136,22 +136,35 @@ export default function Navbar({ onCartClick }) {
       </div>
 
       {/* Mobile dropdown */}
-      {/* {menuOpen && (
+      {menuOpen && (
         <div className="mobile-menu">
           {categories.map((category) => (
             <div key={category.slug} className="mobile-category">
               <div className="mobile-category-header">
                 {category.subcategories && category.subcategories.length > 0 ? (
-                  <button
-                    className="mobile-category-btn"
-                    onClick={() => toggleMobileCategory(category.slug)}
-                  >
-                    <span>{category.name}</span>
-                    <ChevronRight 
-                      size={18} 
-                      className={expandedMobileCategory === category.slug ? 'rotated' : ''}
-                    />
-                  </button>
+                  <div className="mobile-category-with-subs">
+                    {expandedMobileCategory === category.slug ? (
+                      <Link
+                        href={`/category/${category.slug}`}
+                        className="mobile-category-link-active"
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        <span>{category.name}</span>
+                      </Link>
+                    ) : (
+                      <span className="mobile-category-text">{category.name}</span>
+                    )}
+                    <button
+                      className="mobile-category-toggle"
+                      onClick={() => toggleMobileCategory(category.slug)}
+                      aria-label={`Toggle ${category.name} subcategories`}
+                    >
+                      <ChevronRight 
+                        size={18} 
+                        className={expandedMobileCategory === category.slug ? 'rotated' : ''}
+                      />
+                    </button>
+                  </div>
                 ) : (
                   <Link 
                     href={`/category/${category.slug}`}
@@ -163,7 +176,7 @@ export default function Navbar({ onCartClick }) {
               </div>
               
               {/* Mobile Subcategories */}
-              {/* <AnimatePresence>
+              <AnimatePresence>
                 {expandedMobileCategory === category.slug && category.subcategories && (
                   <motion.div
                     className="mobile-subcategories"
@@ -188,7 +201,7 @@ export default function Navbar({ onCartClick }) {
             </div>
           ))}
         </div>
-      )} */} 
+      )}
     </div>
   );
 }

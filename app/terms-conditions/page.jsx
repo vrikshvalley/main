@@ -55,7 +55,7 @@ export default function TermsConditions() {
 
           <h2>Governing Law</h2>
           <p>
-            The laws of India govern these Terms and Conditions. Any dispute will be subject to the jurisdiction of the courts in Kolkata.
+            The laws of India govern these Terms and Conditions. Any dispute will be subject to the jurisdiction of the courts in Ranchi.
           </p>
 
           <h2>Order Cancellations</h2>

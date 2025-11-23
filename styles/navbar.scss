@@ -444,8 +444,7 @@
       width: 100%;
       position: relative;
 
-      a,
-      .mobile-category-btn {
+      a {
         flex: 1;
         width: 100%;
         padding: 0.75rem 1rem;
@@ -462,11 +461,6 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        background: none;
-        border: none;
-        border-left: 3px solid transparent;
-        text-align: left;
-        cursor: pointer;
 
         &::before {
           content: '';
@@ -496,13 +490,62 @@
         &:active {
           transform: translateX(4px);
         }
+      }
 
-        svg {
-          transition: transform 0.3s ease;
+      .mobile-category-with-subs {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        gap: 0;
+
+        .mobile-category-text {
+          flex: 1;
+          padding: 0.75rem 1rem;
+          color: $primary-bg;
+          font-family: 'Alumni Sans', sans-serif;
+          font-size: 1.3rem;
+          font-weight: 500;
+          display: block;
+        }
+
+        .mobile-category-link-active {
+          flex: 1;
+          padding: 0.75rem 1rem;
+          color: $accent-primary;
+          font-family: 'Alumni Sans', sans-serif;
+          font-size: 1.3rem;
+          font-weight: 500;
+          text-decoration: none;
+          transition: all 0.3s ease;
+
+          &:hover {
+            color: $teal;
+          }
+        }
+
+        .mobile-category-toggle {
+          background: none;
+          border: none;
+          padding: 0.75rem 1rem;
+          color: $primary-bg;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.3s ease;
           flex-shrink: 0;
 
-          &.rotated {
-            transform: rotate(90deg);
+          &:hover {
+            color: $accent-primary;
+          }
+
+          svg {
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+
+            &.rotated {
+              transform: rotate(90deg);
+            }
           }
         }
       }
