@@ -27,7 +27,7 @@ export default function HeroSlider() {
   };
 
   return (
-    <div className="heroContainer">
+    <motion.div className="heroContainer">
       <div className="sliderWrapper">
         {/* Custom Navigation Arrows - Must be inside sliderWrapper */}
         <div className="swiper-button-prev"></div>
@@ -101,5 +101,6 @@ export default function HeroSlider() {
         </motion.div>
       </motion.div>
     </motion.div>
+
   );
 }
