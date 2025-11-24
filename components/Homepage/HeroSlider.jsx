@@ -16,6 +16,37 @@ const slides = [
   { src: '/hero3.jpg', alt: 'Outdoor Garden Dreams' }
 ];
 
+const contentVariants = {
+  hidden: { 
+    opacity: 0,
+    y: 50,
+    scale: 0.95
+  },
+  visible: { 
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.8,
+      ease: [0.22, 1, 0.36, 1],
+      staggerChildren: 0.15,
+      delayChildren: 0.2
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut"
+    }
+  }
+};
+
 export default function HeroSlider() {
   const router = useRouter();
 
@@ -28,7 +59,12 @@ export default function HeroSlider() {
   };
 
   return (
-    <motion.div className="heroContainer">
+    <motion.div 
+      className="heroContainer"
+      initial="hidden"
+      animate="visible"
+      variants={contentVariants}
+    >
       <div className="sliderWrapper">
         {/* Custom Navigation Arrows - Must be inside sliderWrapper */}
         <div className="swiper-button-prev"></div>
@@ -72,6 +108,8 @@ export default function HeroSlider() {
       
       <motion.div 
         className="heroContent"
+        initial="hidden"
+        animate="visible"
         variants={contentVariants}
       >
         <motion.div className="badge" variants={itemVariants}>
