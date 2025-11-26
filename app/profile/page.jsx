@@ -56,7 +56,7 @@ const ProfilePage = () => {
         setProfile(data);
       }
       setLoading(false);
-    };
+    });
     getUserAndProfile();
   }, [router]);
 
