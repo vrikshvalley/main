@@ -23,27 +23,10 @@ import CartModal from "@/components/cart/CartModal";
 import Ads from "@/components/general/Ads";
 
 import { React, useState } from "react";
-import { useEffect } from "react";
 import { motion } from "framer-motion";
-import { supabase } from "../lib/supabaseClient";
-import { useRouter } from "next/navigation";  
 
 export default function Home() {
-  const router = useRouter();
   const [cartOpen, setCartOpen] = useState(false);
-
-
-  useEffect(() => {
-    async function checkAuth() {
-    const { data, error } = await supabase.auth.getSession();
-    if (data?.session) {
-      router.push('/'); // redirect after login
-    } else if (error) {
-      router.push('/auth/login'); // redirect to login on error
-    }
-  }
-    checkAuth();
-  }, [router]);
 
 
   // Animation variants for sections

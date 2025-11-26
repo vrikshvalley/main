@@ -2,7 +2,8 @@
 
 import { useDispatch } from 'react-redux';
 import { addItem, addItemAsync } from '@/lib/slices/cartSlice';
-import { supabase } from '@/lib/supabaseClient';
+import { auth } from '@/lib/firebaseConfig';
+import { onAuthStateChanged } from 'firebase/auth';
 import { useState, useEffect } from 'react';
 import { showSuccessToast, showErrorToast } from '@/lib/toastHelpers';
 
@@ -11,28 +12,19 @@ export default function AddToCartButton({ product, qty = 1 }) {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // Get current user
-    const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      setUser(user);
-    };
-    getUser();
-
-    // Listen for auth changes
-    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user || null);
+    // Listen for auth state changes
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
     });
 
-    return () => {
-      authListener?.subscription?.unsubscribe();
-    };
+    return () => unsubscribe();
   }, []);
 
   const handleAddToCart = () => {
     try {
       if (user) {
-        // User is logged in - save to Supabase
-        dispatch(addItemAsync({ item: { ...product, qty }, userId: user.id }));
+        // User is logged in - save to Firebase
+        dispatch(addItemAsync({ item: { ...product, qty }, userId: user.uid }));
         showSuccessToast(`${product.name} added to cart! 🌱`);
       } else {
         // Guest user - save to localStorage via reducer

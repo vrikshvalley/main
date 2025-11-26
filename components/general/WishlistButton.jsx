@@ -2,7 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Heart } from 'lucide-react';
-import { supabase } from '@/lib/supabaseClient';
+import { auth } from '@/lib/firebaseConfig';
+import { onAuthStateChanged } from 'firebase/auth';
 import * as userService from '@/lib/services/userService';
 import { showSuccessToast, showErrorToast } from '@/lib/toastHelpers';
 
@@ -13,29 +14,30 @@ const WishlistButton = ({ product, className = '' }) => {
   const router = useRouter();
 
   useEffect(() => {
-    const checkWishlistStatus = async () => {
-      const { data: { user: currentUser } } = await supabase.auth.getUser();
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (!currentUser) {
         setLoading(false);
+        setUser(null);
         return;
       }
       setUser(currentUser);
-      const { data: wishlist } = await userService.getWishlist(currentUser.id);
+      const { data: wishlist } = await userService.getWishlist(currentUser.uid);
       setIsWishlisted(wishlist?.some(item => item.id === product.id));
       setLoading(false);
-    };
-    checkWishlistStatus();
+    });
+
+    return () => unsubscribe();
   }, [product.id]);
 
   const handleWishlistToggle = async () => {
     if (!user) {
-      router.push('/auth/login');
+      router.push('/auth/login-signup');
       return;
     }
 
     setLoading(true);
     try {
-      const { error } = await userService.toggleWishlistItem(user.id, {
+      const { error } = await userService.toggleWishlistItem(user.uid, {
         id: product.id,
         name: product.name || product.title,
         price: product.price,

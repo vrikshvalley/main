@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { supabase } from '@/lib/supabaseClient';
+import { auth } from '@/lib/firebaseConfig';
+import { onAuthStateChanged } from 'firebase/auth';
 import "@/styles/profileIcon.scss";
 
 export default function ProfileIcon() {
@@ -11,21 +12,12 @@ export default function ProfileIcon() {
   const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
-    // Fetch current user
-    const getUser = async () => {
-      const { data } = await supabase.auth.getUser();
-      setUser(data.user);
-    };
-    getUser();
-
-    // Listen for login/logout changes
-    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
+    // Listen for auth state changes
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
     });
 
-    return () => {
-      authListener.subscription.unsubscribe();
-    };
+    return () => unsubscribe();
   }, []);
 
   return (

@@ -18,14 +18,10 @@ const slides = [
 
 const contentVariants = {
   hidden: { 
-    opacity: 0,
-    y: 50,
-    scale: 0.95
+    opacity: 0
   },
   visible: { 
     opacity: 1,
-    y: 0,
-    scale: 1,
     transition: {
       duration: 0.8,
       ease: [0.22, 1, 0.36, 1],
@@ -59,12 +55,7 @@ export default function HeroSlider() {
   };
 
   return (
-    <motion.div 
-      className="heroContainer"
-      initial="hidden"
-      animate="visible"
-      variants={contentVariants}
-    >
+    <div className="heroContainer">
       <div className="sliderWrapper">
         {/* Custom Navigation Arrows - Must be inside sliderWrapper */}
         <div className="swiper-button-prev"></div>
@@ -109,7 +100,8 @@ export default function HeroSlider() {
       <motion.div 
         className="heroContent"
         initial="hidden"
-        animate="visible"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
         variants={contentVariants}
       >
         <motion.div className="badge" variants={itemVariants}>
@@ -139,7 +131,6 @@ export default function HeroSlider() {
           </button>
         </motion.div>
       </motion.div>
-    </motion.div>
-
+    </div>
   );
 }

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { useAuth } from '@/lib/AuthContext';
 import orderService from '@/lib/services/orderService';
 import shiprocketService from '@/lib/services/shiprocketService';
 import { toast } from 'react-toastify';
@@ -13,9 +13,8 @@ import '@/styles/orders.scss';
 export default function OrderDetailsPage() {
   const router = useRouter();
   const params = useParams();
-  const supabase = createClientComponentClient();
+  const { user, loading: authLoading } = useAuth();
   
-  const [user, setUser] = useState(null);
   const [order, setOrder] = useState(null);
   const [trackingData, setTrackingData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -28,23 +27,17 @@ export default function OrderDetailsPage() {
   const orderId = params?.orderId;
 
   useEffect(() => {
-    checkUser();
-  }, []);
-
-  useEffect(() => {
-    if (user && orderId) {
-      fetchOrderDetails();
-    }
-  }, [user, orderId]);
-
-  const checkUser = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
+    if (authLoading) return;
+    
     if (!user) {
-      router.push('/auth/login');
+      router.push('/auth/login-signup');
       return;
     }
-    setUser(user);
-  };
+    
+    if (orderId) {
+      fetchOrderDetails();
+    }
+  }, [user, authLoading, orderId, router]);
 
   const fetchOrderDetails = async () => {
     setLoading(true);

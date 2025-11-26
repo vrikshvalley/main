@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { supabase } from '@/lib/supabaseClient';
+import { auth } from '@/lib/firebaseConfig';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { startAutoLogoutMonitoring, stopAutoLogoutMonitoring } from '@/lib/autoLogout';
 import { AlertTriangle, X, Clock } from 'lucide-react';
 import '@/styles/autoLogout.scss';
@@ -14,31 +15,15 @@ export default function AutoLogoutProvider({ children }) {
   const router = useRouter();
 
   useEffect(() => {
-    // Check if user is logged in
-    const checkUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      setUser(user);
+    // Listen for auth state changes
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
 
-      if (user) {
+      if (currentUser) {
         // Start auto-logout monitoring with warning callback
         startAutoLogoutMonitoring(() => {
           setShowWarning(true);
           setCountdown(60); // Reset countdown when warning shows
-        });
-      }
-    };
-
-    checkUser();
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      const currentUser = session?.user ?? null;
-      setUser(currentUser);
-
-      if (currentUser) {
-        startAutoLogoutMonitoring(() => {
-          setShowWarning(true);
-          setCountdown(60);
         });
       } else {
         stopAutoLogoutMonitoring();
@@ -46,7 +31,7 @@ export default function AutoLogoutProvider({ children }) {
     });
 
     return () => {
-      subscription.unsubscribe();
+      unsubscribe();
       stopAutoLogoutMonitoring();
     };
   }, []);
@@ -76,9 +61,9 @@ export default function AutoLogoutProvider({ children }) {
   };
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    await signOut(auth);
     setShowWarning(false);
-    router.push('/auth/login');
+    router.push('/auth/login-signup');
   };
 
   return (

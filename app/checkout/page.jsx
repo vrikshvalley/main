@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSelector, useDispatch } from 'react-redux';
-import { supabase } from '@/lib/supabaseClient';
+import { useAuth } from '@/lib/AuthContext';
 import * as userService from '@/lib/services/userService';
 import * as orderService from '@/lib/services/orderService';
 import { showSuccessToast, showErrorToast } from '@/lib/toastHelpers';
@@ -13,12 +13,12 @@ import '@/styles/checkout.scss';
 const CheckoutPage = () => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const { user, loading: authLoading } = useAuth();
   const cartItems = useSelector((state) => state.cart.items);
 
   const [step, setStep] = useState(1); // 1: Address, 2: Payment, 3: Confirmation
   const [loading, setLoading] = useState(true);
   const [processing, setProcessing] = useState(false);
-  const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
 
   // Address step
@@ -40,24 +40,20 @@ const CheckoutPage = () => {
   // Check authentication and load user data
   useEffect(() => {
     const initializeCheckout = async () => {
-      const {
-        data: { user: currentUser },
-      } = await supabase.auth.getUser();
+      if (authLoading) return;
 
-      if (!currentUser) {
-        router.push('/auth/login');
+      if (!user) {
+        router.push('/auth/login-signup');
         return;
       }
 
-      if (cartItems.length === 0) {
+      if (Object.keys(cartItems).length === 0) {
         showErrorToast('Your cart is empty');
-        router.push('/cart');
+        router.push('/');
         return;
       }
 
-      setUser(currentUser);
-
-      const { data: profileData } = await userService.getProfile(currentUser.id);
+      const { data: profileData } = await userService.getProfile(user.uid);
       if (profileData) {
         setProfile(profileData);
         if (profileData.address && profileData.address.length > 0) {
@@ -69,7 +65,7 @@ const CheckoutPage = () => {
     };
 
     initializeCheckout();
-  }, [cartItems, router]);
+  }, [user, authLoading, cartItems, router]);
 
   // Check for payment callback
   useEffect(() => {
@@ -100,7 +96,7 @@ const CheckoutPage = () => {
       ...addressForm,
     };
 
-    const res = await userService.addAddress(user.id, newAddress);
+    const res = await userService.addAddress(user.uid, newAddress);
     if (res.error) {
       showErrorToast('Could not add address');
       return;
@@ -141,7 +137,7 @@ const CheckoutPage = () => {
           email: profile.email,
           phone: profile.phone,
         },
-        userId: user.id,
+        userId: user.uid,
       };
       localStorage.setItem('pending_order', JSON.stringify(orderContext));
 

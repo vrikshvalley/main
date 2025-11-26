@@ -1,9 +1,12 @@
 "use client";
 import React, { useState } from 'react';
-import { supabase } from '@/lib/supabaseClient';
+import { useAuth } from '@/lib/AuthContext';
+import { auth } from '@/lib/firebaseConfig';
+import { sendPasswordResetEmail } from 'firebase/auth';
 import { showSuccessToast, showErrorToast } from '@/lib/toastHelpers';
 
 export default function SecuritySettings({ onLogout }) {
+  const { user } = useAuth();
   const [twoFA, setTwoFA] = useState(false);
   const [resetting, setResetting] = useState(false);
 
@@ -13,10 +16,14 @@ export default function SecuritySettings({ onLogout }) {
   };
 
   const handlePasswordReset = async () => {
+    if (!user?.email) {
+      showErrorToast('No email found for this account');
+      return;
+    }
+
     setResetting(true);
     try {
-      const { error } = await supabase.auth.resetPasswordForEmail((await supabase.auth.getUser()).data.user.email);
-      if (error) throw error;
+      await sendPasswordResetEmail(auth, user.email);
       showSuccessToast('Password reset email sent');
     } catch (err) {
       console.error(err);

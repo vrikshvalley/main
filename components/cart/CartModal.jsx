@@ -17,7 +17,8 @@ import {
 } from '@/lib/slices/cartSlice';
 import { useState, useEffect } from 'react';
 import { X, Plus, Minus, Trash2 } from 'lucide-react';
-import { supabase } from '../../lib/supabaseClient';
+import { auth } from '@/lib/firebaseConfig';
+import { onAuthStateChanged } from 'firebase/auth';
 import { 
   loadCartFromLocalStorage,
   mergeAndSyncCart 
@@ -35,63 +36,55 @@ export default function CartModal({ isOpen, onClose }) {
   const subtotal = useSelector(selectSubtotal);
   const dispatch = useDispatch();
 
-  // Load cart on mount
+  // Load cart on mount and listen for auth state changes
   useEffect(() => {
-    const initializeCart = async () => {
-      const { data } = await supabase.auth.getUser();
-      const currentUser = data.user;
+    let isInitialLoad = true;
+
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
 
-      if (currentUser) {
-        // User is logged in - load from Supabase
-        const guestCart = loadCartFromLocalStorage();
+      if (isInitialLoad) {
+        // Initial load
+        if (currentUser) {
+          // User is logged in - load from Firebase
+          const guestCart = loadCartFromLocalStorage();
 
-        if (Object.keys(guestCart).length > 0) {
-          // Merge guest cart with user cart
-          const mergedCart = await mergeAndSyncCart(currentUser.id, guestCart);
-          dispatch(setCart(mergedCart));
+          if (Object.keys(guestCart).length > 0) {
+            // Merge guest cart with user cart
+            const mergedCart = await mergeAndSyncCart(currentUser.uid, guestCart);
+            dispatch(setCart(mergedCart));
+          } else {
+            // Just load user cart
+            dispatch(loadUserCart(currentUser.uid));
+          }
         } else {
-          // Just load user cart
-          dispatch(loadUserCart(currentUser.id));
+          // Guest user - load from localStorage
+          const guestCart = loadCartFromLocalStorage();
+          dispatch(loadCart(guestCart));
         }
+        setIsLoading(false);
+        isInitialLoad = false;
       } else {
-        // Guest user - load from localStorage
-        const guestCart = loadCartFromLocalStorage();
-        dispatch(loadCart(guestCart));
-      }
-      
-      setIsLoading(false);
-    };
-
-    initializeCart();
-  }, [dispatch]);
-
-  // Listen for auth state changes
-  useEffect(() => {
-    const { data: listener } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      const currentUser = session?.user ?? null;
-      setUser(currentUser);
-
-      if (currentUser && _event === 'SIGNED_IN') {
-        // User just logged in - merge carts
-        const guestCart = loadCartFromLocalStorage();
-        
-        if (Object.keys(guestCart).length > 0) {
-          const mergedCart = await mergeAndSyncCart(currentUser.id, guestCart);
-          dispatch(setCart(mergedCart));
+        // Auth state changed after initial load
+        if (currentUser) {
+          // User just logged in - merge carts
+          const guestCart = loadCartFromLocalStorage();
+          
+          if (Object.keys(guestCart).length > 0) {
+            const mergedCart = await mergeAndSyncCart(currentUser.uid, guestCart);
+            dispatch(setCart(mergedCart));
+          } else {
+            dispatch(loadUserCart(currentUser.uid));
+          }
         } else {
-          dispatch(loadUserCart(currentUser.id));
+          // User logged out - cart already in localStorage from reducers
+          const localCart = loadCartFromLocalStorage();
+          dispatch(loadCart(localCart));
         }
-      } else if (!currentUser && _event === 'SIGNED_OUT') {
-        // User logged out - cart already in localStorage from reducers
-        const localCart = loadCartFromLocalStorage();
-        dispatch(loadCart(localCart));
       }
     });
 
-    return () => {
-      listener.subscription.unsubscribe();
-    };
+    return () => unsubscribe();
   }, [dispatch]);
 
   // Allow background to scroll while modal is open (no body scroll lock)
@@ -114,11 +107,11 @@ export default function CartModal({ isOpen, onClose }) {
 
   const handleIncrement = (item) => {
     if (user) {
-      // User is logged in - update in Supabase
+      // User is logged in - update in Firebase
       dispatch(updateItemAsync({ 
         productId: item.id, 
         quantity: item.qty + 1, 
-        userId: user.id 
+        userId: user.uid 
       }));
     } else {
       // Guest user - update in localStorage via reducer
@@ -128,15 +121,15 @@ export default function CartModal({ isOpen, onClose }) {
 
   const handleDecrement = (item) => {
     if (user) {
-      // User is logged in - update in Supabase
+      // User is logged in - update in Firebase
       const newQty = item.qty - 1;
       if (newQty <= 0) {
-        dispatch(removeItemAsync({ productId: item.id, userId: user.id }));
+        dispatch(removeItemAsync({ productId: item.id, userId: user.uid }));
       } else {
         dispatch(updateItemAsync({ 
           productId: item.id, 
           quantity: newQty, 
-          userId: user.id 
+          userId: user.uid 
         }));
       }
     } else {
@@ -147,8 +140,8 @@ export default function CartModal({ isOpen, onClose }) {
 
   const handleRemoveItem = (productId) => {
     if (user) {
-      // User is logged in - remove from Supabase
-      dispatch(removeItemAsync({ productId, userId: user.id }));
+      // User is logged in - remove from Firebase
+      dispatch(removeItemAsync({ productId, userId: user.uid }));
     } else {
       // Guest user - remove from localStorage via reducer
       dispatch(removeItem(productId));

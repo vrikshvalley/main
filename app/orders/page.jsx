@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { useAuth } from '@/lib/AuthContext';
 import orderService from '@/lib/services/orderService';
 import { toast } from 'react-toastify';
 import Image from 'next/image';
@@ -10,9 +10,8 @@ import '@/styles/orders.scss';
 
 export default function OrdersPage() {
   const router = useRouter();
-  const supabase = createClientComponentClient();
+  const { user, loading: authLoading } = useAuth();
   
-  const [user, setUser] = useState(null);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState('all');
@@ -37,30 +36,22 @@ export default function OrdersPage() {
   ];
 
   useEffect(() => {
-    checkUser();
-  }, []);
-
-  useEffect(() => {
-    if (user) {
-      fetchOrders();
-    }
-  }, [user, activeFilter]);
-
-  const checkUser = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
+    if (authLoading) return;
+    
     if (!user) {
-      router.push('/auth/login');
+      router.push('/auth/login-signup');
       return;
     }
-    setUser(user);
-  };
+    
+    fetchOrders();
+  }, [user, authLoading, activeFilter, router]);
 
   const fetchOrders = async () => {
     setLoading(true);
     try {
       const filterStatus = activeFilter === 'all' ? null : activeFilter;
       const { data, error } = await orderService.getUserOrders(
-        user.id,
+        user.uid,
         null, // no limit, fetch all
         filterStatus
       );

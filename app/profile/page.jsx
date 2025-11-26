@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from 'react';
-import { supabase } from '../../lib/supabaseClient';
+import { auth } from '@/lib/firebaseConfig';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import TheLoader from '@/components/general/TheLoader';
 import Image from 'next/image';
@@ -35,20 +36,19 @@ const ProfilePage = () => {
   const toastError = (msg) => showErrorToast(msg);
 
   useEffect(() => {
-    const getUserAndProfile = async () => {
-      const { data: userData, error: userError } = await supabase.auth.getUser();
-      if (userError || !userData.user) {
-        router.push('/auth/login');
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (!currentUser) {
+        router.push('/auth/login-signup');
         return;
       }
-      setUser(userData.user);
+      setUser(currentUser);
 
       // Fetch profile via service
-      const { data, error } = await userService.getProfile(userData.user.id);
+      const { data, error } = await userService.getProfile(currentUser.uid);
       if (error) {
         // try creating minimal profile
-        const oauthName = userData.user.user_metadata?.full_name || userData.user.user_metadata?.name || null;
-        const newProfileData = { id: userData.user.id, email: userData.user.email, name: oauthName, address: [] };
+        const oauthName = currentUser.displayName || null;
+        const newProfileData = { id: currentUser.uid, email: currentUser.email, name: oauthName, address: [] };
         const created = await userService.createProfile(newProfileData);
         if (!created.error) setProfile(created.data?.[0] || newProfileData);
         else setProfile(newProfileData);
@@ -132,8 +132,8 @@ const ProfilePage = () => {
   };
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
-    router.push('/auth/login');
+    await signOut(auth);
+    router.push('/auth/login-signup');
   };
 
   const openEditAddress = (address) => {
