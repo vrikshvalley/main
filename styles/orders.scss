@@ -2,8 +2,6 @@
 // Styles for orders listing and individual order details pages
 @use 'variables' as *;
 @use 'sass:color';
-// Import global variables
-@import './globals.scss';
 
 
 // Additional text color variables for this file
@@ -432,7 +430,7 @@ $text-muted: rgba($dark-green, 0.6);
           border: none;
 
           &:hover {
-            background: darken($teal, 10%);
+            background: color.adjust($teal, $lightness: -10%);
             transform: scale(1.02);
           }
         }
@@ -894,7 +892,7 @@ $text-muted: rgba($dark-green, 0.6);
           border: none;
 
           &:hover:not(:disabled) {
-            background: darken($teal, 10%);
+            background: color.adjust($teal, $lightness: -10%);
             transform: scale(1.02);
           }
         }
