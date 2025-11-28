@@ -1,4 +1,4 @@
-import TopBar from "@/components/general/Topbar";
+import Topbar from "@/components/general/Topbar";
 import Navbar from "@/components/general/Navbar";
 import Footer from "@/components/general/Footer";
 import WhatsAppButton from "@/components/general/WhatsAppButton";
@@ -24,7 +24,7 @@ export const metadata = {
 export default function OurStoryLayout({ children }) {
   return (
     <>
-      <TopBar />
+      <Topbar />
       <Navbar />
       {children}
       <Footer />

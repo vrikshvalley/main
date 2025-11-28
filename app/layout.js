@@ -3,6 +3,7 @@ import Providers from "./providers";
 import AutoLogoutProvider from "@/components/general/AutoLogoutProvider";
 import InitialLoader from "@/components/general/InitialLoader";
 import TheLoader from "@/components/general/TheLoader";
+import GlobalCartModal from "@/components/cart/GlobalCartModal";
 
 export const metadata = {
   metadataBase: new URL("https://vrikshvalley.com"),
@@ -95,14 +96,23 @@ export default function RootLayout({ children }) {
         <meta name="apple-mobile-web-app-title" content="Vriksh Valley" />
         <link rel="canonical" href="https://vrikshvalley.com" />
         <meta name="theme-color" content="#073b22" />
-        <link rel="icon" type="image/x-icon" href="https://vrikshvalley.com/favicon.ico" sizes="any" />
-        <link rel="apple-touch-icon" href="https://vrikshvalley.com/favicon.ico" />
+        <link
+          rel="icon"
+          type="image/x-icon"
+          href="https://vrikshvalley.com/favicon.ico"
+          sizes="any"
+        />
+        <link
+          rel="apple-touch-icon"
+          href="https://vrikshvalley.com/favicon.ico"
+        />
       </head>
       <body>
         <InitialLoader />
         <TheLoader fullscreen showOnRouteChange />
         <Providers>
           <AutoLogoutProvider>
+            <GlobalCartModal />
             <div className="container">{children}</div>
           </AutoLogoutProvider>
         </Providers>

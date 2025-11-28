@@ -54,6 +54,10 @@ export default function HeroSlider() {
     router.push('/our-story');  
   };
 
+  const handleNatureNurture = () => {
+    router.push('/where-nature-meets-nurture');
+  };
+
   return (
     <div className="heroContainer">
       <div className="sliderWrapper">
@@ -104,9 +108,14 @@ export default function HeroSlider() {
         viewport={{ once: true, amount: 0.3 }}
         variants={contentVariants}
       >
-        <motion.div className="badge" variants={itemVariants}>
+        <motion.button 
+          className="badge badge-clickable" 
+          variants={itemVariants}
+          onClick={handleNatureNurture}
+          aria-label="Learn about where nature meets nurture"
+        >
           🌿 Where Nature Meets Nurture
-        </motion.div>
+        </motion.button>
         
         <motion.h1 className="heroTitle" variants={itemVariants}>
           Welcome to Vriksh Valley

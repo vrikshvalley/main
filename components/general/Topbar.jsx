@@ -5,7 +5,7 @@ import Image from 'next/image';
 import "@/styles/topbar.scss";
 import  {showWarningToast} from '@/lib/toastHelpers';
 
-export default function TopBar() {
+export default function Topbar() {
 
   const handleClick = () => {
     showWarningToast("This feature is coming soon!");

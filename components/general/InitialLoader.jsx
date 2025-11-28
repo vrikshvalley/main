@@ -13,10 +13,10 @@ export default function InitialLoader() {
     // Set pathname on client side only
     setPathname(window.location.pathname);
 
-    // Animation duration: 3.5 seconds total (reduced for better performance)
+    // Animation duration: 2.5 seconds total (optimized for better performance)
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 3500);
+    }, 2500);
 
     return () => clearTimeout(timer);
   }, []);
@@ -24,12 +24,12 @@ export default function InitialLoader() {
   // Only show on homepage
   if (pathname !== '/' && pathname !== '') return null;
 
-  // Generate leaf positions - reduced from 20 to 8 for better performance
-  const leaves = Array.from({ length: 8 }, (_, i) => ({
+  // Generate leaf positions - reduced to 5 for better performance
+  const leaves = Array.from({ length: 5 }, (_, i) => ({
     id: i,
     left: Math.random() * 100,
-    delay: Math.random() * 2,
-    duration: 3 + Math.random() * 2,
+    delay: Math.random() * 1.5,
+    duration: 2.5 + Math.random() * 1,
     rotate: Math.random() * 360
   }));
 
@@ -81,19 +81,16 @@ export default function InitialLoader() {
 
           {/* Content Container */}
           <div className="loaderContent">
-            {/* Logo Animation */}
+            {/* Logo Animation - Simplified slow fade-in */}
             <motion.div
               className="logoContainer"
-              initial={{ scale: 0, opacity: 0, rotate: -180 }}
+              initial={{ opacity: 0 }}
               animate={{ 
-                scale: [0, 1.2, 1],
-                opacity: [0, 1, 1],
-                rotate: [- 180, 0, 0]
+                opacity: 1
               }}
               transition={{
-                duration: 1.5,
-                times: [0, 0.7, 1],
-                ease: [0.22, 1, 0.36, 1]
+                duration: 1.2,
+                ease: 'easeOut'
               }}
             >
               <Image
@@ -105,21 +102,19 @@ export default function InitialLoader() {
               />
             </motion.div>
 
-            {/* Brand Name Container */}
+            {/* Brand Name Container - Simplified */}
             <div className="brandContainer">
               {/* VRIKSH */}
               <motion.div
                 className="brandWord"
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0 }}
                 animate={{ 
-                  opacity: [0, 1, 1, 1],
-                  y: [30, 0, 0, 0]
+                  opacity: 1
                 }}
                 transition={{
-                  duration: 2,
-                  times: [0, 0.3, 0.7, 1],
-                  ease: [0.22, 1, 0.36, 1],
-                  delay: 0.8
+                  duration: 0.8,
+                  ease: 'easeOut',
+                  delay: 0.4
                 }}
               >
                 <span className="brandText gradient-text">VRIKSH</span>
@@ -128,72 +123,38 @@ export default function InitialLoader() {
               {/* VALLEY */}
               <motion.div
                 className="brandWord"
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0 }}
                 animate={{ 
-                  opacity: [0, 1, 1, 1],
-                  y: [30, 0, 0, 0]
+                  opacity: 1
                 }}
                 transition={{
-                  duration: 2,
-                  times: [0, 0.3, 0.7, 1],
-                  ease: [0.22, 1, 0.36, 1],
-                  delay: 1.2
+                  duration: 0.8,
+                  ease: 'easeOut',
+                  delay: 0.7
                 }}
               >
                 <span className="brandText gradient-text">VALLEY</span>
               </motion.div>
             </div>
 
-            {/* Tagline */}
+            {/* Tagline - Simplified */}
             <motion.p
               className="tagline"
               initial={{ opacity: 0 }}
-              animate={{ opacity: [0, 1, 1] }}
+              animate={{ opacity: 1 }}
               transition={{
-                duration: 1.5,
-                times: [0, 0.5, 1],
-                delay: 2
+                duration: 0.8,
+                ease: 'easeOut',
+                delay: 1
               }}
             >
               Bring Nature Home
             </motion.p>
 
-            {/* Growing Vine Effect */}
-            <motion.div
-              className="vineDecoration"
-              initial={{ scaleY: 0 }}
-              animate={{ scaleY: 1 }}
-              transition={{
-                duration: 2.5,
-                delay: 1.5,
-                ease: 'easeOut'
-              }}
-            />
+            {/* Growing Vine Effect - Removed for performance */}
           </div>
 
-          {/* Particles/Sparkles */}
-          <div className="sparklesContainer">
-            {[...Array(6)].map((_, i) => (
-              <motion.div
-                key={i}
-                className="sparkle"
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`
-                }}
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{
-                  scale: [0, 1, 0],
-                  opacity: [0, 1, 0]
-                }}
-                transition={{
-                  duration: 2,
-                  delay: Math.random() * 3,
-                  repeat: 0
-                }}
-              />
-            ))}
-          </div>
+          {/* Particles/Sparkles - Removed for performance */}
         </motion.div>
       )}
     </AnimatePresence>

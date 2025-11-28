@@ -4,7 +4,7 @@ import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Calendar, Clock, User, ArrowLeft, Tag, ArrowRight } from 'lucide-react';
-import TopBar from '@/components/general/Topbar';
+import Topbar from '@/components/general/Topbar';
 import Navbar from '@/components/general/Navbar';
 import Footer from '@/components/general/Footer';
 import WhatsAppButton from '@/components/general/WhatsAppButton';
@@ -20,7 +20,7 @@ export default function BlogPost() {
   if (!blog) {
     return (
       <>
-        <TopBar />
+        <Topbar />
         <Navbar />
         <div className="blog-not-found">
           <h1>Blog Post Not Found</h1>
@@ -36,7 +36,7 @@ export default function BlogPost() {
 
   return (
     <>
-      <TopBar />
+      <Topbar />
       <Navbar />
       <Breadcrumbs 
         items={[

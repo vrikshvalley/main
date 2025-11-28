@@ -20,13 +20,25 @@ $grey-dark: #374151;
   // Page Header
   .products-header {
     background: linear-gradient(135deg, rgba($dark-green, 0.95) 0%, rgba($dark-green, 1) 100%);
-    padding: 3rem 1.5rem 2.5rem;
+    padding: 8rem 1.5rem 4rem;
     margin-bottom: 2rem;
     border-bottom: 2px solid rgba($teal, 0.3);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     position: relative;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @media (max-width: 768px) {
+      padding: 6rem 1.5rem 3rem;
+      min-height: 300px;
+    }
     
-    // Optional overlay effect
+    // Dark overlay for better text readability
     &::before {
       content: '';
       position: absolute;
@@ -34,8 +46,9 @@ $grey-dark: #374151;
       left: 0;
       right: 0;
       bottom: 0;
-      background: linear-gradient(135deg, rgba($teal, 0.1) 0%, transparent 100%);
+      background: linear-gradient(135deg, rgba($dark-green, 0.85) 0%, rgba($dark-green, 0.75) 100%);
       pointer-events: none;
+      z-index: 1;
     }
 
     .header-content {
@@ -43,14 +56,18 @@ $grey-dark: #374151;
       margin: 0 auto;
       text-align: center;
       position: relative;
-      z-index: 1;
+      z-index: 2;
 
       .category-icon {
         font-size: 4rem;
         margin-bottom: 1rem;
         display: inline-block;
         animation: float 3s ease-in-out infinite;
-        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+
+        @media (max-width: 768px) {
+          font-size: 3rem;
+        }
       }
 
       h1 {
@@ -59,12 +76,21 @@ $grey-dark: #374151;
         color: $white;
         margin-bottom: 0.5rem;
         letter-spacing: -0.5px;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+
+        @media (max-width: 768px) {
+          font-size: 2rem;
+        }
       }
 
       p {
-        color: rgba($white, 0.9);
+        color: rgba($white, 0.95);
         font-size: 1.125rem;
+        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+
+        @media (max-width: 768px) {
+          font-size: 1rem;
+        }
       }
     }
   }
@@ -959,7 +985,6 @@ $grey-dark: #374151;
   margin-top: 4rem;
   padding: 4rem 1.5rem;
   background: linear-gradient(135deg, rgba($teal, 0.04) 0%, rgba($accent-primary, 0.02) 100%);
-  border-top: 2px solid rgba($teal, 0.1);
 
   .why-choose-us-products-container {
     max-width: 1500px;

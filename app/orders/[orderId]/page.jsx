@@ -30,7 +30,7 @@ export default function OrderDetailsPage() {
     if (authLoading) return;
     
     if (!user) {
-      router.push('/auth/login-signup');
+      router.push('/auth/login');
       return;
     }
     

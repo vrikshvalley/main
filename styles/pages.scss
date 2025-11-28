@@ -338,3 +338,265 @@
   font-style: italic;
   font-weight: 400;
 }
+
+// ========================================
+// Page-Specific Hero Background Images
+// ========================================
+
+// Add a hero section wrapper for pages that need backgrounds
+.page-hero-wrapper {
+  position: relative;
+  min-height: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba($dark-green, 0.75) 0%, rgba($deep-green, 0.75) 100%);
+    pointer-events: none;
+  }
+
+  .page-hero-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 3rem 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+
+    h1 {
+      color: $white;
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
+      margin-bottom: 1rem;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    p {
+      color: rgba($white, 0.95);
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      text-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  @media (max-width: 768px) {
+    min-height: 280px;
+  }
+}
+
+// Contact Us Page
+.page-container[data-page="contact-us"] {
+  .page-hero-wrapper {
+    background-image: url('/Landscape Image for Pages/Contact Us/Contact Us.png');
+
+    @media (max-width: 768px) {
+      background-image: url('/Portrait Image for Pages for Mobile/Contact Us/Untitled-36.png');
+    }
+  }
+}
+
+// Our Story Page
+.page-container[data-page="our-story"] {
+  .page-hero-wrapper {
+    background-image: url('/Landscape Image for Pages/Our Story/Our Story.png');
+
+    @media (max-width: 768px) {
+      background-image: url('/Portrait Image for Pages for Mobile/Our Story/Untitled-36.png');
+    }
+  }
+}
+
+// FAQs Page
+.page-container[data-page="faqs"] {
+  .page-hero-wrapper {
+    background-image: url('/Landscape Image for Pages/FAQs/FAQs.png');
+
+    @media (max-width: 768px) {
+      background-image: url('/Portrait Image for Pages for Mobile/FAQs/Untitled-36.png');
+    }
+  }
+}
+
+// Privacy Policy Page
+.page-container[data-page="privacy-policy"] {
+  .page-hero-wrapper {
+    background-image: url('/Landscape Image for Pages/Privacy Policies/Privacy Policies.png');
+
+    @media (max-width: 768px) {
+      background-image: url('/Portrait Image for Pages for Mobile/Privacy Policies/Untitled-36.png');
+    }
+  }
+}
+
+// Terms and Conditions Page
+.page-container[data-page="terms-conditions"] {
+  .page-hero-wrapper {
+    background-image: url('/Landscape Image for Pages/Terms and Conditions/Terms and Conditions.png');
+
+    @media (max-width: 768px) {
+      background-image: url('/Portrait Image for Pages for Mobile/Terms and Conditions/Untitled-36.png');
+    }
+  }
+}
+
+// Terms of Service Page
+.page-container[data-page="terms-of-service"] {
+  .page-hero-wrapper {
+    background-image: url('/Landscape Image for Pages/Terms of Service/Terms of Service.png');
+
+    @media (max-width: 768px) {
+      background-image: url('/Portrait Image for Pages for Mobile/Terms of Service/Untitled-36.png');
+    }
+  }
+}
+
+// Track Order Page
+.page-container[data-page="track-order"] {
+  .page-hero-wrapper {
+    background-image: url('/Landscape Image for Pages/Track Order/Track Order.png');
+
+    @media (max-width: 768px) {
+      background-image: url('/Portrait Image for Pages for Mobile/Track Order/Untitled-36.png');
+    }
+  }
+}
+
+// Profile Page
+.page-container[data-page="profile"] {
+  .page-hero-wrapper {
+    background-image: url('/Landscape Image for Pages/Profile/Profile.png');
+
+    @media (max-width: 768px) {
+      background-image: url('/Portrait Image for Pages for Mobile/Profile/Untitled-36.png');
+    }
+  }
+}
+
+// Shipping Policies Page
+.page-container[data-page="shipping-policies"] {
+  .page-hero-wrapper {
+    background-image: url('/Landscape Image for Pages/Shipping Plicies/Shipping Plicies.png');
+
+    @media (max-width: 768px) {
+      background-image: url('/Portrait Image for Pages for Mobile/Shipping Policies/Untitled-36.png');
+    }
+  }
+}
+
+// Disclaimer Page
+.page-container[data-page="disclaimer"] {
+  .page-hero-wrapper {
+    background-image: url('/Landscape Image for Pages/Disclaimer/Disclaimer.png');
+
+    @media (max-width: 768px) {
+      background-image: url('/Portrait Image for Pages for Mobile/Disclaimer/Untitled-36.png');
+    }
+  }
+}
+
+// Cancellation/Refund Policy Page
+.page-container[data-page="cancellation-refund"] {
+  .page-hero-wrapper {
+    background-image: url('/Landscape Image for Pages/Cancellation Terms/Cancellation Terms.png');
+
+    @media (max-width: 768px) {
+      background-image: url('/Portrait Image for Pages for Mobile/Cancellation Terms/Untitled-36.png');
+    }
+  }
+}
+
+// Refund Policy Page
+.page-container[data-page="refund-policy"] {
+  .page-hero-wrapper {
+    background-image: url('/Landscape Image for Pages/Refund Policy/Untitled-37.png');
+
+    @media (max-width: 768px) {
+      background-image: url('/Portrait Image for Pages for Mobile/Refund Policy/Untitled-36.png');
+    }
+  }
+}
+
+// Plant Care Page
+.page-container[data-page="plant-care"] {
+  .page-hero-wrapper {
+    background-image: url('/Landscape Image for Pages/Plant Care/Plant Care.png');
+
+    @media (max-width: 768px) {
+      background-image: url('/Portrait Image for Pages for Mobile/Plant Care/Untitled-36.png');
+    }
+  }
+}
+
+// Blog Page
+.page-container[data-page="blogs"] {
+  .page-hero-wrapper {
+    background-image: url('/Landscape Image for Pages/Blogs/Blogs.png');
+
+    @media (max-width: 768px) {
+      background-image: url('/Portrait Image for Pages for Mobile/Blogs/Untitled-36.png');
+    }
+  }
+}
+
+// Products/Plants Page
+.page-container[data-page="plants"] {
+  .page-hero-wrapper {
+    background-image: url('/Landscape Image for Pages/Plants/Plants.png');
+
+    @media (max-width: 768px) {
+      background-image: url('/Portrait Image for Pages for Mobile/Plants/Untitled-36.png');
+    }
+  }
+}
+
+// Seeds Page
+.page-container[data-page="seeds"] {
+  .page-hero-wrapper {
+    background-image: url('/Landscape Image for Pages/Seeds/Seeds.png');
+
+    @media (max-width: 768px) {
+      background-image: url('/Portrait Image for Pages for Mobile/Seeds/Untitled-36.png');
+    }
+  }
+}
+
+// Planters/Pots Page
+.page-container[data-page="planters"] {
+  .page-hero-wrapper {
+    background-image: url('/Landscape Image for Pages/Planters/Planters.png');
+
+    @media (max-width: 768px) {
+      background-image: url('/Portrait Image for Pages for Mobile/Planter/Untitled-36.png');
+    }
+  }
+}
+
+// Decor Page
+.page-container[data-page="decor"] {
+  .page-hero-wrapper {
+    background-image: url('/Landscape Image for Pages/Decor/Decor.png');
+
+    @media (max-width: 768px) {
+      background-image: url('/Portrait Image for Pages for Mobile/Decor/Untitled-36.png');
+    }
+  }
+}
+
+// Accessories Page
+.page-container[data-page="accessories"] {
+  .page-hero-wrapper {
+    background-image: url('/Landscape Image for Pages/Accessories/Accessories.png');
+
+    @media (max-width: 768px) {
+      background-image: url('/Portrait Image for Pages for Mobile/Accessories/Untitled-36.png');
+    }
+  }
+}

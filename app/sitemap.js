@@ -16,7 +16,7 @@ export default function sitemap() {
     priority: route === "" ? 1.0 : 0.8,
   }));
 
-  // Add product categories (you can fetch these dynamically from Supabase if needed)
+  // Add product categories (you can fetch these dynamically from Firebase if needed)
   const categories = [
     "indoor-plants",
     "outdoor-plants",

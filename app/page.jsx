@@ -1,6 +1,6 @@
 "use client"
 
-import TopBar from "../components/general/Topbar";
+import Topbar from "../components/general/Topbar";
 import Navbar from "../components/general/Navbar";
 import HeroSlider from "../components/Homepage/HeroSlider";
 import CategoryCircles from "../components/Homepage/CategoryCircles";
@@ -19,14 +19,12 @@ import Footer from "@/components/general/Footer";
 import WhatsAppButton from "@/components/general/WhatsAppButton";
 import  ToastContainer  from "@/components/general/ToastContainer";
 import HomeSidebar from "@/components/general/HomeSidebar";
-import CartModal from "@/components/cart/CartModal";
 import Ads from "@/components/general/Ads";
 
-import { React, useState } from "react";
+import { React } from "react";
 import { motion } from "framer-motion";
 
 export default function Home() {
-  const [cartOpen, setCartOpen] = useState(false);
 
 
   // Animation variants for sections
@@ -47,10 +45,9 @@ export default function Home() {
 
   return (
     <>
-      <CartModal isOpen={cartOpen} onClose={() => setCartOpen(false)} />
-      <TopBar />
+      <Topbar />
       <ToastContainer />
-      <Navbar onCartClick={() => setCartOpen(true)} />
+      <Navbar />
       <HomeSidebar />
       
       {/* Hero Section */}

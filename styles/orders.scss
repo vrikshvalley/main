@@ -66,13 +66,77 @@ $text-muted: rgba($dark-green, 0.6);
     }
   }
 
+  // Order Statistics
+  .order-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+
+    .stat-card {
+      background: $white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+
+      &:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+      }
+
+      svg {
+        color: $teal;
+        flex-shrink: 0;
+      }
+
+      .stat-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+
+        .stat-value {
+          font-size: 1.75rem;
+          font-weight: 700;
+          color: $dark-green;
+          margin: 0;
+        }
+
+        .stat-label {
+          font-size: 0.875rem;
+          color: $text-muted;
+          margin: 0;
+        }
+      }
+
+      &.delivered {
+        svg {
+          color: #10b981;
+        }
+      }
+    }
+  }
+
+  // View Controls (Filter tabs + View toggle)
+  .view-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+  }
+
   // Filter tabs
   .filters {
     display: flex;
     gap: 1rem;
-    margin-bottom: 2.5rem;
     overflow-x: auto;
     padding-bottom: 0.5rem;
+    margin-bottom: 0; // Remove margin when inside view-controls
 
     &::-webkit-scrollbar {
       height: 4px;
@@ -105,6 +169,52 @@ $text-muted: rgba($dark-green, 0.6);
         color: $white;
       }
     }
+  }
+
+  // View Toggle
+  .view-toggle {
+    display: flex;
+    gap: 0.5rem;
+    background: $white;
+    padding: 0.35rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+    .toggle-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.25rem;
+      background: transparent;
+      border: none;
+      border-radius: 7px;
+      font-weight: 500;
+      color: $text-secondary;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      &:hover {
+        background: rgba($teal, 0.1);
+        color: $teal;
+      }
+
+      &.active {
+        background: $teal;
+        color: $white;
+      }
+    }
+  }
+
+  // Orders Tracking List (for tracking view mode)
+  .orders-tracking-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
   }
 
   // Empty state
@@ -989,8 +1099,42 @@ $text-muted: rgba($dark-green, 0.6);
   }
 }
 
+@media (max-width: 768px) {
+  .orders-page {
+    .order-stats {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .view-controls {
+      flex-direction: column;
+      align-items: stretch;
+
+      .filters {
+        order: 2;
+      }
+
+      .view-toggle {
+        order: 1;
+        justify-content: center;
+      }
+    }
+  }
+}
+
 @media (max-width: 480px) {
   .orders-page {
+    .order-stats {
+      grid-template-columns: 1fr;
+    }
+
+    .view-toggle {
+      .toggle-btn {
+        flex: 1;
+        justify-content: center;
+      }
+    }
+
     .order-card .order-card-body .order-items-preview {
       flex-direction: column;
       align-items: flex-start;

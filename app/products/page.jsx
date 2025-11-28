@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import TopBar from '@/components/general/Topbar';
+import Topbar from '@/components/general/Topbar';
 import Navbar from '@/components/general/Navbar';
 import Footer from '@/components/general/Footer';
 import WhatsAppButton from '@/components/general/WhatsAppButton';

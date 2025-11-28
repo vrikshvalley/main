@@ -11,9 +11,11 @@ import ProfileIcon from '@/components/auth/ProfileIcon';
 import CartIcon from '@/components/cart/CartIcon';
 import SearchBar from '@/components/general/SearchBar';
 import { categories } from '@/lib/sampleProducts';
+import { useCart } from '@/lib/CartContext';
 import "@/styles/navbar.scss";
 
-export default function Navbar({ onCartClick }) {
+export default function Navbar() {
+  const { openCart } = useCart();
   const count = useSelector(selectCount);
   const [menuOpen, setMenuOpen] = useState(false);
   const [hoveredCategory, setHoveredCategory] = useState(null);
@@ -122,7 +124,7 @@ export default function Navbar({ onCartClick }) {
         <div className="nav-actions">
           <SearchBar />
           
-          <CartIcon onCartClick={onCartClick} />
+          <CartIcon onCartClick={openCart} />
           <ProfileIcon />
 
           {/* Hamburger (mobile) */}

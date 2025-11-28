@@ -4,8 +4,10 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/AuthContext';
 import orderService from '@/lib/services/orderService';
+import ShipmentTracker from '@/components/orders/ShipmentTracker';
 import { toast } from 'react-toastify';
 import Image from 'next/image';
+import { Package, TrendingUp, Clock, Truck, MapPin } from 'lucide-react';
 import '@/styles/orders.scss';
 
 export default function OrdersPage() {
@@ -15,6 +17,8 @@ export default function OrdersPage() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState('all');
+  const [viewMode, setViewMode] = useState('cards'); // 'cards' or 'tracking'
+  const [orderStats, setOrderStats] = useState(null);
 
   // Status badge configuration
   const statusConfig = {
@@ -39,11 +43,12 @@ export default function OrdersPage() {
     if (authLoading) return;
     
     if (!user) {
-      router.push('/auth/login-signup');
+      router.push('/auth/login');
       return;
     }
     
     fetchOrders();
+    fetchOrderStats();
   }, [user, authLoading, activeFilter, router]);
 
   const fetchOrders = async () => {
@@ -69,6 +74,15 @@ export default function OrdersPage() {
       setOrders([]);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchOrderStats = async () => {
+    try {
+      const stats = await orderService.getOrderStats(user.uid);
+      setOrderStats(stats);
+    } catch (error) {
+      console.error('Error fetching order stats:', error);
     }
   };
 
@@ -116,17 +130,70 @@ export default function OrdersPage() {
           <p className="subtitle">Track, manage, and view your order history</p>
         </div>
 
-        {/* Filter tabs */}
-        <div className="filters">
-          {filters.map((filter) => (
-            <button
-              key={filter.id}
-              className={`filter-tab ${activeFilter === filter.id ? 'active' : ''}`}
-              onClick={() => setActiveFilter(filter.id)}
-            >
+        {/* Order Statistics */}
+        {orderStats && (
+          <div className="order-stats">
+            <div className="stat-card">
+              <Package size={24} />
+              <div className="stat-info">
+                <p className="stat-value">{orderStats.total}</p>
+                <p className="stat-label">Total Orders</p>
+              </div>
+            </div>
+            <div className="stat-card">
+              <Clock size={24} />
+              <div className="stat-info">
+                <p className="stat-value">{orderStats.pending}</p>
+                <p className="stat-label">Pending</p>
+              </div>
+            </div>
+            <div className="stat-card">
+              <Truck size={24} />
+              <div className="stat-info">
+                <p className="stat-value">{orderStats.shipped}</p>
+                <p className="stat-label">Shipped</p>
+              </div>
+            </div>
+            <div className="stat-card delivered">
+              <MapPin size={24} />
+              <div className="stat-info">
+                <p className="stat-value">{orderStats.delivered}</p>
+                <p className="stat-label">Delivered</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* View Mode Toggle */}
+        <div className="view-controls">
+          <div className="filters">
+            {filters.map((filter) => (
+              <button
+                key={filter.id}
+                className={`filter-tab ${activeFilter === filter.id ? 'active' : ''}`}
+                onClick={() => setActiveFilter(filter.id)}
+              >
               {filter.label}
             </button>
           ))}
+        </div>
+          
+          <div className="view-toggle">
+            <button
+              className={`toggle-btn ${viewMode === 'cards' ? 'active' : ''}`}
+              onClick={() => setViewMode('cards')}
+            >
+              <Package size={18} />
+              Cards
+            </button>
+            <button
+              className={`toggle-btn ${viewMode === 'tracking' ? 'active' : ''}`}
+              onClick={() => setViewMode('tracking')}
+            >
+              <TrendingUp size={18} />
+              Tracking
+            </button>
+          </div>
         </div>
 
         {/* Orders list */}
@@ -142,6 +209,12 @@ export default function OrdersPage() {
             <button className="btn-primary" onClick={() => router.push('/products')}>
               Start Shopping
             </button>
+          </div>
+        ) : viewMode === 'tracking' ? (
+          <div className="orders-tracking-list">
+            {orders.map((order) => (
+              <ShipmentTracker key={order.id} order={order} />
+            ))}
           </div>
         ) : (
           <div className="orders-list">

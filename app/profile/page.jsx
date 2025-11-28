@@ -38,7 +38,7 @@ const ProfilePage = () => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (!currentUser) {
-        router.push('/auth/login-signup');
+        router.push('/auth/login');
         return;
       }
       setUser(currentUser);
@@ -80,7 +80,7 @@ const ProfilePage = () => {
       toastError('Error adding address');
       return res;
     }
-    // Supabase returns array of updated profiles; use first
+    // Firebase returns updated profile data
     const updatedProfile = res.data?.[0] || { ...profile, address: [...(profile.address||[]), newAddress] };
     setProfile(updatedProfile);
     return res;
@@ -114,26 +114,30 @@ const ProfilePage = () => {
     
     const confirmation = prompt('Type "DELETE" to confirm account deletion:');
     if (confirmation !== 'DELETE') {
-      showToast('Deactivation cancelled', 'error');
+      showErrorToast('Deactivation cancelled');
       return;
     }
 
-    const { error } = await supabase
-      .from('profiles')
-      .delete()
-      .eq('id', user.id);
-
-    if (error) {
-      showToast('Error deactivating account', 'error');
-    } else {
-      await supabase.auth.signOut();
-      router.push('/');
+    try {
+      // Delete user profile from Firebase
+      const res = await userService.deleteProfile(user.id);
+      
+      if (res.error) {
+        showErrorToast('Error deactivating account');
+      } else {
+        await signOut(auth);
+        router.push('/');
+        showSuccessToast('Account deleted successfully');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      showErrorToast('Error deactivating account');
     }
   };
 
   const handleLogout = async () => {
     await signOut(auth);
-    router.push('/auth/login-signup');
+    router.push('/auth/login');
   };
 
   const openEditAddress = (address) => {

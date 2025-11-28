@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Calendar, Clock, User, ArrowRight } from 'lucide-react';
-import TopBar from '@/components/general/Topbar';
+import Topbar from '@/components/general/Topbar';
 import Navbar from '@/components/general/Navbar';
 import Footer from '@/components/general/Footer';
 import WhatsAppButton from '@/components/general/WhatsAppButton';
@@ -24,7 +24,7 @@ export default function BlogPage() {
 
   return (
     <>
-      <TopBar />
+      <Topbar />
       <Navbar />
       <Breadcrumbs items={[{ label: 'Blog' }]} />
       

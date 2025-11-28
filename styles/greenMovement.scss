@@ -3,11 +3,13 @@
 
 .green-movement-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, rgba($teal, 0.03) 0%, rgba($white, 1) 50%, rgba($teal, 0.03) 100%);
+  background: linear-gradient(135deg, rgba($teal, 0.03) 0%, rgba($dark-green, 1) 50%, rgba($teal, 0.03) 100%);
 
-  // Hero Section
-  .movement-hero {
-    background: linear-gradient(135deg, $dark-green 0%, $deep-green 100%);
+  // === SHARED HERO SECTIONS (both pages) ===
+  .movement-hero,
+  .green-movement-hero {
+    background: linear-gradient(135deg, rgba($dark-green, 0.85) 0%, rgba($deep-green, 0.85) 100%),
+                url('/Landscape Image for Pages/Our Story/Our Story.png') center/cover no-repeat;
     padding: 5rem 2rem;
     text-align: center;
     position: relative;
@@ -22,6 +24,12 @@
       bottom: 0;
       background: radial-gradient(circle at 30% 50%, rgba($teal, 0.2) 0%, transparent 50%);
       pointer-events: none;
+    }
+
+    // Mobile portrait background
+    @media (max-width: 768px) {
+      background: linear-gradient(135deg, rgba($dark-green, 0.85) 0%, rgba($deep-green, 0.85) 100%),
+                  url('/Portrait Image for Pages for Mobile/Our Story/Untitled-36.png') center/cover no-repeat;
     }
 
     .hero-content {
@@ -39,15 +47,15 @@
 
       h1 {
         font-family: $font-primary;
-        // Styles for both Green Movement and Where Nature Meets Nurture pages
-        .green-movement-page {
+        font-size: clamp(2.5rem, 6vw, 4rem);
         color: $white;
         margin-bottom: 1rem;
         letter-spacing: -1px;
-          // Hero Section (used for both pages)
-          .green-movement-hero, .movement-hero {
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      }
 
-      .hero-subtitle {
+      .hero-subtitle,
+      .subtitle {
         font-size: clamp(1.125rem, 2vw, 1.5rem);
         color: rgba($white, 0.95);
         font-weight: 300;
@@ -55,140 +63,175 @@
       }
     }
 
+    h2.subtitle {
+      font-size: clamp(1.125rem, 2vw, 1.5rem);
+      color: rgba($white, 0.95);
+      font-weight: 300;
+      letter-spacing: 0.5px;
+      margin-bottom: 2rem;
+    }
+
+    p.story {
+      font-size: 1.125rem;
+      line-height: 1.8;
+      color: rgba($white, 0.9);
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: left;
+    }
+
     @media (max-width: 768px) {
       padding: 3rem 1.5rem;
     }
   }
 
-  // Content Sections
-  .content-section {
+  // === SHARED CONTENT SECTIONS ===
+  .content-section,
+  .origin-story,
+  .sustainability,
+  .plant-care,
+  .community,
+  .green-movement-promises,
+  .green-movement-companion,
+  .green-movement-tribe {
     padding: 4rem 2rem;
-            .hero-content {
-              max-width: 900px;
-              margin: 0 auto;
-              position: relative;
-              z-index: 1;
+    max-width: 1000px;
+    margin: 0 auto;
 
-              .hero-icon {
-                font-size: 5rem;
-                margin-bottom: 1.5rem;
-                display: inline-block;
-                filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
-              }
+    .section-icon {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2rem;
+      font-size: 4rem;
+      color: $white;
 
-              h1 {
-                font-family: $font-primary;
-                font-size: clamp(2.5rem, 6vw, 4rem);
-                color: $white;
-                margin-bottom: 1rem;
-                letter-spacing: -1px;
-                text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-              }
+      svg {
+        filter: drop-shadow(0 2px 8px rgba($white, 0.3));
+      }
+    }
 
-              .hero-subtitle, .subtitle {
-                font-size: clamp(1.125rem, 2vw, 1.5rem);
-                color: rgba($white, 0.95);
-                font-weight: 300;
-                letter-spacing: 0.5px;
-              }
-            }
+    h2,
+    h3 {
+      font-family: $font-primary;
+      font-size: clamp(2rem, 4vw, 2.75rem);
+      color: $white;
+      text-align: center;
+      margin-bottom: 2.5rem;
+      position: relative;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
         left: 50%;
         transform: translateX(-50%);
         width: 80px;
         height: 3px;
         background: linear-gradient(90deg, transparent, $teal, transparent);
       }
-          // Content Sections (used for both pages)
-          .content-section, .green-movement-promises, .green-movement-companion, .green-movement-tribe {
-            padding: 4rem 2rem;
-            max-width: 1000px;
-            margin: 0 auto;
+    }
 
-            h2, h3 {
-              font-family: $font-primary;
-              font-size: clamp(2rem, 4vw, 2.75rem);
-              color: $dark-green;
-              text-align: center;
-              margin-bottom: 2.5rem;
-              position: relative;
-              &::after {
-                content: '';
-                position: absolute;
-                bottom: -10px;
-                left: 50%;
-                transform: translateX(-50%);
-                width: 80px;
-                height: 3px;
-                background: linear-gradient(90deg, transparent, $teal, transparent);
-              }
-            }
+    .intro,
+    .story-content,
+    p {
+      font-size: 1.125rem;
+      line-height: 1.8;
+      color: $white;
+      margin-bottom: 1.5rem;
 
-            .story, .story-content {
-              font-size: 1.125rem;
-              line-height: 1.8;
-              color: $deep-green;
-              margin-bottom: 1.5rem;
-              p {
-                margin-bottom: 1.5rem;
-                &:last-child { margin-bottom: 0; }
-                strong { color: $dark-green; font-weight: 600; }
-                em { color: $teal; font-style: italic; font-weight: 500; }
-              }
-            }
+      &:last-child {
+        margin-bottom: 0;
+      }
 
-            ul {
-              margin: 1.5rem 0 1.5rem 1.5rem;
-              padding-left: 1.5rem;
-              color: $deep-green;
-              li {
-                margin-bottom: 0.75rem;
-                font-size: 1.08rem;
-              }
-            }
+      strong,
+      b {
+        color: $yellow;
+        font-weight: 600;
+      }
 
-            @media (max-width: 768px) {
-              padding: 3rem 1.5rem;
-              .story, .story-content { font-size: 1rem; }
-            }
-          }
+      em {
+        color: $teal;
+        font-style: italic;
+        font-weight: 500;
+      }
+    }
+
+    ul {
+      margin: 1.5rem 0 1.5rem 1.5rem;
+      padding-left: 1.5rem;
+      color: $white;
+
+      li {
+        margin-bottom: 0.75rem;
+        font-size: 1.08rem;
+        line-height: 1.7;
+
+        b {
+          color: $text-secondary;
+        }
+      }
+    }
+
+    @media (max-width: 768px) {
+      padding: 3rem 1.5rem;
+
+      .intro,
+      .story-content,
+      p {
+        font-size: 1rem;
+      }
+    }
+  }
+
+  // === MILESTONES SECTION (join-green-movement specific) ===
+  .milestones-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin: 3rem 0;
+    padding: 0 2rem;
+
+    .milestone-card {
+      background: rgba($teal, 0.05);
+      border: 2px solid rgba($teal, 0.2);
+      border-radius: 16px;
+      padding: 2rem;
+      text-align: center;
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: translateY(-5px);
+        border-color: $teal;
+        box-shadow: 0 8px 24px rgba($teal, 0.2);
+      }
+
+      .milestone-icon {
+        font-size: 3rem;
+        color: $teal;
+        margin-bottom: 1rem;
+        display: flex;
+        justify-content: center;
+      }
+
+      .value {
+        font-size: 2rem;
         font-weight: 700;
+        color: $dark-green;
         margin-bottom: 0.5rem;
       }
 
       p {
         font-size: 1rem;
-          // CTA for Where Nature Meets Nurture page
-          .green-movement-cta {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 3rem 0 5rem 0;
-            .cta-button {
-              background: linear-gradient(135deg, $teal 0%, color.adjust($teal, $lightness: 10%) 100%);
-              color: $white;
-              font-size: 1.25rem;
-              font-weight: 600;
-              padding: 1rem 2.5rem;
-              border: none;
-              border-radius: 12px;
-              box-shadow: 0 4px 15px rgba($teal, 0.15);
-              cursor: pointer;
-              transition: all 0.3s ease;
-              &:hover {
-                transform: translateY(-3px);
-                box-shadow: 0 6px 25px rgba($teal, 0.3);
-                background: linear-gradient(135deg, color.adjust($teal, $lightness: 10%) 0%, $teal 100%);
-              }
-            }
-          }
-        color: $deep-green;
+        color: $yellow;
         font-weight: 500;
+        margin: 0;
       }
     }
 
     @media (max-width: 768px) {
       grid-template-columns: 1fr;
       gap: 1.5rem;
+      padding: 0 1.5rem;
     }
   }
 
@@ -196,14 +239,19 @@
     text-align: center;
     font-size: 1.125rem;
     color: $deep-green;
-    margin-top: 2rem;
+    margin: 2rem 2rem 0;
     padding: 1.5rem;
     background: rgba($teal, 0.05);
     border-radius: 12px;
     border-left: 4px solid $teal;
+
+    @media (max-width: 768px) {
+      margin: 2rem 1.5rem 0;
+      font-size: 1rem;
+    }
   }
 
-  // CTA Section
+  // === CTA SECTION (join-green-movement specific) ===
   .cta-section {
     background: linear-gradient(135deg, $dark-green 0%, $deep-green 100%);
     padding: 5rem 2rem;
@@ -239,8 +287,16 @@
         font-size: clamp(2rem, 5vw, 3rem);
         color: $white;
         margin-bottom: 2rem;
+        position: relative;
 
         &::after {
+          content: '';
+          position: absolute;
+          bottom: -10px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 80px;
+          height: 3px;
           background: linear-gradient(90deg, transparent, $yellow, transparent);
         }
       }
@@ -312,7 +368,7 @@
 
         @media (max-width: 480px) {
           flex-direction: column;
-          
+
           .shop-now-btn,
           .contact-btn {
             width: 100%;
@@ -339,12 +395,41 @@
     }
   }
 
-  @keyframes float {
-    0%, 100% {
-      transform: translateY(0);
+  // === CTA SECTION (where-nature-meets-nurture specific) ===
+  .green-movement-cta {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem 0 5rem 0;
+
+    .cta-button {
+      background: linear-gradient(135deg, $teal 0%, color.adjust($teal, $lightness: 10%) 100%);
+      color: $white;
+      font-size: 1.25rem;
+      font-weight: 600;
+      padding: 1rem 2.5rem;
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba($teal, 0.15);
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 25px rgba($teal, 0.3);
+        background: linear-gradient(135deg, color.adjust($teal, $lightness: 10%) 0%, $teal 100%);
+      }
     }
-    50% {
-      transform: translateY(-15px);
-    }
+  }
+}
+
+// === ANIMATIONS ===
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
   }
 }

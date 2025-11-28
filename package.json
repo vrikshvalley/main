@@ -10,8 +10,6 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "latest",
-    "@supabase/auth-helpers-nextjs": "^0.10.0",
-    "@supabase/supabase-js": "^2.57.4",
     "@types/nodemailer": "^6.4.21",
     "axios": "^1.12.2",
     "axis": "^1.0.0",
@@ -30,6 +28,7 @@
     "react-use-measure": "^2.1.7",
     "sass": "latest",
     "simple-icons": "^15.18.0",
-    "swiper": "^11.2.10"
+    "swiper": "^11.2.10",
+    "uuid": "^13.0.0"
   }
 }

@@ -246,6 +246,16 @@ export default function CartModal({ isOpen, onClose }) {
               </div>
               
               <div className="cart-footer">
+                <button 
+                  className="view-cart-btn"
+                  onClick={() => {
+                    onClose();
+                    window.location.href = '/cart';
+                  }}
+                >
+                  <span>🛒 View Full Cart</span>
+                </button>
+
                 {!user && (
                   <p className="login-prompt">🔐 Please log in to proceed to checkout</p>
                 )}

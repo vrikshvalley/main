@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import TopBar from '@/components/general/Topbar';
+import Topbar from '@/components/general/Topbar';
 import Navbar from '@/components/general/Navbar';
 import Footer from '@/components/general/Footer';
 import WhatsAppButton from '@/components/general/WhatsAppButton';
@@ -124,7 +124,7 @@ export default function SubcategoryPage() {
   if (!category || !subcategory) {
     return (
       <>
-        <TopBar />
+        <Topbar />
         <Navbar />
         <div className="category-not-found">
           <h1>Subcategory Not Found</h1>
@@ -139,7 +139,7 @@ export default function SubcategoryPage() {
 
   return (
     <>
-      <TopBar />
+      <Topbar />
       <Navbar />
       <div className="products-page">
         <Breadcrumbs 
@@ -151,7 +151,19 @@ export default function SubcategoryPage() {
         />
         
         {/* Subcategory Header */}
-        <div className="products-header">
+        <div 
+          className="products-header"
+          style={{
+            backgroundImage: `url('/Landscape Image for Pages/${category.name}/${subcategory.name}/${subcategory.name}.png')`,
+          }}
+        >
+          <style jsx>{`
+            @media (max-width: 768px) {
+              .products-header {
+                background-image: url('/Portrait Image for Pages for Mobile/${category.name}/${subcategory.name}/${subcategory.name}.png') !important;
+              }
+            }
+          `}</style>
           <div className="header-content">
             <div className="category-icon">{category.icon}</div>
             <h1>{subcategory.name}</h1>

@@ -1,7 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabaseClient';
+import { ref, get, query, orderByChild, limitToFirst, remove, update } from 'firebase/database';
+import { realtimeDb } from '@/lib/firebaseConfig';
+import { showSuccessToast, showErrorToast } from '@/lib/toastHelpers';
 import "@/styles/adminProducts.scss";
 
 export default function Products() {
@@ -22,34 +24,52 @@ export default function Products() {
 
   async function fetchProducts() {
     setLoading(true);
-    const from = (page - 1) * limit;
-    const to = page * limit - 1;
-
-    const { data, error } = await supabase
-      .from('products')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .range(from, to);
-
-    if (error) {
+    try {
+      const productsRef = ref(realtimeDb, 'products');
+      const snapshot = await get(productsRef);
+      
+      if (snapshot.exists()) {
+        const productsData = [];
+        snapshot.forEach((childSnapshot) => {
+          productsData.push({
+            id: childSnapshot.key,
+            ...childSnapshot.val()
+          });
+        });
+        
+        // Sort by created_at if available
+        productsData.sort((a, b) => {
+          const dateA = new Date(a.created_at || 0);
+          const dateB = new Date(b.created_at || 0);
+          return dateB - dateA;
+        });
+        
+        setProducts(productsData);
+        setHasNext(productsData.length === limit);
+      } else {
+        setProducts([]);
+        setHasNext(false);
+      }
+    } catch (error) {
       console.error('Fetch products error', error);
+      showErrorToast('Failed to fetch products');
       setProducts([]);
       setHasNext(false);
-    } else {
-      setProducts(data || []);
-      setHasNext((data?.length || 0) === limit);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }
 
   async function handleDelete(id) {
     if (!confirm('Delete this product?')) return;
-    const { error } = await supabase.from('products').delete().eq('id', id);
-    if (error) {
-      alert('Delete failed');
-      console.error(error);
-    } else {
+    try {
+      const productRef = ref(realtimeDb, `products/${id}`);
+      await remove(productRef);
+      showSuccessToast('Product deleted successfully');
       fetchProducts();
+    } catch (error) {
+      console.error('Delete error:', error);
+      showErrorToast('Delete failed');
     }
   }
 
@@ -118,27 +138,25 @@ export default function Products() {
       name: form.name,
       category: form.category,
       price: form.price ? parseFloat(form.price) : 0,
-      quantity: form.quantity ? parseInt(form.quantity) : 0,
+      stock: form.quantity ? parseInt(form.quantity) : 0,
       featured: !!form.featured,
       feature_section: form.feature_section || null,
       description: form.description || null,
       image: form.image || null,
-      size: form.size ? form.size.split(',').map((s) => s.trim()).filter(Boolean) : [],
-      color: form.color ? form.color.split(',').map((c) => c.trim()).filter(Boolean) : [],
+      sizes: form.size ? form.size.split(',').map((s) => s.trim()).filter(Boolean) : [],
+      colors: form.color ? form.color.split(',').map((c) => c.trim()).filter(Boolean) : [],
+      updated_at: new Date().toISOString(),
     };
 
-    const { error } = await supabase
-      .from('products')
-      .update(updatePayload)
-      .eq('id', editingProduct.id);
-
-    if (error) {
-      console.error('Update error', error);
-      alert('Update failed');
-    } else {
+    try {
+      const productRef = ref(realtimeDb, `products/${editingProduct.id}`);
+      await update(productRef, updatePayload);
+      showSuccessToast('Product updated successfully');
       handleCloseEdit();
-      // refetch current page
       fetchProducts();
+    } catch (error) {
+      console.error('Update error', error);
+      showErrorToast('Update failed');
     }
   }
 

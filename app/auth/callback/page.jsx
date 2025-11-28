@@ -34,7 +34,7 @@ export default function AuthCallback() {
           
           router.push('/profile'); // redirect after login
         } else {
-          router.push('/auth/login-signup'); // redirect to login on error
+          router.push('/auth/login'); // redirect to login on error
         }
         unsubscribe();
       });

@@ -88,7 +88,7 @@ export default function ProductPageTabs({ product }) {
             {/* Reviews List Placeholder */}
             <div className="reviews-list">
               <div className="no-reviews">
-                <p>Reviews are currently disabled. Enable Supabase to see customer reviews!</p>
+                <p>Reviews are currently disabled. Customer reviews will be available soon!</p>
               </div>
             </div>
 

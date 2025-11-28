@@ -43,7 +43,7 @@ const CheckoutPage = () => {
       if (authLoading) return;
 
       if (!user) {
-        router.push('/auth/login-signup');
+        router.push('/auth/login');
         return;
       }
 
@@ -200,7 +200,7 @@ const CheckoutPage = () => {
         throw new Error(error?.message || 'Payment verification failed');
       }
 
-      // Create order in Supabase
+      // Create order in Firebase
       const orderPayload = {
         userId: orderContext.userId,
         orderId: callbackOrderId,

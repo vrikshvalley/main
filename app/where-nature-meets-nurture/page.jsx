@@ -1,13 +1,21 @@
 "use client";
 import React from "react";
 import Link from "next/link";
+import Topbar from "@/components/general/Topbar";
+import Navbar from "@/components/general/Navbar";
+import Breadcrumbs from "@/components/general/Breadcrumbs";
+import Footer from "@/components/general/Footer";
 import "../../styles/greenMovement.scss";
 
 export default function WhereNatureMeetsNurturePage() {
   return (
-    <div className="green-movement-page">
-      <section className="green-movement-hero">
-        <h1>Where Nature Meets Nurture</h1>
+    <>
+      <Topbar />
+      <Navbar />
+      <div className="green-movement-page">
+        <Breadcrumbs items={[{ label: 'Where Nature Meets Nurture' }]} />
+        <section className="green-movement-hero">
+          <h1>Where Nature Meets Nurture</h1>
         <h2 className="subtitle">A Journey Home to Green</h2>
         <p className="story">
           I remember life in Kolkata’s bustling streets as a young dreamer, craving the quiet whispers of the forest. In 2019, a move to Ranchi unlocked something deep inside me. I realized plants weren’t just decorations anymore—they were conversations, and gardens weren’t just spaces, they were sanctuaries. That awakening planted the seed for Vriksh Valley. Through long walks among dew-drenched leaves and dusty nurseries, I understood that every leaf has a story and every gardener needs a friend.<br /><br />
@@ -45,11 +53,13 @@ export default function WhereNatureMeetsNurturePage() {
           Be part of our growing community. When you choose Vriksh Valley, you join a family of nature lovers and guardians who encourage each other to make small green changes every day. Together, let’s grow lush indoor forests, thriving balconies and peaceful gardens. Welcome to Vriksh Valley. Let’s grow together.
         </p>
       </section>
-      <div className="green-movement-cta">
-        <Link href="/products">
-          <button className="cta-button">Shop Now</button>
-        </Link>
+        <div className="green-movement-cta">
+          <Link href="/products">
+            <button className="cta-button">Shop Now</button>
+          </Link>
+        </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 }
