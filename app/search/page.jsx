@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Topbar from '@/components/general/Topbar';
 import Navbar from '@/components/general/Navbar';
@@ -13,7 +13,7 @@ import { searchProducts } from '@/lib/searchService';
 import { Search, SlidersHorizontal, X } from 'lucide-react';
 import '@/styles/products.scss';
 
-export default function SearchPage() {
+function SearchContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const query = searchParams.get('q') || '';
@@ -186,5 +186,13 @@ export default function SearchPage() {
       <Footer />
       <WhatsAppButton />
     </>
+  );
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense fallback={<TheLoader />}>
+      <SearchContent />
+    </Suspense>
   );
 }
