@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import { selectCount } from '@/lib/slices/cartSlice';
@@ -10,7 +10,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import ProfileIcon from '@/components/auth/ProfileIcon';
 import CartIcon from '@/components/cart/CartIcon';
 import SearchBar from '@/components/general/SearchBar';
-import { categories } from '@/lib/sampleProducts';
+import { getCategories } from '@/lib/services/productService';
 import { useCart } from '@/lib/CartContext';
 import "@/styles/navbar.scss";
 
@@ -20,6 +20,33 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [hoveredCategory, setHoveredCategory] = useState(null);
   const [expandedMobileCategory, setExpandedMobileCategory] = useState(null);
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const { data: fetchedCategories } = await getCategories();
+        
+        // Define the desired order to match CategoryCircles
+        const categoryOrder = ['Plants', 'Seeds', 'Planters', 'Plant care', 'Decor', 'Accessories'];
+        
+        // Sort categories based on the defined order
+        const sortedCategories = (fetchedCategories || []).sort((a, b) => {
+          const indexA = categoryOrder.indexOf(a.name);
+          const indexB = categoryOrder.indexOf(b.name);
+          // If not found in order array, put at end
+          if (indexA === -1) return 1;
+          if (indexB === -1) return -1;
+          return indexA - indexB;
+        });
+        
+        setCategories(sortedCategories);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    }
+    fetchCategories();
+  }, []);
 
   const dropdownVariants = {
     hidden: { 
@@ -87,7 +114,7 @@ export default function Navbar() {
 
               {/* Dropdown Menu */}
               <AnimatePresence>
-                {hoveredCategory === category.slug && category.subcategories && (
+                {hoveredCategory === category.slug && category.subcategories && category.slug !== 'accessories' && (
                   <motion.div
                     className="dropdown-menu"
                     variants={dropdownVariants}
@@ -143,7 +170,7 @@ export default function Navbar() {
           {categories.map((category) => (
             <div key={category.slug} className="mobile-category">
               <div className="mobile-category-header">
-                {category.subcategories && category.subcategories.length > 0 ? (
+                {category.subcategories && category.subcategories.length > 0 && category.slug !== 'accessories' ? (
                   <div className="mobile-category-with-subs">
                     {expandedMobileCategory === category.slug ? (
                       <Link
@@ -179,7 +206,7 @@ export default function Navbar() {
               
               {/* Mobile Subcategories */}
               <AnimatePresence>
-                {expandedMobileCategory === category.slug && category.subcategories && (
+                {expandedMobileCategory === category.slug && category.subcategories && category.slug !== 'accessories' && (
                   <motion.div
                     className="mobile-subcategories"
                     initial={{ height: 0, opacity: 0 }}

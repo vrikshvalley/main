@@ -30,7 +30,7 @@ export default function OrderDetailsPage() {
     if (authLoading) return;
     
     if (!user) {
-      router.push('/auth/login');
+      router.push('/auth/signin');
       return;
     }
     
@@ -153,8 +153,8 @@ export default function OrderDetailsPage() {
     }
   };
 
-  const formatPrice = (priceInPaise) => {
-    return `₹${(priceInPaise / 100).toFixed(2)}`;
+  const formatPrice = (price) => {
+    return `₹${price.toFixed(2)}`;
   };
 
   const formatDate = (dateString) => {

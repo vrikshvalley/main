@@ -38,7 +38,7 @@ const ProfilePage = () => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (!currentUser) {
-        router.push('/auth/login');
+        router.push('/auth/signin');
         return;
       }
       setUser(currentUser);
@@ -137,7 +137,7 @@ const ProfilePage = () => {
 
   const handleLogout = async () => {
     await signOut(auth);
-    router.push('/auth/login');
+    router.push('/auth/signin');
   };
 
   const openEditAddress = (address) => {

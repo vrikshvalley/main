@@ -34,7 +34,7 @@ export async function POST(request) {
       shipping_is_billing: true,
       order_items: orderService.formatItemsForShiprocket(order.items),
       payment_method: "Prepaid",
-      sub_total: order.total / 100, // Convert paise to rupees
+      sub_total: order.total, // Total already in rupees
       length: 15,
       breadth: 15,
       height: 15,

@@ -8,13 +8,14 @@ Vriksh Valley is an online plant nursery dedicated to bringing nature closer to 
 
 ## 🚀 Tech Stack
 
-- **Framework:** Next.js 14 (App Router)
+- **Framework:** Next.js 15.5.2 (App Router)
 - **State Management:** Redux Toolkit for cart and user state
-- **Authentication:** Supabase Auth with OAuth support
-- **Database:** Supabase (PostgreSQL)
-- **Payment Gateway:** PhonePe
+- **Authentication:** Firebase Auth (Google OAuth, Email Magic Link)
+- **Database:** Firebase Firestore (products, users, orders) + Realtime DB
+- **Payment Gateway:** PhonePe OAuth 2.0
 - **Shipping:** Shiprocket API integration
-- **Email:** Nodemailer with Google Workspace SMTP
+- **Communications:** MSG91 (Email, SMS, WhatsApp)
+- **Image CDN:** Cloudinary
 - **Styling:** SCSS with modular components
 - **Animations:** Framer Motion
 - **Image Optimization:** Next.js Image component
@@ -115,16 +116,23 @@ npm start
 ### E-commerce
 
 - 🛒 Redux-powered shopping cart with persistence
-- 🔐 Secure authentication with Supabase
-- 📦 Order tracking and management
-- 💳 User profile with order history
+- 🔐 Secure authentication with Firebase (Google OAuth, Email Magic Link)
+- 📦 Order tracking and management with Shiprocket
+- 💳 PhonePe payment gateway integration
+- 🏠 Address collection flow with sleek 3-step modal
+- ⭐ Product reviews and ratings
+- 🔍 Real-time product search with Firestore
+- 🎯 Custom pricing for special products
 
 ### User Experience
 
 - 🎭 Smooth animations with Framer Motion
-- 📱 Fully responsive design
-- 🖼️ Optimized image loading and lazy loading
+- 📱 Fully responsive design (mobile-first)
+- 🖼️ Optimized image loading with Cloudinary CDN
 - ⚡ Fast page loads with Next.js optimization
+- 🔎 Advanced search with suggestions, history, and debouncing
+- 💬 WhatsApp integration for customer support
+- 📬 Multi-channel notifications (Email, SMS, WhatsApp via MSG91)
 
 ### SEO & Marketing
 
@@ -139,6 +147,8 @@ npm start
 - 🎨 GPU-accelerated animations
 - 📦 Code splitting and lazy loading
 - 🖼️ WebP image optimization
+- 🔥 Firestore composite indexes for fast queries
+- 💾 Client-side caching for categories
 
 ## 🌐 Pages
 

@@ -10,7 +10,18 @@ const nextConfig = {
     },
   },
   images: {
-    remotePatterns: [new URL("https://avatar.iran.liara.run/public/**")],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "avatar.iran.liara.run",
+        pathname: "/public/**",
+      },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        pathname: "/**",
+      },
+    ],
     qualities: [75, 85, 90, 95, 100],
   },
 };

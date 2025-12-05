@@ -1,14 +1,7 @@
-
 'use client';
 
-import React from 'react';
-import Products from '@/components/admin/Products';
+import AdminProducts from '@/components/admin/AdminProducts';
 
-
-const ProductsAdminPage = () => {
-    return (
-        <Products />
-    );
-};
-
-export default ProductsAdminPage;
+export default function AdminProductsPage() {
+  return <AdminProducts />;
+}

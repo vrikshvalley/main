@@ -54,7 +54,7 @@ const cardVariants = {
   },
 };
 
-export default function WhyChooseUs() {
+export default function WhyChooseUsProducts() {
   return (
     <section className="why-choose-us-products">
       <div className="why-choose-us-products-container">

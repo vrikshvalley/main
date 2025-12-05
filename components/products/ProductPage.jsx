@@ -112,14 +112,32 @@ export default function ProductPage({ product }) {
           <div className="category-badge">{product.category}</div>
           <h1>{product.name}</h1>
           <p className="description">{product.description}</p>
-          <p className="price">₹{(product.price / 100).toFixed(2)}</p>
+          
+          {/* Price Display - Handle custom pricing */}
+          {product.priceType === 'custom' || product.price === 'Price on Customization' ? (
+            <div className="price-custom">
+              <p className="price-label">Price on Customization</p>
+              <p className="price-description">
+                This product requires customization. Contact us for a personalized quote.
+              </p>
+            </div>
+          ) : (
+            <>
+              <p className="price">₹{typeof product.price === 'number' ? product.price : (product.priceValue || product.price)}</p>
+              {product.alternate_price && (
+                <p className="price-original">₹{product.alternate_price}</p>
+              )}
+            </>
+          )}
 
           {/* Stock Info */}
-          <div className={`stock-info ${product.stock > 0 ? 'in-stock' : 'out-of-stock'}`}>
-            {product.stock > 0 ? (
+          <div className={`stock-info ${(product.stock || product.quantity) > 0 ? 'in-stock' : 'out-of-stock'}`}>
+            {(product.stock || product.quantity) > 0 ? (
               <>
                 <span className="stock-badge">In Stock</span>
-                {product.stock < 10 && <span className="low-stock">Only {product.stock} left!</span>}
+                {(product.stock || product.quantity) < 10 && (
+                  <span className="low-stock">Only {product.stock || product.quantity} left!</span>
+                )}
               </>
             ) : (
               <span className="stock-badge">Out of Stock</span>
@@ -174,20 +192,33 @@ export default function ProductPage({ product }) {
 
           {/* Buttons */}
           <div className="actions">
-            <button 
-              className="add-to-cart" 
-              onClick={handleAddToCart}
-              disabled={product.stock === 0}
-            >
-              Add to Cart
-            </button>
-            <button 
-              className="buy-now"
-              onClick={handleBuyNow}
-              disabled={product.stock === 0}
-            >
-              Buy Now
-            </button>
+            {product.priceType === 'custom' || product.price === 'Price on Customization' ? (
+              <a 
+                href="https://wa.me/+919999999999?text=Hi, I'm interested in customizing this product"
+                className="contact-customize"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Contact for Customization
+              </a>
+            ) : (
+              <>
+                <button 
+                  className="add-to-cart" 
+                  onClick={handleAddToCart}
+                  disabled={(product.stock || product.quantity) === 0}
+                >
+                  Add to Cart
+                </button>
+                <button 
+                  className="buy-now"
+                  onClick={handleBuyNow}
+                  disabled={(product.stock || product.quantity) === 0}
+                >
+                  Buy Now
+                </button>
+              </>
+            )}
           </div>
 
           {/* Product Meta */}

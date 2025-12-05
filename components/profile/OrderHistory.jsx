@@ -40,8 +40,8 @@ export default function OrderHistory({ userId }) {
     return () => { mounted = false };
   }, [userId]);
 
-  const formatPrice = (priceInPaise) => {
-    return `₹${(priceInPaise / 100).toFixed(2)}`;
+  const formatPrice = (price) => {
+    return `₹${price.toFixed(2)}`;
   };
 
   const formatDate = (dateString) => {

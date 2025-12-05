@@ -339,6 +339,45 @@
       }
     }
 
+    .price-original {
+      font-size: 1.125rem;
+      font-weight: 500;
+      color: #999;
+      text-decoration: line-through;
+      margin-top: -0.5rem;
+    }
+
+    .price-custom {
+      margin: 1rem 0;
+      padding: 1.25rem;
+      background: linear-gradient(135deg, rgba(45, 92, 45, 0.05), rgba(74, 124, 74, 0.05));
+      border-left: 4px solid $dark-green;
+      border-radius: 8px;
+
+      .price-label {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: $dark-green;
+        margin: 0 0 0.5rem;
+        font-family: 'Playfair Display', serif;
+
+        @media (max-width: 480px) {
+          font-size: 1.25rem;
+        }
+      }
+
+      .price-description {
+        font-size: 0.95rem;
+        color: #555;
+        margin: 0;
+        line-height: 1.5;
+
+        @media (max-width: 480px) {
+          font-size: 0.875rem;
+        }
+      }
+    }
+
     .stock-info {
       display: flex;
       align-items: center;
@@ -552,6 +591,40 @@ input[type="number"]::-webkit-inner-spin-button {
 
         &:hover:not(:disabled) {
           box-shadow: $shadow-glow;
+        }
+      }
+
+      .contact-customize {
+        flex: 1;
+        padding: 0.875rem 2rem;
+        background: linear-gradient(135deg, $dark-green, $deep-green);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+
+        &::after {
+          content: '→';
+          font-size: 1.25rem;
+        }
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 20px rgba(45, 92, 45, 0.3);
+        }
+
+        @media (max-width: 480px) {
+          font-size: 0.9rem;
+          padding: 0.75rem 1.5rem;
         }
       }
     }

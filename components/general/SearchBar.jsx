@@ -21,6 +21,7 @@ export default function SearchBar() {
   const [searchHistory, setSearchHistory] = useState([]);
   const [popularSearches, setPopularSearches] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const searchRef = useRef(null);
 
   // Load search history and popular searches on mount
@@ -44,12 +45,27 @@ export default function SearchBar() {
   // Get suggestions as user types
   useEffect(() => {
     if (searchQuery.trim().length >= 2) {
-      const results = getSearchSuggestions(searchQuery, 5);
-      setSuggestions(results);
-      setShowSuggestions(true);
+      const fetchSuggestions = async () => {
+        setIsLoading(true);
+        try {
+          const results = await getSearchSuggestions(searchQuery, 5);
+          setSuggestions(results);
+          setShowSuggestions(true);
+        } catch (error) {
+          console.error('Error fetching suggestions:', error);
+          setSuggestions([]);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      
+      // Debounce search
+      const timer = setTimeout(fetchSuggestions, 300);
+      return () => clearTimeout(timer);
     } else {
       setSuggestions([]);
       setShowSuggestions(false);
+      setIsLoading(false);
     }
   }, [searchQuery]);
 
@@ -120,12 +136,16 @@ export default function SearchBar() {
           >
             <div className="search-input-wrapper">
               <div className="search-icon">
-                <Image 
-                  src="/search-icon.png" 
-                  alt="Search" 
-                  width={18} 
-                  height={18}
-                />
+                {isLoading ? (
+                  <div className="search-spinner" />
+                ) : (
+                  <Image 
+                    src="/search-icon.png" 
+                    alt="Search" 
+                    width={18} 
+                    height={18}
+                  />
+                )}
               </div>
               <input 
                 type="text" 
@@ -150,8 +170,16 @@ export default function SearchBar() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.2 }}
               >
+                {/* Loading state */}
+                {isLoading && (
+                  <div className="suggestions-loading">
+                    <div className="search-spinner-large" />
+                    <span>Searching...</span>
+                  </div>
+                )}
+
                 {/* Show suggestions when typing */}
-                {suggestions.length > 0 && (
+                {!isLoading && suggestions.length > 0 && (
                   <div className="suggestions-section">
                     <div className="section-title">Suggestions</div>
                     {suggestions.map((suggestion, index) => (
@@ -172,8 +200,21 @@ export default function SearchBar() {
                   </div>
                 )}
 
+                {/* No results message */}
+                {!isLoading && searchQuery.length >= 2 && suggestions.length === 0 && (
+                  <div className="no-results">
+                    <p>No suggestions found for "{searchQuery}"</p>
+                    <button 
+                      className="search-anyway"
+                      onClick={() => handleSearch()}
+                    >
+                      Search anyway
+                    </button>
+                  </div>
+                )}
+
                 {/* Show history when not typing */}
-                {searchQuery.length === 0 && searchHistory.length > 0 && (
+                {!isLoading && searchQuery.length === 0 && searchHistory.length > 0 && (
                   <div className="suggestions-section">
                     <div className="section-title">
                       <Clock size={14} />
@@ -193,7 +234,7 @@ export default function SearchBar() {
                 )}
 
                 {/* Popular searches */}
-                {searchQuery.length === 0 && (
+                {!isLoading && searchQuery.length === 0 && (
                   <div className="suggestions-section">
                     <div className="section-title">
                       <TrendingUp size={14} />

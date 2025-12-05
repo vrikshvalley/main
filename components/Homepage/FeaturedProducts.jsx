@@ -50,12 +50,12 @@ export default function FeaturedProducts({ title}) {
         >
           {title}
         </motion.h2>
-        {/* <motion.div variants={cardVariants}>
+        <motion.div variants={cardVariants}>
           <Link href="/products" className="view-all-link">
             View All Products
             <ArrowRight size={18} />
           </Link>
-        </motion.div> */}
+        </motion.div>
       </div>
       <motion.div 
         className="products-container"

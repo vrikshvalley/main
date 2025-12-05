@@ -1,0 +1,205 @@
+// Payment Status Page Styles
+
+.payment-status-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+  .status-container {
+    width: 100%;
+    max-width: 500px;
+
+    .status-card {
+      background: white;
+      border-radius: 16px;
+      padding: 48px 32px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+
+      .status-icon {
+        margin: 0 auto 24px;
+        display: block;
+
+        &.spinner {
+          animation: spin 1s linear infinite;
+        }
+      }
+
+      h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 12px;
+      }
+
+      > p {
+        font-size: 1rem;
+        color: #718096;
+        margin-bottom: 32px;
+      }
+
+      // Success State
+      &.success {
+        .status-icon {
+          color: #48bb78;
+        }
+
+        h1 {
+          color: #2d3748;
+        }
+      }
+
+      // Checking State
+      &.checking {
+        .status-icon {
+          color: #4299e1;
+        }
+
+        h1 {
+          color: #2d3748;
+        }
+      }
+
+      // Pending State
+      &.pending {
+        .status-icon {
+          color: #ed8936;
+        }
+
+        h1 {
+          color: #2d3748;
+        }
+      }
+
+      // Failed State
+      &.failed {
+        .status-icon {
+          color: #f56565;
+        }
+
+        h1 {
+          color: #2d3748;
+        }
+      }
+
+      // Payment Details
+      .payment-details {
+        background: #f7fafc;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 24px;
+        text-align: left;
+
+        .detail-row {
+          display: flex;
+          justify-content: space-between;
+          padding: 10px 0;
+          border-bottom: 1px solid #e2e8f0;
+
+          &:last-child {
+            border-bottom: none;
+          }
+
+          .label {
+            font-weight: 600;
+            color: #4a5568;
+          }
+
+          .value {
+            color: #2d3748;
+            font-family: monospace;
+            font-size: 0.9rem;
+          }
+        }
+      }
+
+      // Buttons
+      .btn-primary {
+        width: 100%;
+        padding: 14px 24px;
+        background: #48bb78;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        margin-bottom: 12px;
+
+        &:hover {
+          background: #38a169;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
+        }
+      }
+
+      .btn-secondary {
+        width: 100%;
+        padding: 14px 24px;
+        background: #4299e1;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        margin-bottom: 12px;
+
+        &:hover {
+          background: #3182ce;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
+        }
+      }
+
+      .btn-outline {
+        width: 100%;
+        padding: 14px 24px;
+        background: white;
+        color: #4a5568;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+          border-color: #cbd5e0;
+          background: #f7fafc;
+        }
+      }
+    }
+  }
+
+  // Responsive
+  @media (max-width: 768px) {
+    .status-container {
+      .status-card {
+        padding: 32px 24px;
+
+        h1 {
+          font-size: 1.5rem;
+        }
+
+        .status-icon {
+          width: 48px;
+          height: 48px;
+        }
+      }
+    }
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

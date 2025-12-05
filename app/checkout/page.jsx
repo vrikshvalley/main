@@ -43,7 +43,7 @@ const CheckoutPage = () => {
       if (authLoading) return;
 
       if (!user) {
-        router.push('/auth/login');
+        router.push('/auth/signin');
         return;
       }
 
@@ -149,7 +149,7 @@ const CheckoutPage = () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          amount: totals.total,
+          amount: Math.round(totals.total * 100), // Convert rupees to paisa for PhonePe
           merchantOrderId: orderId,
           redirectUrl: callbackUrl,
           customerName: profile.name,
@@ -414,7 +414,7 @@ const CheckoutPage = () => {
                       <p className="item-name">{item.name}</p>
                       <p className="item-qty">Qty: {item.quantity}</p>
                     </div>
-                    <p className="item-price">₹{((item.price * item.quantity) / 100).toFixed(2)}</p>
+                    <p className="item-price">₹{(item.price * item.quantity).toFixed(2)}</p>
                   </div>
                 ))}
               </div>
@@ -422,19 +422,19 @@ const CheckoutPage = () => {
               <div className="summary-totals">
                 <div className="total-row">
                   <span>Subtotal</span>
-                  <span>₹{(totals.subtotal / 100).toFixed(2)}</span>
+                  <span>₹{totals.subtotal.toFixed(2)}</span>
                 </div>
                 <div className="total-row">
                   <span>Shipping</span>
-                  <span>₹{(totals.shippingCharges / 100).toFixed(2)}</span>
+                  <span>₹{totals.shippingCharges.toFixed(2)}</span>
                 </div>
                 <div className="total-row">
                   <span>Tax</span>
-                  <span>₹{(totals.tax / 100).toFixed(2)}</span>
+                  <span>₹{totals.tax.toFixed(2)}</span>
                 </div>
                 <div className="total-row grand-total">
                   <span>Total</span>
-                  <span>₹{(totals.total / 100).toFixed(2)}</span>
+                  <span>₹{totals.total.toFixed(2)}</span>
                 </div>
               </div>
             </div>
@@ -459,7 +459,7 @@ const CheckoutPage = () => {
                 Back
               </button>
               <button className="btn-primary" onClick={handlePayment} disabled={processing}>
-                {processing ? 'Processing...' : `Pay ₹${(totals.total / 100).toFixed(2)}`}
+                {processing ? 'Processing...' : `Pay ₹${totals.total.toFixed(2)}`}
               </button>
             </div>
           </div>

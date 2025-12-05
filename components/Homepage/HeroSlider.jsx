@@ -11,9 +11,11 @@ import 'swiper/css/effect-fade';
 import '@/styles/heroSlider.scss';
 
 const slides = [
-  { src: '/hero1.jpg', alt: 'Premium Plant Collection' },
-  { src: '/hero2.jpg', alt: 'Indoor Green Paradise' },
-  { src: '/hero3.jpg', alt: 'Outdoor Garden Dreams' }
+  { src: '/heroSlider/Untitled-1.png', alt: 'Premium Plant Collection' },
+  { src: '/heroSlider/Untitled-2.png', alt: 'Indoor Green Paradise' },
+  { src: '/heroSlider/Untitled-3.png', alt: 'Outdoor Garden Dreams' },
+  { src: '/heroSlider/Untitled-4.png', alt: 'Nature\'s Beauty' },
+  { src: '/heroSlider/Untitled-5.png', alt: 'Green Living' }
 ];
 
 const contentVariants = {

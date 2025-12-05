@@ -1,12 +1,12 @@
 'use client';
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 
 import AddToCartButton from '@/components/cart/AddToCartButton';
 import WishlistButton from '@/components/general/WishlistButton';
-import { sampleProducts } from '@/lib/sampleProducts';
+import { getProducts } from '@/lib/services/productService';
 import "@/styles/featuredProductCard.scss";
 import "@/styles/wishlistButton.scss";
 
@@ -28,9 +28,48 @@ const cardVariants = {
 };
 
 function ProductCard() {
-  // Get featured products
-  // const products = sampleProducts.filter(p => p.featured).slice(0, 4);
-  const products = sampleProducts.slice(0, 4);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        // Simplified query to avoid needing complex Firestore index
+        const { data: allProducts } = await getProducts({ 
+          sortBy: 'newest',
+          pageSize: 4,
+          inStock: false
+        });
+        // Get first 4 products for featured section
+        setProducts(allProducts || []);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchProducts();
+  }, []);
+
+  if (loading) {
+    return (
+      <>
+        {[1, 2, 3, 4].map((i) => (
+          <div key={i} className="product-card skeleton">
+            <div className="product-image skeleton-img">
+              <div className="skeleton-wishlist"></div>
+            </div>
+            <div className="skeleton-text title"></div>
+            <div className="skeleton-text price"></div>
+            <div className="skeleton-buttons">
+              <div className="skeleton-button"></div>
+              <div className="skeleton-button"></div>
+            </div>
+          </div>
+        ))}
+      </>
+    );
+  }
   return (
       <>
        {products.map((product) => (
@@ -51,7 +90,7 @@ function ProductCard() {
                 />
               </div>
               <h3>{product.name}</h3>
-              <p className="price">₹{(product.price / 100).toFixed(2)}</p>
+              <p className="price">₹{product.price}</p>
             </Link>
             <div className="product-actions">
               <AddToCartButton product={product} />

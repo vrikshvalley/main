@@ -1,12 +1,7 @@
 'use client';
 
-import Orders from '@/components/admin/Orders';
-import React from 'react';
+import AdminOrders from '@/components/admin/AdminOrders';
 
-const OrdersPage = () => {
-    return (
-        <Orders />
-    );
-};
-
-export default OrdersPage;
+export default function AdminOrdersPage() {
+  return <AdminOrders />;
+}

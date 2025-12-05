@@ -29,7 +29,7 @@ export default function ProfileIcon() {
       <div className="icon-wrapper">
         <Image 
           src={user ? "/profile.png" : "/login.png"}
-          alt={user ? "Profile" : "Login"}
+          alt={user ? "Profile" : "Sign in"}
           width={24}
           height={24}
         />
@@ -42,7 +42,7 @@ export default function ProfileIcon() {
             </Link>
           </>
         ) : (
-          <Link href="/auth/login" className="auth-link">Login/Signup</Link>
+          <Link href="/auth/signin" className="auth-link">Sign in</Link>
         )}
       </div>
     </div>

@@ -43,7 +43,7 @@ export default function OurLocation() {
         >
           <div className="store-image-container">
             <img 
-              src="/hero1.jpg" 
+              src="/storefront.png" 
               alt="Vriksh Valley Store" 
               className="store-image"
             />

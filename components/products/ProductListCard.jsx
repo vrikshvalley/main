@@ -88,7 +88,7 @@ export default function ProductListCard({ product, viewMode = 'grid' }) {
 
         <div className="product-footer">
           <div className="product-price">
-            ₹{(product.price / 100).toFixed(2)}
+            ₹{product.price}
           </div>
 
           {product.stock > 0 ? (

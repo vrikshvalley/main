@@ -2,36 +2,54 @@
 
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Image from 'next/image';
 import '@/styles/initialLoader.scss';
 
 export default function InitialLoader() {
   const [isLoading, setIsLoading] = useState(true);
   const [pathname, setPathname] = useState('');
+  const [currentTextIndex, setCurrentTextIndex] = useState(0);
+  const [showVriksh, setShowVriksh] = useState(false);
+  const [showValley, setShowValley] = useState(false);
+
+  // Array of text in different languages
+  const textArray = ['वृक्ष', 'বৃক্ষ', 'ବୃକ୍ଷ', 'وڻ', 'વૃક્ષ', 'ಮರ', 'చెట్టు', 'மரம்', 'മരം', 'ꯔꯨ'];
 
   useEffect(() => {
     // Set pathname on client side only
     setPathname(window.location.pathname);
 
-    // Animation duration: 2.5 seconds total (optimized for better performance)
+    // Scroll through different language texts
+    const textInterval = setInterval(() => {
+      setCurrentTextIndex((prev) => {
+        if (prev < textArray.length - 1) {
+          return prev + 1;
+        } else {
+          clearInterval(textInterval);
+          // After scrolling through all texts, show "Vriksh"
+          setTimeout(() => setShowVriksh(true), 200);
+          return prev;
+        }
+      });
+    }, 150); // Fast scrolling effect
+
+    // Show Valley after Vriksh appears
+    setTimeout(() => {
+      setShowValley(true);
+    }, 2000);
+
+    // Complete animation and hide loader (increased by 1 second)
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 2500);
+    }, 4500);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearInterval(textInterval);
+      clearTimeout(timer);
+    };
   }, []);
 
   // Only show on homepage
   if (pathname !== '/' && pathname !== '') return null;
-
-  // Generate leaf positions - reduced to 5 for better performance
-  const leaves = Array.from({ length: 5 }, (_, i) => ({
-    id: i,
-    left: Math.random() * 100,
-    delay: Math.random() * 1.5,
-    duration: 2.5 + Math.random() * 1,
-    rotate: Math.random() * 360
-  }));
 
   return (
     <AnimatePresence mode="wait">
@@ -41,120 +59,77 @@ export default function InitialLoader() {
           initial={{ opacity: 1 }}
           exit={{ 
             opacity: 0,
-            transition: { duration: 0.6, ease: 'easeOut' }
+            transition: { duration: 0.8, ease: [0.43, 0.13, 0.23, 0.96] }
           }}
         >
-          {/* Animated Background Gradient */}
+          {/* Green Background */}
           <div className="loaderBackground" />
-
-          {/* Floating Leaves */}
-          <div className="leavesContainer">
-            {leaves.map((leaf) => (
-              <motion.div
-                key={leaf.id}
-                className="leaf"
-                style={{
-                  left: `${leaf.left}%`,
-                  rotate: leaf.rotate
-                }}
-                initial={{ y: -100, opacity: 0 }}
-                animate={{ 
-                  y: '100vh',
-                  opacity: [0, 0.7, 0.7, 0],
-                  rotate: [leaf.rotate, leaf.rotate + 180]
-                }}
-                transition={{
-                  duration: leaf.duration,
-                  delay: leaf.delay,
-                  ease: 'linear',
-                  repeat: 0
-                }}
-              />
-            ))}
-          </div>
-
-          {/* Mist/Fog Effect */}
-          <div className="mistContainer">
-            <div className="mist mist1" />
-            <div className="mist mist2" />
-          </div>
 
           {/* Content Container */}
           <div className="loaderContent">
-            {/* Logo Animation - Simplified slow fade-in */}
-            <motion.div
-              className="logoContainer"
-              initial={{ opacity: 0 }}
-              animate={{ 
-                opacity: 1
-              }}
-              transition={{
-                duration: 1.2,
-                ease: 'easeOut'
-              }}
-            >
-              <Image
-                src="/white-logo.png"
-                alt="Vriksh Valley"
-                width={120}
-                height={120}
-                priority
-              />
-            </motion.div>
-
-            {/* Brand Name Container - Simplified */}
-            <div className="brandContainer">
-              {/* VRIKSH */}
+            {/* Scrolling Text Animation */}
+            {!showVriksh && (
               <motion.div
-                className="brandWord"
-                initial={{ opacity: 0 }}
-                animate={{ 
-                  opacity: 1
-                }}
-                transition={{
-                  duration: 0.8,
-                  ease: 'easeOut',
-                  delay: 0.4
-                }}
+                className="scrollingTextContainer"
+                initial={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
               >
-                <span className="brandText gradient-text">VRIKSH</span>
+                <motion.span
+                  className="scrollingText"
+                  key={currentTextIndex}
+                  initial={{ y: 50, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: -50, opacity: 0 }}
+                  transition={{
+                    duration: 0.15,
+                    ease: [0.43, 0.13, 0.23, 0.96]
+                  }}
+                >
+                  {textArray[currentTextIndex]}
+                </motion.span>
               </motion.div>
+            )}
 
-              {/* VALLEY */}
-              <motion.div
-                className="brandWord"
-                initial={{ opacity: 0 }}
-                animate={{ 
-                  opacity: 1
-                }}
-                transition={{
-                  duration: 0.8,
-                  ease: 'easeOut',
-                  delay: 0.7
-                }}
-              >
-                <span className="brandText gradient-text">VALLEY</span>
-              </motion.div>
-            </div>
+            {/* Vriksh Valley Animation */}
+            {showVriksh && (
+              <div className="brandContainer">
+                <div className="brandWrapper">
+                  {/* Vriksh - appears then slides left */}
+                  <motion.div
+                    className="vrikshText"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ 
+                      opacity: 1, 
+                      scale: 1,
+                      x: showValley ? -80 : 0
+                    }}
+                    transition={{
+                      opacity: { duration: 0.4, ease: 'easeOut' },
+                      scale: { duration: 0.4, ease: [0.43, 0.13, 0.23, 0.96] },
+                      x: { duration: 0.6, delay: 0.5, ease: [0.43, 0.13, 0.23, 0.96] }
+                    }}
+                  >
+                    Vriksh
+                  </motion.div>
 
-            {/* Tagline - Simplified */}
-            <motion.p
-              className="tagline"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{
-                duration: 0.8,
-                ease: 'easeOut',
-                delay: 1
-              }}
-            >
-              Bring Nature Home
-            </motion.p>
-
-            {/* Growing Vine Effect - Removed for performance */}
+                  {/* Valley - slides in from right */}
+                  {showValley && (
+                    <motion.div
+                      className="valleyText"
+                      initial={{ opacity: 0, x: 100 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{
+                        duration: 0.6,
+                        ease: [0.43, 0.13, 0.23, 0.96]
+                      }}
+                    >
+                      Valley
+                    </motion.div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
-
-          {/* Particles/Sparkles - Removed for performance */}
         </motion.div>
       )}
     </AnimatePresence>

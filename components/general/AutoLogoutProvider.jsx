@@ -63,7 +63,7 @@ export default function AutoLogoutProvider({ children }) {
   const handleLogout = async () => {
     await signOut(auth);
     setShowWarning(false);
-    router.push('/auth/login');
+    router.push('/auth/signin');
   };
 
   return (

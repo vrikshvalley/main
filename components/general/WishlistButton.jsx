@@ -31,7 +31,7 @@ const WishlistButton = ({ product, className = '' }) => {
 
   const handleWishlistToggle = async () => {
     if (!user) {
-      router.push('/auth/login');
+      router.push('/auth/signin');
       return;
     }
 

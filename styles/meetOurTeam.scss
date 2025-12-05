@@ -2,10 +2,6 @@
 
 .meet-our-team {
   padding: 5rem 2rem;
-  background: linear-gradient(135deg, 
-    rgba($primary-bg, 0.95) 0%, 
-    rgba($deep-green, 0.9) 100%
-  );
   position: relative;
   overflow: hidden;
 
@@ -16,7 +12,6 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: url('/background.jpg') center/cover;
     opacity: 0.1;
     pointer-events: none;
   }
@@ -106,6 +101,44 @@
   box-shadow: 0 10px 40px rgba($primary-bg, 0.2);
   transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
   border: 2px solid rgba($accent-primary, 0.2);
+  height: fit-content;
+  max-height: fit-content;
+
+  // Founder card (slightly larger)
+  &.large {
+    transform: scale(1.05);
+    
+    @media (max-width: 768px) {
+      transform: scale(1);
+    }
+
+    .team-image-wrapper {
+      height: 320px;
+
+      @media (max-width: 768px) {
+        height: 250px;
+      }
+    }
+
+    &:hover {
+      transform: scale(1.05) translateY(-5px);
+      
+      @media (max-width: 768px) {
+        transform: translateY(-5px);
+      }
+    }
+  }
+
+  // Regular team members
+  &.small {
+    .team-image-wrapper {
+      height: 300px;
+
+      @media (max-width: 768px) {
+        height: 250px;
+      }
+    }
+  }
 
   &:hover {
     box-shadow: 0 20px 60px rgba($accent-primary, 0.3);

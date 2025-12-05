@@ -2,49 +2,49 @@
 
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { Mail, Linkedin, Twitter } from 'lucide-react';
+import { Mail, Linkedin } from 'lucide-react';
 import '@/styles/meetOurTeam.scss';
 
 const teamMembers = [
   {
     id: 1,
-    name: "Priya Sharma",
-    role: "Founder & Plant Expert",
-    image: "/hero1.jpg", // Replace with actual team member image
-    bio: "With over 15 years of experience in horticulture, Priya founded Vriksh Valley to bring sustainable greenery to urban homes.",
-    email: "priya@vrikshvalley.com",
-    linkedin: "#",
-    twitter: "#"
+    name: "Susmita Sen",
+    role: "Sustainability Manager",
+    image: "/susmita.png",
+    bio: "Susmita doesn't just talk about sustainable gardening—she orchestrates it. Every eco-friendly choice at Vriksh Valley (from sourcing to packaging to practices) flows through her vision. She's built a framework where profitability and planet-protection aren't opponents; they're dance partners. Because real sustainability isn't a box to check—it's how we do business.🌱",
+    email: "susmitasen.1502@gmail.com",
+    linkedin: "https://www.linkedin.com/in/susmita-sen-ss1502/",
+    size: "small"
   },
   {
     id: 2,
-    name: "Arjun Patel",
-    role: "Head of Operations",
-    image: "/hero2.jpg", // Replace with actual team member image
-    bio: "Arjun ensures every plant reaches you in perfect condition, managing our nursery and logistics with passion.",
-    email: "arjun@vrikshvalley.com",
-    linkedin: "#",
-    twitter: "#"
+    name: "Ridhima Sen",
+    role: "Community Manager",
+    image: "/ridhima.png",
+    bio: "Ridhima cultivates our plant community — she plans hands-on workshops, runs vibrant green events, and crafts the scroll-stopping social feed that turns curious browsers into confident plant parents. A storyteller at heart, she connects newbies and experts, sparks conversations, and turns every question into a moment of growth. In short: if Vriksh Valley found you, Ridhima made it happen.🌱",
+    email: "ridhimasen1607@gmail.com",
+    linkedin: "http://www.linkedin.com/in/ridhimasen1607",
+    size: "small"
   },
   {
     id: 3,
-    name: "Sneha Reddy",
-    role: "Plant Care Specialist",
-    image: "/hero3.jpg", // Replace with actual team member image
-    bio: "Sneha is our go-to expert for plant care advice, helping customers nurture their green companions.",
-    email: "sneha@vrikshvalley.com",
-    linkedin: "#",
-    twitter: "#"
+    name: "Sagnik Dutta",
+    role: "Founder & Green Enthusiast",
+    image: "/sagnik.png",
+    bio: "From the concrete heart of the city to thriving green sanctuaries, Sagnik turned his frustration with clueless nurseries and wilting plants into a mission‑driven start-up: Vriksh Valley. He's built a platform where every plant arrives with expert knowledge, personalized care, and a trusted \"plant whisperer\" who knows exactly why your leafy friends are throwing a tantrum. 🌱\n\nUnder his leadership, Vriksh Valley is turning the chaos of plant parenting into a seamless, confidence‑boosting experience—one thriving green at a time.",
+    email: "sagnikdutta2001@gmail.com",
+    linkedin: "https://www.linkedin.com/in/sagnik-dutta-524720250/",
+    size: "large"
   },
   {
     id: 4,
-    name: "Rahul Kumar",
-    role: "Community Manager",
-    image: "/hero1.jpg", // Replace with actual team member image
-    bio: "Rahul builds and nurtures our plant-loving community, organizing workshops and green events.",
-    email: "rahul@vrikshvalley.com",
-    linkedin: "#",
-    twitter: "#"
+    name: "Debayan Mukherjee",
+    role: "Developer and Digital Gardener",
+    image: "/debayan.png",
+    bio: "Debayan isn't just a coder—he's the gardener of Vriksh Valley's digital landscape, shaping online experiences that feel like a quiet walk through a thriving garden: clean, inviting, and subtly rooted in nature. Every seamless scroll through our catalogue, every effortless checkout, every feature that makes plant‑parenting easier—he engineers the vision into reality, planting the effortless love you feel for your online garden.🌱",
+    email: "astrodebayan.18@gmail.com",
+    linkedin: "https://www.linkedin.com/in/dev-web3000",
+    size: "small"
   }
 ];
 
@@ -53,8 +53,8 @@ const containerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.2
+      staggerChildren: 0.2,
+      delayChildren: 0.3
     }
   }
 };
@@ -62,15 +62,17 @@ const containerVariants = {
 const cardVariants = {
   hidden: { 
     opacity: 0, 
-    y: 50,
-    scale: 0.9
+    y: 80,
+    scale: 0.85,
+    rotateX: 15
   },
   visible: { 
     opacity: 1, 
     y: 0,
     scale: 1,
+    rotateX: 0,
     transition: {
-      duration: 0.6,
+      duration: 0.8,
       ease: [0.22, 1, 0.36, 1]
     }
   }
@@ -83,7 +85,7 @@ export default function MeetOurTeam() {
         className="team-container"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
+        viewport={{ once: false, amount: 0.15 }}
         variants={containerVariants}
       >
         <motion.div className="team-header" variants={cardVariants}>
@@ -97,7 +99,7 @@ export default function MeetOurTeam() {
           {teamMembers.map((member) => (
             <motion.div 
               key={member.id} 
-              className="team-card"
+              className={`team-card ${member.size || ''}`}
               variants={cardVariants}
               whileHover={{ 
                 y: -10,
@@ -119,9 +121,6 @@ export default function MeetOurTeam() {
                     </a>
                     <a href={member.linkedin} className="social-link" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
                       <Linkedin size={20} />
-                    </a>
-                    <a href={member.twitter} className="social-link" aria-label="Twitter" target="_blank" rel="noopener noreferrer">
-                      <Twitter size={20} />
                     </a>
                   </div>
                 </div>

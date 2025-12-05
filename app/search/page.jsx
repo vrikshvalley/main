@@ -32,11 +32,15 @@ function SearchContent() {
     const fetchResults = async () => {
       setLoading(true);
       
-      // TODO: Replace with Firebase query when products are connected
-      const results = searchProducts(query, filters);
-      
-      setSearchResults(results);
-      setLoading(false);
+      try {
+        const results = await searchProducts(query, filters);
+        setSearchResults(results);
+      } catch (error) {
+        console.error('Search error:', error);
+        setSearchResults([]);
+      } finally {
+        setLoading(false);
+      }
     };
 
     if (query) {

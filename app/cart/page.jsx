@@ -129,7 +129,7 @@ export default function CartPage() {
 
   const handleCheckout = () => {
     if (!user) {
-      router.push("/auth/login?redirect=/checkout");
+      router.push("/auth/signin?redirect=/checkout");
     } else {
       router.push("/checkout");
     }
@@ -259,7 +259,7 @@ export default function CartPage() {
                 {!user && (
                   <p className="login-prompt">
                     Have an account?{" "}
-                    <Link href="/auth/login?redirect=/checkout">
+                    <Link href="/auth/signin?redirect=/checkout">
                       Sign in
                     </Link>{" "}
                     for faster checkout

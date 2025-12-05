@@ -8,7 +8,7 @@ import Footer from '@/components/general/Footer';
 import WhatsAppButton from '@/components/general/WhatsAppButton';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
 import { getProducts, getPriceRange } from '@/lib/productHelpers';
-import { categories } from '@/lib/sampleProducts';
+import { getCategories } from '@/lib/services/productService';
 import { ChevronDown, X, SlidersHorizontal, Grid, List } from 'lucide-react';
 import TheLoader from '@/components/general/TheLoader';
 import ProductListCard from '@/components/products/ProductListCard';
@@ -19,12 +19,30 @@ export default function SubcategoryPage() {
   const categorySlug = params.category;
   const subcategorySlug = params.subcategory;
   
-  const category = categories.find(c => c.slug === categorySlug);
-  const subcategory = category?.subcategories?.find(s => s.slug === subcategorySlug);
+  const [category, setCategory] = useState(null);
+  const [subcategory, setSubcategory] = useState(null);
 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState('grid');
+  
+  // Fetch category and subcategory data
+  useEffect(() => {
+    async function fetchCategoryData() {
+      try {
+        const { data: categories } = await getCategories();
+        const foundCategory = categories.find(c => c.slug === categorySlug);
+        setCategory(foundCategory);
+        if (foundCategory?.subcategories) {
+          const foundSubcategory = foundCategory.subcategories.find(s => s.slug === subcategorySlug);
+          setSubcategory(foundSubcategory);
+        }
+      } catch (error) {
+        console.error('Error fetching category data:', error);
+      }
+    }
+    fetchCategoryData();
+  }, [categorySlug, subcategorySlug]);
   
   // Filter states
   const [priceRange, setPriceRange] = useState([0, 10000]);
@@ -207,7 +225,7 @@ export default function SubcategoryPage() {
                 <div className="active-filter-tags">
                   {(priceRange[0] > 0 || priceRange[1] < maxPossiblePrice) && (
                     <span className="filter-tag">
-                      ₹{priceRange[0]/100} - ₹{priceRange[1]/100}
+                      ₹{priceRange[0]} - ₹{priceRange[1]}
                       <X size={14} onClick={() => setPriceRange([0, maxPossiblePrice])} />
                     </span>
                   )}
@@ -256,7 +274,7 @@ export default function SubcategoryPage() {
                 className="price-slider"
               />
               <div className="price-range-display">
-                ₹{(priceRange[0]/100).toFixed(0)} - ₹{(priceRange[1]/100).toFixed(0)}
+                ₹{priceRange[0]} - ₹{priceRange[1]}
               </div>
             </div>
 

@@ -8,16 +8,31 @@ import Footer from '@/components/general/Footer';
 import WhatsAppButton from '@/components/general/WhatsAppButton';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
 import { getProducts, getPriceRange } from '@/lib/productHelpers';
-import { categories } from '@/lib/sampleProducts';
+import { getCategories } from '@/lib/services/productService';
 import { ChevronDown, X, SlidersHorizontal, Grid, List } from 'lucide-react';
 import TheLoader from '@/components/general/TheLoader';
 import ProductListCard from '@/components/products/ProductListCard';
+import WhyChooseUs from '@/components/products/WhyChooseUs';
 import '@/styles/products.scss';
 
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
+  const [categories, setCategories] = useState([]);
+  
+  // Fetch categories
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const { data: fetchedCategories } = await getCategories();
+        setCategories(fetchedCategories || []);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    }
+    fetchCategories();
+  }, []);
   
   // Filter states
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -167,7 +182,7 @@ export default function ProductsPage() {
                 )}
                 {(priceRange[0] > 0 || priceRange[1] < maxPossiblePrice) && (
                   <span className="filter-tag">
-                    ₹{priceRange[0]/100} - ₹{priceRange[1]/100}
+                    ₹{priceRange[0]} - ₹{priceRange[1]}
                     <X size={14} onClick={() => setPriceRange([0, maxPossiblePrice])} />
                   </span>
                 )}
@@ -234,7 +249,7 @@ export default function ProductsPage() {
               className="price-slider"
             />
             <div className="price-range-display">
-              ₹{(priceRange[0]/100).toFixed(0)} - ₹{(priceRange[1]/100).toFixed(0)}
+              ₹{priceRange[0]} - ₹{priceRange[1]}
             </div>
           </div>
 
@@ -389,6 +404,7 @@ export default function ProductsPage() {
         </main>
       </div>
     </div>
+    <WhyChooseUs />
     </>
   );
 }

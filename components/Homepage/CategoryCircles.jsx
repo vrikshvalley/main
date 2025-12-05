@@ -1,8 +1,9 @@
 'use client';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
-import { categories } from '@/lib/sampleProducts';
+import { getCategories } from '@/lib/services/productService';
 import "@/styles/categoryCircles.scss";
 
 const containerVariants = {
@@ -34,6 +35,52 @@ const circleVariants = {
 };
 
 export default function CategoryCircles() {
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const { data: fetchedCategories } = await getCategories();
+        
+        // Define the desired order
+        const categoryOrder = ['Plants', 'Seeds', 'Planters', 'Plant care', 'Decor', 'Accessories'];
+        
+        // Sort categories based on the defined order
+        const sortedCategories = (fetchedCategories || []).sort((a, b) => {
+          const indexA = categoryOrder.indexOf(a.name);
+          const indexB = categoryOrder.indexOf(b.name);
+          // If not found in order array, put at end
+          if (indexA === -1) return 1;
+          if (indexB === -1) return -1;
+          return indexA - indexB;
+        });
+        
+        setCategories(sortedCategories);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchCategories();
+  }, []);
+
+  if (loading) {
+    return (
+      <section className="category-circles">
+        <div className="circle-container">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <div key={i} className="circle-item skeleton">
+              <div className="circle-icon skeleton-circle"></div>
+              <div className="skeleton-text"></div>
+            </div>
+          ))}
+        </div>
+      </section>
+    );
+  }
+
   return (
     <motion.section 
       className="category-circles"
@@ -44,22 +91,37 @@ export default function CategoryCircles() {
     >
       <motion.div className="circle-container" variants={containerVariants}>
 
-        {categories.map((category) => (
-          <Link key={category.slug} href={`/category/${category.slug}`} passHref>
-            <motion.div className="circle-item" variants={circleVariants}>
-              <div className="circle-icon">
-                <Image 
-                  src={category.image} 
-                  alt={category.name}
-                  width={120}
-                  height={120}
-                  className="category-image"
-                />
-              </div>
-              <p>{category.name}</p>
-            </motion.div>
-          </Link>
-        ))}
+        {categories.map((category) => {
+          // Map category names to their image files in public folder
+          // Note: File names are case-sensitive
+          const imageMap = {
+            'Plants': '/Plants.jpg',
+            'Seeds': '/Seeds.jpg',
+            'Planters': '/Pots.jpg',
+            'Plant Care': '/Plant care.jpg', 
+            'Decor': '/Decor.jpg',
+            'Accessories': '/Plant tools.jpg'
+          };
+          
+          const imagePath = imageMap[category.name] || '/logo.png';
+          
+          return (
+            <Link key={category.slug} href={`/category/${category.slug}`} passHref>
+              <motion.div className="circle-item" variants={circleVariants}>
+                <div className="circle-icon">
+                  <Image 
+                    src={imagePath}
+                    alt={category.name}
+                    width={120}
+                    height={120}
+                    className="category-image"
+                  />
+                </div>
+                <p>{category.name}</p>
+              </motion.div>
+            </Link>
+          );
+        })}
 
       </motion.div>
     </motion.section>
