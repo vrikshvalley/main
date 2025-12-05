@@ -5,7 +5,7 @@ import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { CheckCircle, XCircle, Loader2, Clock } from "lucide-react";
-import "../../styles/paymentStatus.scss";
+import "@/styles/paymentStatus.scss";
 
 function PaymentStatusContent() {
   const router = useRouter();

@@ -11,7 +11,7 @@ import {
   Loader2,
   AlertCircle
 } from "lucide-react";
-import "../styles/sampleOrder.scss";
+import "@/styles/sampleOrder.scss";
 
 export default function SampleOrderPage() {
   const searchParams = useSearchParams();
