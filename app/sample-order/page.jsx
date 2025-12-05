@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { 
@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import "@/styles/sampleOrder.scss";
 
-export default function SampleOrderPage() {
+function SampleOrderContent() {
   const searchParams = useSearchParams();
   const [step, setStep] = useState(1); // 1: Order Details, 2: Payment, 3: Shipping, 4: Success
   const [loading, setLoading] = useState(false);
@@ -526,5 +526,22 @@ export default function SampleOrderPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function SampleOrderPage() {
+  return (
+    <Suspense fallback={
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        minHeight: '100vh' 
+      }}>
+        <Loader2 className="animate-spin" size={48} />
+      </div>
+    }>
+      <SampleOrderContent />
+    </Suspense>
   );
 }
