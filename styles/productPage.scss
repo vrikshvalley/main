@@ -318,7 +318,7 @@
     }
 
     .description {
-      color: $grey-dark;
+      color: $dark-gray;
       line-height: 1.7;
       font-size: 1rem;
       font-weight: 400;
@@ -369,7 +369,7 @@
 
       .price-description {
         font-size: 0.95rem;
-        color: $grey-dark;
+        color: $dark-gray;
         margin: 0;
         line-height: 1.6;
         font-weight: 500;
@@ -651,7 +651,7 @@ input[type="number"]::-webkit-inner-spin-button {
         display: flex;
         gap: 0.5rem;
         padding: 0.5rem 0;
-        color: $grey-dark;
+        color: $dark-gray;
         font-size: 0.9rem;
         line-height: 1.6;
 
