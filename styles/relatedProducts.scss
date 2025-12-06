@@ -1,0 +1,126 @@
+@import './colors.scss';
+
+.related-products-section {
+  max-width: 1500px;
+  margin: 3rem auto;
+  padding: 2rem 1.5rem;
+  background: linear-gradient(135deg, rgba($accent-primary, 0.02) 0%, rgba($accent-primary, 0.01) 100%);
+  border-radius: 16px;
+
+  @media (max-width: 768px) {
+    margin: 2rem auto;
+    padding: 1.5rem 1rem;
+  }
+
+  @media (max-width: 480px) {
+    margin: 1.5rem auto;
+    padding: 1rem 0.75rem;
+  }
+
+  .related-products-container {
+    position: relative;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: $primary-bg;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    
+    @media (max-width: 768px) {
+      font-size: 1.75rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 1.5rem;
+    }
+  }
+
+  .section-subtitle {
+    font-size: 1rem;
+    color: rgba($primary-bg, 0.7);
+    text-align: center;
+    margin-bottom: 2rem;
+    font-family: $font-secondary;
+
+    @media (max-width: 768px) {
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+    }
+  }
+
+  .related-products-swiper {
+    padding: 1rem 0;
+
+    @media (max-width: 768px) {
+      padding: 0.5rem 0;
+    }
+
+    .swiper-button-prev,
+    .swiper-button-next {
+      width: 45px;
+      height: 45px;
+      background: rgba($accent-primary, 0.9);
+      border-radius: 50%;
+      box-shadow: 0 4px 12px rgba($primary-bg, 0.2);
+      transition: all 0.3s ease;
+
+      &::after {
+        font-size: 18px;
+        font-weight: 900;
+        color: $text-primary;
+      }
+
+      &:hover {
+        background: $accent-secondary;
+        transform: scale(1.1);
+        box-shadow: 0 6px 20px rgba($accent-primary, 0.4);
+      }
+
+      @media (max-width: 768px) {
+        width: 36px;
+        height: 36px;
+
+        &::after {
+          font-size: 14px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        display: none;
+      }
+    }
+
+    .swiper-button-prev {
+      left: -10px;
+
+      @media (max-width: 1024px) {
+        left: 0;
+      }
+    }
+
+    .swiper-button-next {
+      right: -10px;
+
+      @media (max-width: 1024px) {
+        right: 0;
+      }
+    }
+
+    .swiper-slide {
+      height: auto;
+      display: flex;
+      
+      > * {
+        width: 100%;
+      }
+    }
+  }
+}

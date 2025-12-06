@@ -19,44 +19,42 @@ $grey-dark: #374151;
 
   // Page Header
   .products-header {
-    background: linear-gradient(135deg, rgba($dark-green, 0.95) 0%, rgba($dark-green, 1) 100%);
-    padding: 8rem 1.5rem 4rem;
-    margin-bottom: 2rem;
-    border-bottom: 2px solid rgba($teal, 0.3);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     position: relative;
+    margin-bottom: 0;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    min-height: 400px;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: flex-end;
 
     @media (max-width: 768px) {
-      padding: 6rem 1.5rem 3rem;
-      min-height: 300px;
+      aspect-ratio: 69 / 53;
     }
-    
-    // Dark overlay for better text readability
-    &::before {
-      content: '';
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
       position: absolute;
       top: 0;
       left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(135deg, rgba($dark-green, 0.85) 0%, rgba($dark-green, 0.75) 100%);
-      pointer-events: none;
-      z-index: 1;
+      z-index: 0;
     }
 
     .header-content {
-      max-width: 1400px;
+      max-width: 1500px;
+      width: 100%;
       margin: 0 auto;
-      text-align: center;
+      padding: 2rem 2rem;
       position: relative;
-      z-index: 2;
+      z-index: 1;
+
+      @media (max-width: 768px) {
+        padding: 1.5rem 1.5rem;
+      }
 
       .category-icon {
         font-size: 4rem;
@@ -72,25 +70,31 @@ $grey-dark: #374151;
 
       h1 {
         font-family: 'Playfair Display', serif;
-        font-size: 3rem;
+        font-size: 3.5rem;
         color: $white;
         margin-bottom: 0.5rem;
         letter-spacing: -0.5px;
-        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+        font-weight: 600;
+
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.832);
 
         @media (max-width: 768px) {
-          font-size: 2rem;
+          font-size: 1.75rem;
         }
       }
 
       p {
-        color: rgba($white, 0.95);
-        font-size: 1.125rem;
-        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
-
+        color: $white;
+        font-size: 1.9rem;
+        font-weight: 500;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.665);
         @media (max-width: 768px) {
           font-size: 1rem;
         }
+      }
+
+      .category-icon {
+        display: none;
       }
     }
   }
@@ -110,6 +114,7 @@ $grey-dark: #374151;
     margin: 0 auto;
     padding: 0 1.5rem;
     position: relative;
+    margin-top: 2rem;
 
     @media (max-width: 1024px) {
       padding: 0 1.5rem;
@@ -1118,6 +1123,114 @@ $grey-dark: #374151;
 
     &:active {
       transform: translateY(0);
+    }
+  }
+}
+
+// Search Results Header
+.search-header {
+  .header-content {
+    .search-icon-large {
+      margin-bottom: 1.5rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100px;
+      height: 100px;
+      background: rgba($white, 0.1);
+      border-radius: 50%;
+      animation: float 3s ease-in-out infinite, pulse 2s ease-in-out infinite;
+
+      svg {
+        color: $white;
+        filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+      }
+
+      @media (max-width: 768px) {
+        width: 80px;
+        height: 80px;
+      }
+    }
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba($white, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 15px rgba($white, 0);
+  }
+}
+
+// Search Results - No Results
+.no-results {
+  min-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 4rem 2rem;
+  grid-column: 1 / -1;
+
+  svg {
+    color: rgba($dark-green, 0.2);
+    margin-bottom: 1.5rem;
+    animation: float 3s ease-in-out infinite;
+  }
+
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: $dark-green;
+    margin-bottom: 1rem;
+    font-weight: 600;
+
+    @media (max-width: 768px) {
+      font-size: 1.75rem;
+    }
+  }
+
+  p {
+    font-size: 1.125rem;
+    color: $grey-dark;
+    margin-bottom: 2rem;
+    max-width: 500px;
+
+    @media (max-width: 768px) {
+      font-size: 1rem;
+    }
+  }
+
+  .browse-btn {
+    padding: 0.875rem 2.5rem;
+    background: linear-gradient(135deg, $teal 0%, color.adjust($teal, $lightness: 5%) 100%);
+    color: $white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 16px rgba($teal, 0.25);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba($teal, 0.35);
+      background: linear-gradient(135deg, color.adjust($teal, $lightness: 5%) 0%, color.adjust($teal, $lightness: 10%) 100%);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    @media (max-width: 768px) {
+      padding: 0.75rem 2rem;
+      font-size: 0.9375rem;
     }
   }
 }

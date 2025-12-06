@@ -1,10 +1,11 @@
 @use 'variables' as *;
 
 .breadcrumbs {
-  background: rgba($dark-green, 0.03);
-  border-bottom: 1px solid rgba($teal, 0.1);
+  background: $white;
+  border-bottom: 1px solid rgba($teal, 0.15);
   padding: 0.75rem 2rem;
   position: relative;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 
   @media (max-width: 768px) {
     padding: 0.625rem 1.5rem;
@@ -57,7 +58,7 @@
     display: flex;
     align-items: center;
     gap: 0.25rem;
-    color: $white;
+    color: $dark-green;
     text-decoration: none;
     transition: all 0.2s ease;
     padding: 0.25rem 0.5rem;
@@ -66,7 +67,7 @@
 
     &:hover {
       color: $teal;
-      background: rgba($teal, 0.05);
+      background: rgba($teal, 0.08);
 
       svg {
         transform: translateX(-2px);

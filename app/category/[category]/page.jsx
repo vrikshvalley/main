@@ -68,6 +68,8 @@ export default function CategoryPage() {
   // Fetch products when filters change
   useEffect(() => {
     fetchProducts();
+    // Scroll to top when filters change
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [categorySlug, priceRange, inStockOnly, sortBy, sortOrder, currentPage]);
 
   const fetchProducts = async () => {

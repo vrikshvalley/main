@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation';
 import { getProductBySlug } from '@/lib/productHelpers';
 import TheLoader from '@/components/general/TheLoader';
 import ProductPage from '@/components/products/ProductPage';
+import RelatedProducts from '@/components/products/RelatedProducts';
 import Ads from '@/components/general/Ads';
 
 export default function ProductDetailPage() {
@@ -46,6 +47,9 @@ export default function ProductDetailPage() {
       <div className="product-page-wrapper">
         <ProductPage product={product} />
       </div>
+      
+      {/* Related Products Section */}
+      <RelatedProducts category={product?.category} currentProductId={product?.id} />
       
       {/* Ads Section */}
       <div className="ads-banner">

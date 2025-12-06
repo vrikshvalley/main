@@ -7,10 +7,11 @@ import Navbar from '@/components/general/Navbar';
 import Footer from '@/components/general/Footer';
 import WhatsAppButton from '@/components/general/WhatsAppButton';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
-import ProductCard from '@/components/products/ProductCard';
+import ProductListCard from '@/components/products/ProductListCard';
 import TheLoader from '@/components/general/TheLoader';
 import { searchProducts } from '@/lib/searchService';
-import { Search, SlidersHorizontal, X } from 'lucide-react';
+import { getCategories } from '@/lib/services/productService';
+import { Search, SlidersHorizontal, X, Grid, List } from 'lucide-react';
 import '@/styles/products.scss';
 
 function SearchContent() {
@@ -20,12 +21,26 @@ function SearchContent() {
 
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState([]);
+  const [viewMode, setViewMode] = useState('grid');
   const [filters, setFilters] = useState({
     category: '',
-    priceRange: null,
     inStock: false,
   });
   const [showFilters, setShowFilters] = useState(false);
+
+  // Fetch categories
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const { data: fetchedCategories } = await getCategories();
+        setCategories(fetchedCategories || []);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    }
+    fetchCategories();
+  }, []);
 
   // Fetch search results
   useEffect(() => {
@@ -57,6 +72,17 @@ function SearchContent() {
     }));
   };
 
+  const handleClearFilters = () => {
+    setFilters({ category: '', inStock: false });
+  };
+
+  const getActiveFiltersCount = () => {
+    let count = 0;
+    if (filters.category) count++;
+    if (filters.inStock) count++;
+    return count;
+  };
+
   if (loading) {
     return <TheLoader />;
   }
@@ -76,9 +102,11 @@ function SearchContent() {
         />
 
         {/* Search Header */}
-        <div className="products-header" style={{ minHeight: '200px' }}>
+        <div className="products-header search-header" style={{ minHeight: '250px' }}>
           <div className="header-content">
-            <Search size={48} />
+            <div className="search-icon-large">
+              <Search size={56} strokeWidth={1.5} />
+            </div>
             <h1>Search Results</h1>
             <p>
               {searchResults.length > 0 
@@ -113,21 +141,51 @@ function SearchContent() {
               </button>
             </div>
 
+            {/* Active Filters */}
+            {getActiveFiltersCount() > 0 && (
+              <div className="active-filters">
+                <div className="active-filters-header">
+                  <span>{getActiveFiltersCount()} active filter{getActiveFiltersCount() > 1 ? 's' : ''}</span>
+                  <button onClick={handleClearFilters} className="clear-all">
+                    Clear all
+                  </button>
+                </div>
+                <div className="active-filter-tags">
+                  {filters.category && (
+                    <span className="filter-tag">
+                      {categories.find(c => c.slug === filters.category)?.name || filters.category}
+                      <X size={14} onClick={() => handleFilterChange('category', '')} />
+                    </span>
+                  )}
+                  {filters.inStock && (
+                    <span className="filter-tag">
+                      In Stock Only
+                      <X size={14} onClick={() => handleFilterChange('inStock', false)} />
+                    </span>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Category Filter */}
             <div className="filter-section">
-              <h4>Category</h4>
-              <select 
-                value={filters.category}
-                onChange={(e) => handleFilterChange('category', e.target.value)}
-              >
-                <option value="">All Categories</option>
-                <option value="Plants">Plants</option>
-                <option value="Seeds">Seeds</option>
-                <option value="Planters">Planters</option>
-                <option value="Decor">Decor</option>
-                <option value="Accessories">Accessories</option>
-              </select>
+              <h4>Categories</h4>
+              <div className="category-list">
+                {categories.map((cat) => (
+                  <label key={cat.slug} className="category-item">
+                    <input
+                      type="checkbox"
+                      checked={filters.category === cat.slug}
+                      onChange={() => handleFilterChange('category', filters.category === cat.slug ? '' : cat.slug)}
+                    />
+                    <span className="category-icon">{cat.icon}</span>
+                    <span className="category-name">{cat.name}</span>
+                  </label>
+                ))}
+              </div>
             </div>
 
+            {/* Availability Filter */}
             <div className="filter-section">
               <h4>Availability</h4>
               <label className="checkbox-label">
@@ -139,31 +197,47 @@ function SearchContent() {
                 <span>In Stock Only</span>
               </label>
             </div>
-
-            <button 
-              className="clear-filters"
-              onClick={() => setFilters({ category: '', priceRange: null, inStock: false })}
-            >
-              Clear All Filters
-            </button>
           </aside>
 
-          {/* Results Grid */}
-          <div className="products-grid-container">
-            <div className="products-controls">
-              <div className="results-info">
-                <p>{searchResults.length} {searchResults.length === 1 ? 'Product' : 'Products'}</p>
+          {/* Main Content */}
+          <main className="products-main">
+            {/* Toolbar */}
+            <div className="products-toolbar">
+              <div className="toolbar-left">
+                <button 
+                  className="mobile-filter-toggle"
+                  onClick={() => setShowFilters(!showFilters)}
+                >
+                  <SlidersHorizontal size={18} />
+                  Filters {getActiveFiltersCount() > 0 && `(${getActiveFiltersCount()})`}
+                </button>
+                <p className="results-count">
+                  Showing <strong>{searchResults.length}</strong> result{searchResults.length !== 1 ? 's' : ''} for "{query}"
+                </p>
               </div>
               
-              <button 
-                className="toggle-filters-btn"
-                onClick={() => setShowFilters(!showFilters)}
-              >
-                <SlidersHorizontal size={18} />
-                Filters
-              </button>
+              <div className="toolbar-right">
+                {/* View Toggle */}
+                <div className="view-toggle">
+                  <button
+                    className={viewMode === 'grid' ? 'active' : ''}
+                    onClick={() => setViewMode('grid')}
+                    title="Grid View"
+                  >
+                    <Grid size={18} />
+                  </button>
+                  <button
+                    className={viewMode === 'list' ? 'active' : ''}
+                    onClick={() => setViewMode('list')}
+                    title="List View"
+                  >
+                    <List size={18} />
+                  </button>
+                </div>
+              </div>
             </div>
 
+            {/* Products Grid/List */}
             {searchResults.length === 0 ? (
               <div className="no-results">
                 <Search size={64} />
@@ -177,13 +251,13 @@ function SearchContent() {
                 </button>
               </div>
             ) : (
-              <div className="products-grid">
+              <div className={`products-grid ${viewMode}`}>
                 {searchResults.map(product => (
-                  <ProductCard key={product.id} product={product} />
+                  <ProductListCard key={product.id} product={product} viewMode={viewMode} />
                 ))}
               </div>
             )}
-          </div>
+          </main>
         </div>
       </div>
 

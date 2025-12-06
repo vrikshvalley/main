@@ -101,7 +101,7 @@ export default function InitialLoader() {
                     animate={{ 
                       opacity: 1, 
                       scale: 1,
-                      x: showValley ? -80 : 0
+                      x: showValley ? -10 : 0
                     }}
                     transition={{
                       opacity: { duration: 0.4, ease: 'easeOut' },
