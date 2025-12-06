@@ -1,0 +1,56 @@
+.light-guide {
+  background: $white;
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 3rem 0;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba($dark-green, 0.1);
+
+  .light-guide-title {
+    color: $dark-green;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    text-align: center;
+
+    @media (max-width: 768px) {
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+    }
+  }
+
+  .light-guide-image-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+    border-radius: 8px;
+
+    .light-guide-image {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      max-width: 800px;
+    }
+  }
+
+  .light-guide-description {
+    color: $grey-dark;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    text-align: center;
+    margin: 0;
+    padding: 0 1rem;
+
+    @media (max-width: 768px) {
+      font-size: 0.9rem;
+      padding: 0;
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 1.5rem 1rem;
+    margin: 2rem 0;
+  }
+}

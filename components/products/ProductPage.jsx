@@ -9,6 +9,7 @@ import { addItem } from '@/lib/slices/cartSlice';
 import { showSuccessToast, showWarningToast } from '@/lib/toastHelpers';
 import WishlistButton from '@/components/general/WishlistButton';
 import ProductPageTabs from '@/components/products/ProductPageTabs';
+import LightGuide from '@/components/products/LightGuide';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
@@ -248,6 +249,9 @@ export default function ProductPage({ product }) {
           )}
         </div>
       </section>
+
+      {/* Light Guide - Only for plant category products */}
+      {product.category?.toLowerCase() === 'plants' && <LightGuide />}
 
       {/* Product Page Tabs - Additional Info, Reviews, Gallery */}
       <ProductPageTabs product={product} />
