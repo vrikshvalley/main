@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { handleGoogleLogin, handleEmailAuth } from '@/lib/authHandlers';
@@ -15,7 +15,7 @@ const slides = [
   { src: '/loginSlider/Untitled-5.png', alt: 'Botanical Collection', title: 'Plant Paradise', subtitle: 'Your green journey starts here' }
 ];
 
-export default function LoginPage() {
+function LoginContent() {
   const searchParams = useSearchParams();
   const redirectUrl = searchParams.get('redirect') || null;
   const [emailSent, setEmailSent] = useState(false);
@@ -289,5 +289,13 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="login-page"><div className="login-container">Loading...</div></div>}>
+      <LoginContent />
+    </Suspense>
   );
 }

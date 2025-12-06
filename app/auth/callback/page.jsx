@@ -22,7 +22,7 @@
  *   - updatedAt: timestamp
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { auth } from '@/lib/firebaseConfig';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -30,7 +30,7 @@ import { getProfile, createProfile, addAddress } from '@/lib/services/userServic
 import TheLoader from '@/components/general/TheLoader';
 import AddressCollectionModal from '@/components/profile/AddressCollectionModal';
 
-export default function AuthCallback() {
+function AuthCallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [showAddressModal, setShowAddressModal] = useState(false);
@@ -131,5 +131,13 @@ export default function AuthCallback() {
 
   return (
     <TheLoader fullscreen />
+  );
+}
+
+export default function AuthCallback() {
+  return (
+    <Suspense fallback={<TheLoader fullscreen />}>
+      <AuthCallbackContent />
+    </Suspense>
   );
 }

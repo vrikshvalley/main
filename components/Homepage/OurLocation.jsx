@@ -75,7 +75,7 @@ export default function OurLocation() {
           </div>
           
           <div className="store-info">
-            <h3>Vriksh Valley Nursery</h3>
+            <h3>Vriksh Valley Garden</h3>
             <p className="location-text">
               <MapPin size={18} />
               Dungra, Ranchi, Jharkhand
