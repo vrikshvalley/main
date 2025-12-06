@@ -28,12 +28,12 @@ export default function Navbar() {
         const { data: fetchedCategories } = await getCategories();
         
         // Define the desired order to match CategoryCircles
-        const categoryOrder = ['Plants', 'Seeds', 'Planters', 'Plant care', 'Decor', 'Accessories'];
+        const categoryOrder = ['Plants', 'Seeds', 'Planters', 'Plant Care', 'Decor', 'Accessories'];
         
-        // Sort categories based on the defined order
+        // Sort categories based on the defined order (case-insensitive)
         const sortedCategories = (fetchedCategories || []).sort((a, b) => {
-          const indexA = categoryOrder.indexOf(a.name);
-          const indexB = categoryOrder.indexOf(b.name);
+          const indexA = categoryOrder.findIndex(c => c.toLowerCase() === (a.name || '').toLowerCase());
+          const indexB = categoryOrder.findIndex(c => c.toLowerCase() === (b.name || '').toLowerCase());
           // If not found in order array, put at end
           if (indexA === -1) return 1;
           if (indexB === -1) return -1;
