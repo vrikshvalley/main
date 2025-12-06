@@ -21,8 +21,8 @@ export default function Topbar() {
         <nav className="topbar-links">
           <Link href="/blog">Blog</Link>
           <span className="separator">|</span>
-          <Link onClick={handleClick} href="#">Consulting</Link>
-          <span className="separator">|</span>
+          <Link onClick={handleClick} href="#" className="hide-on-mobile">Consulting</Link>
+          <span className="separator hide-on-mobile">|</span>
           <Link onClick={handleClick} href="#">Offers</Link>
           <span className="separator hide-on-mobile">|</span>
           <Link href="#testimonials" className="hide-on-mobile">Testimonials</Link>

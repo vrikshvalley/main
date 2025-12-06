@@ -38,7 +38,7 @@ export default function ProfileIcon() {
         {user ? (
           <>
             <Link href="/profile" className="profile-link">
-              {isHovered ? "Profile" : "Your garden."}
+              Profile
             </Link>
           </>
         ) : (
