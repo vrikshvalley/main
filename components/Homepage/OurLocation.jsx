@@ -53,7 +53,7 @@ export default function OurLocation() {
                   <MapPin size={24} />
                   <div>
                     <h4>Address</h4>
-                    <p>Vriksh Valley Nursery<br />Ranchi<br />Jharkhand, India</p>
+                    <p>Vriksh Valley Garden<br />Ranchi<br />Jharkhand, India</p>
                   </div>
                 </div>
                 <div className="detail-item">

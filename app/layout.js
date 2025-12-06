@@ -4,6 +4,7 @@ import AutoLogoutProvider from "@/components/general/AutoLogoutProvider";
 import InitialLoader from "@/components/general/InitialLoader";
 import TheLoader from "@/components/general/TheLoader";
 import GlobalCartModal from "@/components/cart/GlobalCartModal";
+import ToastContainer from "@/components/general/ToastContainer";
 
 export const metadata = {
   metadataBase: new URL("https://vrikshvalley.com"),
@@ -113,6 +114,7 @@ export default function RootLayout({ children }) {
         <Providers>
           <AutoLogoutProvider>
             <GlobalCartModal />
+            <ToastContainer />
             <div className="container">{children}</div>
           </AutoLogoutProvider>
         </Providers>

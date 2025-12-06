@@ -3,10 +3,7 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Sprout, Droplets, TreePine, Heart, ShoppingBag, Leaf, Users } from 'lucide-react';
-import Topbar from '@/components/general/Topbar';
-import Navbar from '@/components/general/Navbar';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
-import Footer from '@/components/general/Footer';
 import '@/styles/greenMovement.scss';
 
 export default function JoinGreenMovementPage() {
@@ -26,11 +23,8 @@ export default function JoinGreenMovementPage() {
   ];
 
   return (
-    <>
-      <Topbar />
-      <Navbar />
-      <div className="green-movement-page">
-        <Breadcrumbs items={[{ label: 'Join the Green Movement' }]} />
+    <div className="green-movement-page">
+      <Breadcrumbs items={[{ label: 'Join the Green Movement' }]} />
         {/* Hero Section */}
         <motion.section 
         className="movement-hero"
@@ -251,8 +245,6 @@ export default function JoinGreenMovementPage() {
           </div>
         </div>
       </motion.section>
-      </div>
-      <Footer />
-    </>
+    </div>
   );
 }

@@ -451,7 +451,7 @@
           background: rgba($deep-green, 0.8);
           cursor: pointer;
           transition: all 0.3s;
-          color: $text-primary;
+          color: $dark-green;
           white-space: nowrap;
 
           @media (max-width: 480px) {
@@ -459,11 +459,17 @@
             font-size: 0.875rem;
           }
 
-          &.active,
+          &.active{
+            border-color: $accent-primary;
+            background: rgba($accent-primary, 0.9);
+            color: rgba($white, 0.9);
+            transform: scale(1.05);
+            box-shadow: $shadow-medium;
+          }
           &:hover {
             border-color: $accent-primary;
             background: rgba($accent-primary, 0.2);
-            color: $text-primary;
+            color: rgba($dark-green, 0.9);
             transform: scale(1.05);
             box-shadow: $shadow-medium;
           }

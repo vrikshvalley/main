@@ -205,35 +205,40 @@
       border-radius: 20px;
       box-shadow: 0 4px 20px rgba($primary-bg, 0.2);
       border: 2px solid rgba($primary-bg, 0.1);
-      display: flex;
-      align-items: center;
       padding: 0.5rem 1rem;
       min-width: 300px;
       z-index: 100;
 
-      .search-icon {
-        color: $primary-bg;
-        opacity: 0.6;
+      .search-input-wrapper {
         display: flex;
+        flex-direction: row;
         align-items: center;
-        justify-content: center;
-        margin-right: 0.5rem;
-        flex-shrink: 0;
-      }
+        width: 100%;
+        gap: 0.5rem;
 
-      input {
-        flex: 1;
-        border: none;
-        outline: none;
-        background: transparent;
-        color: $primary-bg;
-        font-family: 'Playfair Display', serif;
-        font-size: 0.95rem;
-        font-weight: 500;
+        .search-icon {
+          color: $primary-bg;
+          opacity: 0.6;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+        }
 
-        &::placeholder {
-          color: rgba($primary-bg, 0.6);
+        input {
+          flex: 1;
+          border: none;
+          outline: none;
+          background: transparent;
+          color: $primary-bg;
           font-family: 'Playfair Display', serif;
+          font-size: 0.95rem;
+          font-weight: 500;
+
+          &::placeholder {
+            color: rgba($primary-bg, 0.6);
+            font-family: 'Playfair Display', serif;
+          }
         }
       }
 
@@ -241,8 +246,10 @@
         min-width: 280px;
         padding: 0.6rem 1rem;
 
-        input {
-          font-size: 0.9rem;
+        .search-input-wrapper {
+          input {
+            font-size: 0.9rem;
+          }
         }
       }
 
@@ -262,20 +269,22 @@
         border-left: none;
         border-right: none;
 
-        .search-icon {
-          margin-right: 0.75rem;
+        .search-input-wrapper {
+          gap: 0.75rem;
 
-          img {
-            width: 20px;
-            height: 20px;
+          .search-icon {
+            img {
+              width: 20px;
+              height: 20px;
+            }
           }
-        }
 
-        input {
-          font-size: 1.05rem;
-
-          &::placeholder {
+          input {
             font-size: 1.05rem;
+
+            &::placeholder {
+              font-size: 1.05rem;
+            }
           }
         }
       }
@@ -284,20 +293,22 @@
         width: calc(100vw - 2rem);
         padding: 1rem 1.25rem;
 
-        .search-icon {
-          margin-right: 0.5rem;
+        .search-input-wrapper {
+          gap: 0.5rem;
 
-          img {
-            width: 18px;
-            height: 18px;
+          .search-icon {
+            img {
+              width: 18px;
+              height: 18px;
+            }
           }
-        }
 
-        input {
-          font-size: 0.95rem;
-
-          &::placeholder {
+          input {
             font-size: 0.95rem;
+
+            &::placeholder {
+              font-size: 0.95rem;
+            }
           }
         }
       }

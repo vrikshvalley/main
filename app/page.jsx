@@ -17,7 +17,6 @@ import MeetOurTeam from "@/components/Homepage/MeetOurTeam";
 import OurBlogs from "@/components/Homepage/OurBlogs";
 import Footer from "@/components/general/Footer";
 import WhatsAppButton from "@/components/general/WhatsAppButton";
-import  ToastContainer  from "@/components/general/ToastContainer";
 import HomeSidebar from "@/components/general/HomeSidebar";
 import Ads from "@/components/general/Ads";
 
@@ -46,7 +45,6 @@ export default function Home() {
   return (
     <>
       <Topbar />
-      <ToastContainer />
       <Navbar />
       <HomeSidebar />
       

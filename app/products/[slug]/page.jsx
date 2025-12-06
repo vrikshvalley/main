@@ -42,18 +42,20 @@ export default function ProductDetailPage() {
   }
 
   return (
-    <>
+    <div className="product-detail-container">
       <div className="product-page-wrapper">
         <ProductPage product={product} />
       </div>
       
       {/* Ads Section */}
-      <Ads 
-        items={['Bring nature home, one leaf at a time']}
-        bgColor="dark"
-        textColor="light"
-        speed={15}
-      />
-    </>
+      <div className="ads-banner">
+        <Ads 
+          items={['Bring nature home, one leaf at a time']}
+          bgColor="dark"
+          textColor="light"
+          speed={15}
+        />
+      </div>
+    </div>
   );
 }

@@ -12,6 +12,12 @@ export default function OrderHistory({ userId }) {
     let mounted = true;
     
     const fetchOrders = async () => {
+      if (!userId) {
+        setOrders([]);
+        setLoading(false);
+        return;
+      }
+
       try {
         const { data, error } = await orderService.getUserOrders(userId, 5); // Get last 5 orders
         
@@ -19,7 +25,7 @@ export default function OrderHistory({ userId }) {
         
         if (error) {
           console.error('Error fetching orders:', error);
-          toast.error('Failed to load orders');
+          // Don't show error toast, just set empty orders
           setOrders([]);
         } else {
           setOrders(data || []);
@@ -91,7 +97,10 @@ export default function OrderHistory({ userId }) {
           ))}
         </ul>
       ) : (
-        <p className="muted">No recent orders. <Link href="/products" className="link">Start shopping</Link></p>
+        <div className="empty-state">
+          <p className="muted">No orders yet</p>
+          <Link href="/products" className="link">Start shopping</Link>
+        </div>
       )}
     </section>
   );

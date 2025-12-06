@@ -114,7 +114,7 @@ export default function Navbar() {
 
               {/* Dropdown Menu */}
               <AnimatePresence>
-                {hoveredCategory === category.slug && category.subcategories && category.slug !== 'accessories' && (
+                {hoveredCategory === category.slug && category.subcategories && category.subcategories.length > 0 && category.slug !== 'accessories' && (
                   <motion.div
                     className="dropdown-menu"
                     variants={dropdownVariants}

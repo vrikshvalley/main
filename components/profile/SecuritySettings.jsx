@@ -7,13 +7,7 @@ import { showSuccessToast, showErrorToast } from '@/lib/toastHelpers';
 
 export default function SecuritySettings({ onLogout }) {
   const { user } = useAuth();
-  const [twoFA, setTwoFA] = useState(false);
   const [resetting, setResetting] = useState(false);
-
-  const handleToggle2FA = () => {
-    setTwoFA(prev => !prev);
-    showSuccessToast(`Two-factor ${!twoFA ? 'enabled' : 'disabled'} (demo)`);
-  };
 
   const handlePasswordReset = async () => {
     if (!user?.email) {
@@ -36,15 +30,6 @@ export default function SecuritySettings({ onLogout }) {
   return (
     <section className="security card">
       <h3>Security & Account</h3>
-      <div className="security-row">
-        <div>
-          <label>Two-factor authentication</label>
-          <p className="muted">Add an extra layer of security (demo)</p>
-        </div>
-        <div>
-          <button className="btn small" onClick={handleToggle2FA}>{twoFA ? 'Disable' : 'Enable'}</button>
-        </div>
-      </div>
 
       <div className="security-row">
         <div>

@@ -57,7 +57,8 @@ const ProfilePage = () => {
       }
       setLoading(false);
     });
-    getUserAndProfile();
+    
+    return () => unsubscribe();
   }, [router]);
 
   const handleUpdateName = async (e) => {
@@ -239,13 +240,13 @@ const ProfilePage = () => {
       </div>
 
       <div className="container">
-        <div className="profile-grid">
-          <aside>
+        <div className="profileGrid">
+          <aside className="sidebar">
             <ProfileOverview profile={profile} onEdit={() => { setNameForm(profile.name); setShowUpdateName(true); }} />
             <SecuritySettings onLogout={handleLogout} />
           </aside>
 
-          <main>
+          <main className="mainContent">
             <OrderHistory userId={user?.id} />
             <Addresses addresses={profile?.address || []}
                        onAdd={handleAddAddress}

@@ -7,12 +7,16 @@ import '@/styles/gallery.scss';
 
 export default function Gallery() {
   const galleryImages = [
-    { id: 1, src: '/hero1.jpg', alt: 'Indoor Plants Collection' },
-    { id: 2, src: '/hero2.jpg', alt: 'Outdoor Garden Setup' },
-    { id: 3, src: '/hero3.jpg', alt: 'Plant Care Workshop' },
-    { id: 4, src: '/indoor.jpg', alt: 'Snake Plant Display' },
-    { id: 5, src: '/outdoor.jpg', alt: 'Garden Landscape' },
-    { id: 6, src: '/flowering.jpg', alt: 'Flowering Plants' },
+    { id: 1, src: '/heroSlider/Untitled-1.png', alt: 'Premium Plant Collection' },
+    { id: 2, src: '/heroSlider/Untitled-2.png', alt: 'Indoor Green Paradise' },
+    { id: 3, src: '/heroSlider/Untitled-3.png', alt: 'Outdoor Garden Dreams' },
+    { id: 4, src: '/heroSlider/Untitled-4.png', alt: 'Nature\'s Beauty' },
+    { id: 5, src: '/heroSlider/Untitled-5.png', alt: 'Green Living' },
+    { id: 6, src: '/loginSlider/Untitled-1.png', alt: 'Premium Plants - Handpicked for your space' },
+    { id: 7, src: '/loginSlider/Untitled-2.png', alt: 'Indoor Paradise - Bring nature inside' },
+    { id: 8, src: '/loginSlider/Untitled-3.png', alt: 'Garden Dreams - Create your own oasis' },
+    { id: 9, src: '/loginSlider/Untitled-4.png', alt: 'Green Living - Embrace sustainability' },
+    { id: 10, src: '/loginSlider/Untitled-5.png', alt: 'Plant Paradise - Your green journey starts here' },
   ];
 
   return (

@@ -222,21 +222,26 @@ export default function ProductPage({ product }) {
           </div>
 
           {/* Product Meta */}
-          {product.additional_info && (
+          {(product.care_level || product.light || product.water || product.stock_status) && (
             <div className="product-meta">
-              {product.additional_info.light && (
+              {product.care_level && (
                 <div className="meta-item">
-                  <strong>Light:</strong> {product.additional_info.light}
+                  <strong>Care Level:</strong> {product.care_level}
                 </div>
               )}
-              {product.additional_info.water && (
+              {product.light && (
                 <div className="meta-item">
-                  <strong>Water:</strong> {product.additional_info.water}
+                  <strong>Light:</strong> {product.light}
                 </div>
               )}
-              {product.additional_info.pet_friendly !== undefined && (
+              {product.water && (
                 <div className="meta-item">
-                  <strong>Pet Friendly:</strong> {product.additional_info.pet_friendly ? 'Yes' : 'No'}
+                  <strong>Water:</strong> {product.water}
+                </div>
+              )}
+              {product.stock_status && (
+                <div className="meta-item">
+                  <strong>Status:</strong> {product.stock_status.replace('_', ' ').toUpperCase()}
                 </div>
               )}
             </div>

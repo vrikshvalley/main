@@ -39,24 +39,60 @@ export default function ProductPageTabs({ product }) {
         {activeTab === 'additional-info' && (
           <div className="tab-panel additional-info-panel">
             <h3>Product Details</h3>
-            {product.long_description && (
-              <div className="description-section">
-                <p>{product.long_description}</p>
-              </div>
-            )}
+            
+            <div className="info-grid">
+              {product.category && (
+                <div className="info-item">
+                  <span className="info-label">Category:</span>
+                  <span className="info-value">{product.category}</span>
+                </div>
+              )}
+              {product.subcategories && product.subcategories.length > 0 && product.subcategories[0] !== '-' && (
+                <div className="info-item">
+                  <span className="info-label">Type:</span>
+                  <span className="info-value">{product.subcategories.join(', ')}</span>
+                </div>
+              )}
+              {product.size && (
+                <div className="info-item">
+                  <span className="info-label">Size:</span>
+                  <span className="info-value">{product.size}</span>
+                </div>
+              )}
+              {product.care_level && (
+                <div className="info-item">
+                  <span className="info-label">Care Level:</span>
+                  <span className="info-value">{product.care_level}</span>
+                </div>
+              )}
+              {product.light && (
+                <div className="info-item">
+                  <span className="info-label">Light Requirements:</span>
+                  <span className="info-value">{product.light}</span>
+                </div>
+              )}
+              {product.water && (
+                <div className="info-item">
+                  <span className="info-label">Watering:</span>
+                  <span className="info-value">{product.water}</span>
+                </div>
+              )}
+              {product.stock_status && (
+                <div className="info-item">
+                  <span className="info-label">Availability:</span>
+                  <span className="info-value">{product.stock_status.replace('_', ' ').toUpperCase()}</span>
+                </div>
+              )}
+            </div>
 
-            {product.additional_info && (
-              <div className="info-grid">
-                {Object.entries(product.additional_info).map(([key, value]) => (
-                  <div key={key} className="info-item">
-                    <span className="info-label">
-                      {key.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}:
-                    </span>
-                    <span className="info-value">
-                      {typeof value === 'boolean' ? (value ? 'Yes' : 'No') : value}
-                    </span>
-                  </div>
-                ))}
+            {product.tags && product.tags.length > 0 && product.tags[0] !== '-' && (
+              <div className="tags-section">
+                <h4>Tags</h4>
+                <div className="tags-list">
+                  {product.tags.map((tag, index) => (
+                    <span key={index} className="tag">{tag}</span>
+                  ))}
+                </div>
               </div>
             )}
           </div>
