@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { motion } from 'framer-motion';
+
 import AddToCartButton from '@/components/cart/AddToCartButton';
 import WishlistButton from '@/components/general/WishlistButton';
 import { addItem } from '@/lib/slices/cartSlice';
@@ -31,19 +32,20 @@ const cardVariants = {
   }
 };
 
-function ProductCard() {
+function ProductCard({ sortBy }) {
   const router = useRouter();
   const dispatch = useDispatch();
   const { user } = useAuth();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const sort = sortBy || 'featured';
 
   useEffect(() => {
     async function fetchProducts() {
       try {
         // Simplified query to avoid needing complex Firestore index
         const { data: allProducts } = await getProducts({ 
-          sortBy: 'newest',
+          sortBy: sort,
           pageSize: 4,
           inStock: false
         });

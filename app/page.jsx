@@ -88,7 +88,7 @@ export default function Home() {
         viewport={{ once: true, amount: 0.3 }}
         variants={sectionVariants}
       >
-        <FeaturedProducts title="Featured Products"  />
+        <FeaturedProducts title="Featured Products"   />
       </motion.section>
 
       <Ads 
@@ -118,7 +118,7 @@ export default function Home() {
         viewport={{ once: true, amount: 0.3 }}
         variants={sectionVariants}
       >
-        <FeaturedProducts title="New Arrivals"/>
+        <FeaturedProducts title="New Arrivals" sortBy="newest"/>
       </motion.section>
 
       {/* Bring Nature Home Section */}

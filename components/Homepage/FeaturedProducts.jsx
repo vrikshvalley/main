@@ -34,7 +34,7 @@ const cardVariants = {
   }
 };
 
-export default function FeaturedProducts({ title}) {
+export default function FeaturedProducts({ title, sortBy }) {
   return (
     <motion.section 
       className="featured-products"
@@ -61,7 +61,7 @@ export default function FeaturedProducts({ title}) {
         className="products-container"
         variants={containerVariants}
       >
-        <ProductCard />
+        <ProductCard sortBy={sortBy} />
       </motion.div>
     </motion.section>
   );

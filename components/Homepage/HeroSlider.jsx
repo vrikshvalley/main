@@ -11,11 +11,11 @@ import 'swiper/css/effect-fade';
 import '@/styles/heroSlider.scss';
 
 const slides = [
-  { src: '/heroSlider/Untitled-1.png', alt: 'Premium Plant Collection' },
-  { src: '/heroSlider/Untitled-2.png', alt: 'Indoor Green Paradise' },
-  { src: '/heroSlider/Untitled-3.png', alt: 'Outdoor Garden Dreams' },
-  { src: '/heroSlider/Untitled-4.png', alt: 'Nature\'s Beauty' },
-  { src: '/heroSlider/Untitled-5.png', alt: 'Green Living' }
+  { src: '/heroSlider/(1).png', alt: 'Premium Plant Collection' },
+  { src: '/heroSlider/(2).png', alt: 'Indoor Green Paradise' },
+  { src: '/heroSlider/(3).png', alt: 'Outdoor Garden Dreams' },
+  { src: '/heroSlider/(4).png', alt: 'Nature\'s Beauty' },
+  { src: '/heroSlider/(5).png', alt: 'Green Living' }
 ];
 
 const contentVariants = {
@@ -124,7 +124,11 @@ export default function HeroSlider() {
         </motion.h1>
         
         <motion.p className="heroSubtitle" variants={itemVariants}>
-          Every home deserves a touch of green. Transform your space into a sanctuary where plants thrive and life slows down to the gentle rhythm of growth.
+          Vriksh Valley is a plant-care and gardening companion app that helps users discover plants, track care schedules, and manage their gardening needs. You can sign in with Google to save your plants, receive reminders, and access personalized features.
+          
+          We use your Google account only for authentication and to display your name, email, and profile picture inside the app. This helps us personalize your experience and keep your data synced across devices.
+
+          Vriksh Valley Lets you sign in securely using your Google account,Helps you track watering, fertilizing, and plant-care routines,Allows you to browse and save plants to your personal collection,Provides personalized recommendations based on your interests and Stores your data safely and privately.
         </motion.p>
 
         <motion.div className="features" variants={itemVariants}>
@@ -137,8 +141,11 @@ export default function HeroSlider() {
           <button className="ctaButton" onClick={handleJoinMovement}>
             Join the Green Movement
           </button>
-          <button className="ctaButtonSecondary" onClick={handleLearnMore}>
+          {/* <button className="ctaButtonSecondary" onClick={handleLearnMore}>
             Our Story
+          </button> */}
+          <button className="ctaButtonSecondary" onClick={() => router.push('/products')}>
+            Shop Now
           </button>
         </motion.div>
       </motion.div>

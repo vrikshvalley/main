@@ -80,7 +80,21 @@ export default function PrivacyPolicy() {
           <p>
             We retain your personal information only for as long as necessary to fulfill the purposes for which it was collected. This includes legal, accounting, or reporting requirements. For example, order transaction data may be retained to comply with taxation or regulatory obligations. When information is no longer required, it is securely deleted or anonymized in accordance with applicable data protection laws.
           </p>
-
+          <h2>Use of Google User Data</h2>
+          <p>
+            Vriksh Valley uses Google Sign-In solely to authenticate users and provide a personalized experience. When you sign in with Google, we request access to your basic profile information, which includes your name, email address, and profile picture.
+            We do not request access to any sensitive Google data (such as Gmail, Drive, Calendar, etc.).
+          </p>
+          <h2>How We Use Google Information</h2>
+          <p>
+            The information obtained through Google OAuth is used only for the following purposes:
+          </p>
+          <ul>
+            <li>To create and manage your user account</li>
+            <li>To personalize your experience inside the application</li>
+            <li>To allow you to save and sync your preferences, plants, and activity</li>
+            <li>To provide customer support related to your account</li>
+          </ul>
           <h2>Children's Privacy</h2>
           <p>
             Vriksh Valley does not knowingly collect personal information from individuals under the age of 18. Our website and services are intended for adult users who can make purchases online. If we become aware that a minor has provided us with personal data, we will promptly delete it. We strongly encourage parents and guardians to supervise children's online activities and ensure safe browsing.
