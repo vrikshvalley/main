@@ -2,10 +2,14 @@
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useDispatch } from 'react-redux';
 import { motion } from 'framer-motion';
-
 import AddToCartButton from '@/components/cart/AddToCartButton';
 import WishlistButton from '@/components/general/WishlistButton';
+import { addItem } from '@/lib/slices/cartSlice';
+import { showSuccessToast } from '@/lib/toastHelpers';
+import { useAuth } from '@/lib/AuthContext';
 import { getProducts } from '@/lib/services/productService';
 import "@/styles/featuredProductCard.scss";
 import "@/styles/wishlistButton.scss";
@@ -28,6 +32,9 @@ const cardVariants = {
 };
 
 function ProductCard() {
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const { user } = useAuth();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -50,6 +57,36 @@ function ProductCard() {
     }
     fetchProducts();
   }, []);
+
+  const handleBuyNow = (product, e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // Ensure price is a number (for products with variants, use base price)
+    const productPrice = typeof product.price === 'number' ? product.price : (product.variants?.[0]?.price || 0);
+    
+    // Add to cart
+    dispatch(addItem({
+      id: product.id,
+      name: product.name,
+      price: productPrice,
+      image: product.images?.[0],
+      quantity: 1,
+    }));
+    
+    // Redirect based on auth status
+    if (user) {
+      showSuccessToast('Redirecting to checkout... 🛒');
+      setTimeout(() => {
+        router.push('/checkout');
+      }, 500);
+    } else {
+      showSuccessToast('Please sign in to checkout 🔐');
+      setTimeout(() => {
+        router.push('/auth/signin?redirect=/checkout');
+      }, 500);
+    }
+  };
 
   if (loading) {
     return (
@@ -90,13 +127,18 @@ function ProductCard() {
                 />
               </div>
               <h3>{product.name}</h3>
-              <p className="price">₹{product.price}</p>
+              <p className="price">
+                ₹{typeof product.price === 'number' ? product.price : (product.variants?.[0]?.price || 0)}
+                {product.variants && product.variants.length > 1 && <span> onwards</span>}
+              </p>
             </Link>
             <div className="product-actions">
               <AddToCartButton product={product} />
-              <button className="buy-now-btn" disabled>
+              <button 
+                className="buy-now-btn" 
+                onClick={(e) => handleBuyNow(product, e)}
+              >
                 Buy Now
-                {/* <span className="coming-soon-badge">Coming Soon</span> */}
               </button>
             </div>
           </motion.div>

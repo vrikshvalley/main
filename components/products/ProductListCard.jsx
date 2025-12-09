@@ -14,11 +14,14 @@ export default function ProductListCard({ product, viewMode = 'grid' }) {
     e.preventDefault();
     e.stopPropagation();
     
+    // Ensure price is a number (for products with variants, use base price)
+    const productPrice = typeof product.price === 'number' ? product.price : (product.variants?.[0]?.price || 0);
+    
     dispatch(addItem({
       id: product.id,
       name: product.name,
-      price: product.price,
-      image: product.images[0],
+      price: productPrice,
+      image: product.images?.[0] || product.images[0],
       quantity: 1,
     }));
   };
@@ -88,7 +91,8 @@ export default function ProductListCard({ product, viewMode = 'grid' }) {
 
         <div className="product-footer">
           <div className="product-price">
-            ₹{product.price}
+            ₹{typeof product.price === 'number' ? product.price : (product.variants?.[0]?.price || 0)}
+            {product.variants && product.variants.length > 1 && <span className="price-suffix"> onwards</span>}
           </div>
 
           {product.stock > 0 ? (
@@ -109,6 +113,26 @@ export default function ProductListCard({ product, viewMode = 'grid' }) {
 
         {viewMode === 'list' && (
           <div className="product-meta">
+            {product.maintenanceLevel && (
+              <div className="meta-item">
+                <strong>Maintenance:</strong> {product.maintenanceLevel}
+              </div>
+            )}
+            {product.petFriendly && (
+              <div className="meta-item">
+                <strong>Pet-Friendly:</strong> {product.petFriendly}
+              </div>
+            )}
+            {product.size && (
+              <div className="meta-item">
+                <strong>Size:</strong> {product.size}
+              </div>
+            )}
+            {product.color && (
+              <div className="meta-item">
+                <strong>Color:</strong> {product.color}
+              </div>
+            )}
             {product.colors && product.colors.length > 0 && (
               <div className="meta-item">
                 <strong>Colors:</strong> {product.colors.join(', ')}

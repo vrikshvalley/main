@@ -2,9 +2,10 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Sprout, Droplets, TreePine, Heart, ShoppingBag, Leaf, Users } from 'lucide-react';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
-import '@/styles/greenMovement.scss';
+import '@/styles/pages.scss';
 
 export default function JoinGreenMovementPage() {
   const fadeInUp = {
@@ -23,44 +24,42 @@ export default function JoinGreenMovementPage() {
   ];
 
   return (
-    <div className="green-movement-page">
-      <Breadcrumbs items={[{ label: 'Join the Green Movement' }]} />
-        {/* Hero Section */}
-        <motion.section 
-        className="movement-hero"
-        initial="hidden"
-        animate="visible"
-        variants={fadeInUp}
-      >
-        <div className="hero-content">
-          <motion.div 
-            className="hero-icon"
-            animate={{ 
-              y: [0, -10, 0],
-              rotate: [0, 5, -5, 0]
-            }}
-            transition={{ 
-              duration: 4,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          >
-            🌿
-          </motion.div>
+    <div className="page-container">
+      {/* Hero Banner */}
+      {/* Hero Banner */}
+      <div className="hero-banner">
+        <picture>
+          <source 
+            media="(max-width: 768px)" 
+            srcSet="/OurStoryMobile.png" 
+          />
+          <Image
+            src="/OurStoryDesktop.png"
+            alt="Join the Green Movement - Vriksh Valley"
+            fill
+            priority
+            className="hero-image"
+            style={{ objectFit: 'cover' }}
+          />
+        </picture>
+        <div className="hero-overlay">
           <h1>Join the Green Movement</h1>
-          <p className="hero-subtitle">Together, We Turn Concrete Dreams into Leafy Sanctuaries</p>
+          <p>Together, We Turn Concrete Dreams into Leafy Sanctuaries</p>
         </div>
-      </motion.section>
+      </div>
 
-      {/* Origin Story */}
-      <motion.section 
-        className="content-section origin-story"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
-        variants={fadeInUp}
-      >
-        <div className="section-container">
+      <Breadcrumbs items={[{ label: 'Join the Green Movement' }]} />
+      
+      <div className="page-content">
+        {/* Origin Story */}
+        <motion.section 
+          className="content-section origin-story"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={fadeInUp}
+        >
+          <div className="section-container">
           <div className="section-icon">
             <Sprout size={48} />
           </div>
@@ -245,6 +244,7 @@ export default function JoinGreenMovementPage() {
           </div>
         </div>
       </motion.section>
+      </div>
     </div>
   );
 }

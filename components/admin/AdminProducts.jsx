@@ -264,7 +264,7 @@ export default function AdminProducts() {
                       {product.priceType === 'custom' ? (
                         <span className="price-custom">Custom</span>
                       ) : (
-                        <span className="price-value">₹{product.price}</span>
+                        <span className="price-value">₹{typeof product.price === 'number' ? product.price : 0}</span>
                       )}
                     </td>
                     <td className="col-stock">

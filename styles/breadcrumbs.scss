@@ -4,7 +4,9 @@
   background: $white;
   border-bottom: 1px solid rgba($teal, 0.15);
   padding: 0.75rem 2rem;
-  position: relative;
+  position: sticky;
+  top: 70px; // Account for navbar height (50px topbar + 70px navbar)
+  z-index: 40;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 
   @media (max-width: 768px) {

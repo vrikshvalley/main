@@ -1,9 +1,11 @@
 'use client';
 import { useState } from 'react';
+import Image from 'next/image';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
 import { ChevronDown, HelpCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import '@/styles/plantFAQs.scss';
+import '@/styles/pages.scss';
 
 const faqs = [
   {
@@ -66,7 +68,25 @@ export default function FAQs() {
   };
 
   return (
-    <>
+    <div className="page-container">
+      {/* Hero Banner */}
+      <div className="hero-banner faqs-hero">
+        <picture>
+          <source media="(max-width: 768px)" srcSet="/FAQsMobile.png" />
+          <Image
+            src="/FAQsDesktop.png"
+            alt="FAQs - Vriksh Valley"
+            fill
+            priority
+            style={{ objectFit: 'cover' }}
+          />
+        </picture>
+        <div className="hero-overlay">
+          <h1>Frequently Asked Questions</h1>
+          <p>Find answers to common questions</p>
+        </div>
+      </div>
+
       <Breadcrumbs items={[{ label: 'FAQs' }]} />
       
       <section className="plant-faqs">
@@ -138,6 +158,6 @@ export default function FAQs() {
           </motion.div>
         </div>
       </section>
-    </>
+    </div>
   );
 }

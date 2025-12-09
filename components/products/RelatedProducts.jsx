@@ -44,7 +44,7 @@ export default function RelatedProducts({ category, currentProductId }) {
         <Swiper
           modules={[Navigation, Autoplay]}
           spaceBetween={20}
-          slidesPerView={1}
+          slidesPerView={'auto'}
           navigation
           autoplay={{
             delay: 3500,
@@ -52,15 +52,12 @@ export default function RelatedProducts({ category, currentProductId }) {
           }}
           breakpoints={{
             480: {
-              slidesPerView: 2,
               spaceBetween: 15,
             },
             768: {
-              slidesPerView: 3,
               spaceBetween: 20,
             },
             1024: {
-              slidesPerView: 4,
               spaceBetween: 25,
             },
           }}

@@ -64,7 +64,7 @@ const ProfilePage = () => {
   const handleUpdateName = async (e) => {
     e?.preventDefault?.();
     if (!nameForm.trim()) return toastError('Please enter a valid name');
-    const res = await userService.updateProfile(user.id, { name: nameForm.trim() });
+    const res = await userService.updateProfile(user.uid, { name: nameForm.trim() });
     if (res.error) return toastError('Error updating name');
     // update local state using returned record if present
     const updated = res.data?.[0] || { ...profile, name: nameForm.trim() };
@@ -76,7 +76,7 @@ const ProfilePage = () => {
 
   const handleAddAddress = async (newAddress) => {
     // newAddress expected to contain id, line1, locality, pincode etc.
-    const res = await userService.addAddress(user.id, newAddress);
+    const res = await userService.addAddress(user.uid, newAddress);
     if (res.error) {
       toastError('Error adding address');
       return res;
@@ -84,11 +84,12 @@ const ProfilePage = () => {
     // Firebase returns updated profile data
     const updatedProfile = res.data?.[0] || { ...profile, address: [...(profile.address||[]), newAddress] };
     setProfile(updatedProfile);
+    toastSuccess('Address added successfully!');
     return res;
   };
 
   const handleUpdateAddress = async (updatedAddress) => {
-    const res = await userService.updateAddress(user.id, updatedAddress);
+    const res = await userService.updateAddress(user.uid, updatedAddress);
     if (res.error) {
       toastError('Error updating address');
       return res;
@@ -96,12 +97,13 @@ const ProfilePage = () => {
     const updatedProfile = res.data?.[0] || profile;
     setProfile(updatedProfile);
     setEditingAddress(null);
+    toastSuccess('Address updated successfully!');
     return res;
   };
 
  const handleDeleteAddress = async (addressId) => {
     if (!confirm('Delete this address?')) return;
-    const res = await userService.deleteAddress(user.id, addressId);
+    const res = await userService.deleteAddress(user.uid, addressId);
     if (res.error) return toastError('Error deleting address');
     const updatedProfile = res.data?.[0] || profile;
     setProfile(updatedProfile);
@@ -121,7 +123,7 @@ const ProfilePage = () => {
 
     try {
       // Delete user profile from Firebase
-      const res = await userService.deleteProfile(user.id);
+      const res = await userService.deleteProfile(user.uid);
       
       if (res.error) {
         showErrorToast('Error deactivating account');
@@ -153,7 +155,7 @@ const ProfilePage = () => {
     return (
       <div className="profilePage">
         <div className="brandHeader">
-          <Image src="/logo.png" alt="Vriksh Valley" width={60} height={60} className="logo" />
+          <Image src="/white-logo.png" alt="Vriksh Valley" width={60} height={60} className="logo" />
           <div className="brandInfo">
             <h1>Vriksh Valley</h1>
             <p>Pure. Organic. Natural.</p>
@@ -232,7 +234,7 @@ const ProfilePage = () => {
   return (
     <div className="profilePage">
       <div className="brandHeader">
-        <Image src="/logo.png" alt="Vriksh Valley" width={60} height={60} className="logo" />
+        <Image src="/white-logo.png" alt="Vriksh Valley" width={60} height={60} className="logo" />
         <div className="brandInfo">
           <h1>Vriksh Valley</h1>
           <p>Pure. Organic. Natural.</p>

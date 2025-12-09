@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
 import { Mail, Phone, MapPin, MessageCircle } from 'lucide-react';
 import '@/styles/pages.scss';
@@ -6,12 +7,30 @@ import '@/styles/pages.scss';
 export default function ContactUs() {
   return (
     <div className="page-container">
+      {/* Hero Banner */}
+      <div className="hero-banner contact-us-hero">
+        <picture>
+          <source media="(max-width: 768px)" srcSet="/ContactUsMobile.png" />
+          <Image
+            src="/ContactUsDesktop.png"
+            alt="Contact Us - Vriksh Valley"
+            fill
+            priority
+            style={{ objectFit: 'cover' }}
+          />
+        </picture>
+        <div className="hero-overlay">
+          <h1>Contact Us</h1>
+          <p>We'd love to hear from you</p>
+        </div>
+      </div>
+
       <Breadcrumbs items={[{ label: 'Contact Us' }]} />
       
       <div className="page-content">
         <div className="page-header">
-          <h1>Get in Touch</h1>
-          <p>We'd love to hear from you. Reach out to us anytime!</p>
+          <h2>Get in Touch</h2>
+          <p>Reach out to us anytime!</p>
         </div>
 
         <div className="content-section">

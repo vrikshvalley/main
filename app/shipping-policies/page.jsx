@@ -1,16 +1,34 @@
 'use client';
+import Image from 'next/image';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
 import '@/styles/pages.scss';
 
 export default function ShippingPolicies() {
   return (
     <div className="page-container">
+      {/* Hero Banner */}
+      <div className="hero-banner shipping-policies-hero">
+        <picture>
+          <source media="(max-width: 768px)" srcSet="/ShippingPoliciesMobile.png" />
+          <Image
+            src="/ShippingPoliciesDesktop.png"
+            alt="Shipping Policies - Vriksh Valley"
+            fill
+            priority
+            style={{ objectFit: 'cover' }}
+          />
+        </picture>
+        <div className="hero-overlay">
+          <h1>Shipping Policies</h1>
+          <p>Everything you need to know</p>
+        </div>
+      </div>
+
       <Breadcrumbs items={[{ label: 'Shipping Policies' }]} />
       
       <div className="page-content">
         <div className="page-header">
-          <h1>Shipping Policies</h1>
-          <p>Everything you need to know about our shipping process</p>
+          <h2>Shipping Policies</h2>
         </div>
 
         <div className="content-section">

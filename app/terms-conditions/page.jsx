@@ -1,10 +1,33 @@
 'use client';
+import Image from 'next/image';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
 import '@/styles/pages.scss';
 
 export default function TermsConditions() {
   return (
     <div className="page-container">
+      {/* Hero Banner */}
+      <div className="hero-banner">
+        <picture>
+          <source 
+            media="(max-width: 768px)" 
+            srcSet="/TermsandConditionsMobile.png" 
+          />
+          <Image
+            src="/TermsandConditionsDesktop.png"
+            alt="Terms and Conditions - Vriksh Valley"
+            fill
+            priority
+            className="hero-image"
+            style={{ objectFit: 'cover' }}
+          />
+        </picture>
+        <div className="hero-overlay">
+          <h1>Terms and Conditions</h1>
+          <p>Please read carefully before using our services</p>
+        </div>
+      </div>
+
       <Breadcrumbs items={[{ label: 'Terms and Conditions' }]} />
       
       <div className="page-content">

@@ -1,7 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { useParams } from 'next/navigation';
+import Link from 'next/link';
+import Image from 'next/image';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Autoplay } from 'swiper/modules';
 import Topbar from '@/components/general/Topbar';
 import Navbar from '@/components/general/Navbar';
 import Footer from '@/components/general/Footer';
@@ -12,11 +16,14 @@ import { getCategories } from '@/lib/services/productService';
 import { ChevronDown, X, SlidersHorizontal, Grid, List } from 'lucide-react';
 import TheLoader from '@/components/general/TheLoader';
 import ProductListCard from '@/components/products/ProductListCard';
+import 'swiper/css';
+import 'swiper/css/navigation';
 import '@/styles/products.scss';
 
 export default function CategoryPage() {
   const params = useParams();
   const categorySlug = params.category;
+  const productsContainerRef = useRef(null);
   
   const [category, setCategory] = useState(null);
 
@@ -68,9 +75,12 @@ export default function CategoryPage() {
   // Fetch products when filters change
   useEffect(() => {
     fetchProducts();
-    // Scroll to top when filters change
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [categorySlug, priceRange, inStockOnly, sortBy, sortOrder, currentPage]);
+
+  // Scroll to top immediately on page change (before paint)
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentPage]);
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -166,24 +176,95 @@ export default function CategoryPage() {
         <div 
           className="products-header"
           style={{
-            backgroundImage: `url('/Landscape Image for Pages/${category.name}/${category.name}.png')`,
+            backgroundImage: category.imageUrl?.desktop 
+              ? `url(${category.imageUrl.desktop})` 
+              : 'none',
           }}
         >
           <style jsx>{`
             @media (max-width: 768px) {
               .products-header {
-                background-image: url('/Portrait Image for Pages for Mobile/${category.name}/${category.name}.png') !important;
+                background-image: ${category.imageUrl?.mobile 
+                  ? `url(${category.imageUrl.mobile})` 
+                  : 'none'} !important;
               }
             }
           `}</style>
           <div className="header-content">
             <div className="category-icon">{category.icon}</div>
             <h1>{category.name}</h1>
-            <p>Browse our collection of {category.name.toLowerCase()}</p>
+            <p>{category.description || `Browse our collection of ${category.name.toLowerCase()}`}</p>
+            <p className="products-count">{category.productsCount || totalProducts} products available</p>
           </div>
         </div>
 
-        <div className="main-products-container">
+        {/* Subcategories Section */}
+        {category.subcategories && category.subcategories.length > 0 && (
+          <div className="subcategories-section">
+            <h2>Shop by Type</h2>
+            <Swiper
+              modules={[Navigation, Autoplay]}
+              spaceBetween={20}
+              slidesPerView={'auto'}
+              navigation
+              autoplay={{
+                delay: 3000,
+                disableOnInteraction: false,
+              }}
+              breakpoints={{
+                320: {
+                  slidesPerView: 2,
+                  spaceBetween: 15,
+                },
+                480: {
+                  slidesPerView: 3,
+                  spaceBetween: 15,
+                },
+                768: {
+                  slidesPerView: 4,
+                  spaceBetween: 20,
+                },
+                1024: {
+                  slidesPerView: 5,
+                  spaceBetween: 20,
+                },
+                1280: {
+                  slidesPerView: 6,
+                  spaceBetween: 25,
+                },
+              }}
+              className="subcategories-slider"
+            >
+              {category.subcategories.map((subcat) => (
+                <SwiperSlide key={subcat.slug}>
+                  <Link 
+                    href={`/category/${categorySlug}/${subcat.slug}`}
+                    className="subcategory-card"
+                  >
+                    {(subcat.imageUrl?.desktop || subcat.imageUrl?.mobile) && (
+                      <div className="subcat-image">
+                        <picture>
+                          {subcat.imageUrl?.mobile && (
+                            <source media="(max-width: 768px)" srcSet={subcat.imageUrl.mobile} />
+                          )}
+                          <img 
+                            src={subcat.imageUrl.desktop || subcat.imageUrl.mobile} 
+                            alt={subcat.name}
+                            width={200}
+                            height={200}
+                          />
+                        </picture>
+                      </div>
+                    )}
+                    <h3>{subcat.name}</h3>
+                  </Link>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        )}
+
+        <div className="main-products-container" ref={productsContainerRef}>
           {/* Backdrop Overlay */}
           {showFilters && (
             <div 
@@ -371,7 +452,10 @@ export default function CategoryPage() {
                 {totalPages > 1 && (
                   <div className="pagination">
                     <button
-                      onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                      onClick={() => {
+                        setCurrentPage(prev => Math.max(1, prev - 1));
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
                       disabled={currentPage === 1}
                       className="pagination-button"
                     >
@@ -389,7 +473,10 @@ export default function CategoryPage() {
                           return (
                             <button
                               key={page}
-                              onClick={() => setCurrentPage(page)}
+                              onClick={() => {
+                                setCurrentPage(page);
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                              }}
                               className={currentPage === page ? 'active' : ''}
                             >
                               {page}
@@ -403,7 +490,10 @@ export default function CategoryPage() {
                     </div>
 
                     <button
-                      onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                      onClick={() => {
+                        setCurrentPage(prev => Math.min(totalPages, prev + 1));
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
                       disabled={currentPage === totalPages}
                       className="pagination-button"
                     >

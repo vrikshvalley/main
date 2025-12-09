@@ -1,10 +1,33 @@
 'use client';
+import Image from 'next/image';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
 import '@/styles/pages.scss';
 
 export default function PrivacyPolicy() {
   return (
     <div className="page-container">
+      {/* Hero Banner */}
+      <div className="hero-banner">
+        <picture>
+          <source 
+            media="(max-width: 768px)" 
+            srcSet="/PrivacyPoliciesMobile.png" 
+          />
+          <Image
+            src="/PrivacyPoliciesDesktop.png"
+            alt="Privacy Policy - Vriksh Valley"
+            fill
+            priority
+            className="hero-image"
+            style={{ objectFit: 'cover' }}
+          />
+        </picture>
+        <div className="hero-overlay">
+          <h1>Privacy Policy</h1>
+          <p>Your privacy grows with our care</p>
+        </div>
+      </div>
+
       <Breadcrumbs items={[{ label: 'Privacy Policy' }]} />
       
       <div className="page-content">

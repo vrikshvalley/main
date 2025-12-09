@@ -25,3 +25,9 @@ serviceAccountKey.json
 
 # firebase data
 firestore-ready-products.json
+
+#data
+
+products_collection.json
+categories_collection.json
+/scripts

@@ -11,10 +11,10 @@ export default function OurStory() {
         <picture>
           <source 
             media="(max-width: 768px)" 
-            srcSet="/Portrait Image for Pages for Mobile/Our Story/Our Story.png" 
+            srcSet="/OurStoryMobile.png" 
           />
           <Image
-            src="/Landscape Image for Pages/Our Story/Our Story.png"
+            src="/OurStoryDesktop.png"
             alt="Our Story - Vriksh Valley"
             fill
             priority

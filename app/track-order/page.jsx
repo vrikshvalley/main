@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import Image from 'next/image';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
 import { Search, Package } from 'lucide-react';
 import '@/styles/pages.scss';
@@ -15,6 +16,25 @@ export default function TrackOrder() {
 
   return (
     <div className="page-container">
+      {/* Hero Banner */}
+      <div className="hero-banner">
+        <picture>
+          <source media="(max-width: 768px)" srcSet="/TrackOrderMobile.png" />
+          <Image
+            src="/TrackOrderDesktop.png"
+            alt="Track Your Order - Vriksh Valley"
+            fill
+            priority
+            className="hero-image"
+            style={{ objectFit: 'cover' }}
+          />
+        </picture>
+        <div className="hero-overlay">
+          <h1>Track Your Order</h1>
+          <p>Enter your order ID to track your shipment</p>
+        </div>
+      </div>
+
       <Breadcrumbs items={[{ label: 'Track Order' }]} />
       
       <div className="page-content">

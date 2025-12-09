@@ -4,7 +4,66 @@ import {
   createOrder,
   checkServiceability,
   assignCourier,
+  authenticate,
 } from "@/lib/services/shiprocketService";
+
+// GET endpoint for testing authentication
+export async function GET(request) {
+  try {
+    console.log("\n=== Testing Shiprocket Authentication ===");
+
+    // Check environment variables
+    const email = process.env.SHIPROCKET_EMAIL;
+    const password = process.env.SHIPROCKET_PASSWORD;
+
+    const config = {
+      email: email ? `✅ Set (${email})` : "❌ Missing",
+      password: password ? "✅ Set (hidden)" : "❌ Missing",
+      baseUrl:
+        process.env.SHIPROCKET_BASE_URL ||
+        "Using default: https://apiv2.shiprocket.in",
+      courierId: process.env.SHIPROCKET_COURIER_ID || "Not set (optional)",
+    };
+
+    console.log("Environment Configuration:", config);
+
+    // Test authentication
+    try {
+      const token = await authenticate();
+
+      console.log("✅ Authentication successful");
+      console.log("Token (first 20 chars):", token?.substring(0, 20) + "...");
+
+      return NextResponse.json({
+        success: true,
+        message: "Shiprocket authentication successful",
+        config,
+        tokenPreview: token?.substring(0, 20) + "...",
+        timestamp: new Date().toISOString(),
+      });
+    } catch (authError) {
+      console.error("❌ Authentication failed:", authError.message);
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Shiprocket authentication failed",
+          error: authError.message,
+          config,
+        },
+        { status: 500 }
+      );
+    }
+  } catch (error) {
+    console.error("Test error:", error);
+    return NextResponse.json(
+      {
+        success: false,
+        error: error.message,
+      },
+      { status: 500 }
+    );
+  }
+}
 
 export async function POST(request) {
   try {
@@ -49,20 +108,30 @@ export async function POST(request) {
       weight: 1, // kg
     };
 
-    console.log("Creating Shiprocket order...");
+    console.log("\n=== Creating Shiprocket Order ===");
+    console.log("Order ID:", orderId);
+    console.log("Customer:", customer.name);
+    console.log("Pincode:", address.pincode);
+
     const { data: orderResult, error: orderError } = await createOrder(
       orderData
     );
 
     if (orderError) {
+      console.error("❌ Shiprocket order creation failed:", orderError.message);
       return NextResponse.json(
         {
           success: false,
           error: orderError.message || "Failed to create order",
+          details: orderData,
         },
         { status: 500 }
       );
     }
+
+    console.log("✅ Shiprocket order created successfully");
+    console.log("Shiprocket Order ID:", orderResult.order_id);
+    console.log("Shipment ID:", orderResult.shipment_id);
 
     const shiprocketOrderId = orderResult.order_id;
     const shipmentId = orderResult.shipment_id;

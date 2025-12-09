@@ -249,6 +249,19 @@ function SearchContent() {
                 >
                   Browse All Products
                 </button>
+                <div style={{ marginTop: '2rem', padding: '1.5rem', background: 'rgba(0, 128, 128, 0.05)', borderRadius: '12px', border: '1px solid rgba(0, 128, 128, 0.2)' }}>
+                  <p style={{ fontStyle: 'italic', marginBottom: '1rem', color: '#00504d' }}>
+                    Can't find it in our Garden? Contact our Farmers, and they will curate the plant for you. No Extra Charges!!!
+                  </p>
+                  <a 
+                    href="https://wa.me/919204745612?text=Hi,%20I%20can't%20find%20a%20specific%20plant.%20Can%20you%20help%20me%20find%20it?" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    style={{ display: 'inline-block', padding: '0.75rem 1.5rem', background: '#25D366', color: 'white', borderRadius: '8px', textDecoration: 'none', fontWeight: '600' }}
+                  >
+                    Contact on WhatsApp
+                  </a>
+                </div>
               </div>
             ) : (
               <div className={`products-grid ${viewMode}`}>

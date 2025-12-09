@@ -93,7 +93,7 @@ export default function CategoryCircles() {
 
         {categories.map((category) => {
           // Map category names to their image files in public folder
-          // Note: File names are case-sensitive
+          // These are the fixed images that will always be used
           const imageMap = {
             'Plants': '/Plants.jpg',
             'Seeds': '/seeds.jpg',

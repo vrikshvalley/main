@@ -180,7 +180,7 @@ export default function Products() {
                 <div className="title">{p.name}</div>
                 <div className="meta">
                   <span className="cat">{p.category}</span>
-                  <span className="price">₹{p.price}</span>
+                  <span className="price">₹{typeof p.price === 'number' ? p.price : 0}</span>
                   <span className={`status ${p.quantity <= 0 ? 'out' : 'in'}`}>
                     {p.quantity <= 0 ? 'Out of stock' : `Qty: ${p.quantity}`}
                   </span>

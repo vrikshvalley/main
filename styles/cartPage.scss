@@ -2,7 +2,7 @@
 
 .cart-page {
   min-height: 100vh;
-  background: $gradient-dark;
+  background: linear-gradient(135deg, #f8faf9 0%, #ffffff 100%);
   padding: 2rem 0 4rem;
 
   @media (max-width: 768px) {
@@ -28,18 +28,20 @@
     align-items: center;
     gap: 0.5rem;
     padding: 0.75rem 1.5rem;
-    background: rgba($text-primary, 0.1);
+    background: $white;
     border: 2px solid rgba($accent-primary, 0.3);
     border-radius: 12px;
-    color: $text-primary;
+    color: $dark-green;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
     margin-bottom: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 
     &:hover {
-      background: rgba($accent-primary, 0.2);
+      background: $accent-primary;
       border-color: $accent-primary;
+      color: $white;
       transform: translateX(-4px);
     }
   }
@@ -48,7 +50,7 @@
     font-family: 'Playfair Display', serif;
     font-size: 3rem;
     font-weight: 700;
-    color: $text-primary;
+    color: $dark-green;
     margin-bottom: 0.5rem;
     display: flex;
     align-items: center;
@@ -60,7 +62,7 @@
   }
 
   .cart-count {
-    color: rgba($text-primary, 0.7);
+    color: $dark-gray;
     font-size: 1.1rem;
   }
 }
@@ -68,24 +70,25 @@
 .empty-cart {
   text-align: center;
   padding: 6rem 2rem;
-  background: rgba($text-primary, 0.05);
+  background: $white;
   border-radius: 24px;
   border: 2px solid rgba($accent-primary, 0.2);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
 
   svg {
-    color: rgba($accent-primary, 0.5);
+    color: $accent-primary;
     margin-bottom: 2rem;
   }
 
   h2 {
     font-family: 'Playfair Display', serif;
     font-size: 2rem;
-    color: $text-primary;
+    color: $dark-green;
     margin-bottom: 1rem;
   }
 
   p {
-    color: rgba($text-primary, 0.6);
+    color: $dark-gray;
     margin-bottom: 2rem;
     font-size: 1.1rem;
   }
@@ -133,15 +136,15 @@
   grid-template-columns: 120px 1fr auto;
   gap: 1.5rem;
   padding: 1.5rem;
-  background: rgba($text-primary, 0.05);
-  backdrop-filter: blur(10px);
+  background: $white;
   border-radius: 16px;
-  border: 2px solid rgba($accent-primary, 0.2);
+  border: 2px solid rgba($accent-primary, 0.15);
   transition: all 0.3s ease;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
 
   &:hover {
-    border-color: rgba($accent-primary, 0.4);
-    box-shadow: 0 8px 24px rgba($accent-primary, 0.15);
+    border-color: $accent-primary;
+    box-shadow: 0 8px 24px rgba($accent-primary, 0.2);
   }
 
   @media (max-width: 640px) {
@@ -175,7 +178,7 @@
     .item-name {
       font-size: 1.2rem;
       font-weight: 600;
-      color: $text-primary;
+      color: $dark-green;
       margin: 0;
 
       @media (max-width: 640px) {
@@ -184,7 +187,7 @@
     }
 
     .item-size {
-      color: rgba($text-primary, 0.6);
+      color: $dark-gray;
       font-size: 0.9rem;
     }
 
@@ -213,7 +216,7 @@
       display: flex;
       align-items: center;
       gap: 0.75rem;
-      background: rgba($primary-bg, 0.1);
+      background: #f8f9fa;
       padding: 0.5rem;
       border-radius: 12px;
       border: 2px solid rgba($accent-primary, 0.2);
@@ -224,16 +227,16 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background: rgba($accent-primary, 0.2);
-        border: none;
+        background: $white;
+        border: 2px solid $accent-primary;
         border-radius: 8px;
-        color: $text-primary;
+        color: $accent-primary;
         cursor: pointer;
         transition: all 0.2s ease;
 
         &:hover {
           background: $accent-primary;
-          color: $text-dark;
+          color: $white;
           transform: scale(1.1);
         }
       }
@@ -242,29 +245,30 @@
         min-width: 32px;
         text-align: center;
         font-weight: 700;
-        color: $text-primary;
+        color: $dark-green;
         font-size: 1.1rem;
       }
     }
 
     .item-total {
-      color: $text-primary;
+      color: $dark-green;
       font-size: 1.3rem;
       font-weight: 700;
     }
 
     .remove-btn {
       padding: 0.5rem;
-      background: rgba($yellow, 0.2);
-      border: 2px solid rgba($yellow, 0.3);
+      background: #fff5f5;
+      border: 2px solid #fee;
       border-radius: 8px;
-      color: $yellow;
+      color: #e53e3e;
       cursor: pointer;
       transition: all 0.2s ease;
 
       &:hover {
-        background: rgba($yellow, 0.3);
-        border-color: $yellow;
+        background: #e53e3e;
+        border-color: #e53e3e;
+        color: $white;
         transform: scale(1.1);
       }
     }
@@ -275,11 +279,11 @@
   position: sticky;
   top: 2rem;
   padding: 2rem;
-  background: rgba($text-primary, 0.05);
-  backdrop-filter: blur(10px);
+  background: $white;
   border-radius: 16px;
-  border: 2px solid rgba($accent-primary, 0.3);
+  border: 2px solid rgba($accent-primary, 0.2);
   height: fit-content;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
 
   @media (max-width: 768px) {
     position: relative;
@@ -289,7 +293,7 @@
   h2 {
     font-family: 'Playfair Display', serif;
     font-size: 1.5rem;
-    color: $text-primary;
+    color: $dark-green;
     margin-bottom: 1.5rem;
   }
 
@@ -298,19 +302,19 @@
     justify-content: space-between;
     align-items: center;
     padding: 1rem 0;
-    color: rgba($text-primary, 0.8);
+    color: $dark-gray;
     font-size: 1rem;
 
     &.total {
       font-size: 1.3rem;
       font-weight: 700;
-      color: $text-primary;
+      color: $dark-green;
       padding-top: 1.5rem;
     }
 
     .free-badge {
       background: $accent-gradient;
-      color: $text-dark;
+      color: $white;
       padding: 0.25rem 0.75rem;
       border-radius: 6px;
       font-size: 0.85rem;
@@ -356,7 +360,7 @@
   .login-prompt {
     text-align: center;
     margin-top: 1rem;
-    color: rgba($text-primary, 0.7);
+    color: $dark-gray;
     font-size: 0.9rem;
 
     a {
@@ -384,12 +388,13 @@
       align-items: center;
       gap: 0.5rem;
       text-align: center;
-      color: rgba($text-primary, 0.8);
+      color: $dark-green;
       font-size: 0.85rem;
       font-weight: 600;
 
       .icon {
         font-size: 1.5rem;
+        color: $accent-primary;
       }
     }
   }

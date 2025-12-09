@@ -1,16 +1,34 @@
 'use client';
+import Image from 'next/image';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
 import '@/styles/pages.scss';
 
 export default function AboutUs() {
   return (
     <div className="page-container">
+      {/* Hero Banner */}
+      <div className="hero-banner about-us-hero">
+        <picture>
+          <source media="(max-width: 768px)" srcSet="/OurStoryMobile.png" />
+          <Image
+            src="/OurStoryDesktop.png"
+            alt="About Us - Vriksh Valley"
+            fill
+            priority
+            style={{ objectFit: 'cover' }}
+          />
+        </picture>
+        <div className="hero-overlay">
+          <h1>About Us</h1>
+          <p>Where nature meets nurture</p>
+        </div>
+      </div>
+
       <Breadcrumbs items={[{ label: 'About Us' }]} />
       
       <div className="page-content">
         <div className="page-header">
-          <h1>About Us – Vriksh Valley</h1>
-          <p>Where nature meets nurture</p>
+          <h2>About Us – Vriksh Valley</h2>
         </div>
 
         <div className="content-section">

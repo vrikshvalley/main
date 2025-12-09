@@ -174,20 +174,25 @@ export default function SubcategoryPage() {
         <div 
           className="products-header"
           style={{
-            backgroundImage: `url('/Landscape Image for Pages/${category.name}/${subcategory.name}/${subcategory.name}.png')`,
+            backgroundImage: subcategory.imageUrl?.desktop 
+              ? `url(${subcategory.imageUrl.desktop})` 
+              : 'none',
           }}
         >
           <style jsx>{`
             @media (max-width: 768px) {
               .products-header {
-                background-image: url('/Portrait Image for Pages for Mobile/${category.name}/${subcategory.name}/${subcategory.name}.png') !important;
+                background-image: ${subcategory.imageUrl?.mobile 
+                  ? `url(${subcategory.imageUrl.mobile})` 
+                  : 'none'} !important;
               }
             }
           `}</style>
           <div className="header-content">
             <div className="category-icon">{category.icon}</div>
             <h1>{subcategory.name}</h1>
-            <p>Browse our collection of {subcategory.name.toLowerCase()} in {category.name.toLowerCase()}</p>
+            <p>Browse our collection of {subcategory.name.toLowerCase()} in <a href={`/category/${categorySlug}`} style={{color: 'inherit', textDecoration: 'underline'}}>{category.name}</a></p>
+            <p className="products-count">{totalProducts} products available</p>
           </div>
         </div>
 
@@ -379,7 +384,10 @@ export default function SubcategoryPage() {
                 {totalPages > 1 && (
                   <div className="pagination">
                     <button
-                      onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                      onClick={() => {
+                        setCurrentPage(prev => Math.max(1, prev - 1));
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
                       disabled={currentPage === 1}
                       className="pagination-button"
                     >
@@ -397,7 +405,10 @@ export default function SubcategoryPage() {
                           return (
                             <button
                               key={page}
-                              onClick={() => setCurrentPage(page)}
+                              onClick={() => {
+                                setCurrentPage(page);
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                              }}
                               className={currentPage === page ? 'active' : ''}
                             >
                               {page}
@@ -411,7 +422,10 @@ export default function SubcategoryPage() {
                     </div>
 
                     <button
-                      onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                      onClick={() => {
+                        setCurrentPage(prev => Math.min(totalPages, prev + 1));
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
                       disabled={currentPage === totalPages}
                       className="pagination-button"
                     >

@@ -22,13 +22,25 @@ export default function AddToCartButton({ product, qty = 1 }) {
 
   const handleAddToCart = () => {
     try {
+      // Ensure price is a number (for products with variants, use base price)
+      const productPrice = typeof product.price === 'number' ? product.price : (product.variants?.[0]?.price || 0);
+      
+      // Create cart item with only necessary fields
+      const cartItem = {
+        id: product.id,
+        name: product.name,
+        price: productPrice,
+        image: product.images?.[0],
+        qty: qty,
+      };
+      
       if (user) {
         // User is logged in - save to Firebase
-        dispatch(addItemAsync({ item: { ...product, qty }, userId: user.uid }));
+        dispatch(addItemAsync({ item: cartItem, userId: user.uid }));
         showSuccessToast(`${product.name} added to cart! 🌱`);
       } else {
         // Guest user - save to localStorage via reducer
-        dispatch(addItem({ ...product, qty }));
+        dispatch(addItem(cartItem));
         showSuccessToast(`${product.name} added to cart! 🌱`);
       }
     } catch (error) {

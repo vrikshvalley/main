@@ -329,6 +329,23 @@
       }
     }
 
+    .price-section {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+      margin: 0.5rem 0;
+
+      .variant-label {
+        font-size: 1rem;
+        color: $dark-gray;
+        font-weight: 500;
+
+        @media (max-width: 480px) {
+          font-size: 0.875rem;
+        }
+      }
+    }
+
     .price {
       font-size: 1.5rem;
       font-weight: 600;

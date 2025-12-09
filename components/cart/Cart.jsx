@@ -189,7 +189,7 @@ export default function Cart() {
                     )}
                     <div className="item-info">
                       <h4 className="item-name">{item.name}</h4>
-                      <p className="item-price">₹{item.price}</p>
+                      <p className="item-price">₹{typeof item.price === 'number' ? item.price : 0}</p>
                     </div>
                   </div>
                   
@@ -251,7 +251,7 @@ export default function Cart() {
               <button 
                 className="whatsapp-order-btn"
                 onClick={() => {
-                  const phoneNumber = '919876543210';
+                  const phoneNumber = '919204745612';
                   let message = 'Hi! I would like to order:\n\n';
                   items.forEach(item => {
                     message += `${item.name} - Qty: ${item.qty} - ₹${(item.price * item.qty).toFixed(2)}\n`;

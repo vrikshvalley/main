@@ -65,9 +65,15 @@ export default function ProductsPage() {
   // Fetch products when filters change
   useEffect(() => {
     fetchProducts();
-    // Scroll to top when filters change
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [selectedCategory, priceRange, inStockOnly, sortBy, sortOrder, currentPage]);
+
+  // Scroll to products container when page changes
+  useEffect(() => {
+    const productsMain = document.querySelector('.products-main');
+    if (productsMain && currentPage > 1) {
+      productsMain.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [currentPage]);
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -354,7 +360,10 @@ export default function ProductsPage() {
               {totalPages > 1 && (
                 <div className="pagination">
                   <button
-                    onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                    onClick={() => {
+                      setCurrentPage(prev => Math.max(1, prev - 1));
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
                     disabled={currentPage === 1}
                     className="pagination-button"
                   >
@@ -372,7 +381,10 @@ export default function ProductsPage() {
                         return (
                           <button
                             key={page}
-                            onClick={() => setCurrentPage(page)}
+                            onClick={() => {
+                              setCurrentPage(page);
+                              window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }}
                             className={currentPage === page ? 'active' : ''}
                           >
                             {page}
@@ -386,7 +398,10 @@ export default function ProductsPage() {
                   </div>
 
                   <button
-                    onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                    onClick={() => {
+                      setCurrentPage(prev => Math.min(totalPages, prev + 1));
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
                     disabled={currentPage === totalPages}
                     className="pagination-button"
                   >
@@ -406,7 +421,6 @@ export default function ProductsPage() {
         </main>
       </div>
     </div>
-    <WhyChooseUs />
     </>
   );
 }

@@ -30,7 +30,7 @@ export default function Topbar() {
           <Link href="#faqs" className="hide-on-mobile">FAQ</Link>
           <span className="separator">|</span>
           <Link 
-            href="https://wa.me/919876543210?text=Hi,%20I'm%20interested%20in%20corporate%20bulk%20orders"
+            href="https://wa.me/919204745612?text=Hi,%20I'm%20USER%20and%20I'm%20interested%20in%20corporate%20bulk%20orders"
             target="_blank"
             rel="noopener noreferrer"
             className="corporate-link"

@@ -7,16 +7,17 @@ import "../../styles/pages.scss";
 
 export default function WhereNatureMeetsNurturePage() {
   return (
-    <div className="content-page">
+    <div className="page-container">
+      {/* Hero Banner */}
       {/* Hero Banner */}
       <div className="hero-banner">
         <picture>
           <source 
             media="(max-width: 768px)" 
-            srcSet="/Portrait Image for Pages for Mobile/Where Nature Meets Nurture/Where Nature Meets Nurture.png" 
+            srcSet="/OurStoryMobile.png" 
           />
           <Image
-            src="/Landscape Image for Pages/Where Nature Meets Nurture/Where Nature Meets Nurture.png"
+            src="/OurStoryDesktop.png"
             alt="Where Nature Meets Nurture - Vriksh Valley"
             fill
             priority
@@ -32,7 +33,7 @@ export default function WhereNatureMeetsNurturePage() {
 
       <Breadcrumbs items={[{ label: 'Where Nature Meets Nurture' }]} />
       
-      <div className="content-container">
+      <div className="page-content">
         <section className="content-section">
           <p>
             I remember life in Kolkata's bustling streets as a young dreamer, craving the quiet whispers of the forest. In 2019, a move to Ranchi unlocked something deep inside me. I realized plants weren't just decorations anymore—they were conversations, and gardens weren't just spaces, they were sanctuaries. That awakening planted the seed for Vriksh Valley. Through long walks among dew-drenched leaves and dusty nurseries, I understood that every leaf has a story and every gardener needs a friend.

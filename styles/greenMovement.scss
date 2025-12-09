@@ -9,7 +9,7 @@
   .movement-hero,
   .green-movement-hero {
     background: linear-gradient(135deg, rgba($dark-green, 0.85) 0%, rgba($deep-green, 0.85) 100%),
-                url('/Landscape Image for Pages/Our Story/Our Story.png') center/cover no-repeat;
+                url('/OurStoryDesktop.png') center/cover no-repeat;
     padding: 5rem 2rem;
     text-align: center;
     position: relative;
@@ -29,7 +29,7 @@
     // Mobile portrait background
     @media (max-width: 768px) {
       background: linear-gradient(135deg, rgba($dark-green, 0.85) 0%, rgba($deep-green, 0.85) 100%),
-                  url('/Portrait Image for Pages for Mobile/Our Story/Untitled-36.png') center/cover no-repeat;
+                  url('/OurStoryMobile.png') center/cover no-repeat;
     }
 
     .hero-content {

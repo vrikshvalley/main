@@ -1,10 +1,30 @@
 'use client';
+import Image from 'next/image';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
 import '@/styles/pages.scss';
 
 export default function CancellationReturn() {
   return (
     <div className="page-container">
+      {/* Hero Banner */}
+      <div className="hero-banner">
+        <picture>
+          <source media="(max-width: 768px)" srcSet="/CancellationTermsMobile.png" />
+          <Image
+            src="/CancellationTermsDesktop.png"
+            alt="Cancellation & Refund Policy - Vriksh Valley"
+            fill
+            priority
+            className="hero-image"
+            style={{ objectFit: 'cover' }}
+          />
+        </picture>
+        <div className="hero-overlay">
+          <h1>Cancellation & Refund Policy</h1>
+          <p>Clear and transparent policies for your peace of mind</p>
+        </div>
+      </div>
+
       <Breadcrumbs items={[{ label: 'Cancellation & Return Policy' }]} />
       
       <div className="page-content">

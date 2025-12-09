@@ -40,6 +40,30 @@ export default function ProductPageTabs({ product }) {
           <div className="tab-panel additional-info-panel">
             <h3>Product Details</h3>
             
+            {/* Know About the Product */}
+            {product.knowAboutProduct && (
+              <div className="info-section">
+                <h4>About This Product</h4>
+                <p>{product.knowAboutProduct}</p>
+              </div>
+            )}
+
+            {/* What's In The Box */}
+            {product.whatsInTheBox && (
+              <div className="info-section">
+                <h4>What's In The Box?</h4>
+                <p>{product.whatsInTheBox}</p>
+              </div>
+            )}
+
+            {/* Additional Details */}
+            {product.additionalDetails && (
+              <div className="info-section">
+                <h4>Care Instructions</h4>
+                <p className="care-details">{product.additionalDetails}</p>
+              </div>
+            )}
+            
             <div className="info-grid">
               {product.category && (
                 <div className="info-item">
@@ -57,6 +81,24 @@ export default function ProductPageTabs({ product }) {
                 <div className="info-item">
                   <span className="info-label">Size:</span>
                   <span className="info-value">{product.size}</span>
+                </div>
+              )}
+              {product.color && (
+                <div className="info-item">
+                  <span className="info-label">Color:</span>
+                  <span className="info-value">{product.color}</span>
+                </div>
+              )}
+              {product.maintenanceLevel && (
+                <div className="info-item">
+                  <span className="info-label">Maintenance Level:</span>
+                  <span className="info-value">{product.maintenanceLevel}</span>
+                </div>
+              )}
+              {product.petFriendly && (
+                <div className="info-item">
+                  <span className="info-label">Pet-Friendly:</span>
+                  <span className="info-value">{product.petFriendly}</span>
                 </div>
               )}
               {product.care_level && (
@@ -77,6 +119,12 @@ export default function ProductPageTabs({ product }) {
                   <span className="info-value">{product.water}</span>
                 </div>
               )}
+              {product.stock !== undefined && (
+                <div className="info-item">
+                  <span className="info-label">Stock:</span>
+                  <span className="info-value">{product.stock > 0 ? `${product.stock} available` : 'Out of Stock'}</span>
+                </div>
+              )}
               {product.stock_status && (
                 <div className="info-item">
                   <span className="info-label">Availability:</span>
@@ -85,9 +133,20 @@ export default function ProductPageTabs({ product }) {
               )}
             </div>
 
-            {product.tags && product.tags.length > 0 && product.tags[0] !== '-' && (
+            {product.searchTags && product.searchTags.length > 0 && (
               <div className="tags-section">
                 <h4>Tags</h4>
+                <div className="tags-list">
+                  {product.searchTags.map((tag, index) => (
+                    <span key={index} className="tag">{tag}</span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {product.tags && product.tags.length > 0 && product.tags[0] !== '-' && (
+              <div className="tags-section">
+                <h4>Product Tags</h4>
                 <div className="tags-list">
                   {product.tags.map((tag, index) => (
                     <span key={index} className="tag">{tag}</span>

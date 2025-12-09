@@ -11,7 +11,7 @@ const teamMembers = [
     name: "Sagnik Dutta",
     role: "Founder & Green Enthusiast",
     image: "/sagnik.png",
-    bio: "From the concrete heart of the city to thriving green sanctuaries, Sagnik turned his frustration with clueless nurseries and wilting plants into a mission‑driven start-up: Vriksh Valley. He's built a platform where every plant arrives with expert knowledge, personalized care, and a trusted \"plant whisperer\" who knows exactly why your leafy friends are throwing a tantrum. 🌱\n\nUnder his leadership, Vriksh Valley is turning the chaos of plant parenting into a seamless, confidence‑boosting experience—one thriving green at a time.",
+    bio: "From the concrete heart of the city to thriving green sanctuaries, Sagnik turned his frustration with clueless nurseries and wilting plants into a mission‑driven start-up: Vriksh Valley. He's built a platform where every plant arrives with expert knowledge, personalized care, and a trusted \"plant whisperer\" who knows exactly why your leafy friends are throwing a tantrum. \n\nUnder his leadership, Vriksh Valley is turning the chaos of plant parenting into a seamless, confidence‑boosting experience—one thriving green at a time.🌱",
     email: "sagnikdutta2001@gmail.com",
     linkedin: "https://www.linkedin.com/in/sagnik-dutta-524720250/",
     size: "large"

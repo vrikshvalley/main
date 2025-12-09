@@ -2,11 +2,13 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Thumbs, Autoplay } from 'swiper/modules';
 import { useDispatch } from 'react-redux';
 import { addItem } from '@/lib/slices/cartSlice';
 import { showSuccessToast, showWarningToast } from '@/lib/toastHelpers';
+import { useAuth } from '@/lib/AuthContext';
 import WishlistButton from '@/components/general/WishlistButton';
 import ProductPageTabs from '@/components/products/ProductPageTabs';
 import LightGuide from '@/components/products/LightGuide';
@@ -19,11 +21,17 @@ import '@/styles/wishlistButton.scss';
 
 export default function ProductPage({ product }) {
   const dispatch = useDispatch();
+  const router = useRouter();
+  const { user } = useAuth();
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [selectedSize, setSelectedSize] = useState(product?.sizes?.[0] || null);
   const [selectedColor, setSelectedColor] = useState(product?.colors?.[0] || null);
+  const [selectedVariant, setSelectedVariant] = useState(product?.variants?.[0] || null);
   const [quantity, setQuantity] = useState(1);
+
+  // Get current price based on selected variant
+  const currentPrice = selectedVariant ? selectedVariant.price : product?.price || 0;
 
   if (!product) {
     return (
@@ -39,21 +47,41 @@ export default function ProductPage({ product }) {
     dispatch(addItem({
       id: product.id,
       name: product.name,
-      price: product.price,
+      price: currentPrice,
       image: product.images?.[0],
       quantity: quantity,
       color: selectedColor,
       size: selectedSize,
+      variant: selectedVariant?.name || null,
     }));
     showSuccessToast(`${product.name} added to cart! 🌿`);
   };
 
   const handleBuyNow = () => {
-    handleAddToCart();
-    showSuccessToast('Redirecting to checkout... 🛒');
-    setTimeout(() => {
-      window.location.href = '/cart';
-    }, 500);
+    // Add item to cart first
+    dispatch(addItem({
+      id: product.id,
+      name: product.name,
+      price: currentPrice,
+      image: product.images?.[0],
+      quantity: quantity,
+      color: selectedColor,
+      size: selectedSize,
+      variant: selectedVariant?.name || null,
+    }));
+    
+    // Redirect based on auth status
+    if (user) {
+      showSuccessToast('Redirecting to checkout... 🛒');
+      setTimeout(() => {
+        router.push('/checkout');
+      }, 500);
+    } else {
+      showSuccessToast('Please sign in to checkout 🔐');
+      setTimeout(() => {
+        router.push('/auth/signin?redirect=/checkout');
+      }, 500);
+    }
   };
 
   return (
@@ -115,7 +143,7 @@ export default function ProductPage({ product }) {
           <p className="description">{product.description}</p>
           
           {/* Price Display - Handle custom pricing */}
-          {product.priceType === 'custom' || product.price === 'Price on Customization' ? (
+          {product.priceOnCustomization ? (
             <div className="price-custom">
               <p className="price-label">Price on Customization</p>
               <p className="price-description">
@@ -123,12 +151,12 @@ export default function ProductPage({ product }) {
               </p>
             </div>
           ) : (
-            <>
-              <p className="price">₹{typeof product.price === 'number' ? product.price : (product.priceValue || product.price)}</p>
-              {product.alternate_price && (
-                <p className="price-original">₹{product.alternate_price}</p>
+            <div className="price-section">
+              <p className="price">₹{currentPrice}</p>
+              {selectedVariant && (
+                <p className="variant-label">({selectedVariant.label})</p>
               )}
-            </>
+            </div>
           )}
 
           {/* Stock Info */}
@@ -181,6 +209,24 @@ export default function ProductPage({ product }) {
             </div>
           )}
 
+          {/* Variant selection (for products with price variants) */}
+          {product.variants && product.variants.length > 0 && (
+            <div className="option-group">
+              <label>Select Variant:</label>
+              <div className="options">
+                {product.variants.map((variant) => (
+                  <button
+                    key={variant.name}
+                    className={selectedVariant?.name === variant.name ? 'active' : ''}
+                    onClick={() => setSelectedVariant(variant)}
+                  >
+                    {variant.label} - ₹{variant.price}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Quantity */}
           <div className="option-group">
             <label>Quantity:</label>
@@ -193,9 +239,9 @@ export default function ProductPage({ product }) {
 
           {/* Buttons */}
           <div className="actions">
-            {product.priceType === 'custom' || product.price === 'Price on Customization' ? (
+            {product.priceOnCustomization ? (
               <a 
-                href="https://wa.me/+919999999999?text=Hi, I'm interested in customizing this product"
+                href="https://wa.me/919204745612?text=Hi, I'm interested in customizing this product"
                 className="contact-customize"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -223,8 +269,18 @@ export default function ProductPage({ product }) {
           </div>
 
           {/* Product Meta */}
-          {(product.care_level || product.light || product.water || product.stock_status) && (
+          {(product.maintenanceLevel || product.petFriendly || product.care_level || product.light || product.water || product.stock_status) && (
             <div className="product-meta">
+              {product.maintenanceLevel && (
+                <div className="meta-item">
+                  <strong>Maintenance:</strong> {product.maintenanceLevel}
+                </div>
+              )}
+              {product.petFriendly && (
+                <div className="meta-item">
+                  <strong>Pet-Friendly:</strong> {product.petFriendly}
+                </div>
+              )}
               {product.care_level && (
                 <div className="meta-item">
                   <strong>Care Level:</strong> {product.care_level}

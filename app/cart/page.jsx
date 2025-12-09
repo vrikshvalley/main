@@ -102,7 +102,11 @@ export default function CartPage() {
 
   const handleIncrement = (product) => {
     if (user) {
-      dispatch(updateItemAsync({ userId: user.uid, product, increment: true }));
+      dispatch(updateItemAsync({ 
+        userId: user.uid, 
+        productId: product.id, 
+        quantity: product.qty + 1 
+      }));
     } else {
       dispatch(addItem(product));
     }
@@ -111,9 +115,16 @@ export default function CartPage() {
   const handleDecrement = (productId) => {
     const product = itemsMap[productId];
     if (user) {
-      dispatch(
-        updateItemAsync({ userId: user.uid, product, increment: false })
-      );
+      const newQty = product.qty - 1;
+      if (newQty <= 0) {
+        dispatch(removeItemAsync({ userId: user.uid, productId }));
+      } else {
+        dispatch(updateItemAsync({ 
+          userId: user.uid, 
+          productId, 
+          quantity: newQty 
+        }));
+      }
     } else {
       dispatch(decrementItem(productId));
     }
@@ -188,7 +199,7 @@ export default function CartPage() {
                       {item.size && (
                         <p className="item-size">Size: {item.size}</p>
                       )}
-                      <p className="item-price">₹{item.price}</p>
+                      <p className="item-price">₹{typeof item.price === 'number' ? item.price : 0}</p>
                     </div>
 
                     <div className="item-actions">
@@ -211,7 +222,7 @@ export default function CartPage() {
                       </div>
 
                       <div className="item-total">
-                        ₹{(item.price * item.quantity).toFixed(2)}
+                        ₹{((typeof item.price === 'number' ? item.price : 0) * item.quantity).toFixed(2)}
                       </div>
 
                       <button

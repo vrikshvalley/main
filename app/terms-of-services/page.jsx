@@ -1,16 +1,34 @@
 'use client';
+import Image from 'next/image';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
 import '@/styles/pages.scss';
 
 export default function TermsOfServices() {
   return (
     <div className="page-container">
+      {/* Hero Banner */}
+      <div className="hero-banner terms-services-hero">
+        <picture>
+          <source media="(max-width: 768px)" srcSet="/TermsofServiceMobile.png" />
+          <Image
+            src="/TermsofServiceDesktop.png"
+            alt="Terms of Services - Vriksh Valley"
+            fill
+            priority
+            style={{ objectFit: 'cover' }}
+          />
+        </picture>
+        <div className="hero-overlay">
+          <h1>Terms of Services</h1>
+          <p>Please read these terms carefully</p>
+        </div>
+      </div>
+
       <Breadcrumbs items={[{ label: 'Terms of Services' }]} />
       
       <div className="page-content">
         <div className="page-header">
-          <h1>Terms of Services</h1>
-          <p>Please read these terms carefully before using our services</p>
+          <h2>Terms of Services</h2>
         </div>
 
         <div className="content-section">

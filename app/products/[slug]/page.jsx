@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useLayoutEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { getProductBySlug } from '@/lib/productHelpers';
 import TheLoader from '@/components/general/TheLoader';
@@ -19,6 +19,11 @@ export default function ProductDetailPage() {
     if (slug) {
       fetchProduct();
     }
+  }, [slug]);
+
+  // Scroll to top immediately when slug changes (before paint)
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0);
   }, [slug]);
 
   const fetchProduct = async () => {

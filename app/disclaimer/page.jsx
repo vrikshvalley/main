@@ -1,10 +1,30 @@
 'use client';
+import Image from 'next/image';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
 import '@/styles/pages.scss';
 
 export default function Disclaimer() {
   return (
     <div className="page-container">
+      {/* Hero Banner */}
+      <div className="hero-banner">
+        <picture>
+          <source media="(max-width: 768px)" srcSet="/DisclaimerMobile.png" />
+          <Image
+            src="/DisclaimerDesktop.png"
+            alt="Disclaimer - Vriksh Valley"
+            fill
+            priority
+            className="hero-image"
+            style={{ objectFit: 'cover' }}
+          />
+        </picture>
+        <div className="hero-overlay">
+          <h1>Disclaimer</h1>
+          <p>Important information about our services and products</p>
+        </div>
+      </div>
+
       <Breadcrumbs items={[{ label: 'Disclaimer' }]} />
       
       <div className="page-content">
