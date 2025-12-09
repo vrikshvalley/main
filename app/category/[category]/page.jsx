@@ -198,71 +198,7 @@ export default function CategoryPage() {
           </div>
         </div>
 
-        {/* Subcategories Section */}
-        {category.subcategories && category.subcategories.length > 0 && (
-          <div className="subcategories-section">
-            <h2>Shop by Type</h2>
-            <Swiper
-              modules={[Navigation, Autoplay]}
-              spaceBetween={20}
-              slidesPerView={'auto'}
-              navigation
-              autoplay={{
-                delay: 3000,
-                disableOnInteraction: false,
-              }}
-              breakpoints={{
-                320: {
-                  slidesPerView: 2,
-                  spaceBetween: 15,
-                },
-                480: {
-                  slidesPerView: 3,
-                  spaceBetween: 15,
-                },
-                768: {
-                  slidesPerView: 4,
-                  spaceBetween: 20,
-                },
-                1024: {
-                  slidesPerView: 5,
-                  spaceBetween: 20,
-                },
-                1280: {
-                  slidesPerView: 6,
-                  spaceBetween: 25,
-                },
-              }}
-              className="subcategories-slider"
-            >
-              {category.subcategories.map((subcat) => (
-                <SwiperSlide key={subcat.slug}>
-                  <Link 
-                    href={`/category/${categorySlug}/${subcat.slug}`}
-                    className="subcategory-card"
-                  >
-                    {(subcat.imageUrl?.desktop || subcat.imageUrl?.mobile) && (
-                      <div className="subcat-image">
-                        <picture>
-                          {subcat.imageUrl?.mobile && (
-                            <source media="(max-width: 768px)" srcSet={subcat.imageUrl.mobile} />
-                          )}
-                          <img 
-                            src={subcat.imageUrl.desktop || subcat.imageUrl.mobile} 
-                            alt={subcat.name}
-                            width={200}
-                            height={200}
-                          />
-                        </picture>
-                      </div>
-                    )}
-                    <h3>{subcat.name}</h3>
-                  </Link>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </div>
-        )}
+       
 
         <div className="main-products-container" ref={productsContainerRef}>
           {/* Backdrop Overlay */}
@@ -512,6 +448,72 @@ export default function CategoryPage() {
             )}
           </main>
         </div>
+ {/* Subcategories Section */}
+        {category.subcategories && category.subcategories.length > 0 && (
+          <div className="subcategories-section">
+            <h2>Shop by Type</h2>
+            <Swiper
+              modules={[Navigation, Autoplay]}
+              spaceBetween={20}
+              slidesPerView={'auto'}
+              navigation
+              autoplay={{
+                delay: 3000,
+                disableOnInteraction: false,
+              }}
+              breakpoints={{
+                320: {
+                  slidesPerView: 2,
+                  spaceBetween: 15,
+                },
+                480: {
+                  slidesPerView: 3,
+                  spaceBetween: 15,
+                },
+                768: {
+                  slidesPerView: 4,
+                  spaceBetween: 20,
+                },
+                1024: {
+                  slidesPerView: 5,
+                  spaceBetween: 20,
+                },
+                1280: {
+                  slidesPerView: 6,
+                  spaceBetween: 25,
+                },
+              }}
+              className="subcategories-slider"
+            >
+              {category.subcategories.map((subcat) => (
+                <SwiperSlide key={subcat.slug}>
+                  <Link 
+                    href={`/category/${categorySlug}/${subcat.slug}`}
+                    className="subcategory-card"
+                  >
+                    {(subcat.imageUrl?.desktop || subcat.imageUrl?.mobile) && (
+                      <div className="subcat-image">
+                        <picture>
+                          {subcat.imageUrl?.mobile && (
+                            <source media="(max-width: 768px)" srcSet={subcat.imageUrl.mobile} />
+                          )}
+                          <img 
+                            src={subcat.imageUrl.desktop || subcat.imageUrl.mobile} 
+                            alt={subcat.name}
+                            width={200}
+                            height={200}
+                          />
+                        </picture>
+                      </div>
+                    )}
+                    <h3>{subcat.name}</h3>
+                  </Link>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        )}
+
       </div>
       <Footer />
       <WhatsAppButton />

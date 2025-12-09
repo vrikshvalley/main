@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay } from 'swiper/modules';
-import ProductCard from '@/components/products/ProductCard';
+import ProductListCard from '@/components/products/ProductListCard';
 import { getRelatedProducts } from '@/lib/productHelpers';
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -43,29 +43,36 @@ export default function RelatedProducts({ category, currentProductId }) {
 
         <Swiper
           modules={[Navigation, Autoplay]}
-          spaceBetween={20}
-          slidesPerView={'auto'}
+          slidesPerView={1}
+          spaceBetween={12}
           navigation
           autoplay={{
             delay: 3500,
             disableOnInteraction: false,
           }}
           breakpoints={{
-            480: {
-              spaceBetween: 15,
+            320: {
+              slidesPerView: 1,
+              spaceBetween: 10,
             },
-            768: {
+            640: {
+              slidesPerView: 2,
+              spaceBetween: 12,
+            },
+            900: {
+              slidesPerView: 3,
+              spaceBetween: 16,
+            },
+            1200: {
+              slidesPerView: 4,
               spaceBetween: 20,
-            },
-            1024: {
-              spaceBetween: 25,
             },
           }}
           className="related-products-swiper"
         >
           {relatedProducts.map((product) => (
             <SwiperSlide key={product.id}>
-              <ProductCard product={product} />
+              <ProductListCard product={product} viewMode="grid" />
             </SwiperSlide>
           ))}
         </Swiper>

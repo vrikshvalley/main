@@ -14,10 +14,10 @@ export default function WhereNatureMeetsNurturePage() {
         <picture>
           <source 
             media="(max-width: 768px)" 
-            srcSet="/OurStoryMobile.png" 
+            srcSet="/NatureMeetsMobile.png" 
           />
           <Image
-            src="/OurStoryDesktop.png"
+            src="/NatureMeetsDesktop.png"
             alt="Where Nature Meets Nurture - Vriksh Valley"
             fill
             priority

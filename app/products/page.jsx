@@ -1,18 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import Topbar from '@/components/general/Topbar';
-import Navbar from '@/components/general/Navbar';
-import Footer from '@/components/general/Footer';
-import WhatsAppButton from '@/components/general/WhatsAppButton';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
 import { getProducts, getPriceRange } from '@/lib/productHelpers';
 import { getCategories } from '@/lib/services/productService';
 import { ChevronDown, X, SlidersHorizontal, Grid, List } from 'lucide-react';
 import TheLoader from '@/components/general/TheLoader';
 import ProductListCard from '@/components/products/ProductListCard';
-import WhyChooseUs from '@/components/products/WhyChooseUs';
+import WhyChooseUs from "@/components/products/WhyChooseUs";
 import '@/styles/products.scss';
 
 export default function ProductsPage() {
@@ -149,7 +144,17 @@ export default function ProductsPage() {
       <div className="products-page">
         <Breadcrumbs items={[{ label: 'Products' }]} />
       {/* Page Header */}
-      <div className="products-header">
+        <div className="products-header"
+        style={{
+            backgroundImage: 'url(/ProductsDesktop.png)',
+          }}>
+          <style jsx>{`
+            @media (max-width: 768px) {
+              .products-header {
+                background-image: url(/ProductsMobile.png);
+              }
+            }
+          `}</style>
         <div className="header-content">
           <h1>Our Products</h1>
           <p>Discover our curated collection of plants, seeds, and gardening essentials</p>
@@ -417,7 +422,8 @@ export default function ProductsPage() {
                 Clear Filters
               </button>
             </div>
-          )}
+            )}
+            <WhyChooseUs />
         </main>
       </div>
     </div>

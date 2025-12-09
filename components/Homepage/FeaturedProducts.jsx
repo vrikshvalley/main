@@ -1,10 +1,15 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
-import ProductCard from '../products/ProductCard';
 import "@/styles/featuredProducts.scss";
+
+const ProductCard = dynamic(() => import('../products/ProductCard'), {
+  loading: () => <div>Loading...</div>,
+  ssr: true
+});
 
 const containerVariants = {
   hidden: { opacity: 0 },

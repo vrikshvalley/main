@@ -1,4 +1,7 @@
 import React from "react";
+import Navbar from "@/components/general/Navbar";
+import Footer from "@/components/general/Footer";
+import WhatsAppButton from "@/components/general/WhatsAppButton";
 
 export const metadata = {
   title: "Where Nature Meets Nurture | Vriksh Valley",
@@ -7,5 +10,10 @@ export const metadata = {
 };
 
 export default function WhereNatureMeetsNurtureLayout({ children }) {
-  return <>{children}</>;
+  return <>
+    <Navbar />
+    {children}
+    <Footer />
+    <WhatsAppButton />
+  </>;
 }

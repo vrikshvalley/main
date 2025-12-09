@@ -7,6 +7,7 @@ import TheLoader from '@/components/general/TheLoader';
 import ProductPage from '@/components/products/ProductPage';
 import RelatedProducts from '@/components/products/RelatedProducts';
 import Ads from '@/components/general/Ads';
+import WhyChooseUs from "@/components/products/WhyChooseUs";
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -54,6 +55,7 @@ export default function ProductDetailPage() {
       </div>
       
       {/* Related Products Section */}
+      
       <RelatedProducts category={product?.category} currentProductId={product?.id} />
       
       {/* Ads Section */}
@@ -65,6 +67,7 @@ export default function ProductDetailPage() {
           speed={15}
         />
       </div>
+      <WhyChooseUs />
     </div>
   );
 }
