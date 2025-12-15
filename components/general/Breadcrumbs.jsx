@@ -4,6 +4,9 @@ import { ChevronRight, Home } from 'lucide-react';
 import '@/styles/breadcrumbs.scss';
 
 export default function Breadcrumbs({ items }) {
+  // Filter out items with label "Home" to avoid duplicates
+  const filteredItems = items.filter(item => item.label?.toLowerCase() !== 'home');
+  
   return (
     <nav className="breadcrumbs" aria-label="Breadcrumb">
       <ol className="breadcrumbs-list">
@@ -13,7 +16,7 @@ export default function Breadcrumbs({ items }) {
             <span>Home</span>
           </Link>
         </li>
-        {items.map((item, index) => (
+        {filteredItems.map((item, index) => (
           <li key={index} className="breadcrumb-item">
             <ChevronRight size={16} className="separator" />
             {item.href ? (

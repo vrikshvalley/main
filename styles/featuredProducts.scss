@@ -2,9 +2,9 @@
 @use 'variables' as *;
 
 .featured-products {
-  padding: 4rem 1.5rem;
+  padding: 0;
   max-width: 1500px;
-  margin: 1rem auto;
+  margin: 0 auto;
 
   .featured-header {
     display: flex;
@@ -25,6 +25,7 @@
     color: $text-primary;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     margin: 0;
+    justify-content: flex-end;
 
     @media (max-width: 768px) {
       font-size: 1.75rem;
@@ -43,7 +44,7 @@
     text-decoration: none;
     font-weight: 600;
     font-size: 1.05rem;
-    padding: 0.75rem 1.5rem;
+    padding: 0.4rem 0.75rem;
     border-radius: 8px;
     border: 2px solid $text-primary;
     background: rgba($bg-secondary, 0.1);
@@ -73,10 +74,120 @@
     gap: 1.5rem;
   }
 
+  // Featured Products Slider
+  .featured-products-slider {
+    padding: 1rem 0;
+    max-width: 100%;
+
+    /* Ensure slides center the product card and don't stretch it */
+    .swiper-slide {
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+    }
+
+    /* Constrain ProductListCard inside slider so it matches grid appearance */
+    .product-list-card {
+      width: 100%;
+      max-width: 340px; /* similar to grid cell width */
+      display: flex;
+      flex-direction: column;
+      margin: 0 auto;
+    }
+
+    /* Ensure image wrapper keeps aspect ratio as in product list */
+    .product-list-card .product-image-wrapper {
+      width: 100%;
+      aspect-ratio: 1;
+    }
+
+    .swiper-button-next,
+    .swiper-button-prev {
+      color: $accent-primary;
+      background: rgba($accent-primary, 0.1);
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      top: 50%;
+      transform: translateY(-50%);
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: rgba($accent-primary, 0.2);
+        color: $text-primary;
+      }
+
+      @media (max-width: 768px) {
+        width: 38px;
+        height: 38px;
+        font-size: 18px;
+
+        &::after {
+          font-size: 18px;
+        }
+      }
+
+      &::after {
+        font-size: 20px;
+        font-weight: bold;
+      }
+    }
+
+    .swiper-button-next {
+      right: 0;
+
+      @media (max-width: 768px) {
+        right: -5px;
+      }
+    }
+
+    .swiper-button-prev {
+      left: 0;
+
+      @media (max-width: 768px) {
+        left: -5px;
+      }
+    }
+
+    .swiper-pagination {
+      bottom: -40px;
+      padding-bottom: 0;
+
+      .swiper-pagination-bullet {
+        background: rgba($accent-primary, 0.3);
+        width: 8px;
+        height: 8px;
+        transition: all 0.3s ease;
+
+        &.swiper-pagination-bullet-active {
+          background: $accent-primary;
+          width: 24px;
+          border-radius: 4px;
+        }
+      }
+    }
+
+    @media (max-width: 768px) {
+      padding: 1rem 0 60px 0;
+    }
+
+    @media (max-width: 480px) {
+      padding: 0.75rem 0 50px 0;
+
+      .swiper-button-next,
+      .swiper-button-prev {
+        width: 32px;
+        height: 32px;
+
+        &::after {
+          font-size: 16px;
+        }
+      }
+    }
+  }
+
   // Responsive padding
   @media (max-width: 992px) {
-    padding: 3rem 1.5rem;
-    
     .products-container {
       grid-template-columns: repeat(3, 1fr);
       gap: 1.5rem;
@@ -84,8 +195,6 @@
   }
 
   @media (max-width: 768px) {
-    padding: 2rem 1.5rem;
-    
     .featured-title {
       font-size: 1.75rem;
       margin-bottom: 40px;
@@ -98,8 +207,6 @@
   }
 
   @media (max-width: 480px) {
-    padding: 1.5rem 0.75rem;
-    
     .featured-title {
       font-size: 1.5rem;
       margin-bottom: 30px;

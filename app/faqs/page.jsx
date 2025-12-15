@@ -1,7 +1,8 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
+import { setStickyHeaderData } from '@/lib/stickyHeaderStore';
 import { ChevronDown, HelpCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import '@/styles/plantFAQs.scss';
@@ -68,7 +69,7 @@ export default function FAQs() {
   };
 
   return (
-    <div className="page-container">
+    <div className="page-container">      
       {/* Hero Banner */}
       <div className="hero-banner faqs-hero">
         <picture>

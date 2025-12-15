@@ -1,12 +1,18 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
+import { setStickyHeaderData } from '@/lib/stickyHeaderStore';
 import { Search, Package } from 'lucide-react';
 import '@/styles/pages.scss';
 
 export default function TrackOrder() {
   const [orderId, setOrderId] = useState('');
+
+  useEffect(() => {
+    setStickyHeaderData({ title: "Track Your Order", subtitle: "Enter your order ID to track your shipment" });
+    return () => setStickyHeaderData({ title: null, subtitle: null });
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -16,6 +22,7 @@ export default function TrackOrder() {
 
   return (
     <div className="page-container">
+      
       {/* Hero Banner */}
       <div className="hero-banner">
         <picture>

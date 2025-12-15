@@ -1,17 +1,25 @@
 @use 'variables' as *;
 
 .bring-nature-home {
-  padding: 8rem 2rem;
-  max-width: 900px;
+  padding: 0;
+  max-width: 1400px;
   margin: 0 auto;
-  text-align: center;
   background: transparent;
   position: relative;
   font-family: 'Playfair Display', serif;
 
+  .content-container {
+    display: grid;
+    grid-template-columns: 1fr 0.5fr;
+    gap: 4rem;
+    align-items: start;
+    justify-content: space-evenly;
+  }
+
   .content-wrapper {
     position: relative;
     z-index: 1;
+    text-align: left;
   }
 
   h2 {
@@ -24,6 +32,10 @@
 
     .highlight {
       color: $teal;
+      background-color: rgba($white, 0.85);
+      border: dotted 2px $teal;
+      padding: 0 0.4rem;
+      border-radius: 4px;
       font-weight: 500;
       position: relative;
       display: inline-block;
@@ -33,15 +45,53 @@
   p {
     font-size: 1.15rem;
     color: rgba($white, 0.85);
-    max-width: 650px;
-    margin: 0 auto;
     line-height: 1.9;
     font-weight: 300;
     font-family: 'Playfair Display', serif;
+    max-width: 700px;
+  }
+
+  .image-card {
+    background: $white;
+    border-radius: 16px;
+    padding: 0.5rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    border: 3px solid $white;
+    width: 80%;
+    align-self: center;
+    margin-top: 1.5rem;
+    
+    .image-wrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 2/1.5;
+      border-radius: 17px;
+      overflow: hidden;
+      margin-bottom: 1rem;
+      
+      .nature-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+    
+    .nature-quote {
+      font-size: 1rem;
+      color: $dark-green;
+      line-height: 1.7;
+      font-style: italic;
+      font-weight: 400;
+      text-align: right;
+      margin: 0;
+      padding: 0 1rem;
+    }
   }
 
   @media (max-width: 1024px) {
-    padding: 6rem 2rem;
+    .content-container {
+      gap: 3rem;
+    }
 
     h2 {
       font-size: 3rem;
@@ -50,10 +100,25 @@
     p {
       font-size: 1.1rem;
     }
+
+    .image-card {
+      padding: 1rem;
+
+      .nature-quote {
+        font-size: 0.95rem;
+      }
+    }
   }
 
   @media (max-width: 768px) {
-    padding: 5rem 1.5rem;
+    .content-container {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+
+    .content-wrapper {
+      text-align: center;
+    }
 
     h2 {
       font-size: 2.5rem;
@@ -64,11 +129,14 @@
       font-size: 1.05rem;
       line-height: 1.8;
     }
+
+    .image-card {
+      max-width: 400px;
+      margin: 0 auto;
+    }
   }
 
   @media (max-width: 480px) {
-    padding: 4rem 1.25rem;
-
     h2 {
       font-size: 2rem;
       letter-spacing: -0.2px;
@@ -77,6 +145,15 @@
     p {
       font-size: 1rem;
       line-height: 1.7;
+    }
+
+    .image-card {
+      padding: 1.25rem;
+      
+      .nature-quote {
+        font-size: 0.9rem;
+        padding: 0 0.5rem;
+      }
     }
   }
 }

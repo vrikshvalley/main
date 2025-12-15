@@ -109,6 +109,15 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+          if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+          }
+        `,
+          }}
+        />
         <InitialLoader />
         <TheLoader fullscreen showOnRouteChange />
         <Providers>

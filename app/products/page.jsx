@@ -1,20 +1,56 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
 import { getProducts, getPriceRange } from '@/lib/productHelpers';
 import { getCategories } from '@/lib/services/productService';
-import { ChevronDown, X, SlidersHorizontal, Grid, List } from 'lucide-react';
+import { ChevronDown, X, SlidersHorizontal, Grid, List, Search } from 'lucide-react';
 import TheLoader from '@/components/general/TheLoader';
 import ProductListCard from '@/components/products/ProductListCard';
 import WhyChooseUs from "@/components/products/WhyChooseUs";
 import '@/styles/products.scss';
 
 export default function ProductsPage() {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
+  // Read `filter` query param from `window.location.search` on the client
+  const [filter, setFilter] = useState(null);
+
+  useEffect(() => {
+    const readFilter = () => {
+      try {
+        if (typeof window === 'undefined') return null;
+        return new URLSearchParams(window.location.search).get('filter');
+      } catch (e) {
+        return null;
+      }
+    };
+
+    setFilter(readFilter());
+
+    const onPopstate = () => setFilter(readFilter());
+    window.addEventListener('popstate', onPopstate);
+    return () => window.removeEventListener('popstate', onPopstate);
+  }, []);
+  
+  // Framer Motion scroll hook for parallax effect
+  const { scrollY } = useScroll();
+  const headerY = useTransform(scrollY, [0, 500], [0, 150]);
+  
+  // Debug parallax
+  useEffect(() => {
+    const unsubscribe = headerY.on('change', (latest) => {
+      console.log('Products Page - headerY:', latest);
+    });
+    return () => unsubscribe();
+  }, [headerY]);
+  
+  const [pageTitle, setPageTitle] = useState('Our Products');
+  const [pageSubtitle, setPageSubtitle] = useState('Discover our curated collection');
   const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [viewMode, setViewMode] = useState('grid');
+  const [searchQuery, setSearchQuery] = useState('');
   
   // Fetch categories
   useEffect(() => {
@@ -31,6 +67,9 @@ export default function ProductsPage() {
   
   // Filter states
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedPlantType, setSelectedPlantType] = useState([]);
+  const [selectedMaintenance, setSelectedMaintenance] = useState([]);
+  const [selectedPetFriendly, setSelectedPetFriendly] = useState(null);
   const [priceRange, setPriceRange] = useState([0, 10000]);
   const [maxPossiblePrice, setMaxPossiblePrice] = useState(10000);
   const [inStockOnly, setInStockOnly] = useState(false);
@@ -57,16 +96,53 @@ export default function ProductsPage() {
     fetchPriceRange();
   }, [selectedCategory]);
 
-  // Fetch products when filters change
+  // Set sortBy based on filter query param
+  useEffect(() => {
+    if (filter === 'new-arrivals') {
+      setSortBy('created_at');
+      setSortOrder('desc');
+      setPageTitle('New Arrivals');
+      setPageSubtitle('Discover our latest additions');
+    } else if (filter === 'featured') {
+      setSortBy('featured');
+      setSortOrder('desc');
+      setPageTitle('Featured Products');
+      setPageSubtitle('Handpicked favorites');
+    } else {
+      setPageTitle('Our Products');
+      setPageSubtitle('Discover our curated collection');
+    }
+  }, [filter]);
+
+  // Fetch products when filters change (but NOT currentPage)
   useEffect(() => {
     fetchProducts();
-  }, [selectedCategory, priceRange, inStockOnly, sortBy, sortOrder, currentPage]);
+  }, [
+    selectedCategory,
+    (selectedPlantType || []).join('|'),
+    (selectedMaintenance || []).join('|'),
+    selectedPetFriendly,
+    priceRange[0],
+    priceRange[1],
+    inStockOnly,
+    sortBy,
+    sortOrder,
+    searchQuery,
+  ]);
 
-  // Scroll to products container when page changes
+  // Separate effect for currentPage to control scroll timing
   useEffect(() => {
-    const productsMain = document.querySelector('.products-main');
-    if (productsMain && currentPage > 1) {
-      productsMain.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (currentPage === 1) {
+      // Initial load, just fetch
+      fetchProducts();
+    } else {
+      // Scroll to top FIRST (instant, no animation)
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      // Then fetch products after a tiny delay to ensure scroll completes
+      const timer = setTimeout(() => {
+        fetchProducts();
+      }, 50);
+      return () => clearTimeout(timer);
     }
   }, [currentPage]);
 
@@ -83,7 +159,18 @@ export default function ProductsPage() {
       limit: productsPerPage,
     });
 
-    setProducts(result.products);
+    // Filter by search query on client side
+    let filteredProducts = result.products;
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filteredProducts = result.products.filter(product => 
+        product.name?.toLowerCase().includes(query) ||
+        product.description?.toLowerCase().includes(query) ||
+        product.category?.toLowerCase().includes(query)
+      );
+    }
+
+    setProducts(filteredProducts);
     setTotalPages(result.totalPages);
     setTotalProducts(result.total);
     setLoading(false);
@@ -103,6 +190,9 @@ export default function ProductsPage() {
 
   const handleClearFilters = () => {
     setSelectedCategory(null);
+    setSelectedPlantType([]);
+    setSelectedMaintenance([]);
+    setSelectedPetFriendly(null);
     setPriceRange([0, maxPossiblePrice]);
     setInStockOnly(false);
     setSortBy('created_at');
@@ -113,6 +203,9 @@ export default function ProductsPage() {
   const getActiveFiltersCount = () => {
     let count = 0;
     if (selectedCategory) count++;
+    if (selectedPlantType.length > 0) count++;
+    if (selectedMaintenance.length > 0) count++;
+    if (selectedPetFriendly) count++;
     if (priceRange[0] > 0 || priceRange[1] < maxPossiblePrice) count++;
     if (inStockOnly) count++;
     return count;
@@ -155,10 +248,13 @@ export default function ProductsPage() {
               }
             }
           `}</style>
-        <div className="header-content">
-          <h1>Our Products</h1>
-          <p>Discover our curated collection of plants, seeds, and gardening essentials</p>
-        </div>
+        <motion.div 
+          className="header-content"
+          style={{ y: headerY }}
+        >
+          <h1>{pageTitle}</h1>
+          <p>{pageSubtitle}</p>
+        </motion.div>
       </div>
 
       <div className="main-products-container">
@@ -224,6 +320,97 @@ export default function ProductsPage() {
                   <span className="category-name">{cat.name}</span>
                 </label>
               ))}
+            </div>
+          </div>
+
+          {/* Type of Plant Filter */}
+          <div className="filter-section">
+            <h4>Type of Plant</h4>
+            <div className="checkbox-list">
+              {['Indoor', 'Outdoor', 'Succulent', 'Flowering', 'Foliage', 'Herb'].map((type) => (
+                <label key={type} className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    checked={selectedPlantType.includes(type)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setSelectedPlantType([...selectedPlantType, type]);
+                      } else {
+                        setSelectedPlantType(selectedPlantType.filter(t => t !== type));
+                      }
+                      setCurrentPage(1);
+                    }}
+                  />
+                  <span>{type}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* Maintenance Filter */}
+          <div className="filter-section">
+            <h4>Maintenance</h4>
+            <div className="checkbox-list">
+              {['Low', 'Medium', 'High'].map((level) => (
+                <label key={level} className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    checked={selectedMaintenance.includes(level)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setSelectedMaintenance([...selectedMaintenance, level]);
+                      } else {
+                        setSelectedMaintenance(selectedMaintenance.filter(l => l !== level));
+                      }
+                      setCurrentPage(1);
+                    }}
+                  />
+                  <span>{level} Maintenance</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* Pet Friendly Filter */}
+          <div className="filter-section">
+            <h4>Pet Friendly</h4>
+            <div className="checkbox-list">
+              <label className="checkbox-label">
+                <input
+                  type="radio"
+                  name="petFriendly"
+                  checked={selectedPetFriendly === 'Yes'}
+                  onChange={() => {
+                    setSelectedPetFriendly('Yes');
+                    setCurrentPage(1);
+                  }}
+                />
+                <span>Pet Friendly</span>
+              </label>
+              <label className="checkbox-label">
+                <input
+                  type="radio"
+                  name="petFriendly"
+                  checked={selectedPetFriendly === 'No'}
+                  onChange={() => {
+                    setSelectedPetFriendly('No');
+                    setCurrentPage(1);
+                  }}
+                />
+                <span>Not Pet Friendly</span>
+              </label>
+              <label className="checkbox-label">
+                <input
+                  type="radio"
+                  name="petFriendly"
+                  checked={selectedPetFriendly === null}
+                  onChange={() => {
+                    setSelectedPetFriendly(null);
+                    setCurrentPage(1);
+                  }}
+                />
+                <span>All</span>
+              </label>
             </div>
           </div>
 
@@ -295,6 +482,26 @@ export default function ProductsPage() {
               <p className="results-count">
                 Showing <strong>{products.length}</strong> of <strong>{totalProducts}</strong> products
               </p>
+            </div>
+            
+            <div className="toolbar-center">
+              <div className="toolbar-search">
+                <Search size={18} />
+                <input 
+                  type="text" 
+                  placeholder="Search products..." 
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                {searchQuery && (
+                  <button 
+                    className="clear-search"
+                    onClick={() => setSearchQuery('')}
+                  >
+                    <X size={16} />
+                  </button>
+                )}
+              </div>
             </div>
             
             <div className="toolbar-right">

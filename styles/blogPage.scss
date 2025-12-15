@@ -1,9 +1,9 @@
 @use 'variables' as *;
 
 .blog-page {
-  max-width: 1400px;
+  width: 1400px;
   margin: 0 auto;
-  padding: 3rem 2rem;
+  padding: 3rem 0rem;
   min-height: 60vh;
 
   @media (max-width: 768px) {
@@ -12,13 +12,39 @@
 }
 
 .blog-page-header {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
   text-align: center;
   margin-bottom: 3rem;
+  /* Banner background images for desktop and mobile */
+  background-image: url('/BlogsDesktop.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  color: $white;
+  padding: 3rem 2rem;
+  box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+
+  // /* subtle dark overlay for text readability */
+  // &::after {
+  //   content: '';
+  //   position: absolute;
+  //   inset: 0;
+  //   background: linear-gradient(rgba(0, 0, 0, 0.473), rgba(0, 0, 0, 0.493));
+  //   z-index: 0;
+  // }
 
   h1 {
     font-family: $font-primary;
     font-size: 3rem;
-    color: $text-primary;
+    color: inherit;
     margin-bottom: 0.5rem;
 
     @media (max-width: 768px) {
@@ -29,11 +55,17 @@
   p {
     font-family: $font-secondary;
     font-size: 1.2rem;
-    color: rgba($text-primary, 0.8);
+    color: inherit;
 
     @media (max-width: 768px) {
       font-size: 1rem;
     }
+  }
+
+  @media (max-width: 768px) {
+    background-image: url('/BlogsMobile.png');
+    min-height: 220px;
+    padding: 2rem 1rem;
   }
 }
 

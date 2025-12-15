@@ -352,8 +352,62 @@
             letter-spacing: 0.5px;
             display: flex;
             align-items: center;
+            justify-content: space-between;
             gap: 0.5rem;
             font-family: $font-secondary;
+
+            svg {
+              width: 14px;
+              height: 14px;
+            }
+
+            .clear-history-btn {
+              padding: 0.25rem 0.75rem;
+              background: rgba($accent-primary, 0.1);
+              color: $accent-primary;
+              border: none;
+              border-radius: 6px;
+              font-size: 0.7rem;
+              font-weight: 600;
+              cursor: pointer;
+              transition: all 0.2s ease;
+              text-transform: none;
+              letter-spacing: normal;
+
+              &:hover {
+                background: rgba($accent-primary, 0.2);
+                transform: scale(1.05);
+              }
+            }
+          }
+
+          .suggestion-item-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+
+            &:hover {
+              .remove-history-item {
+                opacity: 1;
+              }
+            }
+          }
+
+          .remove-history-item {
+            padding: 0.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.2s ease;
+            color: rgba($primary-bg, 0.4);
+            flex-shrink: 0;
+
+            &:hover {
+              color: #ef4444;
+              transform: scale(1.1);
+            }
 
             svg {
               width: 14px;
@@ -375,6 +429,7 @@
             transition: all 0.2s ease;
             text-align: left;
             font-family: $font-secondary;
+            flex: 1;
 
             svg, img {
               width: 16px;

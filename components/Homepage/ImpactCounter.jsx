@@ -46,7 +46,7 @@ export default function ImpactCounter() {
           viewport={{ once: false }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="section-title">Our Environmental Impact</h2>
+          <h1 className="section-title">Our Environmental Impact</h1>
           <p className="section-subtitle">
             Together, we're making a difference for our planet
           </p>

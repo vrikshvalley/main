@@ -30,7 +30,7 @@ export default function Gallery() {
           transition={{ duration: 0.5, ease: "easeOut" }}
         >
           <Camera className="header-icon" />
-          <h2 className="section-title">Our Gallery</h2>
+          <h1 style={{ fontSize: "3rem", fontWeight: "700" }} className="section-title">Our Gallery</h1>
           <p className="section-subtitle">
             Explore the beauty of nature through our collection
           </p>

@@ -6,6 +6,9 @@
   --fg: #{$text-primary};
   --brand: #{$accent-primary};
   --muted: #{$text-secondary};
+  --home-section-padding: 4rem 1.5rem;
+  --home-heading-size: 3rem;
+  --home-heading-margin: 1.5rem;
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
@@ -15,6 +18,10 @@
   box-sizing: border-box; 
   margin: 0;
   padding: 0;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
 }
 
 // Hardware acceleration for smooth animations
@@ -59,7 +66,7 @@ body {
   margin: 0;
   font-family: Playfair Display, serif;
   color: var(--fg);
-  background: linear-gradient(rgba(0, 0, 0, 0.647), rgba(0, 0, 0, 0.429)), url('/background.jpg');
+  background: linear-gradient(rgba(32, 27, 0, 0.516), rgba(0, 50, 17, 0.926)), url('/1.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -209,6 +216,44 @@ a:hover {
   scroll-snap-align: start;
   scroll-snap-stop: normal;
   scroll-margin-top: 100px; // Offset for navbar height
+
+  &.home-section {
+    padding: var(--home-section-padding);
+  }
+
+  &.home-section h2 {
+    margin: 0 0 var(--home-heading-margin);
+    font-size: var(--home-heading-size);
+    line-height: 1.2;
+  }
+
+  @media (max-width: 1024px) {
+    &.home-section {
+      padding: 3rem 1.25rem;
+    }
+
+    &.home-section h2 {
+      font-size: 3rem;
+      margin-bottom: 1.25rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    &.home-section {
+      padding: 2.5rem 1.25rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    &.home-section {
+      padding: 2rem 1rem;
+    }
+
+    &.home-section h2 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+  }
 
   @media (max-width: 768px) {
     scroll-snap-align: none; // Disable on mobile

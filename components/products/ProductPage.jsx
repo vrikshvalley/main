@@ -27,10 +27,13 @@ export default function ProductPage({ product }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [selectedSize, setSelectedSize] = useState(product?.sizes?.[0] || null);
   const [selectedColor, setSelectedColor] = useState(product?.colors?.[0] || null);
-  const [selectedVariant, setSelectedVariant] = useState(product?.variants?.[0] || null);
+  // Filter out "default" variants and set first non-default variant
+  const filteredVariants = product?.variants?.filter(v => v.label?.toLowerCase() !== 'default' && v.name?.toLowerCase() !== 'default') || [];
+  const [selectedVariant, setSelectedVariant] = useState(filteredVariants[0] || null);
   const [quantity, setQuantity] = useState(1);
+  const [expandDescription, setExpandDescription] = useState(false);
 
-  // Get current price based on selected variant
+  // Get current price based on selected variant or base price
   const currentPrice = selectedVariant ? selectedVariant.price : product?.price || 0;
 
   if (!product) {
@@ -128,7 +131,15 @@ export default function ProductPage({ product }) {
               {product.images.map((src, index) => (
                 <SwiperSlide key={index}>
                   <div className={`thumb-wrapper ${activeIndex === index ? 'active' : ''}`}>
-                    <Image src={src} alt={`Thumbnail ${index}`} width={100} height={100} />
+                    <Image 
+                      src={src || '/1.png'} 
+                      alt={`Thumbnail ${index}`} 
+                      width={100} 
+                      height={100}
+                      onError={(e) => {
+                        e.target.src = '/1.png';
+                      }}
+                    />
                   </div>
                 </SwiperSlide>
               ))}
@@ -140,7 +151,21 @@ export default function ProductPage({ product }) {
         <div className="product-details">
           <div className="category-badge">{product.category}</div>
           <h1>{product.name}</h1>
-          <p className="description">{product.description}</p>
+          
+          {/* Description with Read More on Mobile */}
+          <div className="description-wrapper">
+            <p className={`description ${expandDescription ? 'expanded' : 'collapsed'}`}>
+              {product.description}
+            </p>
+            {product.description && product.description.length > 120 && (
+              <button 
+                className="read-more-btn"
+                onClick={() => setExpandDescription(!expandDescription)}
+              >
+                {expandDescription ? 'Read Less' : 'Read More'}
+              </button>
+            )}
+          </div>
           
           {/* Price Display - Handle custom pricing */}
           {product.priceOnCustomization ? (
@@ -176,12 +201,12 @@ export default function ProductPage({ product }) {
           {/* Size selection */}
           {product.sizes && product.sizes.length > 0 && (
             <div className="option-group">
-              <label>Size:</label>
-              <div className="options">
+              <label>Select Size:</label>
+              <div className="options size-options">
                 {product.sizes.map((size) => (
                   <button
                     key={size}
-                    className={selectedSize === size ? 'active' : ''}
+                    className={`option-btn ${selectedSize === size ? 'active' : ''}`}
                     onClick={() => setSelectedSize(size)}
                   >
                     {size}
@@ -194,12 +219,12 @@ export default function ProductPage({ product }) {
           {/* Color selection */}
           {product.colors && product.colors.length > 0 && (
             <div className="option-group">
-              <label>Color:</label>
-              <div className="options">
+              <label>Select Color:</label>
+              <div className="options color-options">
                 {product.colors.map((color) => (
                   <button
                     key={color}
-                    className={selectedColor === color ? 'active' : ''}
+                    className={`option-btn ${selectedColor === color ? 'active' : ''}`}
                     onClick={() => setSelectedColor(color)}
                   >
                     {color}
@@ -209,15 +234,15 @@ export default function ProductPage({ product }) {
             </div>
           )}
 
-          {/* Variant selection (for products with price variants) */}
-          {product.variants && product.variants.length > 0 && (
+          {/* Variant selection (for products with price variants) - excluding default */}
+          {filteredVariants && filteredVariants.length > 0 && (
             <div className="option-group">
               <label>Select Variant:</label>
-              <div className="options">
-                {product.variants.map((variant) => (
+              <div className="options variant-options">
+                {filteredVariants.map((variant) => (
                   <button
                     key={variant.name}
-                    className={selectedVariant?.name === variant.name ? 'active' : ''}
+                    className={`option-btn ${selectedVariant?.name === variant.name ? 'active' : ''}`}
                     onClick={() => setSelectedVariant(variant)}
                   >
                     {variant.label} - ₹{variant.price}

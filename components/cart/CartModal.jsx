@@ -16,7 +16,7 @@ import {
   loadUserCart 
 } from '@/lib/slices/cartSlice';
 import { useState, useEffect } from 'react';
-import { X, Plus, Minus, Trash2 } from 'lucide-react';
+import { X, Plus, Minus, Trash2, ShoppingBag } from 'lucide-react';
 import { auth } from '@/lib/firebaseConfig';
 import { onAuthStateChanged } from 'firebase/auth';
 import { 
@@ -170,7 +170,7 @@ export default function CartModal({ isOpen, onClose }) {
       <div className="cart-modal-wrapper">
         <div className="cart-modal" onClick={(e) => e.stopPropagation()}>
           <div className="cart-header">
-            <h2>🛒 Your Cart ({count} {count === 1 ? 'item' : 'items'})</h2>
+            <h2><ShoppingBag size={22} style={{ verticalAlign: 'middle', marginRight: '8px' }} /> Your Cart ({count} {count === 1 ? 'item' : 'items'})</h2>
             <button className="close-btn" onClick={onClose}>
               <X size={20} /> 
             </button>
@@ -180,7 +180,7 @@ export default function CartModal({ isOpen, onClose }) {
             <TheLoader />
           ) : items.length === 0 ? (
             <div className="empty">
-              <div className="empty-icon">🛍️</div>
+              <div className="empty-icon"><ShoppingBag size={48} /></div>
               <p>Your cart is empty</p>
               <p className="empty-subtitle">Add some plants to get started! 🌿</p>
             </div>
@@ -253,7 +253,7 @@ export default function CartModal({ isOpen, onClose }) {
                     window.location.href = '/cart';
                   }}
                 >
-                  <span>🛒 View Full Cart</span>
+                  <span> View Full Cart</span>
                 </button>
 
                 {!user && (
@@ -261,11 +261,9 @@ export default function CartModal({ isOpen, onClose }) {
                 )}
                 <button 
                   className="checkout-btn"
-                  disabled
-                  title="Coming Soon"
                 >
-                  <span>🚀 Proceed to Checkout</span>
-                  <span className="coming-soon-badge">Coming Soon</span>
+                  <span>Proceed to Checkout</span>
+                  
                 </button>
                 
                 <button 

@@ -79,9 +79,20 @@
     .info-section {
       margin-bottom: 2rem;
       padding: 1.5rem;
-      background: rgba($bg-secondary, 0.6);
+      background: linear-gradient(135deg, rgba($accent-primary, 0.08), rgba($teal, 0.08));
       border-radius: 12px;
       border-left: 4px solid $accent-primary;
+      transition: all 0.3s ease;
+
+      &:hover {
+        box-shadow: 0 4px 20px rgba($accent-primary, 0.15);
+        transform: translateX(4px);
+      }
+
+      &.about-product {
+        background: linear-gradient(135deg, rgba(#4CAF50, 0.1), rgba(#8BC34A, 0.1));
+        border-left-color: #4CAF50;
+      }
 
       h4 {
         font-size: 1.25rem;
@@ -101,6 +112,93 @@
       .care-details {
         font-size: 0.95rem;
         line-height: 1.6;
+      }
+    }
+
+    // Dropdown styles
+    .dropdown-section {
+      padding: 0;
+      background: transparent;
+      border: none;
+
+      .dropdown-header {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.25rem 1.5rem;
+        background: linear-gradient(135deg, rgba($teal, 0.12), rgba($accent-primary, 0.12));
+        border: 2px solid rgba($teal, 0.3);
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background: linear-gradient(135deg, rgba($teal, 0.18), rgba($accent-primary, 0.18));
+          border-color: $teal;
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba($teal, 0.2);
+        }
+
+        &.open {
+          border-bottom-left-radius: 0;
+          border-bottom-right-radius: 0;
+          background: linear-gradient(135deg, $teal, $accent-primary);
+          border-color: $teal;
+
+          h4 {
+            color: white;
+          }
+
+          .chevron {
+            color: white;
+          }
+        }
+
+        h4 {
+          margin: 0;
+          color: $dark-green;
+          font-size: 1.15rem;
+          transition: color 0.3s ease;
+        }
+
+        .chevron {
+          color: $teal;
+          transition: all 0.3s ease;
+
+          &.rotated {
+            transform: rotate(180deg);
+          }
+        }
+      }
+
+      .dropdown-content {
+        padding: 1.5rem;
+        background: rgba($white, 0.5);
+        border: 2px solid rgba($teal, 0.9);
+        border-top: none;
+        border-bottom-left-radius: 12px;
+        border-bottom-right-radius: 12px;
+        animation: slideDown 0.3s ease;
+
+        p {
+          color: rgba($dark-green, 0.9);
+          line-height: 1.7;
+          font-size: 1rem;
+          margin: 0;
+          white-space: pre-line;
+        }
+      }
+
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
     }
 
@@ -129,16 +227,38 @@
         flex-direction: column;
         gap: 0.5rem;
         padding: 1.25rem;
-        background: white;
+        background: linear-gradient(135deg, rgba(#FF6B6B, 0.08), rgba(#FFD93D, 0.08));
         border-radius: 10px;
-        border: 1px solid rgba($text-secondary, 0.5);
+        border: 2px solid rgba(#FF6B6B, 0.2);
         transition: all 0.3s ease;
 
         &:hover {
-          border-color: $accent-primary;
-          background: rgba($accent-primary, 0.05);
-          transform: translateY(-2px);
-          box-shadow: $shadow-medium;
+          border-color: #FF6B6B;
+          background: linear-gradient(135deg, rgba(#FF6B6B, 0.15), rgba(#FFD93D, 0.15));
+          transform: translateY(-4px);
+          box-shadow: 0 8px 24px rgba(#FF6B6B, 0.25);
+        }
+
+        &:nth-child(2n) {
+          background: linear-gradient(135deg, rgba(#6BCB77, 0.08), rgba(#4D96FF, 0.08));
+          border-color: rgba(#6BCB77, 0.2);
+
+          &:hover {
+            border-color: #6BCB77;
+            background: linear-gradient(135deg, rgba(#6BCB77, 0.15), rgba(#4D96FF, 0.15));
+            box-shadow: 0 8px 24px rgba(#6BCB77, 0.25);
+          }
+        }
+
+        &:nth-child(3n) {
+          background: linear-gradient(135deg, rgba(#9B59B6, 0.08), rgba(#E91E63, 0.08));
+          border-color: rgba(#9B59B6, 0.2);
+
+          &:hover {
+            border-color: #9B59B6;
+            background: linear-gradient(135deg, rgba(#9B59B6, 0.15), rgba(#E91E63, 0.15));
+            box-shadow: 0 8px 24px rgba(#9B59B6, 0.25);
+          }
         }
 
         .info-label {

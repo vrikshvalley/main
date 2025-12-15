@@ -1,12 +1,20 @@
 'use client';
+import { useEffect } from 'react';
 import Image from 'next/image';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
+import { setStickyHeaderData } from '@/lib/stickyHeaderStore';
 import { Mail, Phone, MapPin, MessageCircle } from 'lucide-react';
 import '@/styles/pages.scss';
 
 export default function ContactUs() {
+  useEffect(() => {
+    setStickyHeaderData({ title: "Contact Us", subtitle: "We'd love to hear from you" });
+    return () => setStickyHeaderData({ title: null, subtitle: null });
+  }, []);
+
   return (
     <div className="page-container">
+      
       {/* Hero Banner */}
       <div className="hero-banner contact-us-hero">
         <picture>

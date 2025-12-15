@@ -2,11 +2,13 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import Topbar from '@/components/general/Topbar';
 import Navbar from '@/components/general/Navbar';
 import Footer from '@/components/general/Footer';
 import WhatsAppButton from '@/components/general/WhatsAppButton';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
+import { setStickyHeaderData } from '@/lib/stickyHeaderStore';
 import ProductListCard from '@/components/products/ProductListCard';
 import TheLoader from '@/components/general/TheLoader';
 import { searchProducts } from '@/lib/searchService';
@@ -17,6 +19,18 @@ import '@/styles/products.scss';
 function SearchContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  
+  // Framer Motion scroll hook for parallax effect
+  const { scrollY } = useScroll();
+  const headerY = useTransform(scrollY, [0, 500], [0, 150]);
+  
+  // Debug parallax
+  useEffect(() => {
+    const unsubscribe = headerY.on('change', (latest) => {
+      console.log('Search Page - headerY:', latest);
+    });
+    return () => unsubscribe();
+  }, [headerY]);
   const query = searchParams.get('q') || '';
 
   const [searchResults, setSearchResults] = useState([]);
@@ -65,6 +79,17 @@ function SearchContent() {
     }
   }, [query, filters]);
 
+  // Update sticky header based on search results
+  useEffect(() => {
+    const title = searchResults.length === 0 ? "No Results Found" : "Search Results";
+    const subtitle = searchResults.length === 0 
+      ? `for "${query}"` 
+      : `${searchResults.length} result${searchResults.length !== 1 ? 's' : ''}`;
+    
+    setStickyHeaderData({ title, subtitle });
+    return () => setStickyHeaderData({ title: null, subtitle: null });
+  }, [searchResults, query]);
+
   const handleFilterChange = (filterType, value) => {
     setFilters(prev => ({
       ...prev,
@@ -102,19 +127,37 @@ function SearchContent() {
         />
 
         {/* Search Header */}
-        <div className="products-header search-header" style={{ minHeight: '250px' }}>
-          <div className="header-content">
+        <div
+          className={`products-header search-header ${searchResults.length === 0 ? 'no-results-header' : ''}`}
+          style={{
+            minHeight: '250px',
+            '--search-hero-desktop': `url(${"/SearchDesktop.png"})`,
+            '--search-hero-mobile': `url(${"/SearchMobile.png"})`
+          }}
+        >
+          <motion.div 
+            className="header-content"
+            style={{ y: headerY }}
+          >
             <div className="search-icon-large">
               <Search size={56} strokeWidth={1.5} />
             </div>
-            <h1>Search Results</h1>
-            <p>
-              {searchResults.length > 0 
-                ? `Found ${searchResults.length} ${searchResults.length === 1 ? 'result' : 'results'} for "${query}"`
-                : `No results found for "${query}"`
-              }
-            </p>
-          </div>
+            {searchResults.length === 0 ? (
+              <>
+                <h1 style={{ color: 'white' }}>No Results Found</h1>
+                <p style={{ color: 'white' }}>
+                  No results found for "{query}"
+                </p>
+              </>
+            ) : (
+              <>
+                <h1>Search Results</h1>
+                <p>
+                  Found {searchResults.length} {searchResults.length === 1 ? 'result' : 'results'} for "{query}"
+                </p>
+              </>
+            )}
+          </motion.div>
         </div>
 
         <div className="main-products-container">

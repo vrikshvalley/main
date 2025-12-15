@@ -1,5 +1,5 @@
 @use 'sass:color';
-
+@use 'variables' as *;
 // Variables
 $dark-green: #073b22;
 $teal: #1c9e5b;
@@ -25,9 +25,32 @@ $grey-dark: #374151;
     background-position: center;
     background-repeat: no-repeat;
     aspect-ratio: 16 / 9;
-    overflow: hidden;
+    overflow: visible;
     display: flex;
     align-items: flex-end;
+
+    // Shared dark overlay for readability
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.097) 0%, rgba(0, 0, 0, 0.274) 100%);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    // No-results specific darker overlay
+    &.no-results-header {
+      &::after {
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.85) 100%);
+      }
+
+      .header-content {
+        h1, p {
+          color: $white !important;
+        }
+      }
+    }
 
     @media (max-width: 768px) {
       aspect-ratio: 69 / 53;
@@ -49,7 +72,9 @@ $grey-dark: #374151;
       width: 100%;
       margin: 0 auto;
       padding: 2rem 2rem;
-      position: relative;
+      position: sticky;
+      bottom: 10%;
+      scroll-behavior: smooth;
       z-index: 1;
 
       @media (max-width: 768px) {
@@ -551,11 +576,14 @@ $grey-dark: #374151;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 2rem;
-      padding: 1.25rem;
+      padding: 0.4rem 1rem;
+      position: sticky;
+      top: 130px;
+      z-index: 500;
       background: $white;
       border-radius: 12px;
       box-shadow: 0 2px 12px rgba($teal, 0.06);
-      border: 1.5px solid rgba($teal, 0.1);
+      border: 2px solid rgba($teal, 0.7);
 
       @media (max-width: 768px) {
         flex-direction: column;
@@ -604,6 +632,76 @@ $grey-dark: #374151;
           strong {
             color: $teal;
             font-weight: 600;
+          }
+        }
+      }
+
+      .toolbar-center {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        padding: 0 1rem;
+
+        @media (max-width: 768px) {
+          width: 100%;
+          padding: 0;
+          order: 3;
+          margin-top: 0.75rem;
+        }
+
+        .toolbar-search {
+          position: relative;
+          width: 100%;
+          max-width: 400px;
+          display: flex;
+          align-items: center;
+
+          svg:first-child {
+            position: absolute;
+            left: 0.875rem;
+            color: $grey-medium;
+            pointer-events: none;
+          }
+
+          input {
+            width: 100%;
+            padding: 0.625rem 2.5rem 0.625rem 2.75rem;
+            border: 1.5px solid rgba($teal, 0.2);
+            border-radius: 8px;
+            font-size: 0.875rem;
+            color: $dark-green;
+            background: $white;
+            transition: all 0.2s;
+
+            &:focus {
+              outline: none;
+              border-color: $teal;
+              box-shadow: 0 2px 8px rgba($teal, 0.1);
+            }
+
+            &::placeholder {
+              color: $grey-medium;
+            }
+          }
+
+          .clear-search {
+            position: absolute;
+            right: 0.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: $grey-medium;
+            padding: 0.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.2s;
+
+            &:hover {
+              color: $teal;
+              background: rgba($teal, 0.1);
+            }
           }
         }
       }
@@ -844,7 +942,7 @@ $grey-dark: #374151;
   background: $white;
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 4px 16px rgba($teal, 0.08);
+  box-shadow: 0 4px 16px rgba($teal, 0.9);
   border: 1.5px solid rgba($teal, 0.1);
   transition: all 0.3s ease;
   cursor: pointer;
@@ -856,7 +954,7 @@ $grey-dark: #374151;
   &:hover {
     transform: translateY(-4px);
     box-shadow: 0 8px 24px rgba($teal, 0.15);
-    border-color: rgba($teal, 0.25);
+    border: 2px solid rgba($yellow,1);
 
     .product-image {
       transform: scale(1.05);
@@ -1157,6 +1255,7 @@ $grey-dark: #374151;
           .feature-icon {
             transform: scale(1.1) rotate(5deg);
             background: linear-gradient(135deg, $teal 0%, color.adjust($teal, $lightness: 10%) 100%);
+            color: $white;
           }
         }
 
@@ -1239,6 +1338,12 @@ $grey-dark: #374151;
 
 // Search Results Header
 .search-header {
+  background-image: linear-gradient(135deg, rgba($dark-green, 0.35) 0%, rgba($dark-green, 0.1) 100%), var(--search-hero-desktop, none);
+
+  @media (max-width: 768px) {
+    background-image: linear-gradient(135deg, rgba($dark-green, 0.35) 0%, rgba($dark-green, 0.1) 100%), var(--search-hero-mobile, var(--search-hero-desktop, none));
+  }
+
   .header-content {
     .search-icon-large {
       margin-bottom: 1.5rem;
@@ -1282,10 +1387,13 @@ $grey-dark: #374151;
   justify-content: center;
   text-align: center;
   padding: 4rem 2rem;
+  background: rgba($dark-green, 0.35);
+  border: 1px solid rgba($white, 0.2);
+  border-radius: 16px;
   grid-column: 1 / -1;
 
   svg {
-    color: rgba($dark-green, 0.2);
+    color: rgba($white, 0.7);
     margin-bottom: 1.5rem;
     animation: float 3s ease-in-out infinite;
   }
@@ -1293,7 +1401,7 @@ $grey-dark: #374151;
   h2 {
     font-family: 'Playfair Display', serif;
     font-size: 2rem;
-    color: $dark-green;
+    color: $white;
     margin-bottom: 1rem;
     font-weight: 600;
 
@@ -1304,7 +1412,7 @@ $grey-dark: #374151;
 
   p {
     font-size: 1.125rem;
-    color: $grey-dark;
+    color: rgba($white, 0.9);
     margin-bottom: 2rem;
     max-width: 500px;
 

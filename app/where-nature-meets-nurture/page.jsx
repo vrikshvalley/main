@@ -1,13 +1,18 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Breadcrumbs from "@/components/general/Breadcrumbs";
+import { setStickyHeaderData } from "@/lib/stickyHeaderStore";
 import "../../styles/pages.scss";
 
 export default function WhereNatureMeetsNurturePage() {
+  useEffect(() => {
+    setStickyHeaderData({ title: "Where Nature Meets Nurture", subtitle: "A Journey Home to Green" });
+    return () => setStickyHeaderData({ title: null, subtitle: null });
+  }, []);
   return (
-    <div className="page-container">
+    <div className="page-container">      
       {/* Hero Banner */}
       {/* Hero Banner */}
       <div className="hero-banner">

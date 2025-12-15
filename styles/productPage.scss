@@ -317,6 +317,70 @@
       }
     }
 
+    .description-wrapper {
+      position: relative;
+      margin-bottom: 1.5rem;
+
+      .description {
+        color: $dark-gray;
+        line-height: 1.7;
+        font-size: 1rem;
+        font-weight: 400;
+        transition: max-height 0.3s ease;
+        overflow: hidden;
+
+        &.collapsed {
+          @media (max-width: 768px) {
+            max-height: 3em; // Approximately 2 lines
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+        }
+
+        &.expanded {
+          @media (max-width: 768px) {
+            max-height: none;
+            display: block;
+          }
+        }
+
+        @media (max-width: 768px) {
+          font-size: 0.95rem;
+          line-height: 1.6;
+        }
+
+        @media (max-width: 480px) {
+          font-size: 0.9rem;
+          line-height: 1.5;
+        }
+      }
+
+      .read-more-btn {
+        display: none;
+        margin-top: 0.5rem;
+        background: none;
+        border: none;
+        color: $teal;
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        padding: 0;
+
+        &:hover {
+          color: $deep-green;
+          text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+          display: inline-block;
+        }
+      }
+    }
+
     .description {
       color: $dark-gray;
       line-height: 1.7;

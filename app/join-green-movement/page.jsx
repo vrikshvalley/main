@@ -1,13 +1,19 @@
 'use client';
 
+import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Sprout, Droplets, TreePine, Heart, ShoppingBag, Leaf, Users } from 'lucide-react';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
+import { setStickyHeaderData } from '@/lib/stickyHeaderStore';
 import '@/styles/pages.scss';
 
 export default function JoinGreenMovementPage() {
+  useEffect(() => {
+    setStickyHeaderData({ title: "Join the Green Movement", subtitle: "Together, We Turn Concrete Dreams into Leafy Sanctuaries" });
+    return () => setStickyHeaderData({ title: null, subtitle: null });
+  }, []);
   const fadeInUp = {
     hidden: { opacity: 0, y: 30 },
     visible: { 
@@ -24,7 +30,7 @@ export default function JoinGreenMovementPage() {
   ];
 
   return (
-    <div className="page-container">
+    <div className="page-container">      
       {/* Hero Banner */}
       {/* Hero Banner */}
       <div className="hero-banner">

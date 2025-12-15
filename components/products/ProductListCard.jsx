@@ -2,13 +2,36 @@
 
 import Link from 'next/link';
 import { Star, ShoppingCart, Heart } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { addItem } from '@/lib/slices/cartSlice';
 
 export default function ProductListCard({ product, viewMode = 'grid' }) {
   const [isWishlisted, setIsWishlisted] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isHovering, setIsHovering] = useState(false);
+  const intervalRef = useRef(null);
   const dispatch = useDispatch();
+
+  // Auto-rotate images on hover
+  useEffect(() => {
+    if (isHovering && product.images && product.images.length > 1) {
+      intervalRef.current = setInterval(() => {
+        setCurrentImageIndex((prev) => (prev + 1) % product.images.length);
+      }, 1000); // Change image every second
+    } else {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+      setCurrentImageIndex(0); // Reset to first image when not hovering
+    }
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [isHovering, product.images]);
 
   const handleAddToCart = (e) => {
     e.preventDefault();
@@ -51,9 +74,17 @@ export default function ProductListCard({ product, viewMode = 'grid' }) {
 
   return (
     <Link href={`/products/${product.slug}`} className={`product-list-card ${viewMode}`}>
-      <div className="product-image-wrapper">
+      <div 
+        className="product-image-wrapper"
+        onMouseEnter={() => setIsHovering(true)}
+        onMouseLeave={() => setIsHovering(false)}
+      >
         {product.images && product.images[0] ? (
-          <img src={product.images[0]} alt={product.name} className="product-image" />
+          <img 
+            src={product.images[currentImageIndex] || product.images[0]} 
+            alt={product.name} 
+            className="product-image" 
+          />
         ) : (
           <div className="product-image-placeholder">
             <span>🌿</span>

@@ -1,11 +1,19 @@
 'use client';
+import { useEffect } from 'react';
 import Image from 'next/image';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
+import { setStickyHeaderData } from '@/lib/stickyHeaderStore';
 import '@/styles/pages.scss';
 
 export default function TermsOfServices() {
+  useEffect(() => {
+    setStickyHeaderData({ title: "Terms of Services", subtitle: "Please read these terms carefully" });
+    return () => setStickyHeaderData({ title: null, subtitle: null });
+  }, []);
+
   return (
     <div className="page-container">
+      
       {/* Hero Banner */}
       <div className="hero-banner terms-services-hero">
         <picture>

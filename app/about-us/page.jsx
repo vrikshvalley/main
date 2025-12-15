@@ -1,17 +1,25 @@
 'use client';
+import { useEffect } from 'react';
 import Image from 'next/image';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
+import { setStickyHeaderData } from '@/lib/stickyHeaderStore';
 import '@/styles/pages.scss';
 
 export default function AboutUs() {
+  useEffect(() => {
+    setStickyHeaderData({ title: "About Us", subtitle: "Where nature meets nurture" });
+    return () => setStickyHeaderData({ title: null, subtitle: null });
+  }, []);
+
   return (
     <div className="page-container">
+      
       {/* Hero Banner */}
       <div className="hero-banner about-us-hero">
         <picture>
-          <source media="(max-width: 768px)" srcSet="/OurStoryMobile.png" />
+          <source media="(max-width: 768px)" srcSet="/AboutusPageMobile.png" />
           <Image
-            src="/OurStoryDesktop.png"
+            src="/AboutusPageDesktop.png"
             alt="About Us - Vriksh Valley"
             fill
             priority

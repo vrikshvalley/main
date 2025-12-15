@@ -31,3 +31,6 @@ firestore-ready-products.json
 products_collection.json
 categories_collection.json
 /scripts
+/names.txt
+/fetched_names.txt
+/update.json

@@ -4,12 +4,16 @@ import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination } from 'swiper/modules';
+import { getProducts } from '@/lib/services/productService';
+import ProductListCard from '@/components/products/ProductListCard';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 import "@/styles/featuredProducts.scss";
-
-const ProductCard = dynamic(() => import('../products/ProductCard'), {
-  loading: () => <div>Loading...</div>,
-  ssr: true
-});
+import "@/styles/products.scss";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -40,6 +44,28 @@ const cardVariants = {
 };
 
 export default function FeaturedProducts({ title, sortBy }) {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const viewAllLink = sortBy === 'created_at' ? '/products?filter=new-arrivals' : '/products?filter=featured';
+  
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const { data: allProducts } = await getProducts({ 
+          sortBy: sortBy || 'featured',
+          pageSize: 8, // Get more for slider
+          inStock: false
+        });
+        setProducts(allProducts || []);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
+  }, [sortBy]);
+  
   return (
     <motion.section 
       className="featured-products"
@@ -56,18 +82,50 @@ export default function FeaturedProducts({ title, sortBy }) {
           {title}
         </motion.h2>
         <motion.div variants={cardVariants}>
-          <Link href="/products" className="view-all-link">
-            View All Products
+          <Link href={viewAllLink} className="view-all-link">
+            View All
             <ArrowRight size={18} />
           </Link>
         </motion.div>
       </div>
-      <motion.div 
-        className="products-container"
-        variants={containerVariants}
-      >
-        <ProductCard sortBy={sortBy} />
-      </motion.div>
+
+      {/* Featured Products Slider */}
+      {loading ? (
+        <div style={{ padding: '2rem', textAlign: 'center' }}>Loading...</div>
+      ) : products.length > 0 ? (
+        <Swiper
+          modules={[Navigation, Pagination]}
+          navigation
+          pagination={{ clickable: true }}
+          spaceBetween={20}
+          slidesPerView={1}
+          breakpoints={{
+            480: {
+              slidesPerView: 2,
+              spaceBetween: 15,
+            },
+            768: {
+              slidesPerView: 3,
+              spaceBetween: 20,
+            },
+            1024: {
+              slidesPerView: 4,
+              spaceBetween: 24,
+            },
+          }}
+          className="featured-products-slider"
+        >
+          {products.map((product) => (
+            <SwiperSlide key={product.id}>
+              <ProductListCard product={product} viewMode="grid" />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      ) : (
+        <div style={{ padding: '2rem', textAlign: 'center', color: '#999' }}>
+          No products available
+        </div>
+      )}
     </motion.section>
   );
 }

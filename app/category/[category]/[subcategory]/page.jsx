@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import Topbar from '@/components/general/Topbar';
 import Navbar from '@/components/general/Navbar';
 import Footer from '@/components/general/Footer';
@@ -9,7 +10,7 @@ import WhatsAppButton from '@/components/general/WhatsAppButton';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
 import { getProducts, getPriceRange } from '@/lib/productHelpers';
 import { getCategories } from '@/lib/services/productService';
-import { ChevronDown, X, SlidersHorizontal, Grid, List } from 'lucide-react';
+import { ChevronDown, X, SlidersHorizontal, Grid, List, Search } from 'lucide-react';
 import TheLoader from '@/components/general/TheLoader';
 import ProductListCard from '@/components/products/ProductListCard';
 import '@/styles/products.scss';
@@ -19,12 +20,17 @@ export default function SubcategoryPage() {
   const categorySlug = params.category;
   const subcategorySlug = params.subcategory;
   
+  // Framer Motion scroll hook for parallax effect
+  const { scrollY } = useScroll();
+  const headerY = useTransform(scrollY, [0, 500], [0, 150]);
+  
   const [category, setCategory] = useState(null);
   const [subcategory, setSubcategory] = useState(null);
 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState('grid');
+  const [searchQuery, setSearchQuery] = useState('');
   
   // Fetch category and subcategory data
   useEffect(() => {
@@ -76,7 +82,7 @@ export default function SubcategoryPage() {
     fetchProducts();
     // Scroll to top when filters change
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [categorySlug, subcategorySlug, priceRange, inStockOnly, sortBy, sortOrder, currentPage]);
+  }, [categorySlug, subcategorySlug, priceRange[0], priceRange[1], inStockOnly, sortBy, sortOrder, currentPage, searchQuery]);
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -92,7 +98,18 @@ export default function SubcategoryPage() {
       limit: productsPerPage,
     });
 
-    setProducts(result.products);
+    // Filter by search query on client side
+    let filteredProducts = result.products;
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filteredProducts = result.products.filter(product => 
+        product.name?.toLowerCase().includes(query) ||
+        product.description?.toLowerCase().includes(query) ||
+        product.category?.toLowerCase().includes(query)
+      );
+    }
+
+    setProducts(filteredProducts);
     setTotalPages(result.totalPages);
     setTotalProducts(result.total);
     setLoading(false);
@@ -188,12 +205,15 @@ export default function SubcategoryPage() {
               }
             }
           `}</style>
-          <div className="header-content">
+          <motion.div 
+            className="header-content"
+            style={{ y: headerY }}
+          >
             <div className="category-icon">{category.icon}</div>
             <h1>{subcategory.name}</h1>
             <p>Browse our collection of {subcategory.name.toLowerCase()} in <a href={`/category/${categorySlug}`} style={{color: 'inherit', textDecoration: 'underline'}}>{category.name}</a></p>
             <p className="products-count">{totalProducts} products available</p>
-          </div>
+          </motion.div>
         </div>
 
         <div className="main-products-container">
@@ -314,6 +334,26 @@ export default function SubcategoryPage() {
                 <p className="results-count">
                   Showing <strong>{products.length}</strong> of <strong>{totalProducts}</strong> products
                 </p>
+              </div>
+              
+              <div className="toolbar-center">
+                <div className="toolbar-search">
+                  <Search size={18} />
+                  <input 
+                    type="text" 
+                    placeholder="Search products..." 
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                  {searchQuery && (
+                    <button 
+                      className="clear-search"
+                      onClick={() => setSearchQuery('')}
+                    >
+                      <X size={16} />
+                    </button>
+                  )}
+                </div>
               </div>
               
               <div className="toolbar-right">

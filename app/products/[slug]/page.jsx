@@ -24,7 +24,10 @@ export default function ProductDetailPage() {
 
   // Scroll to top immediately when slug changes (before paint)
   useLayoutEffect(() => {
-    window.scrollTo(0, 0);
+    // Force immediate scroll to top
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
   }, [slug]);
 
   const fetchProduct = async () => {

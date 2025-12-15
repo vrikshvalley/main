@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay } from 'swiper/modules';
 import Topbar from '@/components/general/Topbar';
@@ -13,7 +14,7 @@ import WhatsAppButton from '@/components/general/WhatsAppButton';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
 import { getProducts, getPriceRange } from '@/lib/productHelpers';
 import { getCategories } from '@/lib/services/productService';
-import { ChevronDown, X, SlidersHorizontal, Grid, List } from 'lucide-react';
+import { ChevronDown, X, SlidersHorizontal, Grid, List, Search } from 'lucide-react';
 import TheLoader from '@/components/general/TheLoader';
 import ProductListCard from '@/components/products/ProductListCard';
 import 'swiper/css';
@@ -25,11 +26,16 @@ export default function CategoryPage() {
   const categorySlug = params.category;
   const productsContainerRef = useRef(null);
   
+  // Framer Motion scroll hook for parallax effect
+  const { scrollY } = useScroll();
+  const headerY = useTransform(scrollY, [0, 500], [0, 150]);
+  
   const [category, setCategory] = useState(null);
 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState('grid');
+  const [searchQuery, setSearchQuery] = useState('');
   
   // Fetch category data
   useEffect(() => {
@@ -75,11 +81,14 @@ export default function CategoryPage() {
   // Fetch products when filters change
   useEffect(() => {
     fetchProducts();
-  }, [categorySlug, priceRange, inStockOnly, sortBy, sortOrder, currentPage]);
+  }, [categorySlug, priceRange[0], priceRange[1], inStockOnly, sortBy, sortOrder, currentPage, searchQuery]);
 
   // Scroll to top immediately on page change (before paint)
   useLayoutEffect(() => {
-    window.scrollTo(0, 0);
+    // Force immediate scroll to top
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
   }, [currentPage]);
 
   const fetchProducts = async () => {
@@ -95,7 +104,18 @@ export default function CategoryPage() {
       limit: productsPerPage,
     });
 
-    setProducts(result.products);
+    // Filter by search query on client side
+    let filteredProducts = result.products;
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filteredProducts = result.products.filter(product => 
+        product.name?.toLowerCase().includes(query) ||
+        product.description?.toLowerCase().includes(query) ||
+        product.category?.toLowerCase().includes(query)
+      );
+    }
+
+    setProducts(filteredProducts);
     setTotalPages(result.totalPages);
     setTotalProducts(result.total);
     setLoading(false);
@@ -190,12 +210,15 @@ export default function CategoryPage() {
               }
             }
           `}</style>
-          <div className="header-content">
+          <motion.div 
+            className="header-content"
+            style={{ y: headerY }}
+          >
             <div className="category-icon">{category.icon}</div>
             <h1>{category.name}</h1>
             <p>{category.description || `Browse our collection of ${category.name.toLowerCase()}`}</p>
             <p className="products-count">{category.productsCount || totalProducts} products available</p>
-          </div>
+          </motion.div>
         </div>
 
        
@@ -320,6 +343,26 @@ export default function CategoryPage() {
                 </p>
               </div>
               
+              <div className="toolbar-center">
+                <div className="toolbar-search">
+                  <Search size={18} />
+                  <input 
+                    type="text" 
+                    placeholder="Search products..." 
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                  {searchQuery && (
+                    <button 
+                      className="clear-search"
+                      onClick={() => setSearchQuery('')}
+                    >
+                      <X size={16} />
+                    </button>
+                  )}
+                </div>
+              </div>
+              
               <div className="toolbar-right">
                 {/* View Toggle */}
                 <div className="view-toggle">
@@ -409,9 +452,9 @@ export default function CategoryPage() {
                           return (
                             <button
                               key={page}
-                              onClick={() => {
+                              onClick={() => {window.scrollTo({ top: 2000, behavior: 'smooth' });
                                 setCurrentPage(page);
-                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                                
                               }}
                               className={currentPage === page ? 'active' : ''}
                             >

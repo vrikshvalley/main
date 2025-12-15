@@ -20,7 +20,7 @@ export default function OurBlogs() {
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6 }}
         >
-          <h2>Our Blog</h2>
+          <h1 style={{ fontSize: "3rem" }}>Our Blog</h1>
           <p>Explore expert tips, guides, and stories from the world of plants</p>
         </motion.div>
 
@@ -90,7 +90,7 @@ export default function OurBlogs() {
           transition={{ duration: 0.5, delay: 0.3 }}
         >
           <Link href="/blog" className="view-all-btn">
-            View All Blogs
+            View Blogs
             <ArrowRight size={20} />
           </Link>
         </motion.div>

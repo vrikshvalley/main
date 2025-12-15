@@ -1,19 +1,10 @@
 'use client';
 import React, { useState, useEffect } from 'react'
-import Link from 'next/link';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { useDispatch } from 'react-redux';
 import { motion } from 'framer-motion';
 
-import AddToCartButton from '@/components/cart/AddToCartButton';
-import WishlistButton from '@/components/general/WishlistButton';
-import { addItem } from '@/lib/slices/cartSlice';
-import { showSuccessToast } from '@/lib/toastHelpers';
-import { useAuth } from '@/lib/AuthContext';
+import ProductListCard from '@/components/products/ProductListCard';
 import { getProducts } from '@/lib/services/productService';
-import "@/styles/featuredProductCard.scss";
-import "@/styles/wishlistButton.scss";
+import "@/styles/products.scss";
 
 const cardVariants = {
   hidden: { 
@@ -33,9 +24,6 @@ const cardVariants = {
 };
 
 function ProductCard({ sortBy }) {
-  const router = useRouter();
-  const dispatch = useDispatch();
-  const { user } = useAuth();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const sort = sortBy || 'featured';
@@ -60,36 +48,6 @@ function ProductCard({ sortBy }) {
     fetchProducts();
   }, []);
 
-  const handleBuyNow = (product, e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    // Ensure price is a number (for products with variants, use base price)
-    const productPrice = typeof product.price === 'number' ? product.price : (product.variants?.[0]?.price || 0);
-    
-    // Add to cart
-    dispatch(addItem({
-      id: product.id,
-      name: product.name,
-      price: productPrice,
-      image: product.images?.[0],
-      quantity: 1,
-    }));
-    
-    // Redirect based on auth status
-    if (user) {
-      showSuccessToast('Redirecting to checkout... 🛒');
-      setTimeout(() => {
-        router.push('/checkout');
-      }, 500);
-    } else {
-      showSuccessToast('Please sign in to checkout 🔐');
-      setTimeout(() => {
-        router.push('/auth/signin?redirect=/checkout');
-      }, 500);
-    }
-  };
-
   if (loading) {
     return (
       <>
@@ -111,38 +69,13 @@ function ProductCard({ sortBy }) {
   }
   return (
       <>
-       {products.map((product) => (
+        {products.map((product) => (
           <motion.div 
-            className="product-card" 
             key={product.id}
             variants={cardVariants}
+            className="product-card-wrapper"
           >
-            <Link href={`/products/${product.slug}`}>
-              <div className="product-image">
-                <WishlistButton product={product} />
-                <Image 
-                  src={product.images?.[0] || '/placeholder.jpg'}
-                  alt={product.name}
-                  width={300}
-                  height={300}
-                  loading="lazy"
-                />
-              </div>
-              <h3>{product.name}</h3>
-              <p className="price">
-                ₹{typeof product.price === 'number' ? product.price : (product.variants?.[0]?.price || 0)}
-                {product.variants && product.variants.length > 1 && <span> onwards</span>}
-              </p>
-            </Link>
-            <div className="product-actions">
-              <AddToCartButton product={product} />
-              <button 
-                className="buy-now-btn" 
-                onClick={(e) => handleBuyNow(product, e)}
-              >
-                Buy Now
-              </button>
-            </div>
+            <ProductListCard product={product} viewMode="grid" />
           </motion.div>
         ))}
       </>

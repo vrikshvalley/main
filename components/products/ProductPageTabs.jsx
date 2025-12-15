@@ -2,10 +2,13 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import { ChevronDown } from 'lucide-react';
 import '@/styles/productPageTabs.scss';
 
 export default function ProductPageTabs({ product }) {
   const [activeTab, setActiveTab] = useState('additional-info');
+  const [isBoxOpen, setIsBoxOpen] = useState(false);
+  const [isCareOpen, setIsCareOpen] = useState(false);
 
   if (!product) return null;
 
@@ -42,25 +45,45 @@ export default function ProductPageTabs({ product }) {
             
             {/* Know About the Product */}
             {product.knowAboutProduct && (
-              <div className="info-section">
+              <div className="info-section about-product">
                 <h4>About This Product</h4>
                 <p>{product.knowAboutProduct}</p>
               </div>
             )}
 
-            {/* What's In The Box */}
+            {/* What's In The Box - Dropdown */}
             {product.whatsInTheBox && (
-              <div className="info-section">
-                <h4>What's In The Box?</h4>
-                <p>{product.whatsInTheBox}</p>
+              <div className="info-section dropdown-section">
+                <button 
+                  className={`dropdown-header ${isBoxOpen ? 'open' : ''}`}
+                  onClick={() => setIsBoxOpen(!isBoxOpen)}
+                >
+                  <h4>What's In The Box?</h4>
+                  <ChevronDown size={20} className={`chevron ${isBoxOpen ? 'rotated' : ''}`} />
+                </button>
+                {isBoxOpen && (
+                  <div className="dropdown-content">
+                    <p>{product.whatsInTheBox}</p>
+                  </div>
+                )}
               </div>
             )}
 
-            {/* Additional Details */}
+            {/* Care Instructions - Dropdown */}
             {product.additionalDetails && (
-              <div className="info-section">
-                <h4>Care Instructions</h4>
-                <p className="care-details">{product.additionalDetails}</p>
+              <div className="info-section dropdown-section">
+                <button 
+                  className={`dropdown-header ${isCareOpen ? 'open' : ''}`}
+                  onClick={() => setIsCareOpen(!isCareOpen)}
+                >
+                  <h4>Care Instructions</h4>
+                  <ChevronDown size={20} className={`chevron ${isCareOpen ? 'rotated' : ''}`} />
+                </button>
+                {isCareOpen && (
+                  <div className="dropdown-content">
+                    <p className="care-details">{product.additionalDetails}</p>
+                  </div>
+                )}
               </div>
             )}
             
@@ -117,12 +140,6 @@ export default function ProductPageTabs({ product }) {
                 <div className="info-item">
                   <span className="info-label">Watering:</span>
                   <span className="info-value">{product.water}</span>
-                </div>
-              )}
-              {product.stock !== undefined && (
-                <div className="info-item">
-                  <span className="info-label">Stock:</span>
-                  <span className="info-value">{product.stock > 0 ? `${product.stock} available` : 'Out of Stock'}</span>
                 </div>
               )}
               {product.stock_status && (

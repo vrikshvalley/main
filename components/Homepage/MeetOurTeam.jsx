@@ -91,7 +91,8 @@ export default function MeetOurTeam() {
         <motion.div className="team-header" variants={cardVariants}>
           <h2 className="team-title">Meet Our Green Squad</h2>
           <p className="team-subtitle">
-            The passionate individuals behind Vriksh Valley, dedicated to bringing nature to your doorstep
+            The passionate individuals behind Vriksh Valley, <br />
+            dedicated to bringing nature to your doorstep
           </p>
         </motion.div>
 

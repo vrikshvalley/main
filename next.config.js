@@ -13,11 +13,6 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "avatar.iran.liara.run",
-        pathname: "/public/**",
-      },
-      {
-        protocol: "https",
         hostname: "res.cloudinary.com",
         pathname: "/**",
       },

@@ -61,7 +61,7 @@ export default function Home() {
       </motion.section>
 
       <Ads 
-        items={['New Arrivals', 'Premium Collection', 'Indoor Plants', 'Outdoor Gardens', 'Succulents', 'Bonsai']} 
+        items={['New Arrivals', 'Premium Collection', 'Indoor Plants', 'Outdoor Plants', 'Succulents', 'Bonsai']} 
         bgColor="primary" 
         textColor="light"
         speed={25}
@@ -70,7 +70,7 @@ export default function Home() {
       {/* Category Section */}
       <motion.section
         id="categories"
-        className="scroll-section"
+        className="scroll-section home-section"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
@@ -82,7 +82,7 @@ export default function Home() {
       {/* Featured Products Section */}
       <motion.section
         id="featured"
-        className="scroll-section"
+        className="scroll-section home-section"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
@@ -101,7 +101,7 @@ export default function Home() {
       {/* Why Choose Us Section */}
       <motion.section
         id="why-choose"
-        className="scroll-section"
+        className="scroll-section home-section"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
@@ -112,7 +112,7 @@ export default function Home() {
 
       {/* New Arrivals Section */}
       <motion.section
-        className="scroll-section"
+        className="scroll-section home-section"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
@@ -123,7 +123,7 @@ export default function Home() {
 
       {/* Bring Nature Home Section */}
       <motion.section
-        className="scroll-section"
+        className="scroll-section home-section"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
@@ -135,7 +135,7 @@ export default function Home() {
       {/* Impact Counter Section */}
       <motion.section
         id="impact"
-        className="scroll-section"
+        className="scroll-section home-section"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
@@ -147,7 +147,7 @@ export default function Home() {
       {/* Testimonials Section */}
       <motion.section
         id="testimonials"
-        className="scroll-section"
+        className="scroll-section home-section"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
@@ -159,7 +159,7 @@ export default function Home() {
       {/* FAQs Section */}
       <motion.section
         id="faqs"
-        className="scroll-section"
+        className="scroll-section home-section"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
@@ -171,7 +171,7 @@ export default function Home() {
       {/* Location Section */}
       <motion.section
         id="location"
-        className="scroll-section"
+        className="scroll-section home-section"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
@@ -183,7 +183,7 @@ export default function Home() {
       {/* Gallery Section */}
       <motion.section
         id="gallery"
-        className="scroll-section"
+        className="scroll-section home-section"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
@@ -195,7 +195,7 @@ export default function Home() {
       {/* About Section */}
       <motion.section
         id="about"
-        className="scroll-section"
+        className="scroll-section home-section"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}

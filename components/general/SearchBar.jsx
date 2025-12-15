@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { X, Clock, TrendingUp } from 'lucide-react';
+import { X, Clock, TrendingUp, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
@@ -10,7 +10,8 @@ import {
   getSearchSuggestions, 
   getPopularSearches,
   saveSearchHistory,
-  getSearchHistory 
+  getSearchHistory,
+  clearSearchHistory 
 } from '@/lib/searchService';
 
 export default function SearchBar() {
@@ -101,6 +102,20 @@ export default function SearchBar() {
     handleSearch(suggestion);
   };
 
+  // Remove individual history item
+  const removeHistoryItem = (e, itemToRemove) => {
+    e.stopPropagation();
+    const updatedHistory = searchHistory.filter(item => item !== itemToRemove);
+    localStorage.setItem("search_history", JSON.stringify(updatedHistory));
+    setSearchHistory(updatedHistory);
+  };
+
+  // Clear all search history
+  const handleClearHistory = () => {
+    clearSearchHistory();
+    setSearchHistory([]);
+  };
+
   return (
     <>
       {/* Search icon (always visible) */}
@@ -150,7 +165,6 @@ export default function SearchBar() {
               <input 
                 type="text" 
                 placeholder="Search plants, seeds, pots..." 
-                autoFocus 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={(e) => {
@@ -217,18 +231,38 @@ export default function SearchBar() {
                 {!isLoading && searchQuery.length === 0 && searchHistory.length > 0 && (
                   <div className="suggestions-section">
                     <div className="section-title">
-                      <Clock size={14} />
-                      Recent Searches
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <Clock size={14} />
+                        Recent Searches
+                      </div>
+                      <button 
+                        className="clear-history-btn"
+                        onClick={handleClearHistory}
+                        title="Clear all recent searches"
+                      >
+                        Clear All
+                      </button>
                     </div>
                     {searchHistory.slice(0, 5).map((query, index) => (
-                      <button
+                      <div
                         key={index}
-                        className="suggestion-item"
-                        onClick={() => handleSuggestionClick(query)}
+                        className="suggestion-item-wrapper"
                       >
-                        <Clock size={14} />
-                        <span>{query}</span>
-                      </button>
+                        <button
+                          className="suggestion-item"
+                          onClick={() => handleSuggestionClick(query)}
+                        >
+                          <Clock size={14} />
+                          <span>{query}</span>
+                        </button>
+                        <button
+                          className="remove-history-item"
+                          onClick={(e) => removeHistoryItem(e, query)}
+                          title="Remove from history"
+                        >
+                          <X size={14} />
+                        </button>
+                      </div>
                     ))}
                   </div>
                 )}
