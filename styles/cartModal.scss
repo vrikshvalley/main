@@ -7,7 +7,7 @@
   inset: 0;
   background: rgba($primary-bg, 0.6);
   backdrop-filter: blur(2px);
-  z-index: 9999;
+  z-index: 100000;
   pointer-events: none;
 }
 
@@ -15,7 +15,7 @@
 .cart-modal-wrapper {
   position: fixed;
   inset: 0;
-  z-index: 9999;
+  z-index: 100000;
   display: flex;
   align-items: stretch;
   justify-content: flex-end;

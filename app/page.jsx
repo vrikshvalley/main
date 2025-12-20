@@ -96,6 +96,7 @@ export default function Home() {
         bgColor="yellow" 
         textColor="dark" 
         speed={30}
+        renderLinks={false}
       />
 
       {/* Why Choose Us Section */}

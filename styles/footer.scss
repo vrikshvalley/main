@@ -26,6 +26,40 @@
       text-shadow: 0 2px 4px rgba($primary-bg, 0.3);
     }
 
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .section-toggle {
+        display: none;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 6px;
+        align-items: center;
+        justify-content: center;
+
+        &:focus {
+          outline: none;
+          box-shadow: 0 0 0 3px rgba($accent-primary, 0.12);
+        }
+
+        .toggle-icon {
+          display: inline-block;
+          width: 18px;
+          height: 18px;
+          color: rgba($accent-secondary, 0.95);
+          transition: transform 0.25s ease, opacity 0.2s ease;
+        }
+
+        &[aria-expanded='true'] .toggle-icon {
+          transform: rotate(180deg);
+        }
+      }
+    }
+
     ul {
       list-style: none;
       padding: 0;
@@ -115,6 +149,58 @@
     }
   }
 
+  // Mobile collapsible behavior
+  @media (max-width: 768px) {
+    .footer-section {
+      .section-toggle { display: inline-flex; }
+
+        .section-body {
+        display: block; // ensure visible on desktop but collapsed on mobile via max-height
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.45s cubic-bezier(0.2, 0.85, 0.2, 1), opacity 0.25s ease;
+        opacity: 0;
+      }
+
+      .section-body.open {
+        max-height: 600px; /* large enough to fit content */
+        opacity: 1;
+      }
+    }
+  }
+
+  // Make toggle clearly visible and clickable for testing
+  .section-toggle {
+    /* Force visible for testing & accessibility */
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto;
+    z-index: 40;
+    background: rgba($white, 0.03);
+    border: 1px solid rgba($white, 0.03);
+    padding: 0.5rem;
+    border-radius: 8px;
+  }
+
+  .section-toggle:hover {
+    background: rgba($white, 0.06);
+  }
+
+  /* Ensure SVG chevrons render stroke with currentColor */
+  .section-toggle .toggle-icon {
+    color: rgba($text-primary, 0.95);
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+  }
+
+  .section-toggle .toggle-icon path {
+    stroke: currentColor;
+    stroke-width: 2;
+    fill: none;
+  }
+
   .footer-bottom {
     margin-top: 2rem;
     text-align: center;
@@ -128,6 +214,22 @@
     .footer-container {
       grid-template-columns: 1fr;
       text-align: center;
+
+      /* Left-align links inside each footer section on mobile for easier reading */
+      .footer-section {
+        text-align: left;
+
+        /* Ensure the collapsible bodies and lists are left aligned */
+        .section-body {
+          ul {
+            text-align: left;
+            padding-left: 0.25rem;
+          }
+        }
+        ul {
+          text-align: left;
+        }
+      }
 
       .footer-section form {
         flex-direction: column;

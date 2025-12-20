@@ -108,7 +108,7 @@ export default function CartPage() {
         quantity: product.qty + 1 
       }));
     } else {
-      dispatch(addItem(product));
+      dispatch(addItem({ ...product, qty: 1 }));
     }
   };
 
@@ -261,6 +261,12 @@ export default function CartPage() {
                 <div className="summary-row total">
                   <span>Total</span>
                   <span>₹{subtotal.toFixed(2)}</span>
+                </div>
+
+                <div className="mini-summary" aria-hidden="true">
+                  <span className="label">Total</span>
+                  <span className="value">₹{subtotal.toFixed(2)}</span>
+                  <span className="note">Includes free shipping</span>
                 </div>
 
                 <button className="checkout-btn" onClick={handleCheckout}>

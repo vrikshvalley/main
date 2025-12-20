@@ -4,7 +4,7 @@
 .category-circles {
   padding: 0rem 1rem;
   max-width: 1500px;
-  margin: 5rem auto 1.5rem;
+  margin: 1rem auto;
   overflow: visible; // Allow elements to scale beyond container
   
   h2 {
@@ -95,14 +95,14 @@
   }
 
   @media (max-width: 768px) {
-    padding: 2rem 1rem;
-    margin: 2rem auto;
+    padding: 1.5rem 0rem;
+    margin: 0rem auto;
     
     .circle-container {
       overflow-x: auto;
       overflow-y: visible;
       gap: 2.5rem;
-      padding: 1.5rem 1rem;
+      padding: 1rem;
       justify-content: flex-start;
       scroll-snap-type: x mandatory;
       -webkit-overflow-scrolling: touch;
@@ -150,11 +150,11 @@
   }
 
   @media (max-width: 480px) {
-    padding: 1.5rem 0.5rem;
+    padding: 0.5rem;
     
     .circle-container {
       gap: 2rem;
-      padding: 1.5rem 0.75rem;
+      padding:0.75rem;
     }
 
     .circle-item {

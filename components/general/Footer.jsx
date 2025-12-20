@@ -10,8 +10,15 @@ import {
   siThreads,
 } from 'simple-icons';
 import '@/styles/footer.scss';
+import { useState } from 'react';
 
 export default function Footer() {
+  const [openSections, setOpenSections] = useState([]);
+
+  const toggleSection = (key) => {
+    setOpenSections((prev) => (prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]));
+  };
+
   const fadeUpVariants = {
     hidden: { opacity: 0, y: 30 },
     visible: { opacity: 1, y: 0 }
@@ -28,15 +35,31 @@ export default function Footer() {
           variants={fadeUpVariants}
           transition={{ duration: 0.6 }}
         >
-          <h3>About</h3>
-          <ul>
-            <li><Link href="/about-us">About Us</Link></li>
-            <li><Link href="/our-story">Our Story</Link></li>
-            <li><Link href="/terms-of-services">Terms of Services</Link></li>
-            <li><Link href="/privacy-policy">Privacy Policy</Link></li>
-            <li><Link href="/contact-us">Contact Us</Link></li>
-            <li><Link href="/cancellation-refund">Cancellation & Refund Policy</Link></li>
-          </ul>
+          <div className="section-head">
+            <h3>About</h3>
+            <button
+              type="button"
+              className="section-toggle"
+              aria-expanded={openSections.includes('about')}
+              aria-controls="footer-about-body"
+              onClick={() => toggleSection('about')}
+              aria-label="Toggle About"
+            >
+              <svg className="toggle-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+          </div>
+          <div id="footer-about-body" className={`section-body ${openSections.includes('about') ? 'open' : ''}`}>
+            <ul>
+              <li><Link href="/about-us">About Us</Link></li>
+              <li><Link href="/our-story">Our Story</Link></li>
+              <li><Link href="/terms-of-services">Terms of Services</Link></li>
+              <li><Link href="/privacy-policy">Privacy Policy</Link></li>
+              <li><Link href="/contact-us">Contact Us</Link></li>
+              <li><Link href="/cancellation-refund">Cancellation & Refund Policy</Link></li>
+            </ul>
+          </div>
         </motion.div>
 
         <motion.div 
@@ -47,13 +70,29 @@ export default function Footer() {
           variants={fadeUpVariants}
           transition={{ duration: 0.6, delay: 0.1 }}
         >
-          <h3>Customer Care</h3>
-          <ul>
-            <li><Link href="/track-order">Track Order</Link></li>
-            <li><Link href="/faqs">FAQs</Link></li>
-            <li><Link href="/shipping-policies">Shipping Policies</Link></li>
-            <li><Link href="/terms-conditions">Terms and Conditions</Link></li>
-          </ul>
+          <div className="section-head">
+            <h3>Customer Care</h3>
+            <button
+              type="button"
+              className="section-toggle"
+              aria-expanded={openSections.includes('care')}
+              aria-controls="footer-care-body"
+              onClick={() => toggleSection('care')}
+              aria-label="Toggle Customer Care"
+            >
+              <svg className="toggle-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+          </div>
+          <div id="footer-care-body" className={`section-body ${openSections.includes('care') ? 'open' : ''}`}>
+            <ul>
+              <li><Link href="/track-order">Track Order</Link></li>
+              <li><Link href="/faqs">FAQs</Link></li>
+              <li><Link href="/shipping-policies">Shipping Policies</Link></li>
+              <li><Link href="/terms-conditions">Terms and Conditions</Link></li>
+            </ul>
+          </div>
         </motion.div>
 
         <motion.div 
@@ -64,12 +103,28 @@ export default function Footer() {
           variants={fadeUpVariants}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          <h3>Get in Touch</h3>
-          <ul>
-            <li><a href="tel:+919204745612">Call: +91 92047 45612</a></li>
-            <li><a href="mailto:vrikshvalley@gmail.com">Email: vrikshvalley@gmail.com</a></li>
-            <li><a href="https://wa.me/919204745612" target="_blank">WhatsApp: +91 92047 45612</a></li>
-          </ul>
+          <div className="section-head">
+            <h3>Get in Touch</h3>
+            <button
+              type="button"
+              className="section-toggle"
+              aria-expanded={openSections.includes('contact')}
+              aria-controls="footer-contact-body"
+              onClick={() => toggleSection('contact')}
+              aria-label="Toggle Get in Touch"
+            >
+              <svg className="toggle-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+          </div>
+          <div id="footer-contact-body" className={`section-body ${openSections.includes('contact') ? 'open' : ''}`}>
+            <ul>
+              <li><a href="tel:+919204745612">Call: +91 92047 45612</a></li>
+              <li><a href="mailto:vrikshvalley@gmail.com">Email: vrikshvalley@gmail.com</a></li>
+              <li><a href="https://wa.me/919204745612" target="_blank">WhatsApp: +91 92047 45612</a></li>
+            </ul>
+          </div>
         </motion.div>
 
         <motion.div 

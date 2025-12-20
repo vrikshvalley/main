@@ -222,7 +222,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.8rem;
-  padding: 1rem 2.5rem;
+  padding: 0.7rem 1.5rem;
   background: $dark-green;
   color: $white;
   font-family: $font-secondary;
@@ -239,10 +239,10 @@
   }
 
   &:hover {
-    background: $deep-green;
+    background: $white;
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba($dark-green, 0.3);
-    color: $yellow;
+    color: $text-secondary;
     svg {
       transform: translateX(4px);
     }

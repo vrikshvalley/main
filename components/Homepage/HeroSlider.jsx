@@ -124,7 +124,7 @@ export default function HeroSlider() {
         </motion.h1>
         
         <motion.p className="heroSubtitle" variants={itemVariants}>
-          Vriksh Valley is a plant-care and gardening companion app that helps users discover plants, track care schedules, and manage their gardening needs.
+          Every home deserves a touch of green. Transform your space into a sanctuary where plants thrive and life slows down to the gentle rhythm of growth
         </motion.p>
 
         <motion.div className="features" variants={itemVariants}>

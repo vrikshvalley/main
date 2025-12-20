@@ -14,7 +14,6 @@
 
   @media (max-width: 480px) {
     height: 450px; // Increased from 400px
-    margin-bottom: 1rem;
   }
 
   @media (max-width: 400px) {
@@ -102,9 +101,13 @@
     right: 20px;
   }
 }
-
+.swiper-pagination-bullet{
+  background: rgb(0, 255, 0);
+  transition: all 0.3s ease;
+  border: 1px solid  rgb(0, 255, 0);
+}
 .swiper-pagination-bullet-active{
-  background: $text-secondary;
+ 
   width: 35px;
   border-radius: 6px;
 }
@@ -118,7 +121,6 @@
   text-align: center;
   color: white;
   padding: 2rem;
-  padding-top: 50px;
   width: 100%;
   height: 700px;
   background: linear-gradient(150deg, rgba(0, 0, 0, 0.326), rgba(0, 0, 0, 0.249));
@@ -406,9 +408,9 @@
 }
 
 .ctaButtonSecondary {
-  background: transparent;
+  background: $white;
   backdrop-filter: blur(10px);
-  color: $white;
+  color: $text-secondary;
   border: 2px solid $white;
   padding: 0.875rem 2rem;
   font-size: 1rem;
@@ -424,7 +426,7 @@
   &:hover {
     background: $white;
     color: $accent-primary;
-    border-color: $white;
+    border-color: $text-secondary;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba($white, 0.3);
   }

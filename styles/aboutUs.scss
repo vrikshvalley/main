@@ -13,6 +13,10 @@
     color: $text-primary;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     text-align: left;
+    @media (max-width: 480px) {
+      font-size: 1.5rem;
+      text-align: center;
+    }
   }
 
   .about-grid {
@@ -42,6 +46,7 @@
     @media (max-width: 968px) {
       text-align: center;
     }
+    
 
     p {
       font-size: 1.15rem;
@@ -62,7 +67,7 @@
       @media (max-width: 768px) {
         font-size: 1rem;
         padding: 0 1rem;
-
+        text-align: left;
         &:first-of-type {
           font-size: 1.15rem;
         }
@@ -70,6 +75,7 @@
 
       @media (max-width: 480px) {
         font-size: 0.95rem;
+        
 
         &:first-of-type {
           font-size: 1.05rem;

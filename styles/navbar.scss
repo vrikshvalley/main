@@ -675,6 +675,14 @@ color.adjust($accent-primary, $lightness: -5%);
     backdrop-filter: blur(20px);
     border-top: 2px solid rgba($accent-primary, 0.3);
     box-shadow: 0 10px 30px rgba($primary-bg, 0.15);
+    /* Make the mobile menu an overlay that covers the viewport below the sticky navbar */
+    position: fixed;
+    top: 60px; // match navbar min-height
+    left: 0;
+    right: 0;
+    height: calc(100vh - 60px);
+    overflow-y: auto;
+    z-index: 100050;
     animation: slideDown 0.3s ease-out;
 
     .mobile-category {
@@ -754,7 +762,15 @@ color.adjust($accent-primary, $lightness: -5%);
           font-family: 'Alumni Sans', sans-serif;
           font-size: 1.3rem;
           font-weight: 500;
-          display: block;
+          /* Reset native button appearance so it looks like a text link */
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          appearance: none;
+          background: transparent;
+          border: none;
+          text-align: left;
+          width: 100%;
+          cursor: pointer;
         }
 
         .mobile-category-link-active {
@@ -801,11 +817,16 @@ color.adjust($accent-primary, $lightness: -5%);
     }
 
     .mobile-subcategories {
-      overflow: hidden;
+      /* allow long subcategory lists to scroll on mobile */
       padding-left: 1rem;
       background: rgba($primary-bg, 0.03);
       border-left: 2px solid rgba($accent-primary, 0.2);
       margin-left: 1rem;
+      max-height: calc(100vh - 220px); /* keep room for header/menu */
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
     }
 
     .mobile-subcategory-item {
@@ -1038,5 +1059,6 @@ color.adjust($accent-primary, $lightness: -5%);
     .mobile-menu {
       font-size: 1rem;
       padding: 0.75rem 0.4rem;
+      z-index: 2000;
     }
   }

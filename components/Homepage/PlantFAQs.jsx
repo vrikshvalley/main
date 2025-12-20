@@ -6,7 +6,7 @@ import { ChevronDown, HelpCircle } from 'lucide-react';
 import '@/styles/plantFAQs.scss';
 
 export default function PlantFAQs() {
-  const [openFAQ, setOpenFAQ] = useState(null);
+  const [openFAQs, setOpenFAQs] = useState([]);
 
   const faqs = [
   {
@@ -62,7 +62,10 @@ export default function PlantFAQs() {
 ];
 
   const toggleFAQ = (id) => {
-    setOpenFAQ(openFAQ === id ? null : id);
+    setOpenFAQs((prev) => {
+      if (prev.includes(id)) return prev.filter((i) => i !== id);
+      return [...prev, id];
+    });
   };
 
   return (
@@ -75,7 +78,7 @@ export default function PlantFAQs() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <HelpCircle className="header-icon" />
+          <HelpCircle className="header-icon" color="white"/>
           <h2 className="section-title">Plant Care FAQs</h2>
           <p className="section-subtitle">
             Find answers to the most common questions about plant care
@@ -86,7 +89,7 @@ export default function PlantFAQs() {
           {faqs.map((faq, index) => (
             <motion.div
               key={faq.id}
-              className={`faq-item ${openFAQ === faq.id ? 'active' : ''}`}
+              className={`faq-item ${openFAQs.includes(faq.id) ? 'active' : ''}`}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -95,18 +98,18 @@ export default function PlantFAQs() {
               <button
                 className="faq-question"
                 onClick={() => toggleFAQ(faq.id)}
-                aria-expanded={openFAQ === faq.id}
+                aria-expanded={openFAQs.includes(faq.id)}
               >
                 <span className="question-number">{String(index + 1).padStart(2, '0')}</span>
                 <span className="question-text">{faq.question}</span>
                 <ChevronDown 
-                  className={`chevron ${openFAQ === faq.id ? 'rotated' : ''}`}
+                  className={`chevron ${openFAQs.includes(faq.id) ? 'rotated' : ''}`}
                   size={20}
                 />
               </button>
 
               <AnimatePresence>
-                {openFAQ === faq.id && (
+                {openFAQs.includes(faq.id) && (
                   <motion.div
                     className="faq-answer"
                     initial={{ height: 0, opacity: 0 }}

@@ -1,12 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import { selectCount } from '@/lib/slices/cartSlice';
 import { Menu, X, ChevronDown, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
+import { createPortal } from 'react-dom';
 import ProfileIcon from '@/components/auth/ProfileIcon';
 import CartIcon from '@/components/cart/CartIcon';
 import SearchBar from '@/components/general/SearchBar';
@@ -17,6 +19,7 @@ import "@/styles/navbar.scss";
 export default function Navbar() {
   const { openCart } = useCart();
   const count = useSelector(selectCount);
+  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [hoveredCategory, setHoveredCategory] = useState(null);
   const [expandedMobileCategory, setExpandedMobileCategory] = useState(null);
@@ -87,6 +90,22 @@ export default function Navbar() {
 
   const toggleMobileCategory = (slug) => {
     setExpandedMobileCategory(expandedMobileCategory === slug ? null : slug);
+  };
+
+  const handleMobileCategoryPress = (category) => {
+    const hasSubs = category.subcategories && category.subcategories.length > 0 && category.slug !== 'accessories';
+    if (!hasSubs) {
+      setMenuOpen(false);
+      router.push(`/category/${category.slug}`);
+      return;
+    }
+
+    if (expandedMobileCategory !== category.slug) {
+      setExpandedMobileCategory(category.slug);
+    } else {
+      setMenuOpen(false);
+      router.push(`/category/${category.slug}`);
+    }
   };
 
   return (
@@ -164,9 +183,9 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile dropdown */}
-      {menuOpen && (
-        <div className="mobile-menu">
+      {/* Mobile dropdown rendered into document.body to avoid stacking context issues */}
+      {menuOpen && (typeof document !== 'undefined' ? createPortal(
+        <div className="mobile-menu" role="dialog" aria-modal="true">
           {categories.map((category) => (
             <div key={category.slug} className="mobile-category">
               <div className="mobile-category-header">
@@ -181,7 +200,13 @@ export default function Navbar() {
                         <span>{category.name}</span>
                       </Link>
                     ) : (
-                      <span className="mobile-category-text">{category.name}</span>
+                      <button
+                        type="button"
+                        className="mobile-category-text"
+                        onClick={() => handleMobileCategoryPress(category)}
+                      >
+                        {category.name}
+                      </button>
                     )}
                     <button
                       className="mobile-category-toggle"
@@ -203,7 +228,7 @@ export default function Navbar() {
                   </Link>
                 )}
               </div>
-              
+
               {/* Mobile Subcategories */}
               <AnimatePresence>
                 {expandedMobileCategory === category.slug && category.subcategories && category.slug !== 'accessories' && (
@@ -229,8 +254,9 @@ export default function Navbar() {
               </AnimatePresence>
             </div>
           ))}
-        </div>
-      )}
+        </div>,
+        document.body
+      ) : null)}
     </div>
   );
 }

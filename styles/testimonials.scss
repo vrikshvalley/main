@@ -4,7 +4,7 @@
 .testimonials-section {
   width: 100%;
   padding: 4rem 1rem;
-  margin: 2rem auto;
+  margin: 1rem auto;
 
   .testimonials-title {
     text-align: center;
@@ -12,7 +12,7 @@
     margin-bottom: 3rem;
     color: $text-primary;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    font-weight: 400;
+    font-weight: 600;
     font-family: 'Playfair Display', serif;
   }
   .testimonials-subtitle {
@@ -37,9 +37,9 @@
   .testimonial-card {
     background: white; // White background
     padding: 1.5rem;
+    box-shadow: none; // ensure no shadow on inactive cards by default
     border-radius: 12px;
     border: 2px solid rgba($text-secondary, 0.2);
-    box-shadow: $shadow-medium;
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -120,9 +120,7 @@
       background: white; // White background on mobile too
       box-shadow: none; // Remove shadow by default
       
-      &.swiper-slide-active {
-        box-shadow: $shadow-strong; // Only active card has shadow
-      }
+      
       
       .card-header {
         .avatar {
@@ -143,6 +141,27 @@
       .testimonial-text {
         font-size: 0.9rem;
         color: $primary-bg; // Dark text
+      }
+    }
+
+    // Ensure hover effects don't get cropped on mobile emulation or small viewports
+    .testimonials-grid {
+      overflow: visible; // allow cards to visually lift without clipping
+      padding-bottom: 1.5rem; // room for visual space
+    }
+
+    .testimonial-card:hover {
+      transform: none !important; // disable lift on hover for small screens
+      box-shadow: none !important; // ensure no shadow appears
+    }
+  }
+
+  // If using a swiper/carousel, remove shadows for non-active slides
+  .testimonials-swiper {
+    .swiper-slide:not(.swiper-slide-active) {
+      .testimonial-card {
+        box-shadow: none !important;
+        transform: none !important;
       }
     }
   }

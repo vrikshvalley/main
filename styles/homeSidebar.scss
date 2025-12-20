@@ -3,15 +3,16 @@
 
 .home-sidebar {
   position: fixed;
-  left: calc(100%/3 - 20px);
+  
   bottom: 5%;
+  left:33%;
+  transform: translateX(-33%);
   z-index: 900;
   background: rgba($white, 0.95);
   border-radius: 16px;
   padding: 2px;
   box-shadow: 0 8px 32px rgba($dark-green, 0.3);
   border: 1px solid rgba($white, 0.1);
-  overflow: visible;
   max-height: 60vh;
 
   @media (max-width: 1024px) {
@@ -22,6 +23,7 @@
     display: flex;
     flex-direction: row;
     gap: 8px;
+    
   }
 
   .sidebar-item {

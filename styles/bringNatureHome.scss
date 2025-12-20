@@ -32,18 +32,19 @@
 
     .highlight {
       color: $teal;
-      background-color: rgba($white, 0.85);
-      border: dotted 2px $teal;
+      border: dotted 2px $white;
       padding: 0 0.4rem;
-      border-radius: 4px;
+      border-radius: 25px;
       font-weight: 500;
       position: relative;
       display: inline-block;
+      font-weight: 600;
+      background: rgba($color: #ffffff, $alpha: 1.0);
     }
   }
 
   p {
-    font-size: 1.15rem;
+    font-size: 1.6rem;
     color: rgba($white, 0.85);
     line-height: 1.9;
     font-weight: 300;
@@ -55,6 +56,7 @@
     background: $white;
     border-radius: 16px;
     padding: 0.5rem;
+    margin-left: auto;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
     border: 3px solid $white;
     width: 80%;

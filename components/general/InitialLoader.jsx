@@ -12,35 +12,30 @@ export default function InitialLoader() {
   const [showValley, setShowValley] = useState(false);
 
   // Array of text in different languages
-  const textArray = ['वृक्ष', 'বৃক্ষ', 'ବୃକ୍ଷ', 'وڻ', 'વૃક્ષ', 'ಮರ', 'చెట్టు', 'மரம்', 'മരം', 'ꯔꯨ'];
+  const textArray = ['वृक्ष', 'বৃক্ষ', 'ବୃକ୍ଷ', 'وڻ', 'વૃક્ષ', 'ಮರ', 'చెట్టు', 'மரம்', 'മരം', 'ꯔꯨ', 'Vriksh'];
 
   useEffect(() => {
     // Set pathname on client side only
     setPathname(window.location.pathname);
 
-    // Scroll through different language texts
+    // Scroll through different language texts with count-up style
     const textInterval = setInterval(() => {
       setCurrentTextIndex((prev) => {
         if (prev < textArray.length - 1) {
           return prev + 1;
         } else {
           clearInterval(textInterval);
-          // After scrolling through all texts, show "Vriksh"
-          setTimeout(() => setShowVriksh(true), 200);
+          // After showing "Vriksh", show "Valley" beside it
+          setTimeout(() => setShowValley(true), 400);
           return prev;
         }
       });
-    }, 150); // Fast scrolling effect
+    }, 180); // Smoother, less rushed timing
 
-    // Show Valley after Vriksh appears
-    setTimeout(() => {
-      setShowValley(true);
-    }, 2000);
-
-    // Complete animation and hide loader (increased by 1 second)
+    // Complete animation and hide loader
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 4500);
+    }, 3800);
 
     return () => {
       clearInterval(textInterval);
@@ -59,7 +54,7 @@ export default function InitialLoader() {
           initial={{ opacity: 1 }}
           exit={{ 
             opacity: 0,
-            transition: { duration: 0.8, ease: [0.43, 0.13, 0.23, 0.96] }
+            transition: { duration: 0.6, ease: [0.4, 0, 0.2, 1] }
           }}
         >
           {/* Green Background */}
@@ -68,67 +63,41 @@ export default function InitialLoader() {
           {/* Content Container */}
           <div className="loaderContent">
             {/* Scrolling Text Animation */}
-            {!showVriksh && (
-              <motion.div
-                className="scrollingTextContainer"
-                initial={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
+            <motion.div
+              className="scrollingTextContainer"
+              initial={{ opacity: 1 }}
+            >
+              <div className="brandWrapper">
                 <motion.span
                   className="scrollingText"
                   key={currentTextIndex}
-                  initial={{ y: 50, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  exit={{ y: -50, opacity: 0 }}
+                  initial={{ y: 12, opacity: 0, scale: 0.98 }}
+                  animate={{ y: 0, opacity: 1, scale: 1 }}
+                  exit={{ y: -10, opacity: 0, scale: 0.99 }}
                   transition={{
-                    duration: 0.15,
-                    ease: [0.43, 0.13, 0.23, 0.96]
+                    duration: 0.18,
+                    ease: [0.25, 0.1, 0.25, 1]
                   }}
                 >
                   {textArray[currentTextIndex]}
                 </motion.span>
-              </motion.div>
-            )}
 
-            {/* Vriksh Valley Animation */}
-            {showVriksh && (
-              <div className="brandContainer">
-                <div className="brandWrapper">
-                  {/* Vriksh - appears then slides left */}
-                  <motion.div
-                    className="vrikshText"
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ 
-                      opacity: 1, 
-                      scale: 1,
-                      x: showValley ? -10 : 0
-                    }}
+                {/* Valley - appears beside Vriksh */}
+                {showValley && (
+                  <motion.span
+                    className="valleyText"
+                    initial={{ opacity: 0, x: 40, y: 4 }}
+                    animate={{ opacity: 1, x: 0, y: 0 }}
                     transition={{
-                      opacity: { duration: 0.4, ease: 'easeOut' },
-                      scale: { duration: 0.4, ease: [0.43, 0.13, 0.23, 0.96] },
-                      x: { duration: 0.6, delay: 0.5, ease: [0.43, 0.13, 0.23, 0.96] }
+                      duration: 0.5,
+                      ease: [0.4, 0, 0.2, 1]
                     }}
                   >
-                    Vriksh
-                  </motion.div>
-
-                  {/* Valley - slides in from right */}
-                  {showValley && (
-                    <motion.div
-                      className="valleyText"
-                      initial={{ opacity: 0, x: 100 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{
-                        duration: 0.6,
-                        ease: [0.43, 0.13, 0.23, 0.96]
-                      }}
-                    >
-                      Valley
-                    </motion.div>
-                  )}
-                </div>
+                    Valley
+                  </motion.span>
+                )}
               </div>
-            )}
+            </motion.div>
           </div>
         </motion.div>
       )}

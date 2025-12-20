@@ -85,6 +85,32 @@
     }
   }
 
+  // Hover highlight inversion rules
+  // If banner bg is green (primary/dark) -> hover highlight yellow
+  // If banner bg is yellow -> hover highlight green
+  .ads-banner.bg-primary &,
+  .ads-banner.bg-dark & {
+    &:hover {
+      background: rgba($yellow, 0.12);
+      border-radius: 6px;
+    }
+
+    &:hover .ads-text {
+      color: $dark-green;
+    }
+  }
+
+  .ads-banner.bg-yellow & {
+    &:hover {
+      background: rgba($accent-primary, 0.12);
+      border-radius: 6px;
+    }
+
+    &:hover .ads-text {
+      color: $white;
+    }
+  }
+
   .ads-text {
     font-weight: 600;
     font-size: 1rem;

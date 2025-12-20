@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Leaf } from 'lucide-react';
 import '@/styles/ads.scss';
 
-export default function Ads({ items = [], bgColor = 'primary', speed = 30, textColor }) {
+export default function Ads({ items = [], bgColor = 'primary', speed = 30, textColor, renderLinks = true }) {
   // First item is always "Bring nature home..." - don't make it a link
   const firstItem = items[0];
   const categoryItems = items.slice(1); // Rest are category links
@@ -42,17 +42,29 @@ export default function Ads({ items = [], bgColor = 'primary', speed = 30, textC
             </>
           )}
           
-          {/* Category items - with links */}
-          {duplicatedCategories.map((item, index) => (
-            <Link 
-              key={index} 
-              href={`/products/category/${item.toLowerCase().replace(/\s+/g, '-')}`}
-              className="ads-item ads-link"
-            >
-              <span className="ads-text">{item}</span>
-              <Leaf size={16} className="ads-separator" />
-            </Link>
-          ))}
+          {/* Category items - links or plain text depending on prop */}
+          {duplicatedCategories.map((item, index) => {
+            const path = `/products/category/${item.toLowerCase().replace(/\s+/g, '-')}`;
+            if (renderLinks) {
+              return (
+                <Link
+                  key={index}
+                  href={path}
+                  className="ads-item ads-link"
+                >
+                  <span className="ads-text">{item}</span>
+                  <Leaf size={16} className="ads-separator" />
+                </Link>
+              );
+            }
+
+            return (
+              <div key={index} className="ads-item">
+                <span className="ads-text">{item}</span>
+                <Leaf size={16} className="ads-separator" />
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

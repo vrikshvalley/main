@@ -217,7 +217,7 @@ export default function CategoryPage() {
             <div className="category-icon">{category.icon}</div>
             <h1>{category.name}</h1>
             <p>{category.description || `Browse our collection of ${category.name.toLowerCase()}`}</p>
-            <p className="products-count">{category.productsCount || totalProducts} products available</p>
+            <p className="products-count">{totalProducts} products available</p>
           </motion.div>
         </div>
 
