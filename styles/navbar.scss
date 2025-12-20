@@ -6,7 +6,8 @@
   border-bottom: 1px solid rgba($text-secondary, 0.3);
   position: sticky;
   top: 0;
-  z-index: 50;
+  /* raise navbar stacking context so its dropdowns can overlap the products toolbar */
+  z-index: 2000;
   color: $text-primary;
   background-color: $text-primary;
   box-shadow: $shadow-medium;

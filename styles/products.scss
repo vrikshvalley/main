@@ -264,7 +264,8 @@ $grey-dark: #374151;
     bottom: 0;
     background: rgba($dark-green, 0.6);
     backdrop-filter: blur(4px);
-    z-index: 9997;
+    /* keep below toolbar (z-index:500) but above regular content */
+    z-index: 499;
     animation: fadeIn 0.3s ease;
   }
 
