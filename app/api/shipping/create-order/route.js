@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
-import * as shiprocketService from "@/lib/services/shiprocketService";
+import * as delhiveryService from "@/lib/services/delhiveryService";
 import * as orderService from "@/lib/services/orderService";
 
 /**
  * POST /api/shipping/create-order
- * Creates a Shiprocket order and assigns courier
+ * Creates a Delhivery shipment
  */
 export async function POST(request) {
   try {
@@ -17,69 +17,65 @@ export async function POST(request) {
       );
     }
 
-    // Format order for Shiprocket
-    const shiprocketOrderData = {
-      order_id: orderId,
-      order_date: new Date().toISOString().split("T")[0],
-      billing_customer_name: order.customer_name,
-      billing_last_name: "",
-      billing_address: order.shipping_address.line1,
-      billing_address_2: order.shipping_address.line2 || "",
-      billing_city: order.shipping_address.city,
-      billing_pincode: order.shipping_address.pincode,
-      billing_state: order.shipping_address.state,
-      billing_country: "India",
-      billing_email: order.customer_email,
-      billing_phone: order.customer_phone,
-      shipping_is_billing: true,
-      order_items: orderService.formatItemsForShiprocket(order.items),
-      payment_method: "Prepaid",
-      sub_total: order.total, // Total already in rupees
+    // Format order for Delhivery
+    const delhiveryShipmentData = {
+      orderNumber: orderId,
+      orderDate: new Date().toISOString().split("T")[0],
+      pickupLocation: process.env.DELHIVERY_PICKUP_LOCATION || "Primary",
+      shippingName: order.customer_name,
+      shippingAddress: order.shipping_address.line1,
+      shippingAddress2: order.shipping_address.line2 || "",
+      shippingCity: order.shipping_address.city,
+      shippingState: order.shipping_address.state,
+      shippingPincode: order.shipping_address.pincode,
+      shippingCountry: "India",
+      shippingPhone: order.customer_phone,
+      shippingEmail: order.customer_email,
+      items: order.items.map((item) => ({
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price,
+      })),
+      paymentMode: "Prepaid",
+      totalAmount: order.total,
+      weight: 0.5,
       length: 15,
       breadth: 15,
       height: 15,
-      weight: 0.5,
+      sellerName: process.env.DELHIVERY_CLIENT_NAME || "Vriksh Valley",
+      sellerAddress: process.env.DELHIVERY_SELLER_ADDRESS || "",
+      sellerPhone: process.env.DELHIVERY_SELLER_PHONE || "",
     };
 
-    // Create Shiprocket order
-    const { data: shiprocketOrder, error: createError } =
-      await shiprocketService.createOrder(shiprocketOrderData);
+    // Create Delhivery shipment
+    const { data: delhiveryShipment, error: createError } =
+      await delhiveryService.createShipment(delhiveryShipmentData);
 
-    if (createError || !shiprocketOrder) {
-      console.error("Shiprocket order creation failed:", createError);
+    if (createError || !delhiveryShipment) {
+      console.error("Delhivery shipment creation failed:", createError);
       return NextResponse.json(
         {
           error: createError || {
-            message: "Failed to create Shiprocket order",
+            message: "Failed to create Delhivery shipment",
           },
         },
         { status: 500 }
       );
     }
 
-    // Assign courier (using default courier from .env)
-    const shipmentId = shiprocketOrder.shipment_id;
-    const { data: courierAssignment, error: courierError } =
-      await shiprocketService.assignCourier(shipmentId);
-
-    if (courierError) {
-      console.error("Courier assignment failed:", courierError);
-      // Continue even if courier assignment fails - can be done manually
-    }
-
-    // Update order in database with Shiprocket details
+    // Update order in database with Delhivery details
     await orderService.updateShippingDetails(orderId, {
-      shiprocket_order_id: shiprocketOrder.order_id,
-      shiprocket_shipment_id: shipmentId,
-      awb_code: courierAssignment?.response?.data?.awb_code || null,
-      courier_name: courierAssignment?.response?.data?.courier_name || null,
-      courier_id: courierAssignment?.response?.data?.courier_id || null,
+      waybill: delhiveryShipment.waybill,
+      shipment_status: delhiveryShipment.status,
+      reference_id: delhiveryShipment.referenceId,
+      shipping_provider: "Delhivery",
     });
 
     return NextResponse.json({
       success: true,
-      shiprocketOrder,
-      courierAssignment,
+      waybill: delhiveryShipment.waybill,
+      orderNumber: delhiveryShipment.orderNumber,
+      status: delhiveryShipment.status,
     });
   } catch (error) {
     console.error("Create shipping order API error:", error);

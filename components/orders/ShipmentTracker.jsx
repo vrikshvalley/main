@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import shiprocketService from '@/lib/services/shiprocketService';
+import delhiveryService from '@/lib/services/delhiveryService';
 import { Package, Truck, MapPin, Clock, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
 import '@/styles/shipmentTracker.scss';
 
@@ -12,19 +12,19 @@ export default function ShipmentTracker({ order, compact = false }) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (order?.awb_code && expanded) {
+    if (order?.waybill && expanded) {
       fetchTracking();
     }
-  }, [order?.awb_code, expanded]);
+  }, [order?.waybill, expanded]);
 
   const fetchTracking = async () => {
-    if (!order?.awb_code) return;
+    if (!order?.waybill) return;
     
     setLoading(true);
     setError(null);
     
     try {
-      const { data, error: trackError } = await shiprocketService.trackShipment(order.awb_code);
+      const { data, error: trackError } = await delhiveryService.trackShipment(order.waybill);
       
       if (trackError) {
         setError('Failed to fetch tracking data');
@@ -84,8 +84,8 @@ export default function ShipmentTracker({ order, compact = false }) {
 
   if (!order) return null;
 
-  // If no AWB code yet, show basic info
-  if (!order.awb_code) {
+  // If no waybill yet, show basic info
+  if (!order.waybill) {
     return (
       <div className="shipment-tracker no-tracking">
         <div className="tracker-header">

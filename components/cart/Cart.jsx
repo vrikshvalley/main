@@ -18,7 +18,7 @@ import {
 } from '@/lib/slices/cartSlice';
 import { useState, useEffect } from 'react';
 import { X, Plus, Minus, Trash2, MessageCircle } from 'lucide-react';
-import Image from 'next/image';
+import Image from '@/components/general/ImgWithLoader';
 import { auth } from '@/lib/firebaseConfig';
 import { onAuthStateChanged } from 'firebase/auth';
 import { 

@@ -1,21 +1,28 @@
 // API Route: Check Payment Status
 import { NextResponse } from "next/server";
-import { checkOrderStatus } from "@/lib/services/phonepeService";
+import { fetchPayment, fetchOrder } from "@/lib/services/razorpayService";
 
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
-    const transactionId = searchParams.get("transactionId");
+    const paymentId = searchParams.get("paymentId");
+    const orderId = searchParams.get("orderId");
 
-    if (!transactionId) {
+    if (!paymentId && !orderId) {
       return NextResponse.json(
-        { success: false, error: "Transaction ID is required" },
+        { success: false, error: "Payment ID or Order ID is required" },
         { status: 400 }
       );
     }
 
-    // Check payment status with PhonePe
-    const { data: orderStatus, error } = await checkOrderStatus(transactionId);
+    let data, error;
+
+    // Check payment status with Razorpay
+    if (paymentId) {
+      ({ data, error } = await fetchPayment(paymentId));
+    } else if (orderId) {
+      ({ data, error } = await fetchOrder(orderId));
+    }
 
     if (error) {
       return NextResponse.json(
@@ -29,8 +36,8 @@ export async function GET(request) {
 
     return NextResponse.json({
       success: true,
-      status: orderStatus.state,
-      data: orderStatus,
+      status: data.status,
+      data: data,
     });
   } catch (error) {
     console.error("Payment status check error:", error);

@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import Image from 'next/image';
+import Image from '@/components/general/ImgWithLoader';
 import '@/styles/bringNatureHome.scss';
 
 const containerVariants = {

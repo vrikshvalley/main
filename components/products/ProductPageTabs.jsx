@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
+import Image from '@/components/general/ImgWithLoader';
 import { ChevronDown } from 'lucide-react';
 import '@/styles/productPageTabs.scss';
 

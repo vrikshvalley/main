@@ -258,7 +258,8 @@ $grey-dark: #374151;
   // Backdrop Overlay
   .filters-backdrop {
     position: fixed;
-    top: 0;
+    /* place backdrop below the navbar so navbar remains visible */
+    top: var(--navbar-height, 64px);
     left: 0;
     right: 0;
     bottom: 0;
@@ -285,10 +286,11 @@ $grey-dark: #374151;
     box-shadow: 0 4px 24px rgba($teal, 0.15);
     border-right: 3px solid $teal;
     position: fixed;
-    top: 0;
+    /* start below navbar so it appears after the Navbar in vertical stack */
+    top: var(--navbar-height, 64px);
     left: 0;
     width: 360px;
-    height: 100vh;
+    height: calc(100vh - var(--navbar-height, 64px));
     /* sit above the toolbar (z-index:500) but below the mobile menu (z-index:2000) */
     z-index: 600;
     overflow-y: auto;
@@ -297,10 +299,16 @@ $grey-dark: #374151;
 
     // On mobile, hide by default until toggled open
     @media (max-width: 768px) {
-      display: none;
+      /* Full width vertical modal sliding from top below navbar on mobile */
+      width: 100%;
+      left: 0;
+      top: var(--navbar-height, 64px);
+      height: calc(100vh - var(--navbar-height, 64px));
+      transform: translateY(-100%);
+      display: block;
 
       &.show {
-        display: block;
+        transform: translateY(0);
       }
     }
 
@@ -716,6 +724,49 @@ $grey-dark: #374151;
             &:hover {
               color: $teal;
               background: rgba($teal, 0.1);
+            }
+          }
+
+          // Suggestions dropdown
+          .toolbar-search-suggestions {
+            position: absolute;
+            top: calc(100% + 0.4rem);
+            left: 0;
+            width: 100%;
+            background: $white;
+            border: 1px solid rgba($teal, 0.2);
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba($teal, 0.12);
+            z-index: 10;
+            overflow: hidden;
+
+            .suggestions-loading,
+            .no-suggestions {
+              padding: 0.75rem 0.875rem;
+              font-size: 0.875rem;
+              color: $grey-dark;
+            }
+
+            .suggestion-item {
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+              width: 100%;
+              padding: 0.6rem 0.875rem;
+              background: transparent;
+              border: none;
+              cursor: pointer;
+              color: $dark-green;
+              font-size: 0.9rem;
+
+              svg {
+                color: $grey-medium;
+              }
+
+              &:hover,
+              &.active {
+                background: rgba($teal, 0.06);
+              }
             }
           }
         }
@@ -1427,7 +1478,7 @@ $grey-dark: #374151;
 
   p {
     font-size: 1.125rem;
-    color: rgba($white, 0.9);
+    color: $white;
     margin-bottom: 2rem;
     max-width: 500px;
 

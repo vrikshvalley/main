@@ -1,54 +1,27 @@
-// API Route: Create Payment with PhonePe
+// API Route: Create Payment with Razorpay
 import { NextResponse } from "next/server";
-import {
-  createPaymentOrder,
-  rupeesToPaisa,
-  authenticate,
-} from "@/lib/services/phonepeService";
+import { createOrder, rupeesToPaise } from "@/lib/services/razorpayService";
 
-// GET endpoint for testing authentication
+// GET endpoint for testing Razorpay configuration
 export async function GET(request) {
   try {
-    console.log("\n=== Testing PhonePe Authentication ===");
+    console.log("\n=== Testing Razorpay Configuration ===");
 
     // Check environment variables
     const config = {
-      clientId: process.env.PHONEPE_CLIENT_ID ? "✅ Set" : "❌ Missing",
-      clientSecret: process.env.PHONEPE_CLIENT_SECRET ? "✅ Set" : "❌ Missing",
-      clientVersion: process.env.PHONEPE_CLIENT_VERSION
+      keyId: process.env.RAZORPAY_KEY_ID ? "✅ Set" : "❌ Missing",
+      keySecret: process.env.RAZORPAY_KEY_SECRET ? "✅ Set" : "❌ Missing",
+      webhookSecret: process.env.RAZORPAY_WEBHOOK_SECRET
         ? "✅ Set"
         : "❌ Missing",
-      merchantId: process.env.PHONEPE_MERCHANT_ID ? "✅ Set" : "❌ Missing",
-      baseUrl: process.env.PHONEPE_BASE_URL || "Using default",
-      authUrl: process.env.PHONEPE_AUTH_URL || "Using default",
     };
 
     console.log("Environment Configuration:", config);
 
-    // Test authentication
-    const { data: token, error } = await authenticate();
-
-    if (error) {
-      console.error("❌ Authentication failed:", error);
-      return NextResponse.json(
-        {
-          success: false,
-          message: "PhonePe authentication failed",
-          error,
-          config,
-        },
-        { status: 500 }
-      );
-    }
-
-    console.log("✅ Authentication successful");
-    console.log("Token (first 20 chars):", token?.substring(0, 20) + "...");
-
     return NextResponse.json({
       success: true,
-      message: "PhonePe authentication successful",
+      message: "Razorpay configuration check",
       config,
-      tokenPreview: token?.substring(0, 20) + "...",
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
@@ -76,56 +49,54 @@ export async function POST(request) {
     }
 
     // Generate unique order ID
-    const merchantOrderId = `ORDER-${Date.now()}-${Math.random()
+    const receipt = `ORDER-${Date.now()}-${Math.random()
       .toString(36)
       .substr(2, 9)}`;
 
-    // Convert amount from rupees to paisa
-    const amountInPaisa = rupeesToPaisa(amount);
+    // Convert amount from rupees to paise
+    const amountInPaise = rupeesToPaise(amount);
 
     // Prepare payment data
     const paymentData = {
-      merchantOrderId,
-      amount: amountInPaisa,
-      redirectUrl: `${
-        process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
-      }/sample-order/payment-status?orderId=${merchantOrderId}`,
-      metaInfo: {
-        udf1: customer.name,
-        udf2: customer.email,
-        udf3: customer.phone,
-        udf4: JSON.stringify(items),
+      amount: amountInPaise,
+      currency: "INR",
+      receipt,
+      notes: {
+        customerName: customer.name,
+        customerEmail: customer.email,
+        customerPhone: customer.phone,
+        items: JSON.stringify(items),
       },
-      expireAfter: 1200, // 20 minutes
     };
 
-    // Create payment order with PhonePe
-    console.log("\n=== Creating PhonePe Payment Order ===");
-    console.log("Merchant Order ID:", merchantOrderId);
-    console.log("Amount (paisa):", amountInPaisa);
+    // Create Razorpay order
+    console.log("\n=== Creating Razorpay Payment Order ===");
+    console.log("Receipt ID:", receipt);
+    console.log("Amount (paise):", amountInPaise);
 
-    const { data: paymentOrder, error } = await createPaymentOrder(paymentData);
+    const { data: order, error } = await createOrder(paymentData);
 
     if (error) {
-      console.error("❌ Payment creation failed:", error);
+      console.error("❌ Razorpay order creation failed:", error);
       return NextResponse.json(
         {
           success: false,
           error: error || "Payment creation failed",
-          details: paymentData,
         },
         { status: 500 }
       );
     }
 
-    console.log("✅ Payment order created successfully");
+    console.log("✅ Razorpay order created successfully");
+    console.log("Order ID:", order.id);
 
     return NextResponse.json({
       success: true,
-      orderId: merchantOrderId,
-      paymentUrl: paymentOrder.paymentUrl,
-      amount,
-      paymentOrder,
+      orderId: order.id,
+      amount: order.amount,
+      currency: order.currency,
+      receipt: order.receipt,
+      keyId: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // Send public key for frontend
     });
   } catch (error) {
     console.error("Create payment error:", error);

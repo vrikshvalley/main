@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useAuth } from '@/lib/AuthContext';
 import orderService from '@/lib/services/orderService';
-import shiprocketService from '@/lib/services/shiprocketService';
+import delhiveryService from '@/lib/services/delhiveryService';
 import { toast } from 'react-toastify';
 import Image from 'next/image';
 import { Check, Package, Truck, MapPin, X, RotateCcw } from 'lucide-react';
@@ -58,9 +58,9 @@ export default function OrderDetailsPage() {
 
       setOrder(data);
 
-      // Fetch tracking data if AWB code exists
-      if (data.awb_code) {
-        fetchTrackingData(data.awb_code);
+      // Fetch tracking data if waybill exists
+      if (data.waybill) {
+        fetchTrackingData(data.waybill);
       }
     } catch (error) {
       console.error('Error in fetchOrderDetails:', error);
@@ -70,9 +70,9 @@ export default function OrderDetailsPage() {
     }
   };
 
-  const fetchTrackingData = async (awbCode) => {
+  const fetchTrackingData = async (waybill) => {
     try {
-      const { data, error } = await shiprocketService.trackShipment(awbCode);
+      const { data, error } = await delhiveryService.trackShipment(waybill);
       if (!error && data) {
         setTrackingData(data);
       }
@@ -89,12 +89,12 @@ export default function OrderDetailsPage() {
 
     setActionLoading(true);
     try {
-      // Cancel in Shiprocket if AWB exists
-      if (order.awb_code) {
-        const { error: shiprocketError } = await shiprocketService.cancelShipment([order.awb_code]);
-        if (shiprocketError) {
-          console.error('Shiprocket cancellation error:', shiprocketError);
-          // Continue with order cancellation even if Shiprocket fails
+      // Cancel in Delhivery if waybill exists
+      if (order.waybill) {
+        const { error: delhiveryError } = await delhiveryService.cancelShipment(order.waybill);
+        if (delhiveryError) {
+          console.error('Delhivery cancellation error:', delhiveryError);
+          // Continue with order cancellation even if Delhivery fails
         }
       }
 
@@ -125,15 +125,9 @@ export default function OrderDetailsPage() {
 
     setActionLoading(true);
     try {
-      // Request return in Shiprocket
-      if (order.shiprocket_order_id) {
-        const { error: shiprocketError } = await shiprocketService.requestReturn(order.shiprocket_order_id);
-        if (shiprocketError) {
-          console.error('Shiprocket return request error:', shiprocketError);
-          // Continue with order return even if Shiprocket fails
-        }
-      }
-
+      // Note: Delhivery return process may need manual intervention
+      // or specific return pickup request through their RVP API
+      
       // Update order in database
       const { error } = await orderService.requestOrderReturn(order.order_id, returnReason);
       

@@ -1,40 +1,34 @@
 import { NextResponse } from "next/server";
-import * as phonepeService from "@/lib/services/phonepeService";
+import * as razorpayService from "@/lib/services/razorpayService";
 
 /**
  * POST /api/payment/create-order
- * Creates a PhonePe payment order
+ * Creates a Razorpay payment order
  */
 export async function POST(request) {
   try {
-    const {
-      amount,
-      merchantOrderId,
-      redirectUrl,
-      customerName,
-      customerEmail,
-    } = await request.json();
+    const { amount, receipt, customerName, customerEmail } =
+      await request.json();
 
-    if (!amount || !merchantOrderId || !redirectUrl) {
+    if (!amount || !receipt) {
       return NextResponse.json(
         { error: { message: "Missing required fields" } },
         { status: 400 }
       );
     }
 
-    // Prepare metadata
-    const metaInfo = {
-      udf1: customerName || "",
-      udf2: customerEmail || "",
-      udf3: "Vriksh Valley Order",
+    // Prepare notes/metadata
+    const notes = {
+      customerName: customerName || "",
+      customerEmail: customerEmail || "",
+      source: "Vriksh Valley",
     };
 
-    const { data: order, error } = await phonepeService.createPaymentOrder({
-      merchantOrderId,
-      amount, // Amount should already be in paisa
-      redirectUrl,
-      metaInfo,
-      expireAfter: 1200, // 20 minutes
+    const { data: order, error } = await razorpayService.createOrder({
+      amount, // Amount should already be in paise
+      currency: "INR",
+      receipt,
+      notes,
     });
 
     if (error) {
@@ -42,11 +36,11 @@ export async function POST(request) {
     }
 
     return NextResponse.json({
-      orderId: order.orderId,
-      merchantOrderId: order.merchantOrderId,
-      redirectUrl: order.redirectUrl,
-      state: order.state,
-      expireAt: order.expireAt,
+      orderId: order.id,
+      amount: order.amount,
+      currency: order.currency,
+      receipt: order.receipt,
+      status: order.status,
     });
   } catch (error) {
     console.error("Create payment order API error:", error);

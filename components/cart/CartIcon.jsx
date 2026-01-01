@@ -2,7 +2,7 @@
 
 import { useSelector } from 'react-redux';
 import { selectCount } from '@/lib/slices/cartSlice';
-import Image from 'next/image';
+import Image from '@/components/general/ImgWithLoader';
 
 export default function CartIcon({ onCartClick }) {
   const count = useSelector(selectCount);

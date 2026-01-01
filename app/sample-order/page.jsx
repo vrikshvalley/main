@@ -174,7 +174,7 @@ function SampleOrderContent() {
       <div className="container">
         <h1 className="page-title">🧪 Test Order Workflow</h1>
         <p className="page-subtitle">
-          Test PhonePe Payment Gateway & Shiprocket Shipping Integration
+          Test Razorpay Payment Gateway & Delhivery Shipping Integration
         </p>
 
         {/* Progress Steps */}
@@ -413,10 +413,10 @@ function SampleOrderContent() {
             </div>
 
             <div className="section">
-              <h2>Create Shiprocket Shipment</h2>
+              <h2>Create Delhivery Shipment</h2>
               <p>
                 Now let's create a shipment and get tracking details from
-                Shiprocket.
+                Delhivery.
               </p>
 
               <button
@@ -479,28 +479,28 @@ function SampleOrderContent() {
                   <h3>Shipping Details</h3>
                   <div className="details-grid">
                     <div>
-                      <span className="label">Shiprocket Order ID:</span>
+                      <span className="label">Order Number:</span>
                       <span className="value">
-                        {shippingResponse.shiprocketOrderId}
+                        {shippingResponse.orderNumber}
                       </span>
                     </div>
                     <div>
-                      <span className="label">Shipment ID:</span>
+                      <span className="label">Waybill:</span>
                       <span className="value">
-                        {shippingResponse.shipmentId}
+                        {shippingResponse.waybill}
                       </span>
                     </div>
-                    {shippingResponse.awbCode && (
+                    {shippingResponse.status && (
                       <div>
-                        <span className="label">AWB Code:</span>
-                        <span className="value">{shippingResponse.awbCode}</span>
+                        <span className="label">Status:</span>
+                        <span className="value">{shippingResponse.status}</span>
                       </div>
                     )}
-                    {shippingResponse.courierName && (
+                    {shippingResponse.referenceId && (
                       <div>
-                        <span className="label">Courier:</span>
+                        <span className="label">Reference ID:</span>
                         <span className="value">
-                          {shippingResponse.courierName}
+                          {shippingResponse.referenceId}
                         </span>
                       </div>
                     )}

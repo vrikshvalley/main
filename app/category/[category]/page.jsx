@@ -93,31 +93,54 @@ export default function CategoryPage() {
 
   const fetchProducts = async () => {
     setLoading(true);
-    const result = await getProducts({
+    // Fetch full product list for this category (unpaginated) so we can merge moss-walls and paginate client-side
+    const allRes = await getProducts({
       category: categorySlug,
       minPrice: priceRange[0],
       maxPrice: priceRange[1],
       inStock: inStockOnly ? true : null,
       sortBy,
       sortOrder,
-      page: currentPage,
-      limit: productsPerPage,
+      page: 1,
+      limit: 1000,
+      searchQuery: searchQuery.trim() || null,
     });
 
-    // Filter by search query on client side
-    let filteredProducts = result.products;
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
-      filteredProducts = result.products.filter(product => 
-        product.name?.toLowerCase().includes(query) ||
-        product.description?.toLowerCase().includes(query) ||
-        product.category?.toLowerCase().includes(query)
-      );
+    let mergedAll = allRes.products || [];
+
+    // Special-case: include Moss Walls products on the Decor category page
+    if (categorySlug === 'decor') {
+      try {
+        const mossRes = await getProducts({
+          subcategory: 'moss-walls',
+          sortBy,
+          sortOrder,
+          page: 1,
+          limit: 1000,
+          searchQuery: searchQuery.trim() || null,
+        });
+        const mossProducts = mossRes.products || [];
+        const existingIds = new Set(mergedAll.map((p) => p.id));
+        for (const p of mossProducts) {
+          if (!existingIds.has(p.id)) {
+            mergedAll.push(p);
+            existingIds.add(p.id);
+          }
+        }
+      } catch (e) {
+        console.error('Error fetching moss-walls products:', e);
+      }
     }
 
-    setProducts(filteredProducts);
-    setTotalPages(result.totalPages);
-    setTotalProducts(result.total);
+    // Pagination (client-side) after merging
+    const totalCount = mergedAll.length;
+    const totalPagesCalc = Math.max(1, Math.ceil(totalCount / productsPerPage));
+    const startIndex = Math.max(0, (currentPage - 1) * productsPerPage);
+    const paginated = mergedAll.slice(startIndex, startIndex + productsPerPage);
+
+    setProducts(paginated);
+    setTotalPages(totalPagesCalc);
+    setTotalProducts(totalCount);
     setLoading(false);
   };
 
@@ -143,12 +166,20 @@ export default function CategoryPage() {
     return count;
   };
 
-  const handleSortChange = (newSortBy) => {
+  const handleSortChange = (newSortBy, order = null) => {
     if (sortBy === newSortBy) {
-      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+      if (order) {
+        setSortOrder(order);
+      } else {
+        setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+      }
     } else {
       setSortBy(newSortBy);
-      setSortOrder(newSortBy === 'price' ? 'asc' : 'desc');
+      if (order) {
+        setSortOrder(order);
+      } else {
+        setSortOrder(newSortBy === 'price' ? 'asc' : 'desc');
+      }
     }
     setShowSortDropdown(false);
     setCurrentPage(1);
@@ -346,16 +377,24 @@ export default function CategoryPage() {
               <div className="toolbar-center">
                 <div className="toolbar-search">
                   <Search size={18} />
-                  <input 
-                    type="text" 
-                    placeholder="Search products..." 
+                  <input
+                    type="text"
+                    placeholder="Search products..."
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={(e) => {
+                      setSearchQuery(e.target.value);
+                      setCurrentPage(1);
+                    }}
+                    aria-label="Search products"
                   />
                   {searchQuery && (
-                    <button 
+                    <button
                       className="clear-search"
-                      onClick={() => setSearchQuery('')}
+                      onClick={() => {
+                        setSearchQuery('');
+                        setCurrentPage(1);
+                      }}
+                      aria-label="Clear search"
                     >
                       <X size={16} />
                     </button>
@@ -399,10 +438,10 @@ export default function CategoryPage() {
                       <button onClick={() => handleSortChange('name')}>
                         Name (A-Z)
                       </button>
-                      <button onClick={() => handleSortChange('price')}>
+                      <button onClick={() => handleSortChange('price', 'asc')}>
                         Price: Low to High
                       </button>
-                      <button onClick={() => handleSortChange('price')}>
+                      <button onClick={() => handleSortChange('price', 'desc')}>
                         Price: High to Low
                       </button>
                       <button onClick={() => handleSortChange('rating')}>
@@ -469,9 +508,9 @@ export default function CategoryPage() {
                     </div>
 
                     <button
-                      onClick={() => {
-                        setCurrentPage(prev => Math.min(totalPages, prev + 1));
+                        onClick={() => {
                         window.scrollTo({ top: 0, behavior: 'smooth' });
+                        setCurrentPage(prev => Math.min(totalPages, prev + 1));
                       }}
                       disabled={currentPage === totalPages}
                       className="pagination-button"

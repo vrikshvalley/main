@@ -1,49 +1,62 @@
 import { NextResponse } from "next/server";
-import * as phonepeService from "@/lib/services/phonepeService";
+import * as razorpayService from "@/lib/services/razorpayService";
 
 /**
  * POST /api/payment/verify
- * Verifies PhonePe payment by checking order status
+ * Verifies Razorpay payment signature and fetches payment details
  */
 export async function POST(request) {
   try {
-    const { merchantOrderId } = await request.json();
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+      await request.json();
 
-    if (!merchantOrderId) {
+    if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
       return NextResponse.json(
-        { success: false, error: { message: "Missing merchant order ID" } },
+        { success: false, error: { message: "Missing required fields" } },
         { status: 400 }
       );
     }
 
-    const { data: verificationResult, error } =
-      await phonepeService.verifyPayment(merchantOrderId);
+    // Verify signature
+    const { data: verificationResult, error: verifyError } =
+      await razorpayService.verifyPaymentSignature({
+        razorpay_order_id,
+        razorpay_payment_id,
+        razorpay_signature,
+      });
 
-    if (error) {
-      return NextResponse.json(
-        { success: false, error: { message: error } },
-        { status: 400 }
-      );
-    }
-
-    if (!verificationResult.success) {
+    if (verifyError || !verificationResult.verified) {
       return NextResponse.json(
         {
           success: false,
-          error: { message: `Payment is in ${verificationResult.state} state` },
+          error: { message: verifyError || "Payment verification failed" },
         },
+        { status: 400 }
+      );
+    }
+
+    // Fetch payment details
+    const { data: payment, error: fetchError } =
+      await razorpayService.fetchPayment(razorpay_payment_id);
+
+    if (fetchError) {
+      return NextResponse.json(
+        { success: false, error: { message: fetchError } },
         { status: 400 }
       );
     }
 
     return NextResponse.json({
       success: true,
-      orderId: verificationResult.orderId,
-      merchantOrderId: verificationResult.merchantOrderId,
-      transactionId: verificationResult.transactionId,
-      amount: verificationResult.amount,
-      paymentMode: verificationResult.paymentMode,
-      timestamp: verificationResult.timestamp,
+      verified: true,
+      orderId: payment.orderId,
+      paymentId: payment.id,
+      amount: payment.amount,
+      currency: payment.currency,
+      status: payment.status,
+      method: payment.method,
+      email: payment.email,
+      contact: payment.contact,
     });
   } catch (error) {
     console.error("Verify payment API error:", error);

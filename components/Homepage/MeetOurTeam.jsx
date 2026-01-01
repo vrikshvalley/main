@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import Image from 'next/image';
+import Image from '@/components/general/ImgWithLoader';
 import { Mail, Linkedin } from 'lucide-react';
 import '@/styles/meetOurTeam.scss';
 
@@ -85,7 +85,7 @@ export default function MeetOurTeam() {
         className="team-container"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: false, amount: 0.15 }}
+        viewport={{ once: false, amount: 0.15, margin: "100px" }}
         variants={containerVariants}
       >
         <motion.div className="team-header" variants={cardVariants}>

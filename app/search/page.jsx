@@ -293,7 +293,7 @@ function SearchContent() {
                   Browse All Products
                 </button>
                 <div style={{ marginTop: '2rem', padding: '1.5rem', background: 'rgba(0, 128, 128, 0.05)', borderRadius: '12px', border: '1px solid rgba(0, 128, 128, 0.2)' }}>
-                  <p style={{ fontStyle: 'italic', marginBottom: '1rem', color: '#00504d' }}>
+                  <p style={{ fontStyle: 'italic', marginBottom: '1rem', color: 'white' }}>
                     Can't find it in our Garden? Contact our Farmers, and they will curate the plant for you. No Extra Charges!!!
                   </p>
                   <a 

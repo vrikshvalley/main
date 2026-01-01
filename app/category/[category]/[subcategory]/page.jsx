@@ -11,6 +11,7 @@ import Breadcrumbs from '@/components/general/Breadcrumbs';
 import { getProducts, getPriceRange } from '@/lib/productHelpers';
 import { getCategories } from '@/lib/services/productService';
 import { ChevronDown, X, SlidersHorizontal, Grid, List, Search } from 'lucide-react';
+import SearchBar from '@/components/general/SearchBar';
 import TheLoader from '@/components/general/TheLoader';
 import ProductListCard from '@/components/products/ProductListCard';
 import '@/styles/products.scss';
@@ -72,7 +73,8 @@ export default function SubcategoryPage() {
     const fetchPriceRange = async () => {
       const range = await getPriceRange(categorySlug, subcategorySlug);
       setMaxPossiblePrice(range.max);
-      setPriceRange([range.min, range.max]);
+      // Avoid preselecting a non-zero minimum on load
+      setPriceRange([0, range.max]);
     };
     fetchPriceRange();
   }, [categorySlug, subcategorySlug]);
@@ -137,12 +139,20 @@ export default function SubcategoryPage() {
     return count;
   };
 
-  const handleSortChange = (newSortBy) => {
+  const handleSortChange = (newSortBy, order = null) => {
     if (sortBy === newSortBy) {
-      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+      if (order) {
+        setSortOrder(order);
+      } else {
+        setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+      }
     } else {
       setSortBy(newSortBy);
-      setSortOrder(newSortBy === 'price' ? 'asc' : 'desc');
+      if (order) {
+        setSortOrder(order);
+      } else {
+        setSortOrder(newSortBy === 'price' ? 'asc' : 'desc');
+      }
     }
     setShowSortDropdown(false);
     setCurrentPage(1);
@@ -338,21 +348,7 @@ export default function SubcategoryPage() {
               
               <div className="toolbar-center">
                 <div className="toolbar-search">
-                  <Search size={18} />
-                  <input 
-                    type="text" 
-                    placeholder="Search products..." 
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                  />
-                  {searchQuery && (
-                    <button 
-                      className="clear-search"
-                      onClick={() => setSearchQuery('')}
-                    >
-                      <X size={16} />
-                    </button>
-                  )}
+                  <SearchBar />
                 </div>
               </div>
               
@@ -463,8 +459,8 @@ export default function SubcategoryPage() {
 
                     <button
                       onClick={() => {
-                        setCurrentPage(prev => Math.min(totalPages, prev + 1));
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                          setCurrentPage(prev => Math.min(totalPages, prev + 1));
                       }}
                       disabled={currentPage === totalPages}
                       className="pagination-button"

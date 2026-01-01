@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import Image from 'next/image';
+import Image from '@/components/general/ImgWithLoader';
 import { showSuccessToast } from '@/lib/toastHelpers';
 
 export default function ProfileOverview({ profile, onEdit }) {

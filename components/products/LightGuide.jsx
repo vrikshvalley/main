@@ -1,6 +1,6 @@
 'use client';
 
-import Image from 'next/image';
+import Image from '@/components/general/ImgWithLoader';
 import '@/styles/lightGuide.scss';
 
 export default function LightGuide() {

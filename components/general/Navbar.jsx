@@ -1,12 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import { selectCount } from '@/lib/slices/cartSlice';
 import { Menu, X, ChevronDown, ChevronRight } from 'lucide-react';
-import Image from 'next/image';
+import Image from '@/components/general/ImgWithLoader';
 import { motion, AnimatePresence } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import ProfileIcon from '@/components/auth/ProfileIcon';
@@ -20,10 +20,14 @@ export default function Navbar() {
   const { openCart } = useCart();
   const count = useSelector(selectCount);
   const router = useRouter();
+  const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [hoveredCategory, setHoveredCategory] = useState(null);
   const [expandedMobileCategory, setExpandedMobileCategory] = useState(null);
   const [categories, setCategories] = useState([]);
+  
+  // Check if we're on products/category/subcategory page to hide navbar search
+  const isProductsPage = pathname === '/products' || pathname?.startsWith('/products/') || pathname?.startsWith('/category/');
 
   useEffect(() => {
     async function fetchCategories() {
@@ -168,7 +172,7 @@ export default function Navbar() {
 
         {/* Right: Search + Cart + Profile */}
         <div className="nav-actions">
-          <SearchBar />
+          {!isProductsPage && <SearchBar />}
           
           <CartIcon onCartClick={openCart} />
           <ProfileIcon />

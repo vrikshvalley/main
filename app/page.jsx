@@ -5,6 +5,7 @@ import Navbar from "../components/general/Navbar";
 import HeroSlider from "../components/Homepage/HeroSlider";
 import CategoryCircles from "../components/Homepage/CategoryCircles";
 import FeaturedProducts from "../components/Homepage/FeaturedProducts";
+import NewArrivals from "../components/Homepage/NewArrivals";
 import WhyChooseUs from "@/components/Homepage/WhyChooseUs";
 import BringNatureHome from "@/components/Homepage/BringNatureHome";
 import ImpactCounter from "@/components/Homepage/ImpactCounter";
@@ -88,7 +89,7 @@ export default function Home() {
         viewport={{ once: true, amount: 0.3 }}
         variants={sectionVariants}
       >
-        <FeaturedProducts title="Featured Products"   />
+        <FeaturedProducts />
       </motion.section>
 
       <Ads 
@@ -119,7 +120,7 @@ export default function Home() {
         viewport={{ once: true, amount: 0.3 }}
         variants={sectionVariants}
       >
-        <FeaturedProducts title="New Arrivals" sortBy="newest"/>
+        <NewArrivals />
       </motion.section>
 
       {/* Bring Nature Home Section */}

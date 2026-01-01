@@ -1,54 +1,60 @@
-// API Route: Payment Callback from PhonePe
+// API Route: Payment Callback/Webhook from Razorpay
 import { NextResponse } from "next/server";
-import { verifyPayment } from "@/lib/services/phonepeService";
+import {
+  verifyWebhookSignature,
+  fetchPayment,
+} from "@/lib/services/razorpayService";
 
 export async function POST(request) {
   try {
-    const body = await request.json();
+    const body = await request.text();
+    const signature = request.headers.get("x-razorpay-signature");
 
-    // PhonePe sends various payment status updates
-    const { merchantOrderId, paymentStatus, transactionId } = body;
-
-    if (!merchantOrderId) {
+    if (!signature) {
       return NextResponse.json(
-        { success: false, error: "Invalid callback data" },
+        { success: false, error: "Missing signature" },
         { status: 400 }
       );
     }
 
-    // Verify payment status with PhonePe
-    const { data: verificationData, error } = await verifyPayment(
-      merchantOrderId
-    );
+    // Verify webhook signature
+    const isValid = verifyWebhookSignature(body, signature);
 
-    if (error) {
-      console.error("Payment verification failed:", error);
+    if (!isValid) {
+      console.error("Invalid webhook signature");
       return NextResponse.json(
-        { success: false, error: "Payment verification failed" },
-        { status: 400 }
+        { success: false, error: "Invalid signature" },
+        { status: 401 }
       );
     }
 
-    // Log payment status
-    console.log("Payment callback received:", {
-      orderId: merchantOrderId,
-      status: verificationData.state,
-      transactionId: verificationData.transactionId,
-      amount: verificationData.amount,
-    });
+    const event = JSON.parse(body);
 
-    // Here you would typically:
-    // 1. Update order status in database
-    // 2. Send confirmation email
-    // 3. Trigger shipping process
+    // Handle different webhook events
+    switch (event.event) {
+      case "payment.captured":
+        console.log("Payment captured:", event.payload.payment.entity.id);
+        // Update order status in database
+        // Send confirmation email
+        // Trigger shipping process
+        break;
+      case "payment.failed":
+        console.log("Payment failed:", event.payload.payment.entity.id);
+        // Update order status
+        break;
+      case "order.paid":
+        console.log("Order paid:", event.payload.order.entity.id);
+        break;
+      default:
+        console.log("Unhandled event:", event.event);
+    }
 
     return NextResponse.json({
       success: true,
-      message: "Payment callback processed",
-      status: verificationData.state,
+      message: "Webhook processed",
     });
   } catch (error) {
-    console.error("Payment callback error:", error);
+    console.error("Payment webhook error:", error);
     return NextResponse.json(
       { success: false, error: error.message },
       { status: 500 }

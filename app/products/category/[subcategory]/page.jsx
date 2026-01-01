@@ -60,31 +60,29 @@ export default function SubcategoryPage() {
       sortOrder,
       page: currentPage,
       limit: productsPerPage,
+      searchQuery: searchQuery.trim() || null,
     });
 
-    // Filter by search query on client side
-    let filteredProducts = result.products;
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
-      filteredProducts = result.products.filter(product => 
-        product.name?.toLowerCase().includes(query) ||
-        product.description?.toLowerCase().includes(query) ||
-        product.category?.toLowerCase().includes(query)
-      );
-    }
-
-    setProducts(filteredProducts);
+    setProducts(result.products);
     setTotalPages(result.totalPages);
     setTotalProducts(result.total);
     setLoading(false);
   };
 
-  const handleSortChange = (newSortBy) => {
+  const handleSortChange = (newSortBy, order = null) => {
     if (sortBy === newSortBy) {
-      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+      if (order) {
+        setSortOrder(order);
+      } else {
+        setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+      }
     } else {
       setSortBy(newSortBy);
-      setSortOrder(newSortBy === 'price' ? 'asc' : 'desc');
+      if (order) {
+        setSortOrder(order);
+      } else {
+        setSortOrder(newSortBy === 'price' ? 'asc' : 'desc');
+      }
     }
     setShowSortDropdown(false);
     setCurrentPage(1);
@@ -145,16 +143,24 @@ export default function SubcategoryPage() {
               <div className="toolbar-center">
                 <div className="toolbar-search">
                   <Search size={18} />
-                  <input 
-                    type="text" 
-                    placeholder="Search products..." 
+                  <input
+                    type="text"
+                    placeholder="Search products..."
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={(e) => {
+                      setSearchQuery(e.target.value);
+                      setCurrentPage(1);
+                    }}
+                    aria-label="Search products"
                   />
                   {searchQuery && (
-                    <button 
+                    <button
                       className="clear-search"
-                      onClick={() => setSearchQuery('')}
+                      onClick={() => {
+                        setSearchQuery('');
+                        setCurrentPage(1);
+                      }}
+                      aria-label="Clear search"
                     >
                       <X size={16} />
                     </button>
@@ -198,10 +204,10 @@ export default function SubcategoryPage() {
                       <button onClick={() => handleSortChange('name')}>
                         Name (A-Z)
                       </button>
-                      <button onClick={() => handleSortChange('price')}>
+                      <button onClick={() => handleSortChange('price', 'asc')}>
                         Price: Low to High
                       </button>
-                      <button onClick={() => handleSortChange('price')}>
+                      <button onClick={() => handleSortChange('price', 'desc')}>
                         Price: High to Low
                       </button>
                       <button onClick={() => handleSortChange('rating')}>
@@ -269,8 +275,8 @@ export default function SubcategoryPage() {
 
                     <button
                       onClick={() => {
-                        setCurrentPage(prev => Math.min(totalPages, prev + 1));
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                          setCurrentPage(prev => Math.min(totalPages, prev + 1));
                       }}
                       disabled={currentPage === totalPages}
                       className="pagination-button"

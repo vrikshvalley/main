@@ -12,8 +12,8 @@ Vriksh Valley is an online plant nursery dedicated to bringing nature closer to 
 - **State Management:** Redux Toolkit for cart and user state
 - **Authentication:** Firebase Auth (Google OAuth, Email Magic Link)
 - **Database:** Firebase Firestore (products, users, orders) + Realtime DB
-- **Payment Gateway:** PhonePe OAuth 2.0
-- **Shipping:** Shiprocket API integration
+- **Payment Gateway:** Razorpay Payment Gateway
+- **Shipping:** Delhivery B2C API integration
 - **Communications:** MSG91 (Email, SMS, WhatsApp)
 - **Image CDN:** Cloudinary
 - **Styling:** SCSS with modular components
@@ -61,8 +61,8 @@ lib/
 ├── supabaseClient.js      # Supabase client setup
 ├── slices/                # Redux slices (cart, user)
 └── services/              # Backend service integrations
-    ├── shiprocketService.js    # Shiprocket API wrapper
-    ├── phonepeService.js       # PhonePe payment service
+    ├── delhiveryService.js     # Delhivery API wrapper
+    ├── razorpayService.js      # Razorpay payment service
     ├── emailService.js         # Email notifications
     ├── orderService.js         # Order management
     └── userService.js          # User profile operations
@@ -117,8 +117,8 @@ npm start
 
 - 🛒 Redux-powered shopping cart with persistence
 - 🔐 Secure authentication with Firebase (Google OAuth, Email Magic Link)
-- 📦 Order tracking and management with Shiprocket
-- 💳 PhonePe payment gateway integration
+- 📦 Order tracking and management with Delhivery
+- 💳 Razorpay payment gateway integration
 - 🏠 Address collection flow with sleek 3-step modal
 - ⭐ Product reviews and ratings
 - 🔍 Real-time product search with Firestore
@@ -202,19 +202,19 @@ NEXT_PUBLIC_APP_URL=https://vrikshvalley.com
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 
-# PhonePe (https://developer.phonepe.com/)
-NEXT_PUBLIC_PHONEPE_CLIENT_ID=your_client_id
-PHONEPE_CLIENT_SECRET=your_client_secret
-PHONEPE_CLIENT_VERSION=your_client_version
-NEXT_PUBLIC_PHONEPE_BASE_URL=https://api-preprod.phonepe.com/apis/pg-sandbox
-PHONEPE_AUTH_URL=https://api-preprod.phonepe.com/apis/pg-sandbox/v1/oauth/token
-PHONEPE_MERCHANT_ID=your_merchant_id
+# Razorpay (https://razorpay.com/docs/)
+RAZORPAY_KEY_ID=your_razorpay_key_id
+RAZORPAY_KEY_SECRET=your_razorpay_key_secret
+NEXT_PUBLIC_RAZORPAY_KEY_ID=your_razorpay_key_id
+RAZORPAY_WEBHOOK_SECRET=your_webhook_secret
 
-# Shiprocket (https://app.shiprocket.in/seller/setting/api)
-NEXT_PUBLIC_SHIPROCKET_BASE_URL=https://apiv2.shiprocket.in
-SHIPROCKET_EMAIL=your_shiprocket_email
-SHIPROCKET_PASSWORD=your_shiprocket_password
-SHIPROCKET_COURIER_ID=your_preferred_courier_id
+# Delhivery (https://one.delhivery.com/developer-portal/)
+DELHIVERY_API_KEY=your_delhivery_api_token
+DELHIVERY_BASE_URL=https://track.delhivery.com/api
+DELHIVERY_CLIENT_NAME=Vriksh Valley
+DELHIVERY_PICKUP_LOCATION=Primary
+DELHIVERY_SELLER_ADDRESS=your_seller_address
+DELHIVERY_SELLER_PHONE=your_seller_phone
 
 # Google Workspace Email (SMTP)
 SMTP_HOST=smtp.gmail.com
@@ -244,40 +244,46 @@ npm install
 3. Verify the `profiles` table exists for user data
 4. Copy your Supabase URL and anon key to `.env.local`
 
-### 3. Payment Gateway Setup (PhonePe)
+### 3. Payment Gateway Setup (Razorpay)
 
-1. Sign up at [PhonePe Developer Portal](https://developer.phonepe.com/)
-2. Complete merchant onboarding
-3. Navigate to **Dashboard → Credentials**
+1. Sign up at [Razorpay Dashboard](https://dashboard.razorpay.com/)
+2. Complete merchant onboarding and KYC
+3. Navigate to **Settings → API Keys**
 4. Get your API credentials:
-   - Client ID
-   - Client Secret
-   - Client Version
-   - Merchant ID
-5. Use **Sandbox** environment for testing
+   - Key ID (for frontend integration)
+   - Key Secret (for backend verification)
+5. For webhooks, go to **Settings → Webhooks**
+   - Create webhook URL: `https://yourdomain.com/api/payment/webhook`
+   - Select events: `payment.captured`, `payment.failed`, `order.paid`
+   - Copy the webhook secret
 6. Add credentials to `.env.local`:
    ```
-   NEXT_PUBLIC_PHONEPE_CLIENT_ID=your_client_id
-   PHONEPE_CLIENT_SECRET=your_client_secret
-   PHONEPE_CLIENT_VERSION=your_client_version
-   NEXT_PUBLIC_PHONEPE_BASE_URL=https://api-preprod.phonepe.com/apis/pg-sandbox
-   PHONEPE_AUTH_URL=https://api-preprod.phonepe.com/apis/pg-sandbox/v1/oauth/token
-   PHONEPE_MERCHANT_ID=your_merchant_id
+   RAZORPAY_KEY_ID=rzp_test_xxxxxxxxxx
+   RAZORPAY_KEY_SECRET=your_key_secret
+   NEXT_PUBLIC_RAZORPAY_KEY_ID=rzp_test_xxxxxxxxxx
+   RAZORPAY_WEBHOOK_SECRET=your_webhook_secret
    ```
-7. For production, switch to production URLs and credentials
+7. For production, switch to live keys (rzp_live_xxxxxxxxxx)
 
-### 4. Shipping Integration Setup (Shiprocket)
+### 4. Shipping Integration Setup (Delhivery)
 
-1. Create account at [Shiprocket](https://www.shiprocket.in/)
+1. Create account at [Delhivery](https://www.delhivery.com/)
 2. Complete seller verification
-3. Add pickup addresses in Shiprocket dashboard
-4. Get API credentials:
-   - Email: Your Shiprocket login email
-   - Password: Your Shiprocket password
-5. Get preferred courier ID:
-   - Test with `checkServiceability` API
-   - Or check Shiprocket dashboard for courier partners
-6. Add credentials to `.env.local`
+3. Register warehouse/pickup locations
+4. Get API Token:
+   - Login to [Delhivery Panel](https://track.delhivery.com/)
+   - Go to **API Settings** or contact Delhivery support
+   - Copy your API token
+5. Add credentials to `.env.local`:
+   ```
+   DELHIVERY_API_KEY=your_api_token
+   DELHIVERY_BASE_URL=https://track.delhivery.com/api
+   DELHIVERY_CLIENT_NAME=Vriksh Valley
+   DELHIVERY_PICKUP_LOCATION=Primary
+   DELHIVERY_SELLER_ADDRESS=your_warehouse_address
+   DELHIVERY_SELLER_PHONE=your_contact_number
+   ```
+6. Test pincode serviceability using the API before going live
 
 ### 5. Email Service Setup (Google Workspace SMTP)
 
@@ -326,20 +332,23 @@ Visit `http://localhost:3000` to see your application.
 4. **Step 2: Payment**
    - Review order summary
    - Click "Proceed to Payment"
-   - Redirected to PhonePe payment page
-   - Complete payment using PhonePe (UPI/Card/Net Banking)
-   - Redirected back to confirmation page
+   - Razorpay checkout modal appears
+   - Complete payment using UPI/Card/Net Banking/Wallet
+   - Payment verified automatically
 5. **Step 3: Confirmation**
-   - Order created in Supabase
-   - Shiprocket order created
+   - Order created in Firebase
+   - Delhivery shipment created
    - Confirmation email sent
    - View order at `/orders`
 
-### PhonePe Testing:
+### Razorpay Testing:
 
-- In **Sandbox mode**, use PhonePe test credentials provided in the developer dashboard
-- Test different payment modes: UPI, Card, Net Banking
-- Verify payment callback handling
+- In **Test mode**, use Razorpay test cards:
+  - Card: `4111 1111 1111 1111`
+  - CVV: Any 3 digits
+  - Expiry: Any future date
+- Test different payment modes: UPI, Card, Net Banking, Wallets
+- Verify webhook handling
 - Test payment failures and cancellations
 
 ### Order Management Test:
@@ -356,7 +365,7 @@ Visit `http://localhost:3000` to see your application.
 The system sends 4 types of emails:
 
 1. **Order Confirmation** - Sent after successful payment
-2. **Shipping Confirmation** - Sent when order is shipped (includes AWB tracking)
+2. **Shipping Confirmation** - Sent when order is shipped (includes waybill tracking)
 3. **Delivery Notification** - Sent when order is delivered
 4. **Cancellation Confirmation** - Sent when order is cancelled
 
@@ -373,13 +382,13 @@ All emails use beautiful HTML templates with Vriksh Valley branding and include 
 
 ### Important: Production Checklist
 
-- ✅ Switch PhonePe to **Production** credentials and URLs
+- ✅ Switch Razorpay to **Live** credentials (rzp*live*)
 - ✅ Update `NEXT_PUBLIC_APP_URL` to production domain
-- ✅ Verify Supabase RLS policies are enabled
+- ✅ Verify Firebase security rules are properly configured
 - ✅ Test email delivery in production
-- ✅ Configure Shiprocket pickup addresses
-- ✅ Configure PhonePe webhook URLs for payment notifications
-- ✅ Enable Shiprocket auto-courier assignment
+- ✅ Configure Delhivery warehouse/pickup addresses
+- ✅ Configure Razorpay webhook URLs for payment notifications
+- ✅ Test pincode serviceability for all delivery areas
 - ✅ Test complete order flow end-to-end
 
 ## 📞 Support

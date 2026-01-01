@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { Camera } from 'lucide-react';
-import Image from 'next/image';
+import Image from '@/components/general/ImgWithLoader';
 import '@/styles/gallery.scss';
 
 export default function Gallery() {
@@ -26,7 +26,7 @@ export default function Gallery() {
           className="section-header"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true, margin: "100px" }}
           transition={{ duration: 0.5, ease: "easeOut" }}
         >
           <Camera className="header-icon" />
@@ -43,7 +43,7 @@ export default function Gallery() {
               className="gallery-item"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
+              viewport={{ once: true, margin: "50px" }}
               transition={{ 
                 duration: 0.4, 
                 delay: index * 0.05,

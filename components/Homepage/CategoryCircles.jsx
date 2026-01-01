@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import Image from 'next/image';
+import Image from '@/components/general/ImgWithLoader';
 import { getCategories } from '@/lib/services/productService';
 import "@/styles/categoryCircles.scss";
 

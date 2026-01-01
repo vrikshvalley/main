@@ -6,6 +6,11 @@ import { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { addItem } from '@/lib/slices/cartSlice';
 
+const getImageSrc = (img) => {
+  if (!img) return '';
+  return typeof img === 'string' ? img : (img.src || img.url || '');
+};
+
 export default function ProductListCard({ product, viewMode = 'grid' }) {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -18,12 +23,12 @@ export default function ProductListCard({ product, viewMode = 'grid' }) {
     if (isHovering && product.images && product.images.length > 1) {
       intervalRef.current = setInterval(() => {
         setCurrentImageIndex((prev) => (prev + 1) % product.images.length);
-      }, 1000); // Change image every second
+      }, 1000);
     } else {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
-      setCurrentImageIndex(0); // Reset to first image when not hovering
+      setCurrentImageIndex(0);
     }
 
     return () => {
@@ -37,14 +42,13 @@ export default function ProductListCard({ product, viewMode = 'grid' }) {
     e.preventDefault();
     e.stopPropagation();
     
-    // Ensure price is a number (for products with variants, use base price)
     const productPrice = typeof product.price === 'number' ? product.price : (product.variants?.[0]?.price || 0);
     
     dispatch(addItem({
       id: product.id,
       name: product.name,
       price: productPrice,
-      image: product.images?.[0] || product.images[0],
+      image: getImageSrc(product.images?.[0]),
       quantity: 1,
     }));
   };
@@ -81,7 +85,7 @@ export default function ProductListCard({ product, viewMode = 'grid' }) {
       >
         {product.images && product.images[0] ? (
           <img 
-            src={product.images[currentImageIndex] || product.images[0]} 
+            src={getImageSrc(product.images[currentImageIndex]) || getImageSrc(product.images[0])} 
             alt={product.name} 
             className="product-image" 
           />
@@ -122,11 +126,32 @@ export default function ProductListCard({ product, viewMode = 'grid' }) {
 
         <div className="product-footer">
           <div className="product-price">
-            ₹{typeof product.price === 'number' ? product.price : (product.variants?.[0]?.price || 0)}
-            {product.variants && product.variants.length > 1 && <span className="price-suffix"> onwards</span>}
+            {product.priceOnCustomization ? (
+              <span className="price-label">Price on Customization</span>
+            ) : (
+              <>
+                ₹{typeof product.price === 'number' ? product.price : (product.variants?.[0]?.price || 0)}
+                {product.variants && product.variants.length > 1 && <span className="price-suffix"> onwards</span>}
+              </>
+            )}
           </div>
 
-          {product.stock > 0 ? (
+          {product.priceOnCustomization ? (
+            <button
+              className="contact-customize-button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const url = `https://wa.me/919204745612?text=${encodeURIComponent(
+                  `Hi, I'm interested in customizing this product -- ${product.name || ''}`
+                )}`;
+                window.open(url, '_blank', 'noopener');
+              }}
+              aria-label={`Contact to customize ${product.name || ''}`}
+            >
+              Contact for Customization
+            </button>
+          ) : product.stock > 0 ? (
             <button 
               className="add-to-cart-button"
               onClick={handleAddToCart}

@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import Image from 'next/image';
+import Image from '@/components/general/ImgWithLoader';
 import { Calendar, Clock, ArrowRight, User } from 'lucide-react';
 import { getRecentBlogs } from '@/lib/blogData';
 import '@/styles/ourBlogs.scss';
