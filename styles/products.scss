@@ -344,6 +344,11 @@ $grey-dark: #374151;
           width: 16px;
           height: 16px;
         }
+        img {
+          width: 16px;
+          height: 16px;
+          display: block;
+        }
       }
 
       .toggle-filters-mobile {
@@ -627,9 +632,9 @@ $grey-dark: #374151;
 
         .mobile-filter-toggle {
           padding: 0.625rem 1rem;
-          background: linear-gradient(135deg, $teal 0%, color.adjust($teal, $lightness: 5%) 100%);
-          color: $white;
-          border: none;
+          background: $white;
+          color: $dark-green;
+          border: 1.5px solid rgba($teal, 0.15);
           border-radius: 8px;
           cursor: pointer;
           font-weight: 500;
@@ -637,10 +642,17 @@ $grey-dark: #374151;
           display: flex;
           align-items: center;
           gap: 0.5rem;
-          transition: transform 0.2s;
+          transition: transform 0.2s, box-shadow 0.15s;
+
+          img, svg {
+            width: 18px;
+            height: 18px;
+            display: block;
+          }
 
           &:hover {
             transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba($teal, 0.06);
           }
 
           &:active {

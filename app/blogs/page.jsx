@@ -26,11 +26,11 @@ export default function BlogPage() {
     <>
       <Topbar />
       <Navbar />
-      <Breadcrumbs items={[{ label: 'Blog' }]} />
+      <Breadcrumbs items={[{ label: 'Blogs' }]} />
       
       <div className="blog-page">
         <div className="blog-page-header">
-          <h1>Our Blog</h1>
+          <h1>Our Blogs</h1>
           <p>Expert tips, guides, and inspiration for plant lovers</p>
         </div>
 

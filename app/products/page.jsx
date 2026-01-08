@@ -5,7 +5,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
 import { getProducts, getPriceRange } from '@/lib/productHelpers';
 import { getCategories } from '@/lib/services/productService';
-import { ChevronDown, X, SlidersHorizontal, Grid, List, Search } from 'lucide-react';
+import { ChevronDown, X, Grid, List, Search } from 'lucide-react';
 import TheLoader from '@/components/general/TheLoader';
 import ProductListCard from '@/components/products/ProductListCard';
 import WhyChooseUs from "@/components/products/WhyChooseUs";
@@ -261,7 +261,7 @@ export default function ProductsPage() {
         <aside className={`filters-sidebar ${showFilters ? 'show' : 'hide'}`}>
           <div className="filters-header">
             <h3>
-              <SlidersHorizontal size={20} />
+              <img src="/hamMenu.png" alt="Filters" width={16} height={16} />
               Filters
             </h3>
             <button 
@@ -475,7 +475,7 @@ export default function ProductsPage() {
                 className="mobile-filter-toggle"
                 onClick={() => setShowFilters(!showFilters)}
               >
-                <SlidersHorizontal size={18} />
+                <img src="/hamMenu.png" alt="Filters" width={18} height={18} />
                 Filters {getActiveFiltersCount() > 0 && `(${getActiveFiltersCount()})`}
               </button>
               <p className="results-count">

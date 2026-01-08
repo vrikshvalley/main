@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
 import { getProducts } from '@/lib/productHelpers';
-import { ChevronDown, SlidersHorizontal, X, Grid, List, Search } from 'lucide-react';
+import { ChevronDown, X, Grid, List, Search } from 'lucide-react';
 import TheLoader from '@/components/general/TheLoader';
 import ProductListCard from '@/components/products/ProductListCard';
 import WhyChooseUs from "@/components/products/WhyChooseUs";

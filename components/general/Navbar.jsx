@@ -5,7 +5,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import { selectCount } from '@/lib/slices/cartSlice';
-import { Menu, X, ChevronDown, ChevronRight } from 'lucide-react';
+import { X, ChevronDown, ChevronRight } from 'lucide-react';
 import Image from '@/components/general/ImgWithLoader';
 import { motion, AnimatePresence } from 'framer-motion';
 import { createPortal } from 'react-dom';
@@ -182,7 +182,11 @@ export default function Navbar() {
             className="hamburger mobile-only"
             onClick={() => setMenuOpen(!menuOpen)}
           >
-            {menuOpen ? <X size={24} /> : <Menu size={24} />}
+            {menuOpen ? (
+              <X size={24} />
+            ) : (
+              <img src="/hamMenu.png" alt="Menu" width={24} height={24} />
+            )}
           </button>
         </div>
       </div>

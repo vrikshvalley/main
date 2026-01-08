@@ -20,6 +20,7 @@ pnpm-debug.log*
 .env.test.local
 .env.production.local
 .env.local.example
+.env.template
 
 # firebase credentials
 serviceAccountKey.json
@@ -35,8 +36,8 @@ categories_collection.json
 /names.txt
 /fetched_names.txt
 /update.json
-producuts_converted.json
 products.json
 uploadProducts.json
+products_converted.json
 # admin
 /.admin-backup

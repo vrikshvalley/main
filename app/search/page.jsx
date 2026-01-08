@@ -13,7 +13,7 @@ import ProductListCard from '@/components/products/ProductListCard';
 import TheLoader from '@/components/general/TheLoader';
 import { searchProducts } from '@/lib/searchService';
 import { getCategories } from '@/lib/services/productService';
-import { Search, SlidersHorizontal, X, Grid, List } from 'lucide-react';
+import { Search, X, Grid, List } from 'lucide-react';
 import '@/styles/products.scss';
 
 function SearchContent() {
@@ -173,7 +173,7 @@ function SearchContent() {
           <aside className={`filters-sidebar ${showFilters ? 'show' : 'hide'}`}>
             <div className="filters-header">
               <h3>
-                <SlidersHorizontal size={20} />
+                <img src="/hamMenu.png" alt="Filters" width={16} height={16} />
                 Filters
               </h3>
               <button 
@@ -251,7 +251,7 @@ function SearchContent() {
                   className="mobile-filter-toggle"
                   onClick={() => setShowFilters(!showFilters)}
                 >
-                  <SlidersHorizontal size={18} />
+                  <img src="/hamMenu.png" alt="Filters" width={18} height={18} />
                   Filters {getActiveFiltersCount() > 0 && `(${getActiveFiltersCount()})`}
                 </button>
                 <p className="results-count">

@@ -171,8 +171,6 @@
 
   // Make toggle clearly visible and clickable for testing
   .section-toggle {
-    /* Force visible for testing & accessibility */
-    display: inline-flex !important;
     align-items: center;
     justify-content: center;
     pointer-events: auto;
