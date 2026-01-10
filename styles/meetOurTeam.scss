@@ -303,3 +303,18 @@
     line-height: 1.5;
   }
 }
+
+// Mobile fallback: ensure team section is visible if JS animations don't trigger
+@media (max-width: 768px) {
+  .meet-our-team,
+  .meet-our-team .team-container,
+  .meet-our-team .team-header,
+  .meet-our-team .team-grid,
+  .meet-our-team .team-card,
+  .meet-our-team .team-image-wrapper,
+  .meet-our-team .team-info {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}

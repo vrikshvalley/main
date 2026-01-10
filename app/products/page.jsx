@@ -498,6 +498,7 @@ export default function ProductsPage() {
                 />
                 {searchQuery && (
                   <button
+                    type="button"
                     className="clear-search"
                     onClick={() => {
                       setSearchQuery('');

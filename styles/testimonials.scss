@@ -42,8 +42,11 @@
     border: 2px solid rgba($text-secondary, 0.2);
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     gap: 1rem;
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    min-height: 220px; // ensure consistent minimum height across cards
+    min-width: 250px; // align with grid min column size
 
     &:hover {
       transform: translateY(-8px);
@@ -164,5 +167,25 @@
         transform: none !important;
       }
     }
+  }
+}
+
+// Ensure swiper/cards have a consistent min size
+.testimonials-swiper {
+  .testimonial-card {
+    min-height: 220px;
+  }
+
+  .swiper-slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+// Slightly larger cards for wide desktop
+@media (min-width: 1400px) {
+  .testimonial-card {
+    min-height: 260px;
   }
 }

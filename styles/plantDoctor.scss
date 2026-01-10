@@ -1,0 +1,412 @@
+@use 'variables' as *;
+
+.plant-doctor-page {
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+
+  .product-page {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 4rem;
+    align-items: start;
+  }
+
+  .product-gallery {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: rgba($text-secondary, 0.05);
+    border-radius: 12px;
+    overflow: hidden;
+    min-height: 500px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+  }
+
+  .product-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    .category-badge {
+      display: inline-flex;
+      background: rgba($accent-primary, 0.15);
+      color: $accent-primary;
+      padding: 0.5rem 1rem;
+      border-radius: 24px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      width: fit-content;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      margin: 0;
+      color: $text-primary;
+      line-height: 1.3;
+    }
+
+    .description-wrapper {
+      .description {
+        font-size: 1rem;
+        line-height: 1.7;
+        color: $text-secondary;
+        margin: 0;
+        transition: max-height 0.3s ease;
+
+        &.collapsed {
+          max-height: 3em;
+          overflow: hidden;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+        }
+
+        &.expanded {
+          max-height: none;
+        }
+      }
+
+      .read-more-btn {
+        background: none;
+        border: none;
+        color: $accent-primary;
+        cursor: pointer;
+        font-weight: 600;
+        padding: 0;
+        font-size: 0.95rem;
+        
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    .price-section {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      padding: 1.5rem 0;
+      border-top: 1px solid rgba($text-secondary, 0.2);
+      border-bottom: 1px solid rgba($text-secondary, 0.2);
+
+      .price {
+        font-size: 2rem;
+        font-weight: 700;
+        color: $accent-primary;
+        margin: 0;
+      }
+
+      .price-duration {
+        font-size: 0.95rem;
+        color: $text-secondary;
+        margin: 0;
+      }
+    }
+
+    .stock-info {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+
+      &.in-stock .stock-badge {
+        background: rgba($teal, 0.15);
+        color: $teal;
+      }
+
+      .stock-badge {
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 600;
+      }
+
+      .low-stock {
+        color: $yellow;
+        font-size: 0.85rem;
+      }
+    }
+
+    .option-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+
+      label {
+        font-weight: 600;
+        color: $text-primary;
+      }
+
+      .options,
+      .quantity-controls {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+      }
+
+      .option-btn {
+        padding: 0.6rem 1.2rem;
+        border: 2px solid rgba($text-secondary, 0.3);
+        border-radius: 8px;
+        background: transparent;
+        color: $text-primary;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.2s ease;
+
+        &:hover {
+          border-color: $accent-primary;
+          color: $accent-primary;
+        }
+
+        &.active {
+          background: $accent-primary;
+          color: $white;
+          border-color: $accent-primary;
+        }
+      }
+
+      .quantity-controls {
+        align-items: center;
+
+        button {
+          width: 40px;
+          height: 40px;
+          border: 2px solid rgba($text-secondary, 0.3);
+          background: transparent;
+          border-radius: 8px;
+          cursor: pointer;
+          font-weight: 600;
+          color: $text-primary;
+          transition: all 0.2s ease;
+
+          &:hover {
+            border-color: $accent-primary;
+            color: $accent-primary;
+          }
+        }
+
+        input {
+          width: 60px;
+          text-align: center;
+          border: 2px solid rgba($text-secondary, 0.3);
+          border-radius: 8px;
+          padding: 0.5rem;
+          font-size: 1rem;
+          font-weight: 600;
+        }
+      }
+    }
+
+    .actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+
+      button {
+        flex: 1;
+        padding: 1rem;
+        border: none;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+
+        &:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+      }
+
+      .add-to-cart {
+        background: rgba($accent-primary, 0.15);
+        color: $accent-primary;
+        border: 2px solid $accent-primary;
+
+        &:hover:not(:disabled) {
+          background: transparent;
+        }
+      }
+
+      .buy-now {
+        background: $accent-primary;
+        color: $white;
+
+        &:hover:not(:disabled) {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 24px rgba($accent-primary, 0.3);
+        }
+      }
+    }
+
+    .product-meta {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      padding: 1.5rem 0;
+      border-top: 1px solid rgba($text-secondary, 0.2);
+
+      .meta-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        .meta-label {
+          font-weight: 600;
+          color: $text-primary;
+          font-size: 0.85rem;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+
+        .meta-value {
+          color: $text-secondary;
+          font-size: 0.95rem;
+        }
+      }
+    }
+  }
+
+  .booking-section {
+    background: rgba($text-secondary, 0.05);
+    padding: 2.5rem;
+    border-radius: 12px;
+    margin-top: 3rem;
+
+    h2 {
+      font-size: 1.8rem;
+      margin: 0 0 0.5rem 0;
+      color: $text-primary;
+    }
+
+    > p {
+      color: $text-secondary;
+      margin: 0 0 2rem 0;
+      font-size: 1rem;
+    }
+
+    .booking-form {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+
+      label {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        font-weight: 600;
+        color: $text-primary;
+
+        input {
+          padding: 0.75rem 1rem;
+          border: 2px solid rgba($text-secondary, 0.2);
+          border-radius: 8px;
+          font-size: 1rem;
+          font-family: inherit;
+          transition: border-color 0.2s ease;
+
+          &:focus {
+            outline: none;
+            border-color: $accent-primary;
+          }
+        }
+      }
+
+      .actions {
+        grid-column: 1 / -1;
+        display: flex;
+        justify-content: flex-end;
+
+        .btn-primary {
+          padding: 1rem 2rem;
+          background: $accent-primary;
+          color: $white;
+          border: none;
+          border-radius: 8px;
+          font-weight: 700;
+          font-size: 1rem;
+          cursor: pointer;
+          transition: all 0.3s ease;
+
+          &:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba($accent-primary, 0.3);
+          }
+
+          &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .plant-doctor-page {
+    .product-page {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .product-details {
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      .price {
+        font-size: 1.8rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .plant-doctor-page {
+    padding: 1.5rem 1rem;
+
+    .product-gallery {
+      min-height: 350px;
+    }
+
+    .product-details {
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .price-section .price {
+        font-size: 1.5rem;
+      }
+
+      .actions {
+        flex-direction: column;
+
+        button {
+          width: 100%;
+        }
+      }
+
+      .product-meta {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .booking-section {
+      padding: 1.5rem 1rem;
+
+      .booking-form {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+}

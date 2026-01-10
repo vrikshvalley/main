@@ -55,6 +55,22 @@ export default function Navbar() {
     fetchCategories();
   }, []);
 
+  // Add/remove class to body when menu opens/closes
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      if (menuOpen) {
+        document.body.classList.add('mobile-menu-open');
+      } else {
+        document.body.classList.remove('mobile-menu-open');
+      }
+    }
+    return () => {
+      if (typeof document !== 'undefined') {
+        document.body.classList.remove('mobile-menu-open');
+      }
+    };
+  }, [menuOpen]);
+
   const dropdownVariants = {
     hidden: { 
       opacity: 0, 
@@ -162,6 +178,23 @@ export default function Navbar() {
                           </Link>
                         </motion.div>
                       ))}
+                      {/* Add Plant Doctor under Plant Care */}
+                      {category.slug === 'plant-care' && (
+                        <motion.div
+                          key="plant-doctor"
+                          custom={category.subcategories.length}
+                          variants={itemVariants}
+                          initial="hidden"
+                          animate="visible"
+                        >
+                          <Link 
+                            href="/plant-doctor"
+                            className="dropdown-item"
+                          >
+                            🩺 Plant Doctor
+                          </Link>
+                        </motion.div>
+                      )}
                     </div>
                   </motion.div>
                 )}
@@ -257,6 +290,16 @@ export default function Navbar() {
                         {subcategory.name}
                       </Link>
                     ))}
+                    {/* Add Plant Doctor under Plant Care mobile menu */}
+                    {category.slug === 'plant-care' && (
+                      <Link
+                        href="/plant-doctor"
+                        className="mobile-subcategory-item"
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        🩺 Plant Doctor
+                      </Link>
+                    )}
                   </motion.div>
                 )}
               </AnimatePresence>

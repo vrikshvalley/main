@@ -5,9 +5,11 @@
 .topbar {
   background: $dark-green;
   font-size: 1.5rem;
-  color: $primary-bg;
+  color: $text-primary;
   box-shadow: $shadow-light;
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 1999;
   overflow: hidden;
 
   .topbar-container {
@@ -188,5 +190,12 @@
         font-size: 0.7rem;
       }
     }
+  }
+}
+
+// Hide topbar when mobile menu is open (on mobile devices)
+@media (max-width: 768px) {
+  body.mobile-menu-open .topbar {
+    display: none;
   }
 }

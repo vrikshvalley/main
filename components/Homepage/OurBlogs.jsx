@@ -38,9 +38,11 @@ export default function OurBlogs() {
                 <Image 
                   src={blog.image}
                   alt={blog.title}
-                  fill
+                  width={400}
+                  height={250}
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   className="blog-image"
+                  priority={index === 0}
                 />
                 <div className="blog-category">{blog.category}</div>
               </Link>

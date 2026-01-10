@@ -188,3 +188,19 @@
     }
   }
 }
+
+// Mobile fallback: ensure gallery items are visible if animations don't trigger
+@media (max-width: 768px) {
+  .gallery,
+  .gallery-container,
+  .section-header,
+  .gallery-grid,
+  .gallery-item,
+  .image-wrapper,
+  .gallery-image,
+  .image-overlay {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}

@@ -155,6 +155,7 @@ export default function SubcategoryPage() {
                   />
                   {searchQuery && (
                     <button
+                      type="button"
                       className="clear-search"
                       onClick={() => {
                         setSearchQuery('');

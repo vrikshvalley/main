@@ -389,6 +389,7 @@ export default function CategoryPage() {
                   />
                   {searchQuery && (
                     <button
+                      type="button"
                       className="clear-search"
                       onClick={() => {
                         setSearchQuery('');
