@@ -189,6 +189,15 @@ export default function Cart() {
                     )}
                     <div className="item-info">
                       <h4 className="item-name">{item.name}</h4>
+                      {item.variant && (
+                        <p className="item-variant">Variant: {item.variant}</p>
+                      )}
+                      {item.size && (
+                        <p className="item-variant">Size: {item.size}</p>
+                      )}
+                      {item.color && (
+                        <p className="item-variant">Color: {item.color}</p>
+                      )}
                       <p className="item-price">₹{typeof item.price === 'number' ? item.price : 0}</p>
                     </div>
                   </div>
@@ -254,7 +263,10 @@ export default function Cart() {
                   const phoneNumber = '919204745612';
                   let message = 'Hi! I would like to order:\n\n';
                   items.forEach(item => {
-                    message += `${item.name} - Qty: ${item.qty} - ₹${(item.price * item.qty).toFixed(2)}\n`;
+                    const variantInfo = [item.variant, item.size, item.color]
+                      .filter(Boolean)
+                      .join(' | ');
+                    message += `${item.name}${variantInfo ? ` (${variantInfo})` : ''} - Qty: ${item.qty} - ₹${(item.price * item.qty).toFixed(2)}\n`;
                   });
                   message += `\nTotal: ₹${subtotal.toFixed(2)}`;
                   const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;

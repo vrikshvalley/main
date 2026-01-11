@@ -32,7 +32,7 @@
       justify-content: space-between;
 
       .section-toggle {
-        display: none;
+        display: flex;
         background: transparent;
         border: none;
         cursor: pointer;
@@ -185,6 +185,13 @@
   @media (min-width: 769px) {
     .section-toggle {
       display: none !important;
+    }
+  }
+
+  // Show chevrons on mobile
+  @media (max-width: 768px) {
+    .section-toggle {
+      display: flex !important;
     }
   }
 

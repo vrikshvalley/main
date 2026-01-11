@@ -26,8 +26,11 @@ export default function Navbar() {
   const [expandedMobileCategory, setExpandedMobileCategory] = useState(null);
   const [categories, setCategories] = useState([]);
   
-  // Check if we're on products/category/subcategory page to hide navbar search
-  const isProductsPage = pathname === '/products' || pathname?.startsWith('/products/') || pathname?.startsWith('/category/');
+  // Show search on product detail pages; hide only on listings (products root and category listings)
+  const isListingPage =
+    pathname === '/products' ||
+    pathname?.startsWith('/products/category') ||
+    pathname?.startsWith('/category/');
 
   useEffect(() => {
     async function fetchCategories() {
@@ -191,7 +194,7 @@ export default function Navbar() {
                             href="/plant-doctor"
                             className="dropdown-item"
                           >
-                            🩺 Plant Doctor
+                            Plant Doctor
                           </Link>
                         </motion.div>
                       )}
@@ -205,7 +208,7 @@ export default function Navbar() {
 
         {/* Right: Search + Cart + Profile */}
         <div className="nav-actions">
-          {!isProductsPage && <SearchBar />}
+          {!isListingPage && <SearchBar />}
           
           <CartIcon onCartClick={openCart} />
           <ProfileIcon />
@@ -297,7 +300,7 @@ export default function Navbar() {
                         className="mobile-subcategory-item"
                         onClick={() => setMenuOpen(false)}
                       >
-                        🩺 Plant Doctor
+                        Plant Doctor
                       </Link>
                     )}
                   </motion.div>

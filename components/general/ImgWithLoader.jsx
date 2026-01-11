@@ -14,13 +14,15 @@ export default function ImgWithLoader({
   priority,
   onLoadingComplete, // deprecated from next/image; kept for backward-compat only
   onLoad,
+  onError,
   ...imgProps
 }) {
   const [loaded, setLoaded] = useState(false);
+  const [error, setError] = useState(false);
   const [lottieData, setLottieData] = useState(null);
   const imageClass = imgClassName ?? className;
 
-  const shouldShowLoader = showLoader && !loaded;
+  const shouldShowLoader = showLoader && !loaded && !error;
 
   useEffect(() => {
     if (!showLoader) return;
@@ -44,6 +46,7 @@ export default function ImgWithLoader({
   const handleOnLoad = useMemo(() => {
     return (e) => {
       setLoaded(true);
+      setError(false);
       if (typeof onLoad === "function") onLoad(e);
       // best-effort compatibility: call deprecated callback without passing it to NextImage
       if (typeof onLoadingComplete === "function") {
@@ -55,6 +58,14 @@ export default function ImgWithLoader({
       }
     };
   }, [onLoad, onLoadingComplete]);
+
+  const handleOnError = useMemo(() => {
+    return (e) => {
+      setError(true);
+      setLoaded(true);
+      if (typeof onError === "function") onError(e);
+    };
+  }, [onError]);
 
   return (
     <div
@@ -102,18 +113,36 @@ export default function ImgWithLoader({
         // Next Image requires a string src or a static import object with width/height.
         // Coerce object -> string here to avoid runtime errors.
       }
-      <NextImage
-        {...{
-          ...imgProps,
-          src:
-            imgProps && imgProps.src && typeof imgProps.src === "object"
-              ? imgProps.src.src || imgProps.src.url || String(imgProps.src)
-              : imgProps.src,
-        }}
-        className={imageClass}
-        priority={priority}
-        onLoad={handleOnLoad}
-      />
+      {error ? (
+        <div
+          style={{
+            width: imgProps.width || "100%",
+            height: imgProps.height || "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            background: "#f0f0f0",
+            color: "#999",
+            fontSize: "14px",
+          }}
+        >
+          Image unavailable
+        </div>
+      ) : (
+        <NextImage
+          {...{
+            ...imgProps,
+            src:
+              imgProps && imgProps.src && typeof imgProps.src === "object"
+                ? imgProps.src.src || imgProps.src.url || String(imgProps.src)
+                : imgProps.src || "/1.png",
+          }}
+          className={imageClass}
+          priority={priority}
+          onLoad={handleOnLoad}
+          onError={handleOnError}
+        />
+      )}
 
       <style jsx global>{`
         @keyframes imgWithLoaderSpin {

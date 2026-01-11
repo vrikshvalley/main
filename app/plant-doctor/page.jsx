@@ -15,7 +15,7 @@ const PLANT_DOCTOR_PRODUCT = {
   category: "Plant Care",
   description: "Book a 30-minute expert plant consultation. Get personalized diagnosis, care plan and recommendations from our certified plant experts. Perfect for troubleshooting plant issues, understanding plant care requirements, and getting expert guidance on plant selection.",
   price: 499,
-  images: ["/plant-doctor.jpg"],
+  images: ["/PlantDoctorDesktop.png"],
   stock: 1000,
 };
 
@@ -194,6 +194,8 @@ export default function PlantDoctor() {
             width={600}
             height={600}
             priority
+            sizes="(max-width: 768px) 100vw, 50vw"
+            srcSet="/PlantDoctorMobile.png 768w, /PlantDoctorDesktop.png 1200w"
           />
         </div>
 

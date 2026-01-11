@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from '@/components/general/ImgWithLoader';
 import { useRouter } from 'next/navigation';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -28,13 +28,24 @@ export default function ProductPage({ product }) {
   const [selectedSize, setSelectedSize] = useState(product?.sizes?.[0] || null);
   const [selectedColor, setSelectedColor] = useState(product?.colors?.[0] || null);
   // Filter out "default" variants and set first non-default variant
-  const filteredVariants = product?.variants?.filter(v => v.label?.toLowerCase() !== 'default' && v.name?.toLowerCase() !== 'default') || [];
+  const filteredVariants =
+    product?.variants?.filter(
+      (v) => (v.label || v.name || "").toLowerCase() !== "default"
+    ) || [];
   const [selectedVariant, setSelectedVariant] = useState(filteredVariants[0] || null);
   const [quantity, setQuantity] = useState(1);
   const [expandDescription, setExpandDescription] = useState(false);
 
   // Get current price based on selected variant or base price
   const currentPrice = selectedVariant ? selectedVariant.price : product?.price || 0;
+
+  // Reset option selections when product changes
+  useEffect(() => {
+    setSelectedSize(product?.sizes?.[0] || null);
+    setSelectedColor(product?.colors?.[0] || null);
+    setSelectedVariant(filteredVariants[0] || null);
+    setQuantity(1);
+  }, [product?.id]);
 
   if (!product) {
     return (
@@ -55,7 +66,7 @@ export default function ProductPage({ product }) {
       quantity: quantity,
       color: selectedColor,
       size: selectedSize,
-      variant: selectedVariant?.name || null,
+      variant: selectedVariant?.label || selectedVariant?.name || null,
     }));
     showSuccessToast(`${product.name} added to cart! 🌿`);
   };
@@ -70,7 +81,7 @@ export default function ProductPage({ product }) {
       quantity: quantity,
       color: selectedColor,
       size: selectedSize,
-      variant: selectedVariant?.name || null,
+      variant: selectedVariant?.label || selectedVariant?.name || null,
     }));
     
     // Redirect based on auth status
@@ -241,11 +252,17 @@ export default function ProductPage({ product }) {
               <div className="options variant-options">
                 {filteredVariants.map((variant) => (
                   <button
-                    key={variant.name}
-                    className={`option-btn ${selectedVariant?.name === variant.name ? 'active' : ''}`}
+                    key={variant.id || variant.name || variant.label}
+                    className={`option-btn ${
+                      selectedVariant?.id
+                        ? selectedVariant.id === variant.id
+                        : (selectedVariant?.name || selectedVariant?.label) ===
+                          (variant.name || variant.label)
+                    ? 'active'
+                    : ''}`}
                     onClick={() => setSelectedVariant(variant)}
                   >
-                    {variant.label} - ₹{variant.price}
+                    {variant.label || variant.name} - ₹{variant.price}
                   </button>
                 ))}
               </div>

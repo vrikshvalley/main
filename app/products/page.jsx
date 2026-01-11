@@ -80,7 +80,7 @@ export default function ProductsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalProducts, setTotalProducts] = useState(0);
-  const productsPerPage = 12;
+  const productsPerPage = 12; // Show 12 products per page
   
   // UI states
   const [showFilters, setShowFilters] = useState(false);
