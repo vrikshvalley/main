@@ -90,13 +90,10 @@
   // If banner bg is yellow -> hover highlight green
   .ads-banner.bg-primary &,
   .ads-banner.bg-dark & {
-    &:hover {
-      background: rgba($yellow, 0.12);
-      border-radius: 6px;
-    }
+    
 
     &:hover .ads-text {
-      color: $dark-green;
+      color: $yellow;
     }
   }
 

@@ -88,7 +88,7 @@ export default function CancellationReturn() {
           <p>
             For all cancellation and return queries, reach us at:<br />
             <strong>Phone:</strong> +91 92047 45612<br />
-            <strong>Email:</strong> vrikshvalley@gmail.com<br />
+            <strong>Email:</strong> support@vrikshvalley.com<br />
             Our team is available to assist you with your concerns.
           </p>
         </div>

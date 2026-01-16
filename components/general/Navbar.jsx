@@ -26,11 +26,8 @@ export default function Navbar() {
   const [expandedMobileCategory, setExpandedMobileCategory] = useState(null);
   const [categories, setCategories] = useState([]);
   
-  // Show search on product detail pages; hide only on listings (products root and category listings)
-  const isListingPage =
-    pathname === '/products' ||
-    pathname?.startsWith('/products/category') ||
-    pathname?.startsWith('/category/');
+  // Hide search only on main products listing page; show on category and subcategory pages
+  const isListingPage = pathname === '/products';
 
   useEffect(() => {
     async function fetchCategories() {

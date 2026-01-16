@@ -117,7 +117,7 @@ export default function PrivacyPolicy() {
           <p>
             For privacy-related queries or to exercise your data rights, contact us at:<br />
             <strong>Phone:</strong> +91 92047 45612<br />
-            <strong>Email:</strong> vrikshvalley@gmail.com
+            <strong>Email:</strong> support@vrikshvalley.com
           </p>
         </div>
       </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { memo } from 'react';
 import Image from '@/components/general/ImgWithLoader';
 import { Mail, Linkedin } from 'lucide-react';
 import '@/styles/meetOurTeam.scss';
@@ -53,8 +54,8 @@ const containerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.2,
-      delayChildren: 0.3
+      staggerChildren: 0.15,
+      delayChildren: 0.1
     }
   }
 };
@@ -62,30 +63,26 @@ const containerVariants = {
 const cardVariants = {
   hidden: { 
     opacity: 0, 
-    y: 80,
-    scale: 0.85,
-    rotateX: 15
+    y: 30
   },
   visible: { 
     opacity: 1, 
     y: 0,
-    scale: 1,
-    rotateX: 0,
     transition: {
-      duration: 0.8,
-      ease: [0.22, 1, 0.36, 1]
+      duration: 0.4,
+      ease: "easeOut"
     }
   }
 };
 
-export default function MeetOurTeam() {
+function MeetOurTeam() {
   return (
     <section className="meet-our-team">
       <motion.div 
         className="team-container"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: false, amount: 0.15, margin: "100px" }}
+        viewport={{ once: true, amount: 0.1 }}
         variants={containerVariants}
       >
         <motion.div className="team-header" variants={cardVariants}>
@@ -102,10 +99,6 @@ export default function MeetOurTeam() {
               key={member.id} 
               className={`team-card ${member.size || ''}`}
               variants={cardVariants}
-              whileHover={{ 
-                y: -10,
-                transition: { duration: 0.3 }
-              }}
             >
               <div className="team-image-wrapper">
                 <Image
@@ -114,6 +107,8 @@ export default function MeetOurTeam() {
                   width={300}
                   height={300}
                   className="team-image"
+                  loading="lazy"
+                  quality={75}
                 />
                 <div className="team-overlay">
                   <div className="social-links">
@@ -138,3 +133,5 @@ export default function MeetOurTeam() {
     </section>
   );
 }
+
+export default memo(MeetOurTeam);

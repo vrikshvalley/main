@@ -121,7 +121,7 @@ export default function Footer() {
           <div id="footer-contact-body" className={`section-body ${openSections.includes('contact') ? 'open' : ''}`}>
             <ul>
               <li><a href="tel:+919204745612">Call: +91 92047 45612</a></li>
-              <li><a href="mailto:vrikshvalley@gmail.com">Email: vrikshvalley@gmail.com</a></li>
+              <li><a href="mailto:contact@vrikshvalley.com">Email: contact@vrikshvalley.com</a></li>
               <li><a href="https://wa.me/919204745612" target="_blank">WhatsApp: +91 92047 45612</a></li>
             </ul>
           </div>

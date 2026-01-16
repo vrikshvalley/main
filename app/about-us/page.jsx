@@ -2,6 +2,7 @@
 import { useEffect } from 'react';
 import Image from 'next/image';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
+import PageTitle from '@/components/general/PageTitle';
 import { setStickyHeaderData } from '@/lib/stickyHeaderStore';
 import '@/styles/pages.scss';
 
@@ -35,9 +36,7 @@ export default function AboutUs() {
       <Breadcrumbs items={[{ label: 'About Us' }]} />
       
       <div className="page-content">
-        <div className="page-header">
-          <h2>About Us – Vriksh Valley</h2>
-        </div>
+        <PageTitle title="About Us – Vriksh Valley" subtitle="Where nature meets nurture" />
 
         <div className="content-section">
           <p>
@@ -91,7 +90,7 @@ export default function AboutUs() {
 
           <h2>Contact Us</h2>
           <p>
-            For all your queries and assistance, reach us at <strong>+91 92047 45612</strong> or drop an email to <strong>vrikshvalley@gmail.com</strong>. Our support team is available for any help you need. We are always ready to help you with your plant journey.
+            For all your queries and assistance, reach us at <strong>+91 92047 45612</strong> or drop an email to <strong>contact@vrikshvalley.com</strong>. Our support team is available for any help you need. We are always ready to help you with your plant journey.
           </p>
         </div>
       </div>

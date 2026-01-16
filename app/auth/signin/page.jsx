@@ -8,11 +8,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import '@/styles/login.scss';
 
 const slides = [
-  { src: '/loginSlider/(1).webp', alt: 'Premium Plant Collection', title: 'Premium Plants', subtitle: 'Handpicked for your space' },
-  { src: '/loginSlider/(2).webp', alt: 'Indoor Green Paradise', title: 'Indoor Paradise', subtitle: 'Bring nature inside' },
-  { src: '/loginSlider/(3).webp', alt: 'Outdoor Garden Dreams', title: 'Garden Dreams', subtitle: 'Create your own oasis' },
-  { src: '/loginSlider/(4).webp', alt: 'Nature\'s Beauty', title: 'Green Living', subtitle: 'Embrace sustainability' },
-  { src: '/loginSlider/(5).webp', alt: 'Botanical Collection', title: 'Plant Paradise', subtitle: 'Your green journey starts here' }
+  { src: '/loginSlider/(1).webp', srcMobile: '/loginSliderMobile/(1).webp', alt: 'Premium Plant Collection', title: 'Premium Plants', subtitle: 'Handpicked for your space' },
+  { src: '/loginSlider/(2).webp', srcMobile: '/loginSliderMobile/(2).webp', alt: 'Indoor Green Paradise', title: 'Indoor Paradise', subtitle: 'Bring nature inside' },
+  { src: '/loginSlider/(3).webp', srcMobile: '/loginSliderMobile/(3).webp', alt: 'Outdoor Garden Dreams', title: 'Garden Dreams', subtitle: 'Create your own oasis' },
+  { src: '/loginSlider/(4).webp', srcMobile: '/loginSliderMobile/(4).webp', alt: 'Nature\'s Beauty', title: 'Green Living', subtitle: 'Embrace sustainability' },
+  { src: '/loginSlider/(5).webp', srcMobile: '/loginSliderMobile/(5).webp', alt: 'Botanical Collection', title: 'Plant Paradise', subtitle: 'Your green journey starts here' }
 ];
 
 function LoginContent() {
@@ -104,13 +104,16 @@ function LoginContent() {
             exit={{ opacity: 0 }}
             transition={{ duration: 1 }}
           >
-            <Image 
-              src={slides[currentSlide].src} 
-              alt={slides[currentSlide].alt}
-              fill
-              style={{ objectFit: 'cover' }}
-              priority={currentSlide === 0}
-            />
+            <picture>
+              <source media="(max-width: 768px)" srcSet={slides[currentSlide].srcMobile} />
+              <Image 
+                src={slides[currentSlide].src} 
+                alt={slides[currentSlide].alt}
+                fill
+                style={{ objectFit: 'cover' }}
+                priority={currentSlide === 0}
+              />
+            </picture>
             <div className="slide-overlay">
               <motion.div 
                 className="slide-content"

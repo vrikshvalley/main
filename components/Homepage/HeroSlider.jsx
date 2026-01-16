@@ -11,11 +11,11 @@ import 'swiper/css/effect-fade';
 import '@/styles/heroSlider.scss';
 
 const slides = [
-  { src: '/heroSlider/(1).webp', alt: 'Premium Plant Collection' },
-  { src: '/heroSlider/(2).webp', alt: 'Indoor Green Paradise' },
-  { src: '/heroSlider/(3).webp', alt: 'Outdoor Garden Dreams' },
-  { src: '/heroSlider/(4).webp', alt: 'Nature\'s Beauty' },
-  { src: '/heroSlider/(5).webp', alt: 'Green Living' }
+  { src: '/heroSlider/(1).webp', srcMobile: '/heroSliderMobile/(1).webp', alt: 'Premium Plant Collection' },
+  { src: '/heroSlider/(2).webp', srcMobile: '/heroSliderMobile/(2).webp', alt: 'Indoor Green Paradise' },
+  { src: '/heroSlider/(3).webp', srcMobile: '/heroSliderMobile/(3).webp', alt: 'Outdoor Garden Dreams' },
+  { src: '/heroSlider/(4).webp', srcMobile: '/heroSliderMobile/(4).webp', alt: 'Nature\'s Beauty' },
+  { src: '/heroSlider/(5).webp', srcMobile: '/heroSliderMobile/(5).webp', alt: 'Green Living' }
 ];
 
 const contentVariants = {
@@ -92,12 +92,15 @@ export default function HeroSlider() {
         >
           {slides.map((slide, idx) => (
             <SwiperSlide key={idx}>
-              <img
-                src={slide.src}
-                alt={slide.alt}
-                loading={idx === 0 ? 'eager' : 'lazy'}
-                style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
-              />
+              <picture>
+                <source media="(max-width: 768px)" srcSet={slide.srcMobile} />
+                <img
+                  src={slide.src}
+                  alt={slide.alt}
+                  loading={idx === 0 ? 'eager' : 'lazy'}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
+                />
+              </picture>
             </SwiperSlide>
           ))}
         </Swiper>

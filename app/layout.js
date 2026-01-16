@@ -9,23 +9,19 @@ import ToastContainer from "@/components/general/ToastContainer";
 export const metadata = {
   metadataBase: new URL("https://vrikshvalley.com"),
   title: {
-    default:
-      "Vriksh Valley - Premium Plants & Eco-Friendly Products | Online Plant Nursery",
+    default: "Vriksh Valley – Where Nature Meets Nurture",
     template: "%s | Vriksh Valley",
   },
   description:
-    "Discover premium indoor plants, outdoor plants, and eco-friendly organic products at Vriksh Valley. Expert plant care, sustainable gardening solutions, and home delivery across India.",
+    "Elevate your home with handpicked, specially curated greenery and artisanal planters, creating a tranquil, nature-inspired haven.",
   keywords: [
-    "plants online",
-    "buy plants online",
+    "Vriksh Valley",
     "indoor plants",
-    "outdoor plants",
-    "organic products",
-    "plant nursery",
-    "eco-friendly products",
-    "sustainable gardening",
-    "home plants",
-    "garden plants",
+    "succulents",
+    "ceramic planters",
+    "nature-inspired decor",
+    "handcrafted planters",
+    "buy plants online",
   ],
   authors: [{ name: "Vriksh Valley" }],
   creator: "Vriksh Valley",
@@ -39,9 +35,9 @@ export const metadata = {
     type: "website",
     locale: "en_IN",
     url: "https://vrikshvalley.com",
-    title: "Vriksh Valley - Premium Plants & Eco-Friendly Products",
+    title: "Vriksh Valley – Where Nature Meets Nurture",
     description:
-      "Buy premium indoor & outdoor plants, organic products, and sustainable gardening solutions. Expert care tips and home delivery across India.",
+      "Elevate your home with handpicked, specially curated greenery and artisanal planters, creating a tranquil, nature-inspired haven.",
     siteName: "Vriksh Valley",
     images: [
       {
@@ -54,9 +50,9 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Vriksh Valley - Premium Plants & Eco-Friendly Products",
+    title: "Vriksh Valley – Where Nature Meets Nurture",
     description:
-      "Buy premium plants and organic products online. Expert care & home delivery.",
+      "Elevate your home with handpicked, specially curated greenery and artisanal planters.",
     images: ["/big-logo.png"],
   },
   robots: {

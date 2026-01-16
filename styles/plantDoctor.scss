@@ -1,19 +1,26 @@
+@use 'sass:color';
 @use 'variables' as *;
 
 .plant-doctor-page {
   max-width: 1500px;
   margin: 0 auto;
-  padding: 2rem 1.5rem;
-  background: rgba($white, 0.95);
-  backdrop-filter: blur(10px);
-  border-radius: 12px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+  padding: 3rem 1.5rem;
+  // Modern White/Light Theme
+  background: rgba($white, 0.95); 
+  
+  -webkit-backdrop-filter: blur(16px);backdrop-filter: blur(16px);
+  border: 1px solid rgba($deep-green, 0.05);
+  border-radius: 32px;
+  box-shadow: 
+    0 20px 50px rgba($deep-green, 0.08),
+    inset 0 0 0 1px rgba($white, 0.5); 
+  color: $deep-green; 
 
   .product-page {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 3rem;
-    margin-bottom: 4rem;
+    gap: 5rem;
+    margin-bottom: 5rem;
     align-items: start;
   }
 
@@ -22,52 +29,64 @@
     align-items: center;
     justify-content: center;
     position: relative;
-    background: rgba($text-secondary, 0.05);
-    border-radius: 12px;
+    background: #f0fdf4; // Very light green tint
+    border-radius: 20px;
     overflow: hidden;
     min-height: 500px;
+    box-shadow: inset 0 0 20px rgba($deep-green, 0.05);
 
     img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      border-radius: 12px;
+      transition: transform 0.5s ease;
+      
+      &:hover {
+        transform: scale(1.03);
+      }
     }
   }
 
   .product-details {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 2rem;
+    padding: 1rem 0;
 
     .category-badge {
       display: inline-flex;
-      background: rgba($accent-primary, 0.15);
-      color: $accent-primary;
+      background: rgba($teal, 0.1);
+      color: $teal; 
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
       padding: 0.5rem 1rem;
-      border-radius: 24px;
-      font-size: 0.85rem;
-      font-weight: 600;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 700;
       width: fit-content;
+      border: 1px solid rgba($teal, 0.2);
     }
 
     h1 {
-      font-size: 2.2rem;
+      font-size: 3rem; 
       margin: 0;
-      color: $text-primary;
-      line-height: 1.3;
+      color: $deep-green; 
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.5px;
     }
 
     .description-wrapper {
       .description {
-        font-size: 1rem;
-        line-height: 1.7;
-        color: $text-secondary;
+        font-size: 1.15rem;
+        line-height: 1.8;
+        color: #4a5568; // Dark gray for readability
+        font-weight: 400;
         margin: 0;
-        transition: max-height 0.3s ease;
-
+        text-shadow: none;
+        
         &.collapsed {
-          max-height: 3em;
+          max-height: 4em;
           overflow: hidden;
           display: -webkit-box;
           -webkit-line-clamp: 2;
@@ -83,14 +102,17 @@
       .read-more-btn {
         background: none;
         border: none;
-        color: $accent-primary;
+        color: $teal; 
         cursor: pointer;
-        font-weight: 600;
-        padding: 0;
-        font-size: 0.95rem;
+        font-weight: 700;
+        padding: 0.5rem 0;
+        font-size: 1.05rem;
+        margin-top: 0.75rem;
+        text-shadow: none;
         
         &:hover {
           text-decoration: underline;
+          color: darken($teal, 10%);
         }
       }
     }
@@ -100,19 +122,19 @@
       flex-direction: column;
       gap: 0.5rem;
       padding: 1.5rem 0;
-      border-top: 1px solid rgba($text-secondary, 0.2);
-      border-bottom: 1px solid rgba($text-secondary, 0.2);
+      border-top: 1px solid rgba($deep-green, 0.1);
+      border-bottom: 1px solid rgba($deep-green, 0.1);
 
       .price {
         font-size: 2rem;
         font-weight: 700;
-        color: $accent-primary;
+        color: $deep-green;
         margin: 0;
       }
 
       .price-duration {
         font-size: 0.95rem;
-        color: $text-secondary;
+        color: #718096;
         margin: 0;
       }
     }
@@ -147,7 +169,7 @@
 
       label {
         font-weight: 600;
-        color: $text-primary;
+        color: $deep-green;
       }
 
       .options,
@@ -159,23 +181,23 @@
 
       .option-btn {
         padding: 0.6rem 1.2rem;
-        border: 2px solid rgba($text-secondary, 0.3);
+        border: 2px solid rgba($deep-green, 0.2);
         border-radius: 8px;
         background: transparent;
-        color: $text-primary;
+        color: $deep-green;
         cursor: pointer;
         font-weight: 500;
         transition: all 0.2s ease;
 
         &:hover {
-          border-color: $accent-primary;
-          color: $accent-primary;
+          border-color: $teal;
+          color: $teal;
         }
 
         &.active {
-          background: $accent-primary;
+          background: $teal;
           color: $white;
-          border-color: $accent-primary;
+          border-color: $teal;
         }
       }
 
@@ -185,24 +207,27 @@
         button {
           width: 40px;
           height: 40px;
-          border: 2px solid rgba($text-secondary, 0.3);
-          background: transparent;
+          border: 2px solid rgba($deep-green, 0.2);
+          background: rgba($deep-green, 0.05);
           border-radius: 8px;
           cursor: pointer;
           font-weight: 600;
-          color: $text-primary;
+          color: $deep-green;
           transition: all 0.2s ease;
 
           &:hover {
-            border-color: $accent-primary;
-            color: $accent-primary;
+            border-color: $teal;
+            color: $teal;
+            background: rgba($teal, 0.1);
           }
         }
 
         input {
           width: 60px;
           text-align: center;
-          border: 2px solid rgba($text-secondary, 0.3);
+          border: 2px solid rgba($deep-green, 0.2);
+          background: rgba($deep-green, 0.05);
+          color: $deep-green;
           border-radius: 8px;
           padding: 0.5rem;
           font-size: 1rem;
@@ -218,13 +243,14 @@
 
       button {
         flex: 1;
-        padding: 1rem;
+        padding: 1.2rem;
         border: none;
-        border-radius: 8px;
+        border-radius: 50px; // Rounded pills
         font-weight: 700;
         cursor: pointer;
         transition: all 0.3s ease;
-        font-size: 1rem;
+        font-size: 1.1rem;
+        letter-spacing: 0.5px;
 
         &:disabled {
           opacity: 0.5;
@@ -233,22 +259,24 @@
       }
 
       .add-to-cart {
-        background: rgba($accent-primary, 0.15);
-        color: $accent-primary;
-        border: 2px solid $accent-primary;
+        background: transparent;
+        color: $teal;
+        border: 2px solid rgba($teal, 0.5);
 
         &:hover:not(:disabled) {
-          background: transparent;
+          background: rgba($teal, 0.1);
+          border-color: $teal;
         }
       }
 
       .buy-now {
-        background: $accent-primary;
+        background: linear-gradient(135deg, $teal, color.adjust($teal, $lightness: -10%));
         color: $white;
+        box-shadow: 0 4px 15px rgba($teal, 0.4);
 
         &:hover:not(:disabled) {
           transform: translateY(-2px);
-          box-shadow: 0 8px 24px rgba($accent-primary, 0.3);
+          box-shadow: 0 8px 25px rgba($teal, 0.6);
         }
       }
     }
@@ -258,7 +286,7 @@
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 1.5rem;
       padding: 1.5rem 0;
-      border-top: 1px solid rgba($text-secondary, 0.2);
+      border-top: 1px solid rgba($deep-green, 0.1);
 
       .meta-item {
         display: flex;
@@ -267,90 +295,508 @@
 
         .meta-label {
           font-weight: 600;
-          color: $text-primary;
+          color: #718096;
           font-size: 0.85rem;
           text-transform: uppercase;
           letter-spacing: 0.5px;
         }
 
         .meta-value {
-          color: $text-secondary;
-          font-size: 0.95rem;
+          color: $deep-green;
+          font-size: 1rem;
+          font-weight: 600;
         }
       }
     }
   }
 
   .booking-section {
-    background: rgba($text-secondary, 0.05);
+    background: #f8fafc;
     padding: 2.5rem;
-    border-radius: 12px;
+    border-radius: 20px;
     margin-top: 3rem;
+    border: 1px solid rgba($deep-green, 0.05);
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.02);
 
-    h2 {
-      font-size: 1.8rem;
-      margin: 0 0 0.5rem 0;
-      color: $text-primary;
-    }
+    .booking-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
 
-    > p {
-      color: $text-secondary;
-      margin: 0 0 2rem 0;
-      font-size: 1rem;
+      h2 {
+        font-size: 2rem;
+        margin: 0 0 0.75rem 0;
+        color: $deep-green;
+      }
+
+      p {
+        color: #718096;
+        font-size: 1.05rem;
+        margin: 0;
+      }
     }
 
     .booking-form {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      max-width: 900px;
+      margin: 0 auto;
 
-      label {
+      .form-group {
         display: flex;
         flex-direction: column;
-        gap: 0.5rem;
-        font-weight: 600;
-        color: $text-primary;
+        gap: 0.75rem;
+
+        label {
+          font-weight: 600;
+          color: $deep-green;
+          letter-spacing: 0.5px;
+          font-size: 0.95rem;
+        }
 
         input {
-          padding: 0.75rem 1rem;
-          border: 2px solid rgba($text-secondary, 0.2);
-          border-radius: 8px;
+          padding: 1rem 1.2rem;
+          background: #ffffff;
+          border: 2px solid #e2e8f0;
+          color: $deep-green;
+          border-radius: 12px;
           font-size: 1rem;
           font-family: inherit;
-          transition: border-color 0.2s ease;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+          &::placeholder {
+            color: #cbd5e0;
+            font-weight: 400;
+          }
+
+          &:hover {
+            border-color: rgba($teal, 0.3);
+          }
 
           &:focus {
             outline: none;
-            border-color: $accent-primary;
+            border-color: $teal;
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba($teal, 0.1);
           }
         }
       }
 
-      .actions {
+      .form-row {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+
+        @media (max-width: 768px) {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
+      }
+
+      .form-submit {
         grid-column: 1 / -1;
         display: flex;
-        justify-content: flex-end;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
 
-        .btn-primary {
-          padding: 1rem 2rem;
-          background: $accent-primary;
+        .btn-submit {
+          width: 100%;
+          max-width: 400px;
+          padding: 1.2rem;
+          background: linear-gradient(135deg, $teal, color.adjust($teal, $lightness: -10%));
           color: $white;
           border: none;
-          border-radius: 8px;
+          border-radius: 50px;
+          font-weight: 700;
+          font-size: 1.05rem;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 15px rgba($teal, 0.3);
+
+          &:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba($teal, 0.5);
+          }
+
+          &:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+          }
+        }
+
+        .submit-note {
+          font-size: 0.85rem;
+          color: #718096;
+          margin: 0;
+        }
+      }
+    }
+  }
+
+  /* Hero Section */
+  .hero-section {
+    margin: -3rem -1.5rem 4rem -1.5rem;
+    padding: 3rem 1.5rem;
+    background: linear-gradient(135deg, rgba($teal, 0.05), rgba($deep-green, 0.03));
+    border-radius: 0;
+
+    @media (max-width: 768px) {
+      margin: -1.5rem -1rem 3rem -1rem;
+      padding: 2rem 1rem;
+    }
+
+    .hero-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+      max-width: 1400px;
+      margin: 0 auto;
+
+      @media (max-width: 1024px) {
+        gap: 2rem;
+      }
+
+      @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+    }
+
+    .hero-text {
+      .hero-eyebrow {
+        display: inline-block;
+        background: rgba($teal, 0.1);
+        color: $teal;
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 1rem;
+      }
+
+      h1 {
+        font-size: 3.5rem;
+        font-weight: 800;
+        color: $deep-green;
+        margin: 0 0 1rem 0;
+        line-height: 1.1;
+
+        @media (max-width: 768px) {
+          font-size: 2.5rem;
+        }
+
+        @media (max-width: 480px) {
+          font-size: 1.8rem;
+        }
+      }
+
+      .hero-subtitle {
+        font-size: 1.3rem;
+        color: $teal;
+        font-weight: 600;
+        margin: 0 0 1rem 0;
+
+        @media (max-width: 768px) {
+          font-size: 1.1rem;
+        }
+      }
+
+      .hero-description {
+        font-size: 1.05rem;
+        line-height: 1.8;
+        color: #4a5568;
+        margin: 0 0 2rem 0;
+
+        @media (max-width: 768px) {
+          font-size: 0.95rem;
+        }
+      }
+
+      .hero-cta-group {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+
+        .cta-btn {
+          padding: 1.2rem 2.5rem;
+          border: none;
+          border-radius: 50px;
           font-weight: 700;
           font-size: 1rem;
           cursor: pointer;
           transition: all 0.3s ease;
+          letter-spacing: 0.5px;
 
-          &:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba($accent-primary, 0.3);
+          &.primary {
+            background: linear-gradient(135deg, $teal, color.adjust($teal, $lightness: -10%));
+            color: $white;
+            box-shadow: 0 4px 15px rgba($teal, 0.4);
+
+            &:hover {
+              transform: translateY(-2px);
+              box-shadow: 0 8px 25px rgba($teal, 0.6);
+            }
           }
 
-          &:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+          @media (max-width: 768px) {
+            padding: 0.9rem 1.8rem;
+            font-size: 0.95rem;
+            width: 100%;
           }
+        }
+      }
+    }
+
+    .hero-image {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      picture {
+        width: 100%;
+        max-width: 500px;
+
+        img {
+          width: 100%;
+          height: auto;
+          object-fit: contain;
+        }
+      }
+
+      @media (max-width: 768px) {
+        max-width: 350px;
+      }
+    }
+  }
+
+  /* Features/Why Section */
+  .why-section {
+    margin: 4rem 0;
+    padding: 3rem 0;
+
+    h2 {
+      font-size: 2.5rem;
+      text-align: center;
+      color: $deep-green;
+      margin: 0 0 3rem 0;
+
+      @media (max-width: 768px) {
+        font-size: 1.8rem;
+        margin-bottom: 2rem;
+      }
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+
+      @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+    }
+
+    .feature-card {
+      background: #ffffff;
+      border: 1px solid rgba($deep-green, 0.1);
+      border-radius: 16px;
+      padding: 2rem;
+      text-align: center;
+      transition: all 0.3s ease;
+
+      .feature-icon {
+        font-size: 3.5rem;
+        margin-bottom: 1rem;
+        display: inline-block;
+      }
+
+      h3 {
+        font-size: 1.3rem;
+        color: $deep-green;
+        margin: 1rem 0 0.75rem 0;
+        font-weight: 700;
+      }
+
+      p {
+        font-size: 0.95rem;
+        color: #718096;
+        line-height: 1.6;
+        margin: 0;
+      }
+    }
+  }
+
+  /* How It Works Section */
+  .how-it-works {
+    margin: 4rem 0;
+    padding: 3rem 0;
+    background: linear-gradient(135deg, rgba($teal, 0.03), rgba($deep-green, 0.02));
+    border-radius: 20px;
+    padding: 3rem;
+
+    h2 {
+      font-size: 2.5rem;
+      text-align: center;
+      color: $deep-green;
+      margin: 0 0 3rem 0;
+
+      @media (max-width: 768px) {
+        font-size: 1.8rem;
+        margin-bottom: 2rem;
+      }
+    }
+
+    .steps-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+
+      @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+    }
+
+    .step {
+      position: relative;
+      text-align: center;
+
+      .step-number {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, $teal, color.adjust($teal, $lightness: -10%));
+        color: $white;
+        font-size: 2rem;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        box-shadow: 0 4px 15px rgba($teal, 0.3);
+      }
+
+      h3 {
+        font-size: 1.2rem;
+        color: $deep-green;
+        margin: 0 0 0.75rem 0;
+        font-weight: 700;
+      }
+
+      p {
+        font-size: 0.95rem;
+        color: #718096;
+        line-height: 1.6;
+        margin: 0;
+      }
+
+      .step-arrow {
+        position: absolute;
+        right: -2rem;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 2rem;
+        color: rgba($teal, 0.3);
+
+        @media (max-width: 768px) {
+          display: none;
+        }
+      }
+    }
+  }
+
+  /* Service Details Section */
+  .service-details-section {
+    margin: 4rem 0;
+    padding: 0;
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+
+      @media (max-width: 768px) {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+      }
+
+      @media (max-width: 480px) {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+    }
+
+    .detail-item {
+      background: #f8fafc;
+      border: 1px solid rgba($deep-green, 0.1);
+      border-radius: 12px;
+      padding: 1.75rem;
+      text-align: center;
+      transition: all 0.3s ease;
+
+      .detail-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        display: inline-block;
+      }
+
+      h3 {
+        font-size: 1.1rem;
+        color: $deep-green;
+        margin: 0 0 0.5rem 0;
+        font-weight: 700;
+      }
+
+      p {
+        font-size: 0.9rem;
+        color: #718096;
+        line-height: 1.5;
+        margin: 0;
+      }
+    }
+  }
+
+  /* Trust Section */
+  .trust-section {
+    margin: 4rem 0 2rem 0;
+    padding: 3rem;
+    text-align: center;
+    background: linear-gradient(135deg, rgba($deep-green, 0.05), rgba($teal, 0.02));
+    border-radius: 16px;
+
+    h2 {
+      font-size: 2rem;
+      color: $deep-green;
+      margin: 0 0 1.5rem 0;
+
+      @media (max-width: 768px) {
+        font-size: 1.5rem;
+      }
+    }
+
+    .trust-content {
+      p {
+        font-size: 1rem;
+        color: #718096;
+        margin: 0;
+        line-height: 1.7;
+
+        @media (max-width: 768px) {
+          font-size: 0.95rem;
         }
       }
     }
@@ -359,19 +805,13 @@
 
 @media (max-width: 1024px) {
   .plant-doctor-page {
-    .product-page {
+    .hero-section .hero-content {
       grid-template-columns: 1fr;
       gap: 2rem;
     }
 
-    .product-details {
-      h1 {
-        font-size: 1.8rem;
-      }
-
-      .price {
-        font-size: 1.8rem;
-      }
+    .features-grid {
+      grid-template-columns: repeat(2, 1fr);
     }
   }
 }
@@ -379,140 +819,91 @@
 @media (max-width: 768px) {
   .plant-doctor-page {
     padding: 1.5rem 1rem;
-    margin: 1rem;
-    border-radius: 8px;
 
-    .product-page {
+    .hero-section {
+      margin: -1.5rem -1rem 3rem -1rem;
+      padding: 2rem 1rem;
+
+      .hero-content {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .hero-text {
+        h1 {
+          font-size: 2.2rem;
+        }
+
+        .hero-description {
+          font-size: 0.95rem;
+        }
+
+        .cta-btn {
+          width: 100%;
+        }
+      }
+
+      .hero-image {
+        max-width: 100%;
+      }
+    }
+
+    .why-section,
+    .how-it-works,
+    .service-details-section,
+    .trust-section {
+      padding: 2rem 0 !important;
+      margin: 3rem 0 !important;
+
+      h2 {
+        font-size: 1.6rem;
+        margin-bottom: 2rem;
+      }
+    }
+
+    .features-grid {
+      grid-template-columns: 1fr;
       gap: 1.5rem;
     }
 
-    .product-gallery {
-      min-height: 280px;
-      border-radius: 8px;
-
-      img {
-        object-fit: contain;
-      }
+    .steps-container {
+      grid-template-columns: 1fr;
+      gap: 2rem;
     }
 
-    .product-details {
-      h1 {
-        font-size: 1.5rem;
-        margin-bottom: 0.75rem;
-      }
-
-      .description-wrapper {
-        p {
-          font-size: 0.95rem;
-          line-height: 1.6;
-        }
-      }
-
-      .price-section {
-        padding: 1rem 0;
-        
-        .price {
-          font-size: 1.8rem;
-        }
-
-        .price-duration {
-          font-size: 0.9rem;
-        }
-      }
-
-      .stock-info {
-        margin: 0.5rem 0;
-      }
-
-      .option-group {
-        label {
-          font-size: 0.95rem;
-        }
-
-        .quantity-controls {
-          button {
-            width: 36px;
-            height: 36px;
-            font-size: 1rem;
-          }
-
-          input {
-            width: 50px;
-            padding: 0.4rem;
-            font-size: 0.9rem;
-          }
-        }
-      }
-
-      .actions {
-        flex-direction: column;
-        gap: 0.75rem;
-        margin-top: 1rem;
-
-        button {
-          width: 100%;
-          padding: 0.85rem;
-          font-size: 0.95rem;
-          border-radius: 6px;
-        }
-      }
-
-      .product-meta {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-        padding: 1rem 0;
-
-        .meta-item {
-          gap: 0.4rem;
-
-          .meta-label {
-            font-size: 0.8rem;
-          }
-
-          .meta-value {
-            font-size: 0.9rem;
-          }
-        }
-      }
+    .details-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
     }
 
     .booking-section {
-      padding: 1.5rem 1rem;
-      margin-top: 2rem;
-      border-radius: 8px;
+      padding: 2rem 1.5rem;
+      margin-top: 3rem;
 
-      h2 {
-        font-size: 1.4rem;
-        margin-bottom: 0.5rem;
-      }
+      .booking-header {
+        margin-bottom: 2rem;
 
-      > p {
-        font-size: 0.95rem;
-        margin-bottom: 1.5rem;
+        h2 {
+          font-size: 1.5rem;
+          margin-bottom: 0.5rem;
+        }
+
+        p {
+          font-size: 0.95rem;
+        }
       }
 
       .booking-form {
-        grid-template-columns: 1fr;
-        gap: 1rem;
+        gap: 1.5rem;
 
-        label {
-          font-size: 0.95rem;
-
-          input {
-            padding: 0.65rem 0.75rem;
-            font-size: 0.95rem;
-          }
+        .form-row {
+          grid-template-columns: 1fr;
+          gap: 1.5rem;
         }
 
-        .actions {
-          justify-content: center;
-          
-          .btn-primary {
-            width: 100%;
-            padding: 0.85rem 1.5rem;
-            font-size: 0.95rem;
-            border-radius: 6px;
-          }
+        .form-submit .btn-submit {
+          font-size: 0.95rem;
+          padding: 0.95rem;
         }
       }
     }
@@ -522,40 +913,106 @@
 @media (max-width: 480px) {
   .plant-doctor-page {
     padding: 1rem;
-    margin: 0.5rem;
 
-    .product-details {
-      h1 {
+    .hero-section {
+      margin: -1rem -1rem 2.5rem -1rem;
+      padding: 1.5rem 1rem;
+
+      .hero-text {
+        h1 {
+          font-size: 1.8rem;
+          margin-bottom: 0.75rem;
+        }
+
+        .hero-eyebrow {
+          font-size: 0.75rem;
+          padding: 0.4rem 0.8rem;
+          margin-bottom: 0.75rem;
+        }
+
+        .hero-subtitle {
+          font-size: 1rem;
+        }
+
+        .hero-description {
+          font-size: 0.9rem;
+          margin-bottom: 1.5rem;
+        }
+      }
+    }
+
+    .why-section,
+    .how-it-works,
+    .service-details-section {
+      padding: 1.5rem 0 !important;
+      margin: 2rem 0 !important;
+
+      h2 {
+        font-size: 1.4rem;
+        margin-bottom: 1.5rem;
+      }
+    }
+
+    .features-grid {
+      gap: 1rem;
+    }
+
+    .details-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .detail-item {
+      padding: 1.25rem;
+
+      .detail-icon {
+        font-size: 2rem;
+        margin-bottom: 0.75rem;
+      }
+
+      h3 {
+        font-size: 0.95rem;
+      }
+
+      p {
+        font-size: 0.85rem;
+      }
+    }
+
+    .trust-section {
+      padding: 1.5rem;
+
+      h2 {
         font-size: 1.3rem;
       }
 
-      .category-badge {
-        padding: 0.4rem 0.8rem;
-        font-size: 0.75rem;
-      }
-
-      .price-section .price {
-        font-size: 1.6rem;
-      }
-
-      .product-meta {
-        gap: 0.8rem;
+      .trust-content p {
+        font-size: 0.9rem;
       }
     }
 
     .booking-section {
-      padding: 1rem;
+      padding: 1.5rem 1rem;
 
-      h2 {
-        font-size: 1.2rem;
+      .booking-header {
+        h2 {
+          font-size: 1.3rem;
+        }
+
+        p {
+          font-size: 0.9rem;
+        }
       }
 
       .booking-form {
-        gap: 0.8rem;
-
-        .actions .btn-primary {
+        .form-group input {
           padding: 0.8rem 1rem;
           font-size: 0.9rem;
+        }
+
+        .form-submit .btn-submit {
+          font-size: 0.9rem;
+          padding: 0.9rem;
         }
       }
     }
