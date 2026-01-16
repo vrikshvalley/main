@@ -1125,6 +1125,31 @@ $grey-dark: #374151;
       box-shadow: 0 2px 8px rgba($accent-primary, 0.3);
     }
 
+    .new-arrivals-badge {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      padding: 0.375rem 0.875rem;
+      background: linear-gradient(135deg, $teal 0%, color.adjust($teal, $lightness: -10%) 100%);
+      color: $white;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 8px rgba($teal, 0.3);
+      animation: pulse-badge 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-badge {
+      0%, 100% {
+        box-shadow: 0 2px 8px rgba($teal, 0.3);
+      }
+      50% {
+        box-shadow: 0 2px 12px rgba($teal, 0.5);
+      }
+    }
+
     .wishlist-button {
       position: absolute;
       top: 1rem;

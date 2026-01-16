@@ -103,6 +103,10 @@ export default function ProductListCard({ product, viewMode = 'grid' }) {
           <div className="featured-badge">Featured</div>
         )}
 
+        {product.new_arrivals && product.stock > 0 && (
+          <div className="new-arrivals-badge">New Arrival</div>
+        )}
+
         <button 
           className={`wishlist-button ${isWishlisted ? 'active' : ''}`}
           onClick={toggleWishlist}

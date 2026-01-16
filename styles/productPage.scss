@@ -294,6 +294,13 @@
       gap: 0.75rem;
     }
 
+    .product-badges {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
     .category-badge {
       display: inline-block;
       width: fit-content;
@@ -304,6 +311,30 @@
       font-size: 0.875rem;
       font-weight: 600;
       text-transform: capitalize;
+    }
+
+    .new-arrival-badge {
+      display: inline-block;
+      width: fit-content;
+      padding: 0.5rem 1rem;
+      background: linear-gradient(135deg, $teal 0%, color.adjust($teal, $lightness: -10%) 100%);
+      color: $white;
+      border-radius: 20px;
+      font-size: 0.875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 8px rgba($teal, 0.3);
+      animation: pulse-badge-product 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-badge-product {
+      0%, 100% {
+        box-shadow: 0 2px 8px rgba($teal, 0.3);
+      }
+      50% {
+        box-shadow: 0 2px 12px rgba($teal, 0.5);
+      }
     }
 
     h1 {

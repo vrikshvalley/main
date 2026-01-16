@@ -160,7 +160,12 @@ export default function ProductPage({ product }) {
 
         {/* Right: Product Details */}
         <div className="product-details">
-          <div className="category-badge">{product.category}</div>
+          <div className="product-badges">
+            <div className="category-badge">{product.category}</div>
+            {product.new_arrivals && (
+              <div className="new-arrival-badge">New Arrival</div>
+            )}
+          </div>
           <h1>{product.name}</h1>
           
           {/* Description with Read More on Mobile */}

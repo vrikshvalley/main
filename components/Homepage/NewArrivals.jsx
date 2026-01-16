@@ -35,9 +35,8 @@ export default function NewArrivals() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const { data: allProducts } = await getProducts({ sortBy: 'newest', pageSize: 500, inStock: false });
-        const newest = (allProducts || []).filter(p => p.newest === true).slice(0, 12);
-        setProducts(newest);
+        const { data: allProducts } = await getProducts({ new_arrival: true, pageSize: 12 });
+        setProducts(allProducts || []);
       } catch (error) {
         console.error('Error fetching new arrivals:', error);
       } finally {

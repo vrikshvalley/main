@@ -52,9 +52,8 @@ export default function FeaturedProducts() {
     const fetchProducts = async () => {
       try {
         const { data: allProducts } = await getProducts({ 
-          sortBy: 'featured',
-          pageSize: 8,
-          inStock: false
+          featured: true,
+          pageSize: 8
         });
         setProducts(allProducts || []);
       } catch (error) {

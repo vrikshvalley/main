@@ -270,19 +270,20 @@ export default function PlantDoctor() {
 
   return (
     <section className="plant-doctor-page">
-      {/* Hero Section */}
+      {/* Enhanced Hero Section with Alternating Image & Content */}
       <motion.div
         className="hero-section"
-        initial={{ opacity: 0, y: -50 }}
-        animate={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
       >
-        <div className="hero-content">
+        {/* First Block: Content Left, Image Right */}
+        <div className="hero-block">
           <motion.div
-            className="hero-text"
-            variants={slideInVariants}
-            initial="hidden"
-            animate="visible"
+            className="hero-text-content"
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
           >
             <span className="hero-eyebrow">Expert Plant Care Solutions</span>
             <h1>Meet Dr. Vriksh</h1>
@@ -292,33 +293,32 @@ export default function PlantDoctor() {
             <p className="hero-description">
               Your plants deserve expert care. Whether your favorite plant is struggling to survive or you're unsure how to nurture your new green companion, our network of certified horticulturists is here to rescue them and ensure they flourish.
             </p>
-            <motion.div
-              className="hero-cta-group"
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
+            <ul className="hero-benefits">
+              <li>✓ Real personalized solutions vs. generic YouTube tips</li>
+              <li>✓ 30-minute expert diagnosis and care planning</li>
+              <li>✓ Long-term plant survival guarantee approach</li>
+              <li>✓ Certified horticulturists with years of experience</li>
+            </ul>
+            <motion.button
+              className="cta-btn primary"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() =>
+                document
+                  .querySelector(".booking-section")
+                  ?.scrollIntoView({ behavior: "smooth" })
+              }
             >
-              <motion.button
-                className="cta-btn primary"
-                variants={itemVariants}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() =>
-                  document
-                    .querySelector(".booking-section")
-                    ?.scrollIntoView({ behavior: "smooth" })
-                }
-              >
-                Book Your Consultation
-              </motion.button>
-            </motion.div>
+              Book Your Consultation Now
+            </motion.button>
           </motion.div>
 
           <motion.div
             className="hero-image"
-            initial={{ opacity: 0, scale: 0.9 }}
+            initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            whileHover={{ scale: 1.03 }}
           >
             <picture>
               <source
@@ -327,7 +327,7 @@ export default function PlantDoctor() {
               />
               <Image
                 src="/PlantDoctorDesktop.png"
-                alt="Plant Doctor - Expert Consultation"
+                alt="Dr. Vriksh - Plant Doctor Expert"
                 width={500}
                 height={500}
                 priority
@@ -338,7 +338,7 @@ export default function PlantDoctor() {
         </div>
       </motion.div>
 
-      {/* Why Choose Dr. Vriksh Section */}
+      {/* Why Choose Dr. Vriksh - 2 Column Grid */}
       <motion.div
         className="why-section"
         initial={{ opacity: 0 }}
@@ -346,30 +346,36 @@ export default function PlantDoctor() {
         transition={{ duration: 0.8 }}
         viewport={{ once: true, margin: "-100px" }}
       >
-        <motion.h2
+        <motion.div
+          className="section-header"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          Why Choose Dr. Vriksh?
-        </motion.h2>
+          <h2>Why Choose Dr. Vriksh?</h2>
+          <p>Discover what sets our service apart from the rest</p>
+        </motion.div>
 
         <motion.div
-          className="features-grid"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
+          className="features-grid-2col"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true, margin: "-50px" }}
         >
           {serviceFeatures.map((feature, index) => (
             <motion.div
               key={index}
-              className="feature-card"
-              variants={itemVariants}
-              whileHover={{ y: -8, boxShadow: "0 12px 30px rgba(0,0,0,0.1)" }}
+              className="feature-card-2col"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              viewport={{ once: true }}
+              whileHover={{ y: -8, boxShadow: "0 12px 30px rgba(0,0,0,0.12)" }}
             >
-              <div className="feature-icon">{feature.icon}</div>
+              <div className="feature-number">{index + 1}</div>
+              <div className="feature-icon-2col">{feature.icon}</div>
               <h3>{feature.title}</h3>
               <p>{feature.description}</p>
             </motion.div>
@@ -377,34 +383,77 @@ export default function PlantDoctor() {
         </motion.div>
       </motion.div>
 
-      {/* How It Works Section */}
+      {/* Image Section 1 - Between Features and How It Works */}
       <motion.div
-        className="how-it-works"
+        className="image-showcase-section"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
         viewport={{ once: true, margin: "-100px" }}
       >
-        <motion.h2
+        <div className="showcase-content">
+          <motion.div
+            className="showcase-image"
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <picture>
+              <source media="(max-width: 768px)" srcSet="/PlantDoctorMobile/(1).png" />
+              <Image
+                src="/PlantDoctorDesktop/(1).png"
+                alt="Expert plant diagnosis in action"
+                width={600}
+                height={400}
+                priority={false}
+              />
+            </picture>
+          </motion.div>
+        </div>
+      </motion.div>
+
+      {/* How It Works - 2 Column Layout */}
+      <motion.div
+        className="how-it-works-section"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true, margin: "-100px" }}
+      >
+        <motion.div
+          className="section-header"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          How It Works
-        </motion.h2>
+          <h2>How It Works</h2>
+          <p>Simple steps to plant wellness</p>
+        </motion.div>
 
         <motion.div
-          className="steps-container"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
+          className="steps-2col-grid"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true, margin: "-50px" }}
         >
           {consultationSteps.map((item, index) => (
-            <motion.div key={index} className="step" variants={itemVariants}>
+            <motion.div
+              key={index}
+              className="step-card-2col"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              viewport={{ once: true }}
+              whileHover={{ 
+                y: -5,
+                boxShadow: "0 8px 24px rgba(41, 128, 102, 0.15)" 
+              }}
+            >
               <motion.div
-                className="step-number"
+                className="step-number-circle"
                 whileHover={{ scale: 1.2, rotate: 360 }}
                 transition={{ duration: 0.5 }}
               >
@@ -412,74 +461,42 @@ export default function PlantDoctor() {
               </motion.div>
               <h3>{item.title}</h3>
               <p>{item.description}</p>
-              {index < consultationSteps.length - 1 && (
-                <div className="step-arrow">→</div>
-              )}
             </motion.div>
           ))}
         </motion.div>
       </motion.div>
 
-      {/* Service Details Section */}
+      {/* Image Section 2 - Between How It Works and Booking */}
       <motion.div
-        className="service-details-section"
+        className="image-showcase-section"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
         viewport={{ once: true, margin: "-100px" }}
       >
-        <div className="details-grid">
+        <div className="showcase-content">
           <motion.div
-            className="detail-item"
-            variants={itemVariants}
-            initial="hidden"
-            whileInView="visible"
+            className="showcase-image"
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <div className="detail-icon">⏱️</div>
-            <h3>30-Minute Consultation</h3>
-            <p>In-depth expert analysis and personalized recommendations</p>
-          </motion.div>
-
-          <motion.div
-            className="detail-item"
-            variants={itemVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
-            <div className="detail-icon">📹</div>
-            <h3>Video Call Format</h3>
-            <p>Convenient online consultation from the comfort of your home</p>
-          </motion.div>
-
-          <motion.div
-            className="detail-item"
-            variants={itemVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
-            <div className="detail-icon">📋</div>
-            <h3>Care Plan Included</h3>
-            <p>Written care guide with specific instructions for your plants</p>
-          </motion.div>
-
-          <motion.div
-            className="detail-item"
-            variants={itemVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
-            <div className="detail-icon">✅</div>
-            <h3>Expert Certified</h3>
-            <p>Consultations from certified horticulturists with years of experience</p>
+            <picture>
+              <source media="(max-width: 768px)" srcSet="/PlantDoctorMobile/(2).png" />
+              <Image
+                src="/PlantDoctorDesktop/(2).png"
+                alt="Plant care consultation process"
+                width={600}
+                height={400}
+                priority={false}
+              />
+            </picture>
           </motion.div>
         </div>
       </motion.div>
 
-      {/* Booking Form Section */}
+      {/* Booking Section */}
       <motion.div
         className="booking-section"
         initial={{ opacity: 0 }}
@@ -504,12 +521,12 @@ export default function PlantDoctor() {
         <motion.form
           onSubmit={handleSubmit}
           className="booking-form"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true, margin: "-50px" }}
         >
-          <motion.div className="form-group" variants={itemVariants}>
+          <motion.div className="form-group" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ delay: 0.1 }}>
             <label htmlFor="name">Your Name</label>
             <input
               id="name"
@@ -521,7 +538,7 @@ export default function PlantDoctor() {
             />
           </motion.div>
 
-          <motion.div className="form-group" variants={itemVariants}>
+          <motion.div className="form-group" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ delay: 0.15 }}>
             <label htmlFor="email">Email</label>
             <input
               id="email"
@@ -533,7 +550,7 @@ export default function PlantDoctor() {
             />
           </motion.div>
 
-          <motion.div className="form-group" variants={itemVariants}>
+          <motion.div className="form-group" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ delay: 0.2 }}>
             <label htmlFor="phone">Phone (optional)</label>
             <input
               id="phone"
@@ -544,7 +561,7 @@ export default function PlantDoctor() {
             />
           </motion.div>
 
-          <motion.div className="form-row" variants={itemVariants}>
+          <motion.div className="form-row" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ delay: 0.25 }}>
             <div className="form-group">
               <label htmlFor="date">Preferred Date</label>
               <input
@@ -569,7 +586,6 @@ export default function PlantDoctor() {
 
           <motion.div
             className="form-submit"
-            variants={itemVariants}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
@@ -581,27 +597,144 @@ export default function PlantDoctor() {
         </motion.form>
       </motion.div>
 
-      {/* Trust Section */}
+      {/* Image Section 3 - Before Conclusion */}
       <motion.div
-        className="trust-section"
+        className="image-showcase-section"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
         viewport={{ once: true, margin: "-100px" }}
       >
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-        >
-          Trusted by Plant Parents Everywhere
-        </motion.h2>
-        <div className="trust-content">
-          <p>
-            Over 5,000+ successful consultations | 98% client satisfaction rate |
-            Expert network spanning diverse plant specialties
-          </p>
+        <div className="showcase-content">
+          <motion.div
+            className="showcase-image"
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <picture>
+              <source media="(max-width: 768px)" srcSet="/PlantDoctorMobile/(3).png" />
+              <Image
+                src="/PlantDoctorDesktop/(3).png"
+                alt="Healthy plants after consultation"
+                width={600}
+                height={400}
+                priority={false}
+              />
+            </picture>
+          </motion.div>
+        </div>
+      </motion.div>
+
+      {/* Conclusion Section */}
+      <motion.div
+        className="conclusion-section"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true, margin: "-100px" }}
+      >
+        <div className="conclusion-content">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            Transform Your Plants' Journey
+          </motion.h2>
+          
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            viewport={{ once: true }}
+            className="conclusion-intro"
+          >
+            Every plant has a story. Many come to us stressed, struggling, and on the brink. 
+            With our expert guidance, they transform into thriving, vibrant companions that bring 
+            joy and life to your space.
+          </motion.p>
+
+          <motion.div
+            className="conclusion-stats"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
+            <div className="stat-item">
+              <h3>5000+</h3>
+              <p>Successful Consultations</p>
+            </div>
+            <div className="stat-item">
+              <h3>98%</h3>
+              <p>Client Satisfaction</p>
+            </div>
+            <div className="stat-item">
+              <h3>100%</h3>
+              <p>Plant Recovery Rate</p>
+            </div>
+          </motion.div>
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            viewport={{ once: true }}
+            className="conclusion-closing"
+          >
+            Don't let another plant suffer. Your green companion deserves the best care. 
+            Connect with Dr. Vriksh today and witness the transformation.
+          </motion.p>
+
+          <motion.button
+            className="cta-btn primary large"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            viewport={{ once: true }}
+            onClick={() =>
+              document
+                .querySelector(".booking-section")
+                ?.scrollIntoView({ behavior: "smooth" })
+            }
+          >
+            Start Your Plant's Recovery Journey
+          </motion.button>
+        </div>
+      </motion.div>
+
+      {/* Image Section 4 - Final Inspirational Section */}
+      <motion.div
+        className="image-showcase-section"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true, margin: "-100px" }}
+      >
+        <div className="showcase-content">
+          <motion.div
+            className="showcase-image"
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <picture>
+              <source media="(max-width: 768px)" srcSet="/PlantDoctorMobile/(4).png" />
+              <Image
+                src="/PlantDoctorDesktop/(4).png"
+                alt="Success stories from plant doctor consultations"
+                width={600}
+                height={400}
+                priority={false}
+              />
+            </picture>
+          </motion.div>
         </div>
       </motion.div>
     </section>
