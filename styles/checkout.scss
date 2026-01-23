@@ -349,6 +349,62 @@
   }
 }
 
+// Inline Account Creation Section
+.inline-account-section {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(28, 158, 91, 0.03) 0%, rgba(249, 245, 241, 0.5) 100%);
+  border: 2px solid rgba($teal, 0.15);
+
+  h3 {
+    color: $dark-green;
+    font-size: 1.125rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+
+  .create-account-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+
+    input {
+      width: 100%;
+      padding: 0.875rem;
+      border: 2px solid rgba($teal, 0.2);
+      border-radius: 10px;
+      font-size: 0.9375rem;
+      background: white;
+      transition: all 0.2s ease;
+
+      &:focus {
+        outline: none;
+        border-color: $teal;
+        box-shadow: 0 0 0 3px rgba(28, 158, 91, 0.1);
+      }
+
+      &::placeholder {
+        color: rgba($dark-green, 0.4);
+      }
+
+      &[type='email'],
+      &[type='tel'] {
+        // Full width on single row
+      }
+
+      &[type='password'] {
+        // Two columns
+      }
+    }
+
+    @media (max-width: 640px) {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
 // Step Actions
 .step-actions {
   display: flex;
@@ -389,6 +445,17 @@
       background: color.adjust($teal, $lightness: -5%);
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(28, 158, 91, 0.3);
+    }
+  }
+
+  .btn-ghost {
+    background: transparent;
+    border: 2px solid $teal;
+    color: $teal;
+
+    &:hover:not(:disabled) {
+      background: rgba(28, 158, 91, 0.08);
+      border-color: color.adjust($teal, $lightness: -5%);
     }
   }
 }
@@ -506,6 +573,16 @@
 
     button {
       width: 100%;
+    }
+  }
+
+  .inline-account-section {
+    .create-account-form {
+      grid-template-columns: 1fr;
+    }
+
+    .step-actions {
+      flex-direction: column;
     }
   }
 

@@ -735,6 +735,85 @@
       }
     }
 
+    // Date selection buttons
+    .date-buttons-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+      gap: 0.75rem;
+
+      @media (max-width: 768px) {
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+        gap: 0.5rem;
+      }
+
+      .date-btn {
+        padding: 0.8rem 0.5rem;
+        background: $white;
+        border: 2px solid rgba($deep-green, 0.2);
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 500;
+        color: $deep-green;
+        transition: all 0.3s ease;
+        text-align: center;
+
+        &:hover {
+          border-color: $teal;
+          background: rgba($teal, 0.05);
+        }
+
+        &.active {
+          background: $teal;
+          color: $white;
+          border-color: $teal;
+          box-shadow: 0 4px 12px rgba($teal, 0.3);
+        }
+
+        .date-label {
+          display: block;
+          font-size: 0.9rem;
+        }
+      }
+    }
+
+    // Time selection buttons
+    .time-buttons-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+
+      @media (max-width: 768px) {
+        gap: 0.75rem;
+      }
+
+      .time-btn {
+        padding: 1rem;
+        background: $white;
+        border: 2px solid rgba($deep-green, 0.2);
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        color: $deep-green;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        text-align: center;
+
+        &:hover {
+          border-color: $teal;
+          background: rgba($teal, 0.05);
+          transform: translateY(-2px);
+        }
+
+        &.active {
+          background: $teal;
+          color: $white;
+          border-color: $teal;
+          box-shadow: 0 4px 12px rgba($teal, 0.3);
+          transform: translateY(-2px);
+        }
+      }
+    }
+
     .form-submit {
       margin-top: 2rem;
       display: flex;

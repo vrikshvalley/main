@@ -63,7 +63,11 @@ export default function ProductPageTabs({ product }) {
                 </button>
                 {isBoxOpen && (
                   <div className="dropdown-content">
-                    <p>{product.whatsInTheBox}</p>
+                    <ul className="points-list">
+                      {product.whatsInTheBox.split(',').map((item, index) => (
+                        <li key={index}>{item.trim()}</li>
+                      ))}
+                    </ul>
                   </div>
                 )}
               </div>
@@ -81,7 +85,11 @@ export default function ProductPageTabs({ product }) {
                 </button>
                 {isCareOpen && (
                   <div className="dropdown-content">
-                    <p className="care-details">{product.additionalDetails}</p>
+                    <ul className="points-list">
+                      {product.additionalDetails.split(',').map((item, index) => (
+                        <li key={index}>{item.trim()}</li>
+                      ))}
+                    </ul>
                   </div>
                 )}
               </div>

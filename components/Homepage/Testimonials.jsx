@@ -35,7 +35,7 @@ const testimonialsData = [
     name: 'Dhiman Datta',
     username: '',
     avatar: '/DhimanDatta.jpeg',
-    text: 'Vriksh Valley is a one-stop solution for all your gardening needs. The experience was smooth, from ordering to the delivery and post-delivery follow-ups-all thanks to the Vriksh Valley Team.',
+    text: 'Vriksh Valley seems to me a one-stop solution for gardening. The experience was smooth, from ordering till the delivery and post-delivery follow-ups. All thanks to the Vriksh Valley Team.',
   },
   {
     id: 5,
@@ -49,7 +49,7 @@ const testimonialsData = [
     name: 'Nilanjan Hazarika',
     username: '',
     avatar: '/NilanjanHazarika.jpeg',
-    text: 'Vriksh Valley is a one-stop solution for all your gardening needs. The experience was smooth, from ordering to the delivery and post-delivery follow-ups-all thanks to the Vriksh Valley Team.',
+    text: 'Picked up a plant from this store and it instantly became the freshest corner of my home. Healthy, well-packed, and clearly chosen with care. Loved the experience!',
   },
   {
     id: 7,

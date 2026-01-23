@@ -11,7 +11,6 @@ import Breadcrumbs from '@/components/general/Breadcrumbs';
 import { getProducts, getPriceRange } from '@/lib/productHelpers';
 import { getCategories } from '@/lib/services/productService';
 import { ChevronDown, X, Grid, List, Search } from 'lucide-react';
-import SearchBar from '@/components/general/SearchBar';
 import TheLoader from '@/components/general/TheLoader';
 import ProductListCard from '@/components/products/ProductListCard';
 import '@/styles/products.scss';
@@ -109,6 +108,11 @@ export default function SubcategoryPage() {
         product.description?.toLowerCase().includes(query) ||
         product.category?.toLowerCase().includes(query)
       );
+    }
+
+    // Filter premium-collection to show only products over ₹499
+    if (subcategorySlug === 'premium-collection') {
+      filteredProducts = filteredProducts.filter(product => product.price > 499);
     }
 
     setProducts(filteredProducts);
@@ -348,7 +352,30 @@ export default function SubcategoryPage() {
               
               <div className="toolbar-center">
                 <div className="toolbar-search">
-                  <SearchBar />
+                  <Search size={18} />
+                  <input
+                    type="text"
+                    placeholder="Search products..."
+                    value={searchQuery}
+                    onChange={(e) => {
+                      setSearchQuery(e.target.value);
+                      setCurrentPage(1);
+                    }}
+                    aria-label="Search products"
+                  />
+                  {searchQuery && (
+                    <button
+                      type="button"
+                      className="clear-search"
+                      onClick={() => {
+                        setSearchQuery('');
+                        setCurrentPage(1);
+                      }}
+                      aria-label="Clear search"
+                    >
+                      <X size={16} />
+                    </button>
+                  )}
                 </div>
               </div>
               

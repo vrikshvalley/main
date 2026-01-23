@@ -188,6 +188,34 @@
           margin: 0;
           white-space: pre-line;
         }
+
+        .points-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+
+          li {
+            color: rgba($dark-green, 0.9);
+            line-height: 1.8;
+            font-size: 1rem;
+            padding: 0.5rem 0 0.5rem 1.75rem;
+            position: relative;
+            margin-bottom: 0.5rem;
+
+            &:before {
+              content: '•';
+              position: absolute;
+              left: 0.5rem;
+              color: $accent-primary;
+              font-weight: bold;
+              font-size: 1.25rem;
+            }
+
+            &:last-child {
+              margin-bottom: 0;
+            }
+          }
+        }
       }
 
       @keyframes slideDown {

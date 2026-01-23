@@ -49,6 +49,7 @@ export default function ProductListCard({ product, viewMode = 'grid' }) {
       name: product.name,
       price: productPrice,
       image: getImageSrc(product.images?.[0]),
+      qty: 1,
       quantity: 1,
     }));
   };

@@ -7,7 +7,8 @@ import { useDispatch } from "react-redux";
 import { addItem } from "@/lib/slices/cartSlice";
 import { showSuccessToast, showErrorToast } from "@/lib/toastHelpers";
 import Image from "@/components/general/ImgWithLoader";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { ChevronDown } from "lucide-react";
 import "@/styles/plantDoctor.scss";
 
 const PLANT_DOCTOR_PRODUCT = {
@@ -15,7 +16,7 @@ const PLANT_DOCTOR_PRODUCT = {
   name: "Plant Doctor - Expert Consultation",
   category: "Plant Care",
   description: "Book a 30-minute expert plant consultation. Get personalized diagnosis, care plan and recommendations from our certified plant experts. Perfect for troubleshooting plant issues, understanding plant care requirements, and getting expert guidance on plant selection.",
-  price: 499,
+  price: 49,
   images: ["/PlantDoctorDesktop.png"],
   stock: 1000,
 };
@@ -66,6 +67,30 @@ const consultationSteps = [
   },
 ];
 
+// Helper function to get next 7 days
+const getNext7Days = () => {
+  const days = [];
+  const today = new Date();
+  for (let i = 0; i < 7; i++) {
+    const date = new Date(today);
+    date.setDate(date.getDate() + i);
+    days.push(date);
+  }
+  return days;
+};
+
+const formatDateDisplay = (date, index) => {
+  if (index === 0) return 'Today';
+  return date.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' });
+};
+
+const formatDateForStorage = (date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
 export default function PlantDoctor() {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -80,6 +105,7 @@ export default function PlantDoctor() {
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(false);
   const [expandDescription, setExpandDescription] = useState(false);
+  const [openFAQ, setOpenFAQ] = useState(null);
 
   const PRICE = PLANT_DOCTOR_PRODUCT.price;
 
@@ -561,26 +587,44 @@ export default function PlantDoctor() {
             />
           </motion.div>
 
-          <motion.div className="form-row" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ delay: 0.25 }}>
-            <div className="form-group">
-              <label htmlFor="date">Preferred Date</label>
-              <input
-                id="date"
-                type="date"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                required
-              />
+          {/* Date Selection - Buttons */}
+          <motion.div className="form-group" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ delay: 0.25 }}>
+            <label>Preferred Date</label>
+            <div className="date-buttons-grid">
+              {getNext7Days().map((d, index) => (
+                <motion.button
+                  key={index}
+                  type="button"
+                  className={`date-btn ${date === formatDateForStorage(d) ? 'active' : ''}`}
+                  onClick={() => setDate(formatDateForStorage(d))}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <span className="date-label">{formatDateDisplay(d, index)}</span>
+                </motion.button>
+              ))}
             </div>
-            <div className="form-group">
-              <label htmlFor="time">Preferred Time</label>
-              <input
-                id="time"
-                type="time"
-                value={time}
-                onChange={(e) => setTime(e.target.value)}
-                required
-              />
+          </motion.div>
+
+          {/* Time Selection - Buttons */}
+          <motion.div className="form-group" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ delay: 0.3 }}>
+            <label>Preferred Time</label>
+            <div className="time-buttons-grid">
+              {['12:00', '15:00', '17:00'].map((t) => {
+                const displayTime = t === '12:00' ? '12 PM' : t === '15:00' ? '3 PM' : '5 PM';
+                return (
+                  <motion.button
+                    key={t}
+                    type="button"
+                    className={`time-btn ${time === t ? 'active' : ''}`}
+                    onClick={() => setTime(t)}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    {displayTime}
+                  </motion.button>
+                );
+              })}
             </div>
           </motion.div>
 
@@ -735,6 +779,68 @@ export default function PlantDoctor() {
               />
             </picture>
           </motion.div>
+        </div>
+      </motion.div>
+      {/* FAQ Section - Meet Dr. Vriksh */}
+      <motion.div
+        className="faq-section"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true, margin: "-100px" }}
+      >
+        <div className="faq-content">
+          <motion.div
+            className="section-header"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <h2>Frequently Asked Questions</h2>
+            <p>Everything you need to know about Dr. Vriksh</p>
+          </motion.div>
+
+          <div className="faqs-grid">
+            <motion.div
+              className={`faq-item ${openFAQ === 1 ? 'active' : ''}`}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              <button
+                className="faq-question"
+                onClick={() => setOpenFAQ(openFAQ === 1 ? null : 1)}
+                aria-expanded={openFAQ === 1}
+              >
+                <span className="question-number">01</span>
+                <span className="question-text">Meet Dr. Vriksh. Where Plant Survival Becomes Plant Thriving.</span>
+                <ChevronDown 
+                  className={`chevron ${openFAQ === 1 ? 'rotated' : ''}`}
+                  size={20}
+                />
+              </button>
+
+              <AnimatePresence>
+                {openFAQ === 1 && (
+                  <motion.div
+                    className="faq-answer"
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    <div className="answer-content">
+                      <p>
+                        Your plant is wilting. You're scrolling through Google at 11 PM. You've already tried everything you found on YouTube. This is where most plant parents give up. Dr. Vriksh doesn't let them. We're a network of certified horticulturists who believe every plant—and every plant parent—deserves expert care. Not generic tips. Not one-size-fits-all solutions. Real expertise. Real answers. Real transformation. Through 15-minute video consultations, we diagnose what's actually wrong, create personalized care plans, and guide you toward long-term success. Because your plant didn't choose to struggle. And neither should you. Whether you're rescuing a dying plant or preventing the next failure, Dr. Vriksh is your partner in green growth.
+                      </p>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          </div>
         </div>
       </motion.div>
     </section>

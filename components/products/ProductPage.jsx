@@ -63,6 +63,7 @@ export default function ProductPage({ product }) {
       name: product.name,
       price: currentPrice,
       image: product.images?.[0],
+      qty: quantity,
       quantity: quantity,
       color: selectedColor,
       size: selectedSize,
@@ -78,6 +79,7 @@ export default function ProductPage({ product }) {
       name: product.name,
       price: currentPrice,
       image: product.images?.[0],
+      qty: quantity,
       quantity: quantity,
       color: selectedColor,
       size: selectedSize,
@@ -194,7 +196,7 @@ export default function ProductPage({ product }) {
           ) : (
             <div className="price-section">
               <p className="price">₹{currentPrice}</p>
-              {selectedVariant && (
+              {selectedVariant && selectedVariant.label && !/option/i.test(selectedVariant.label) && (
                 <p className="variant-label">({selectedVariant.label})</p>
               )}
             </div>
@@ -218,15 +220,21 @@ export default function ProductPage({ product }) {
           {product.sizes && product.sizes.length > 0 && (
             <div className="option-group">
               <label>Select Size:</label>
-              <div className="options size-options">
+              <div className="size-options-grid">
                 {product.sizes.map((size) => (
-                  <button
-                    key={size}
-                    className={`option-btn ${selectedSize === size ? 'active' : ''}`}
-                    onClick={() => setSelectedSize(size)}
-                  >
-                    {size}
-                  </button>
+                  <label key={size} className="size-option-label">
+                    <input
+                      type="radio"
+                      name="size"
+                      value={size}
+                      checked={selectedSize === size}
+                      onChange={() => setSelectedSize(size)}
+                      style={{ display: 'none' }}
+                    />
+                    <span className={`size-option-btn ${selectedSize === size ? 'active' : ''}`}>
+                      {size}
+                    </span>
+                  </label>
                 ))}
               </div>
             </div>
@@ -236,22 +244,76 @@ export default function ProductPage({ product }) {
           {product.colors && product.colors.length > 0 && (
             <div className="option-group">
               <label>Select Color:</label>
-              <div className="options color-options">
-                {product.colors.map((color) => (
-                  <button
-                    key={color}
-                    className={`option-btn ${selectedColor === color ? 'active' : ''}`}
-                    onClick={() => setSelectedColor(color)}
-                  >
-                    {color}
-                  </button>
-                ))}
+              <div className="color-options-grid">
+                {product.colors.map((color) => {
+                  // Convert color name to hex or use as-is if it's already a hex code
+                  const colorMap = {
+                    'Red': '#EF4444',
+                    'Blue': '#3B82F6',
+                    'Green': '#10B981',
+                    'Black': '#1F2937',
+                    'White': '#F5F5F5',
+                    'Yellow': '#FBBF24',
+                    'Purple': '#8B5CF6',
+                    'Pink': '#EC4899',
+                    'Orange': '#F97316',
+                    'Brown': '#92400E',
+                    'Gray': '#9CA3AF',
+                    'Navy': '#000080',
+                    'Teal': '#14B8A6',
+                    'Beige': '#F5F5DC',
+                    'Cream': '#FFFDD0',
+                    'Olive': '#6B7280',
+                  };
+                  const colorValue = colorMap[color] || color.toLowerCase().replace(/\\s+/g, '');
+
+                  // determine readable text color for swatch (simple luminance check for hex)
+                  let textColor = '#fff';
+                  try {
+                    if (typeof colorValue === 'string' && colorValue.startsWith('#')) {
+                      const hex = colorValue.replace('#', '');
+                      const r = parseInt(hex.substring(0, 2), 16);
+                      const g = parseInt(hex.substring(2, 4), 16);
+                      const b = parseInt(hex.substring(4, 6), 16);
+                      const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+                      textColor = luminance > 0.75 ? '#333' : '#fff';
+                    } else if (colorValue === 'white' || colorValue === '#F5F5F5' || colorValue === '#FFFDD0' || colorValue === 'beige' || colorValue === 'cream') {
+                      textColor = '#333';
+                    }
+                  } catch (e) {
+                    textColor = '#fff';
+                  }
+
+                  return (
+                    <label key={color} className="color-option-label">
+                      <input
+                        type="radio"
+                        name="color"
+                        value={color}
+                        checked={selectedColor === color}
+                        onChange={() => setSelectedColor(color)}
+                        style={{ display: 'none' }}
+                      />
+                      <span
+                        className={`color-swatch ${selectedColor === color ? 'active' : ''}`}
+                        style={{
+                          backgroundColor: colorValue,
+                          color: textColor,
+                          border: colorValue === '#F5F5F5' || colorValue === '#FFFDD0' ? '2px solid #ccc' : undefined
+                        }}
+                        title={color}
+                      >
+                        <span className="color-swatch-label">{color}</span>
+                      </span>
+                    </label>
+                  );
+                })}
               </div>
             </div>
           )}
 
           {/* Variant selection (for products with price variants) - excluding default */}
-          {filteredVariants && filteredVariants.length > 0 && (
+          {filteredVariants && filteredVariants.length > 1 && (
             <div className="option-group">
               <label>Select Variant:</label>
               <div className="options variant-options">
@@ -267,7 +329,11 @@ export default function ProductPage({ product }) {
                     : ''}`}
                     onClick={() => setSelectedVariant(variant)}
                   >
-                    {variant.label || variant.name} - ₹{variant.price}
+                    {(() => {
+                      const displayLabel = (variant.label || variant.name || '').trim();
+                      const showLabel = displayLabel && !/option/i.test(displayLabel);
+                      return showLabel ? `${displayLabel} - ₹${variant.price}` : `₹${variant.price}`;
+                    })()}
                   </button>
                 ))}
               </div>

@@ -9,6 +9,10 @@ import { showSuccessToast, showErrorToast } from '@/lib/toastHelpers';
 import { clearCart } from '@/lib/slices/cartSlice';
 import TheLoader from '@/components/general/TheLoader';
 import '@/styles/checkout.scss';
+import { auth } from '@/lib/firebaseConfig';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { mergeAndSyncCart, loadCartFromLocalStorage } from '@/lib/cartUtils';
+import { setCart } from '@/lib/slices/cartSlice';
 
 const CheckoutPage = () => {
   const router = useRouter();
@@ -20,6 +24,12 @@ const CheckoutPage = () => {
   const [loading, setLoading] = useState(true);
   const [processing, setProcessing] = useState(false);
   const [profile, setProfile] = useState(null);
+  // Inline account creation for guest users
+  const [createEmail, setCreateEmail] = useState('');
+  const [createPhone, setCreatePhone] = useState('');
+  const [createPassword, setCreatePassword] = useState('');
+  const [createConfirm, setCreateConfirm] = useState('');
+  const [creatingAccount, setCreatingAccount] = useState(false);
 
   // Address step
   const [selectedAddress, setSelectedAddress] = useState(null);
@@ -42,8 +52,9 @@ const CheckoutPage = () => {
     const initializeCheckout = async () => {
       if (authLoading) return;
 
+      // Allow guests to start checkout; if not logged in we'll offer inline account creation
       if (!user) {
-        router.push('/auth/signin');
+        setLoading(false);
         return;
       }
 
@@ -66,6 +77,49 @@ const CheckoutPage = () => {
 
     initializeCheckout();
   }, [user, authLoading, cartItems, router]);
+
+  const handleCreateAccountAndProceed = async () => {
+    if (!createEmail || !createPhone || !createPassword || !createConfirm) {
+      showErrorToast('Please fill all account fields');
+      return;
+    }
+    if (createPassword !== createConfirm) {
+      showErrorToast('Passwords do not match');
+      return;
+    }
+
+    setCreatingAccount(true);
+    try {
+      // Create Firebase Auth user
+      const cred = await createUserWithEmailAndPassword(auth, createEmail, createPassword);
+      const newUser = cred.user;
+
+      // Build profile object (include address if selected)
+      const profilePayload = {
+        id: newUser.uid,
+        email: createEmail,
+        phone: createPhone,
+        name: '',
+        address: selectedAddress ? [selectedAddress] : [],
+      };
+
+      await userService.createProfile(profilePayload);
+
+      // Merge guest cart with user cart and set into redux
+      const guestCart = loadCartFromLocalStorage();
+      const mergedCart = await mergeAndSyncCart(newUser.uid, guestCart);
+      dispatch(setCart(mergedCart));
+
+      showSuccessToast('Account created — continuing to payment');
+      // small delay to allow auth state propagation
+      setTimeout(() => setStep(2), 400);
+    } catch (err) {
+      console.error('Create account error', err);
+      showErrorToast(err.message || 'Could not create account');
+    } finally {
+      setCreatingAccount(false);
+    }
+  };
 
   // Check for payment callback
   useEffect(() => {
@@ -391,10 +445,33 @@ const CheckoutPage = () => {
               </form>
             )}
 
-            <div className="step-actions">
-              <button className="btn-primary" onClick={handleProceedToPayment} disabled={!selectedAddress}>
-                Proceed to Payment
-              </button>
+            {/* If guest, show inline account creation or continue-as-guest options */}
+            <div className="inline-account-section">
+              {!user ? (
+                <>
+                  <h3>Create an account to save your details</h3>
+                  <div className="create-account-form">
+                    <input type="email" placeholder="Email" value={createEmail} onChange={(e) => setCreateEmail(e.target.value)} />
+                    <input type="tel" placeholder="Phone" value={createPhone} onChange={(e) => setCreatePhone(e.target.value)} />
+                    <input type="password" placeholder="Password" value={createPassword} onChange={(e) => setCreatePassword(e.target.value)} />
+                    <input type="password" placeholder="Confirm Password" value={createConfirm} onChange={(e) => setCreateConfirm(e.target.value)} />
+                  </div>
+                  <div className="step-actions">
+                    <button className="btn-primary" onClick={handleCreateAccountAndProceed} disabled={!selectedAddress || creatingAccount}>
+                      {creatingAccount ? 'Creating account...' : 'Create account & Continue'}
+                    </button>
+                    <button className="btn-ghost" onClick={() => { setProfile({ name: '', email: createEmail, phone: createPhone }); setStep(2); }} disabled={!selectedAddress || !createEmail || !createPhone}>
+                      Continue as guest
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <div className="step-actions">
+                  <button className="btn-primary" onClick={handleProceedToPayment} disabled={!selectedAddress}>
+                    Proceed to Payment
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         )}

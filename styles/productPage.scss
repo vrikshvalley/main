@@ -223,6 +223,7 @@
       .swiper-slide {
         width: auto !important;
         flex-shrink: 0;
+        height: auto;
       }
 
       .swiper-slide {
@@ -236,7 +237,7 @@
           opacity: 1;
           
           .thumb-wrapper {
-            border: 2px solid $accent-primary;
+            border: 3px solid $accent-primary;
             box-shadow: $shadow-glow;
           }
         }
@@ -245,27 +246,43 @@
       
       .thumb-wrapper {
         position: relative;
-        border-radius: 8px;
-        border: 2px solid transparent;
+        border-radius: 12px;
+        border: 3px solid rgba($dark-green, 0.2);
         transition: all 0.3s;
+        width: 80px;
+        height: 80px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        @media (max-width: 768px) {
+          width: 70px;
+          height: 70px;
+          border-radius: 10px;
+        }
 
         @media (max-width: 480px) {
-          border-radius: 6px;
+          width: 60px;
+          height: 60px;
+          border-radius: 8px;
         }
 
         &.active {
-          border: 2px solid $accent-primary;
-          box-shadow: $shadow-glow;
+          border: 3px solid $accent-primary;
+          box-shadow: 0 6px 16px rgba($teal, 0.4), inset 0 0 0 2px $white;
         }
 
         img {
-          border-radius: 8px;
+          border-radius: 10px;
           display: block;
           width: 100%;
-          height: auto;
+          height: 100%;
+          object-fit: cover;
+          object-position: center;
 
           @media (max-width: 480px) {
-            border-radius: 6px;
+            border-radius: 8px;
           }
         }
       }
@@ -546,7 +563,6 @@
         text-transform: uppercase;
         font-size: 0.875rem;
         letter-spacing: 0.5px;
-      } letter-spacing: 0.5px;
       }
 
       .options {
@@ -590,6 +606,150 @@
         }
       }
 
+      // Size options with improved styling
+      .size-options-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(80px, 80px));
+        gap: 0.75rem;
+        justify-content: start;
+
+        .size-option-label {
+          display: flex;
+          cursor: pointer;
+          width: 80px;
+          height: 80px;
+
+          .size-option-btn {
+            width: 100%;
+            height: 100%;
+            padding: 6px 8px;
+            border: 3px solid rgba($dark-green, 0.2);
+            border-radius: 12px;
+            background: rgba($white, 0.9);
+            color: $dark-green;
+            font-weight: 600;
+            /* responsive, consistent font that scales but remains readable */
+            font-size: clamp(0.7rem, 1.6vw, 0.95rem);
+            line-height: 1.05;
+            transition: all 0.3s ease;
+            text-align: center;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            white-space: normal;
+            word-break: break-word;
+
+            &:hover {
+              border-color: $teal;
+              background: rgba($teal, 0.05);
+              box-shadow: 0 4px 12px rgba($teal, 0.3);
+              transform: scale(1.05);
+            }
+
+            @media (max-width: 768px) {
+              font-size: clamp(0.65rem, 2.2vw, 0.9rem);
+            }
+
+            @media (max-width: 480px) {
+              font-size: 0.78rem;
+              padding: 4px 6px;
+            }
+          }
+        }
+
+        .size-option-label input:checked + .size-option-btn {
+          background: $teal;
+          color: $white;
+          border-color: $teal;
+          border-width: 3px;
+          box-shadow: 0 6px 16px rgba($teal, 0.4), inset 0 0 0 2px $white;
+          transform: scale(1.08);
+        }
+      
+        // Reduce size squares on very small screens so labels fit and squares remain consistent
+        @media (max-width: 480px) {
+          .size-option-label {
+            width: 64px;
+            height: 64px;
+          }
+
+          .size-option-label .size-option-btn {
+            font-size: 0.72rem;
+            padding: 4px 6px;
+          }
+        }
+
+        @media (max-width: 360px) {
+          .size-option-label {
+            width: 56px;
+            height: 56px;
+          }
+
+          .size-option-label .size-option-btn {
+            font-size: 0.66rem;
+            padding: 3px 5px;
+          }
+        }
+      }
+
+      // Color options with color swatches
+      .color-options-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(80px, 80px));
+        gap: 0.75rem;
+        justify-content: start;
+
+        .color-option-label {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          width: 80px;
+          height: 80px;
+
+          .color-swatch {
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+            border: 3px solid rgba($dark-green, 0.15);
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 6px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            line-height: 1.1;
+            color: #fff;
+
+            &:hover {
+              border-color: $teal;
+              box-shadow: 0 6px 14px rgba($teal, 0.18);
+              transform: translateY(-2px) scale(1.02);
+            }
+
+            &.active {
+              border-color: $teal;
+              box-shadow: 0 8px 20px rgba($teal, 0.22), inset 0 0 0 2px rgba($white, 0.15);
+              transform: translateY(-2px) scale(1.03);
+            }
+
+            .color-swatch-label {
+              display: block;
+              width: 100%;
+              padding: 0 4px;
+              word-break: break-word;
+            }
+          }
+        }
+      }
+
       .quantity-controls {
         display: flex;
         align-items: center;
@@ -626,11 +786,13 @@
             color: $accent-primary;
           }
         }
+
         input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
+        input[type="number"]::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+
         input {
           flex: 1;
           appearance: none;
@@ -784,6 +946,7 @@ input[type="number"]::-webkit-inner-spin-button {
       }
     }
   }
+}
 
 
 // Loading and Error Containers
