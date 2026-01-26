@@ -30,6 +30,16 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+// Ensure images and media preserve aspect ratio when resized via CSS
+img,
+picture img,
+video,
+svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
 html {
   overflow-x: hidden;
   width: 100%;

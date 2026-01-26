@@ -4,6 +4,8 @@ import { auth } from '@/lib/firebaseConfig';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import TheLoader from '@/components/general/TheLoader';
+import Button from '@/components/general/Button';
+import ConfirmModal from '@/components/general/ConfirmModal';
 import Image from 'next/image';
 import '@/styles/profile.scss';
 import '@/styles/profileComponents.scss';
@@ -17,6 +19,7 @@ import SecuritySettings from '@/components/profile/SecuritySettings';
 
 import * as userService from '@/lib/services/userService';
 import { showSuccessToast, showErrorToast } from '@/lib/toastHelpers';
+import { useConfirmModal } from '@/lib/hooks/useConfirmModal';
 
 const ProfilePage = () => {
   const [profile, setProfile] = useState(null);
@@ -24,12 +27,16 @@ const ProfilePage = () => {
   const [user, setUser] = useState(null);
   const router = useRouter();
   
+  // Confirmation modal hook
+  const confirmModal = useConfirmModal();
+  
   // UI states
   const [nameForm, setNameForm] = useState('');
   const [editingAddress, setEditingAddress] = useState(null);
   const [showAddAddress, setShowAddAddress] = useState(false);
   const [showUpdateName, setShowUpdateName] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
+  const [pendingAddressId, setPendingAddressId] = useState(null);
 
   // local helper uses centralized toast helpers
   const toastSuccess = (msg) => showSuccessToast(msg);
@@ -101,41 +108,58 @@ const ProfilePage = () => {
     return res;
   };
 
- const handleDeleteAddress = async (addressId) => {
-    if (!confirm('Delete this address?')) return;
-    const res = await userService.deleteAddress(user.uid, addressId);
-    if (res.error) return toastError('Error deleting address');
-    const updatedProfile = res.data?.[0] || profile;
-    setProfile(updatedProfile);
-    toastSuccess('Address deleted');
- };
+  const handleDeleteAddress = async (addressId) => {
+    setPendingAddressId(addressId);
+    confirmModal.open({
+      type: 'warning',
+      title: 'Delete Address',
+      message: 'Are you sure you want to delete this address? This action cannot be undone.',
+      confirmText: 'Delete',
+      cancelText: 'Keep it',
+      onConfirm: async () => {
+        const res = await userService.deleteAddress(user.uid, addressId);
+        if (res.error) {
+          toastError('Error deleting address');
+          return;
+        }
+        const updatedProfile = res.data?.[0] || profile;
+        setProfile(updatedProfile);
+        toastSuccess('Address deleted successfully');
+        setPendingAddressId(null);
+      },
+      onCancel: () => {
+        setPendingAddressId(null);
+      },
+    });
+  };
 
   
 
   const handleDeactivateAccount = async () => {
-    if (!confirm('Are you sure you want to deactivate your account?')) return;
-    
-    const confirmation = prompt('Type "DELETE" to confirm account deletion:');
-    if (confirmation !== 'DELETE') {
-      showErrorToast('Deactivation cancelled');
-      return;
-    }
+    confirmModal.open({
+      type: 'danger',
+      title: 'Deactivate Account',
+      message: 'This will permanently delete your account and all associated data. This action cannot be undone.',
+      confirmText: 'Deactivate',
+      cancelText: 'Cancel',
+      onConfirm: async () => {
+        try {
+          const res = await userService.deleteProfile(user.uid);
+          
+          if (res.error) {
+            toastError('Error deactivating account');
+            return;
+          }
 
-    try {
-      // Delete user profile from Firebase
-      const res = await userService.deleteProfile(user.uid);
-      
-      if (res.error) {
-        showErrorToast('Error deactivating account');
-      } else {
-        await signOut(auth);
-        router.push('/');
-        showSuccessToast('Account deleted successfully');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      showErrorToast('Error deactivating account');
-    }
+          await signOut(auth);
+          router.push('/');
+          toastSuccess('Account deleted successfully');
+        } catch (error) {
+          console.error('Error:', error);
+          toastError('Error deactivating account');
+        }
+      },
+    });
   };
 
   const handleLogout = async () => {
@@ -155,7 +179,7 @@ const ProfilePage = () => {
     return (
       <div className="profilePage">
         <div className="brandHeader">
-          <Image src="/white-logo.png" alt="Vriksh Valley" width={60} height={60} className="logo" />
+          <Image src="/big-logo.png" alt="Vriksh Valley" width={60} height={60} className="logo" />
           <div className="brandInfo">
             <h1>Vriksh Valley</h1>
             <p>Pure. Organic. Natural.</p>
@@ -206,9 +230,9 @@ const ProfilePage = () => {
                   minLength={2}
                 />
               </div>
-              <button type="submit" className="submitBtn">
+              <Button type="submit" variant="primary" size="lg" fullWidth>
                 Complete Profile Setup
-              </button>
+              </Button>
             </form>
           </div>
         </div>
@@ -280,15 +304,29 @@ const ProfilePage = () => {
                 />
               </div>
               <div className="buttonGroup">
-                <button type="button" className="cancel" onClick={() => setShowUpdateName(false)}>
+                <Button type="button" variant="ghost" size="md" onClick={() => setShowUpdateName(false)}>
                   Cancel
-                </button>
-                <button type="submit" className="submit">Update</button>
+                </Button>
+                <Button type="submit" variant="primary" size="md">Update</Button>
               </div>
             </form>
           </div>
         </div>
       )}
+
+      {/* Confirmation Modal */}
+      <ConfirmModal
+        isOpen={confirmModal.isOpen}
+        type={confirmModal.modalProps.type}
+        title={confirmModal.modalProps.title}
+        message={confirmModal.modalProps.message}
+        confirmText={confirmModal.modalProps.confirmText}
+        cancelText={confirmModal.modalProps.cancelText}
+        loading={confirmModal.modalProps.loading}
+        onConfirm={confirmModal.confirm}
+        onCancel={confirmModal.cancel}
+        showIcon={confirmModal.modalProps.showIcon}
+      />
     </div>
   );
 };

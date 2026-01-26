@@ -9,6 +9,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Button from '@/components/general/Button';
 import '@/styles/addressCollectionModal.scss';
 
 export default function AddressCollectionModal({ user, onComplete, onSkip }) {
@@ -331,21 +332,21 @@ export default function AddressCollectionModal({ user, onComplete, onSkip }) {
         <div className="modal-footer">
           <div className="footer-actions">
             {step > 1 && (
-              <button className="btn-secondary" onClick={handleBack}>
+              <Button variant="secondary" size="md" onClick={handleBack}>
                 Back
-              </button>
+              </Button>
             )}
             
             <div className="footer-right">
               {step === 1 && (
-                <button className="btn-text" onClick={onSkip}>
+                <Button variant="ghost" size="md" onClick={onSkip}>
                   Skip for now
-                </button>
+                </Button>
               )}
               
-              <button className="btn-primary" onClick={handleNext}>
+              <Button variant="primary" size="md" onClick={handleNext}>
                 {step === totalSteps ? 'Save Address' : 'Next'}
-              </button>
+              </Button>
             </div>
           </div>
         </div>

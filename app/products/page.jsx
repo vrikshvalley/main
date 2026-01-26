@@ -7,6 +7,7 @@ import { getProducts, getPriceRange } from '@/lib/productHelpers';
 import { getCategories } from '@/lib/services/productService';
 import { ChevronDown, X, Grid, List, Search } from 'lucide-react';
 import TheLoader from '@/components/general/TheLoader';
+import Button from '@/components/general/Button';
 import ProductListCard from '@/components/products/ProductListCard';
 import WhyChooseUs from "@/components/products/WhyChooseUs";
 import '@/styles/products.scss';
@@ -48,6 +49,7 @@ export default function ProductsPage() {
   const [pageSubtitle, setPageSubtitle] = useState('Discover our curated collection');
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [showLoader, setShowLoader] = useState(false);
   const [products, setProducts] = useState([]);
   const [viewMode, setViewMode] = useState('grid');
   const [searchQuery, setSearchQuery] = useState('');
@@ -146,6 +148,21 @@ export default function ProductsPage() {
       return () => clearTimeout(timer);
     }
   }, [currentPage]);
+
+  // Delayed loader animation for smooth UX
+  useEffect(() => {
+    let loaderTimer;
+    if (loading) {
+      // Show loader after 300ms for quick filters (better UX)
+      loaderTimer = setTimeout(() => {
+        setShowLoader(true);
+      }, 300);
+    } else {
+      // Immediately hide loader when done
+      setShowLoader(false);
+    }
+    return () => clearTimeout(loaderTimer);
+  }, [loading]);
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -471,13 +488,15 @@ export default function ProductsPage() {
           {/* Toolbar */}
           <div className="products-toolbar">
             <div className="toolbar-left">
-              <button 
+              <Button
+                variant="outline"
+                size="sm"
                 className="mobile-filter-toggle"
                 onClick={() => setShowFilters(!showFilters)}
               >
                 <img src="/hamMenu.png" alt="Filters" width={18} height={18} />
                 Filters {getActiveFiltersCount() > 0 && `(${getActiveFiltersCount()})`}
-              </button>
+              </Button>
               <p className="results-count">
                 Showing <strong>{products.length}</strong> of <strong>{totalProducts}</strong> products
               </p>
@@ -497,17 +516,17 @@ export default function ProductsPage() {
                   aria-label="Search products"
                 />
                 {searchQuery && (
-                  <button
-                    type="button"
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     className="clear-search"
                     onClick={() => {
                       setSearchQuery('');
                       setCurrentPage(1);
                     }}
                     aria-label="Clear search"
-                  >
-                    <X size={16} />
-                  </button>
+                    icon={X}
+                  />
                 )}
               </div>
             </div>
@@ -515,31 +534,35 @@ export default function ProductsPage() {
             <div className="toolbar-right">
               {/* View Toggle */}
               <div className="view-toggle">
-                <button
+                <Button
+                  variant={viewMode === 'grid' ? 'primary' : 'ghost'}
+                  size="sm"
                   className={viewMode === 'grid' ? 'active' : ''}
                   onClick={() => setViewMode('grid')}
                   title="Grid View"
-                >
-                  <Grid size={18} />
-                </button>
-                <button
+                  icon={Grid}
+                />
+                <Button
+                  variant={viewMode === 'list' ? 'primary' : 'ghost'}
+                  size="sm"
                   className={viewMode === 'list' ? 'active' : ''}
                   onClick={() => setViewMode('list')}
                   title="List View"
-                >
-                  <List size={18} />
-                </button>
+                  icon={List}
+                />
               </div>
 
               {/* Sort Dropdown */}
               <div className="sort-dropdown">
-                <button
+                <Button
                   className="sort-button"
+                  variant="outline"
+                  size="md"
                   onClick={() => setShowSortDropdown(!showSortDropdown)}
                 >
                   {getSortLabel()}
                   <ChevronDown size={16} />
-                </button>
+                </Button>
                 {showSortDropdown && (
                   <div className="sort-options">
                     <button onClick={() => handleSortChange('created_at')}>
@@ -564,7 +587,7 @@ export default function ProductsPage() {
           </div>
 
           {/* Products Grid/List */}
-          {loading ? (
+          {showLoader ? (
             <div className="products-loading">
               <TheLoader />
             </div>
@@ -579,16 +602,18 @@ export default function ProductsPage() {
               {/* Pagination */}
               {totalPages > 1 && (
                 <div className="pagination">
-                  <button
-                    onClick={() => {
-                      setCurrentPage(prev => Math.max(1, prev - 1));
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }}
-                    disabled={currentPage === 1}
-                    className="pagination-button"
-                  >
-                    Previous
-                  </button>
+                    <Button
+                      variant="outline"
+                      size="md"
+                      onClick={() => {
+                        setCurrentPage(prev => Math.max(1, prev - 1));
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
+                      disabled={currentPage === 1}
+                      className="pagination-button"
+                    >
+                      Previous
+                    </Button>
                   
                   <div className="page-numbers">
                     {[...Array(totalPages)].map((_, index) => {
@@ -617,7 +642,9 @@ export default function ProductsPage() {
                     })}
                   </div>
 
-                  <button
+                  <Button
+                    variant="outline"
+                    size="md"
                     onClick={() => {
                           window.scrollTo({ top: 0, behavior: 'smooth' });
                           setCurrentPage(prev => Math.min(totalPages, prev + 1));
@@ -626,7 +653,7 @@ export default function ProductsPage() {
                     className="pagination-button"
                   >
                     Next
-                  </button>
+                  </Button>
                 </div>
               )}
             </>

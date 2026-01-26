@@ -18,6 +18,7 @@ import 'swiper/css/thumbs';
 import 'swiper/css/autoplay';
 import '@/styles/productPage.scss';
 import '@/styles/wishlistButton.scss';
+import Button from '@/components/general/Button';
 
 export default function ProductPage({ product }) {
   const dispatch = useDispatch();
@@ -363,20 +364,22 @@ export default function ProductPage({ product }) {
               </a>
             ) : (
               <>
-                <button 
-                  className="add-to-cart" 
+                <Button
+                  variant="primary"
+                  size="lg"
                   onClick={handleAddToCart}
                   disabled={(product.stock || product.quantity) === 0}
                 >
                   Add to Cart
-                </button>
-                <button 
-                  className="buy-now"
+                </Button>
+                <Button
+                  variant="secondary"
+                  size="lg"
                   onClick={handleBuyNow}
                   disabled={(product.stock || product.quantity) === 0}
                 >
                   Buy Now
-                </button>
+                </Button>
               </>
             )}
           </div>

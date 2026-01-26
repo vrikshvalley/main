@@ -1,5 +1,6 @@
 "use client";
 import React from 'react';
+import Button from '@/components/general/Button';
 import { showSuccessToast } from '@/lib/toastHelpers';
 
 export default function Wishlist({ items = [], onRemove, onAddToCart }) {
@@ -17,8 +18,8 @@ export default function Wishlist({ items = [], onRemove, onAddToCart }) {
               <div className="wish-meta">
                 <div className="wish-name">{it.name}</div>
                 <div className="wish-actions">
-                  <button className="btn tiny" onClick={() => { onAddToCart?.(it); showSuccessToast('Added to cart') }}>Add to cart</button>
-                  <button className="btn tiny danger" onClick={() => onRemove?.(it.id)}>Remove</button>
+                <Button variant="primary" size="sm" onClick={() => { onAddToCart?.(it); showSuccessToast('Added to cart') }}>Add to cart</Button>
+                <Button variant="danger" size="sm" onClick={() => onRemove?.(it.id)}>Remove</Button>
                 </div>
               </div>
             </div>

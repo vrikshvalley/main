@@ -5,6 +5,7 @@ import { addItem, addItemAsync } from '@/lib/slices/cartSlice';
 import { auth } from '@/lib/firebaseConfig';
 import { onAuthStateChanged } from 'firebase/auth';
 import { useState, useEffect } from 'react';
+import Button from '@/components/general/Button';
 import { showSuccessToast, showErrorToast } from '@/lib/toastHelpers';
 
 export default function AddToCartButton({ product, qty = 1 }) {
@@ -50,8 +51,8 @@ export default function AddToCartButton({ product, qty = 1 }) {
   };
 
   return (
-    <button className="btn" onClick={handleAddToCart}>
+    <Button variant="primary" size="md" onClick={handleAddToCart}>
       Add to cart
-    </button>
+    </Button>
   );
 }

@@ -600,7 +600,7 @@ $grey-dark: #374151;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 2rem;
-      padding: 0.4rem 1rem;
+      padding: 1.5rem;
       position: sticky;
       top: 130px;
       /* keep toolbar above regular content but below modals and the mobile menu */
@@ -609,14 +609,15 @@ $grey-dark: #374151;
       isolation: auto;
 
       background: $white;
-      border-radius: 12px;
-      box-shadow: 0 2px 12px rgba($teal, 0.06);
-      border: 2px solid rgba($teal, 0.7);
+      border-radius: 16px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      border: none;
 
       @media (max-width: 768px) {
         flex-direction: column;
         gap: 1rem;
         align-items: stretch;
+        padding: 1.25rem;
       }
 
       .toolbar-left {
@@ -631,18 +632,18 @@ $grey-dark: #374151;
         }
 
         .mobile-filter-toggle {
-          padding: 0.625rem 1rem;
+          padding: 0.75rem 1.5rem;
           background: $white;
-          color: $dark-green;
-          border: 1.5px solid rgba($teal, 0.15);
-          border-radius: 8px;
+          color: $deep-green;
+          border: 2px solid rgba($teal, 0.2);
+          border-radius: 50px;
           cursor: pointer;
-          font-weight: 500;
-          font-size: 0.875rem;
+          font-weight: 600;
+          font-size: 0.95rem;
           display: flex;
           align-items: center;
           gap: 0.5rem;
-          transition: transform 0.2s, box-shadow 0.15s;
+          transition: all 0.3s ease;
 
           img, svg {
             width: 18px;
@@ -651,16 +652,19 @@ $grey-dark: #374151;
           }
 
           &:hover {
+            border-color: $teal;
+            background: rgba($teal, 0.05);
             transform: translateY(-2px);
-            box-shadow: 0 6px 18px rgba($teal, 0.06);
           }
 
           &:active {
             transform: translateY(0);
           }
-          @media (min-width: 480px) {
-            padding: 10px 0px;
-            
+
+          @media (max-width: 768px) {
+            width: 100%;
+            padding: 0.625rem 1rem;
+            font-size: 0.875rem;
           }
         }
 
@@ -704,18 +708,18 @@ $grey-dark: #374151;
 
           input {
             width: 100%;
-            padding: 0.625rem 2.5rem 0.625rem 2.75rem;
-            border: 1.5px solid rgba($teal, 0.2);
-            border-radius: 8px;
-            font-size: 0.875rem;
+            padding: 0.75rem 2.5rem 0.75rem 2.75rem;
+            border: 2px solid rgba($teal, 0.2);
+            border-radius: 50px;
+            font-size: 0.95rem;
             color: $dark-green;
             background: $white;
-            transition: all 0.2s;
+            transition: all 0.3s ease;
 
             &:focus {
               outline: none;
               border-color: $teal;
-              box-shadow: 0 2px 8px rgba($teal, 0.1);
+              background: rgba($teal, 0.02);
             }
 
             &::placeholder {
@@ -725,7 +729,7 @@ $grey-dark: #374151;
 
           .clear-search {
             position: absolute;
-            right: 0.5rem;
+            right: 0.75rem;
             background: none;
             border: none;
             cursor: pointer;
@@ -750,9 +754,9 @@ $grey-dark: #374151;
             left: 0;
             width: 100%;
             background: $white;
-            border: 1px solid rgba($teal, 0.2);
-            border-radius: 10px;
-            box-shadow: 0 8px 24px rgba($teal, 0.12);
+            border: 2px solid rgba($teal, 0.2);
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
             z-index: 10;
             overflow: hidden;
 
@@ -768,12 +772,14 @@ $grey-dark: #374151;
               align-items: center;
               gap: 0.5rem;
               width: 100%;
-              padding: 0.6rem 0.875rem;
+              padding: 0.75rem 0.875rem;
               background: transparent;
               border: none;
               cursor: pointer;
               color: $dark-green;
-              font-size: 0.9rem;
+              font-size: 0.95rem;
+              font-weight: 500;
+              transition: all 0.2s;
 
               svg {
                 color: $grey-medium;
@@ -782,6 +788,7 @@ $grey-dark: #374151;
               &:hover,
               &.active {
                 background: rgba($teal, 0.06);
+                color: $teal;
               }
             }
           }
@@ -801,28 +808,41 @@ $grey-dark: #374151;
         // View Toggle
         .view-toggle {
           display: flex;
-          gap: 0.25rem;
-          background: $grey-light;
-          padding: 0.25rem;
-          border-radius: 8px;
+          gap: 0.5rem;
+          background: transparent;
+          padding: 0;
+          border-radius: 0;
 
           button {
-            padding: 0.5rem 0.75rem;
+            padding: 0.75rem 1.25rem;
             background: transparent;
-            border: none;
-            border-radius: 6px;
+            border: 2px solid rgba($teal, 0.2);
+            border-radius: 50px;
             cursor: pointer;
-            color: $grey-medium;
-            transition: all 0.2s;
+            color: $deep-green;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
 
             &:hover {
-              color: $teal;
+              border-color: $teal;
+              background: rgba($teal, 0.05);
+              transform: translateY(-2px);
             }
 
             &.active {
-              background: $white;
-              color: $teal;
-              box-shadow: 0 2px 6px rgba($teal, 0.15);
+              background: linear-gradient(135deg, $teal, color.adjust($teal, $lightness: -10%));
+              color: $white;
+              border-color: $teal;
+              box-shadow: 0 4px 12px rgba($teal, 0.3);
+            }
+
+            svg {
+              width: 18px;
+              height: 18px;
             }
           }
 
@@ -840,23 +860,26 @@ $grey-dark: #374151;
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            padding: 0.625rem 1rem;
+            padding: 0.75rem 1.5rem;
             background: $white;
-            border: 1.5px solid rgba($teal, 0.2);
-            border-radius: 8px;
+            border: 2px solid rgba($teal, 0.2);
+            border-radius: 50px;
             cursor: pointer;
-            font-size: 0.875rem;
-            color: $dark-green;
-            font-weight: 500;
-            transition: all 0.2s;
+            font-size: 0.95rem;
+            color: $deep-green;
+            font-weight: 600;
+            transition: all 0.3s ease;
 
             &:hover {
               border-color: $teal;
-              box-shadow: 0 2px 8px rgba($teal, 0.1);
+              background: rgba($teal, 0.05);
+              transform: translateY(-2px);
             }
 
             svg {
-              color: $grey-medium;
+              color: $teal;
+              width: 18px;
+              height: 18px;
             }
           }
 
@@ -865,28 +888,30 @@ $grey-dark: #374151;
             top: calc(100% + 0.5rem);
             right: 0;
             background: $white;
-            border: 1.5px solid rgba($teal, 0.2);
-            border-radius: 10px;
-            box-shadow: 0 8px 24px rgba($teal, 0.15);
-            min-width: 200px;
+            border: 2px solid rgba($teal, 0.2);
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            min-width: 220px;
             z-index: 100;
             overflow: hidden;
 
             button {
               display: block;
               width: 100%;
-              padding: 0.75rem 1rem;
+              padding: 0.875rem 1.25rem;
               background: none;
               border: none;
               text-align: left;
               cursor: pointer;
-              font-size: 0.875rem;
+              font-size: 0.95rem;
               color: $dark-green;
+              font-weight: 500;
               transition: all 0.2s;
 
               &:hover {
                 background: rgba($teal, 0.06);
                 color: $teal;
+                padding-left: 1.5rem;
               }
 
               &:not(:last-child) {
@@ -941,6 +966,7 @@ $grey-dark: #374151;
       justify-content: center;
       align-items: center;
       min-height: 400px;
+      animation: fadeInLoader 0.4s ease-in-out;
     }
 
     // No Products
@@ -1613,5 +1639,15 @@ $grey-dark: #374151;
       padding: 0.75rem 2rem;
       font-size: 0.9375rem;
     }
+  }
+}
+
+// Loader animation
+@keyframes fadeInLoader {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }

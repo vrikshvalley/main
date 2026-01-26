@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from 'react';
+import Button from '@/components/general/Button';
 import { useAuth } from '@/lib/AuthContext';
 import { auth } from '@/lib/firebaseConfig';
 import { sendPasswordResetEmail } from 'firebase/auth';
@@ -37,7 +38,7 @@ export default function SecuritySettings({ onLogout }) {
           <p className="muted">Reset via email</p>
         </div>
         <div>
-          <button className="btn small" onClick={handlePasswordReset} disabled={resetting}>{resetting ? 'Sending...' : 'Reset Password'}</button>
+          <Button variant="secondary" size="sm" onClick={handlePasswordReset} disabled={resetting}>{resetting ? 'Sending...' : 'Reset Password'}</Button>
         </div>
       </div>
 
@@ -47,7 +48,7 @@ export default function SecuritySettings({ onLogout }) {
           <p className="muted">Sign out of this device</p>
         </div>
         <div>
-          <button className="btn danger" onClick={onLogout}>Logout</button>
+          <Button variant="danger" size="md" onClick={onLogout}>Logout</Button>
         </div>
       </div>
     </section>

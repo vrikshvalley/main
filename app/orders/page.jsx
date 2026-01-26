@@ -8,6 +8,7 @@ import ShipmentTracker from '@/components/orders/ShipmentTracker';
 import { toast } from 'react-toastify';
 import Image from 'next/image';
 import { Package, TrendingUp, Clock, Truck, MapPin } from 'lucide-react';
+import Button from '@/components/general/Button';
 import '@/styles/orders.scss';
 
 export default function OrdersPage() {
@@ -179,26 +180,30 @@ export default function OrdersPage() {
         </div>
           
           <div className="view-toggle">
-            <button
-              className={`toggle-btn ${viewMode === 'cards' ? 'active' : ''}`}
+            <Button
+              variant={viewMode === 'cards' ? 'primary' : 'ghost'}
+              size="sm"
+              className={viewMode === 'cards' ? 'active' : ''}
               onClick={() => setViewMode('cards')}
+              icon={Package}
             >
-              <Package size={18} />
               Cards
-            </button>
-            <button
-              className={`toggle-btn ${viewMode === 'tracking' ? 'active' : ''}`}
+            </Button>
+            <Button
+              variant={viewMode === 'tracking' ? 'primary' : 'ghost'}
+              size="sm"
+              className={viewMode === 'tracking' ? 'active' : ''}
               onClick={() => setViewMode('tracking')}
+              icon={TrendingUp}
             >
-              <TrendingUp size={18} />
               Tracking
-            </button>
+            </Button>
           </div>
         </div>
 
         {/* Orders list */}
         {orders.length === 0 ? (
-          <div className="empty-state">
+            <div className="empty-state">
             <div className="empty-icon">📦</div>
             <h2>No orders found</h2>
             <p>
@@ -206,9 +211,9 @@ export default function OrdersPage() {
                 ? "You haven't placed any orders yet"
                 : `You don't have any ${activeFilter} orders`}
             </p>
-            <button className="btn-primary" onClick={() => router.push('/products')}>
+            <Button variant="primary" size="md" onClick={() => router.push('/products')}>
               Start Shopping
-            </button>
+            </Button>
           </div>
         ) : viewMode === 'tracking' ? (
           <div className="orders-tracking-list">
@@ -283,16 +288,13 @@ export default function OrdersPage() {
                 </div>
 
                 <div className="order-card-footer">
-                  <button
-                    className="btn-view-order"
-                    onClick={() => handleViewOrder(order.order_id)}
-                  >
+                  <Button variant="outline" size="md" className="btn-view-order" onClick={() => handleViewOrder(order.order_id)}>
                     View Details
-                  </button>
+                  </Button>
                   {order.status === 'delivered' && (
-                    <button className="btn-secondary">
+                    <Button variant="secondary" size="md">
                       Write Review
-                    </button>
+                    </Button>
                   )}
                 </div>
               </div>

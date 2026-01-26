@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useAuth } from '@/lib/AuthContext';
+import Button from '@/components/general/Button';
 import orderService from '@/lib/services/orderService';
 import delhiveryService from '@/lib/services/delhiveryService';
 import { toast } from 'react-toastify';
@@ -232,9 +233,9 @@ export default function OrderDetailsPage() {
         <div className="container">
           <div className="empty-state">
             <h2>Order not found</h2>
-            <button className="btn-primary" onClick={() => router.push('/orders')}>
+            <Button variant="primary" size="md" onClick={() => router.push('/orders')}>
               Back to Orders
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -248,9 +249,9 @@ export default function OrderDetailsPage() {
   return (
     <div className="order-details-page">
       <div className="container">
-        <button className="back-button" onClick={() => router.push('/orders')}>
+        <Button variant="ghost" size="md" onClick={() => router.push('/orders')}>
           ← Back to Orders
-        </button>
+        </Button>
 
         <div className="order-details-header">
           <div>
@@ -406,31 +407,34 @@ export default function OrderDetailsPage() {
             {/* Order Actions */}
             <div className="order-actions">
               {canCancel && (
-                <button
-                  className="btn-danger"
+                <Button
+                  variant="danger"
+                  size="md"
                   onClick={() => setShowCancelModal(true)}
                   disabled={actionLoading}
                 >
                   <X size={18} />
                   Cancel Order
-                </button>
+                </Button>
               )}
               {canReturn && (
-                <button
-                  className="btn-secondary"
+                <Button
+                  variant="secondary"
+                  size="md"
                   onClick={() => setShowReturnModal(true)}
                   disabled={actionLoading}
                 >
                   <RotateCcw size={18} />
                   Request Return
-                </button>
+                </Button>
               )}
-              <button
-                className="btn-primary"
+              <Button
+                variant="primary"
+                size="md"
                 onClick={() => window.print()}
               >
                 Print Invoice
-              </button>
+              </Button>
             </div>
 
             {/* Cancellation/Return Reason */}

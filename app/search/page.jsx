@@ -8,6 +8,7 @@ import Navbar from '@/components/general/Navbar';
 import Footer from '@/components/general/Footer';
 import WhatsAppButton from '@/components/general/WhatsAppButton';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
+import Button from '@/components/general/Button';
 import { setStickyHeaderData } from '@/lib/stickyHeaderStore';
 import ProductListCard from '@/components/products/ProductListCard';
 import TheLoader from '@/components/general/TheLoader';
@@ -189,9 +190,9 @@ function SearchContent() {
               <div className="active-filters">
                 <div className="active-filters-header">
                   <span>{getActiveFiltersCount()} active filter{getActiveFiltersCount() > 1 ? 's' : ''}</span>
-                  <button onClick={handleClearFilters} className="clear-all">
+                  <Button variant="ghost" size="sm" onClick={handleClearFilters}>
                     Clear all
-                  </button>
+                  </Button>
                 </div>
                 <div className="active-filter-tags">
                   {filters.category && (
@@ -286,12 +287,9 @@ function SearchContent() {
                 <Search size={64} />
                 <h2>No products found</h2>
                 <p>Try searching with different keywords or browse our categories</p>
-                <button 
-                  className="browse-btn"
-                  onClick={() => router.push('/products')}
-                >
+                <Button variant="primary" size="lg" onClick={() => router.push('/products')}>
                   Browse All Products
-                </button>
+                </Button>
                 <div style={{ marginTop: '2rem', padding: '1.5rem', background: 'rgba(0, 128, 128, 0.05)', borderRadius: '12px', border: '1px solid rgba(0, 128, 128, 0.2)' }}>
                   <p style={{ fontStyle: 'italic', marginBottom: '1rem', color: 'white' }}>
                     Can't find it in our Garden? Contact our Farmers, and they will curate the plant for you. No Extra Charges!!!

@@ -1,12 +1,13 @@
 "use client";
 import React from 'react';
+import Button from '@/components/general/Button';
 
 export default function Payments({ payments = [], onSetDefault }) {
   return (
     <section className="payments card">
       <div className="section-header">
         <h3>Payments</h3>
-        <button className="btn small">Manage</button>
+        <Button variant="secondary" size="sm">Manage</Button>
       </div>
 
       <div className="payments-list">
@@ -18,7 +19,7 @@ export default function Payments({ payments = [], onSetDefault }) {
                 <div className="payment-desc muted">{p.brand ? `${p.brand} • **** ${p.last4}` : p.identifier}</div>
               </div>
               <div className="payment-actions">
-                {!p.default && <button className="btn tiny" onClick={() => onSetDefault?.(p.id)}>Set as Default</button>}
+                {!p.default && <Button variant="ghost" size="sm" onClick={() => onSetDefault?.(p.id)}>Set as Default</Button>}
                 {p.default && <span className="badge">Default</span>}
               </div>
             </div>

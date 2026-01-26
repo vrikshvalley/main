@@ -1,15 +1,16 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
-import { useAuth } from "@/lib/AuthContext";
-import { useDispatch } from "react-redux";
-import { addItem } from "@/lib/slices/cartSlice";
-import { showSuccessToast, showErrorToast } from "@/lib/toastHelpers";
-import Image from "@/components/general/ImgWithLoader";
-import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown } from "lucide-react";
-import "@/styles/plantDoctor.scss";
+import React, { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/lib/AuthContext';
+import { useDispatch } from 'react-redux';
+import { addItem } from '@/lib/slices/cartSlice';
+import { showSuccessToast, showErrorToast } from '@/lib/toastHelpers';
+import Image from '@/components/general/ImgWithLoader';
+import Button from '@/components/general/Button';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronDown } from 'lucide-react';
+import '@/styles/plantDoctor.scss';
 
 const PLANT_DOCTOR_PRODUCT = {
   id: "plant-doctor",
@@ -633,9 +634,9 @@ export default function PlantDoctor() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            <button type="submit" className="btn-submit" disabled={loading}>
+            <Button type="submit" variant="primary" size="lg" disabled={loading}>
               {loading ? "Processing..." : `Confirm & Pay ₹${PRICE}`}
-            </button>
+            </Button>
             <p className="submit-note">Secure payment via Razorpay</p>
           </motion.div>
         </motion.form>
@@ -802,44 +803,76 @@ export default function PlantDoctor() {
           </motion.div>
 
           <div className="faqs-grid">
-            <motion.div
-              className={`faq-item ${openFAQ === 1 ? 'active' : ''}`}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-            >
-              <button
-                className="faq-question"
-                onClick={() => setOpenFAQ(openFAQ === 1 ? null : 1)}
-                aria-expanded={openFAQ === 1}
+            {[
+              {
+                id: 1,
+                question: "Meet Dr. Vriksh. Where Plant Survival Becomes Plant Thriving.",
+                answer: "Your plant is wilting. You're scrolling through Google at 11 PM. You've already tried everything you found on YouTube. This is where most plant parents give up. Dr. Vriksh doesn't let them. We're a network of certified horticulturists who believe every plant—and every plant parent—deserves expert care. Not generic tips. Not one-size-fits-all solutions. Real expertise. Real answers. Real transformation. Through 30-minute video consultations, we diagnose what's actually wrong, create personalized care plans, and guide you toward long-term success. Because your plant didn't choose to struggle. And neither should you."
+              },
+              {
+                id: 2,
+                question: "How long does a consultation take?",
+                answer: "Each Dr. Vriksh consultation is a dedicated 30-minute video call with a certified horticulturist. This gives us enough time to understand your plant's condition, ask detailed questions about your growing environment, provide a thorough diagnosis, and create a personalized care action plan. You'll also receive a follow-up guide via email with all the recommendations discussed."
+              },
+              {
+                id: 3,
+                question: "Can Dr. Vriksh help with multiple plants?",
+                answer: "Absolutely! If you have 2-3 plants with similar or different issues, we can cover all of them in your 30-minute consultation. We'll prioritize based on urgency and ensure each plant gets the expert attention it needs. For larger plant collections (5+), we recommend booking multiple sessions or asking about our Plant Parent Packages."
+              },
+              {
+                id: 4,
+                question: "What if my plant doesn't recover after following the advice?",
+                answer: "We stand behind our expertise with a Plant Recovery Confidence approach. If you follow our recommendations diligently for 30 days and don't see improvement, we offer a follow-up consultation at 50% off to reassess and adjust the care plan. We're committed to your plant's long-term health, not just a one-time fix."
+              },
+              {
+                id: 5,
+                question: "How do I prepare for my consultation?",
+                answer: "Before your call, gather a few clear photos of your plant (front, back, and any affected areas), note the current watering schedule, light conditions, and temperature of your space. Have the plant name (if known) ready. This information helps our expert provide the most accurate diagnosis. Don't worry if you don't know all the details—our horticulturist will guide you through the diagnosis process!"
+              },
+              {
+                id: 6,
+                question: "Can I reschedule or get a refund?",
+                answer: "Yes! You can reschedule your consultation up to 24 hours before your booked slot at no extra cost. If you need to cancel, we offer a full refund within 48 hours of booking, or you can convert it to a credit for a future consultation. We understand life happens—flexibility is built into our service."
+              }
+            ].map((faq) => (
+              <motion.div
+                key={faq.id}
+                className={`faq-item ${openFAQ === faq.id ? 'active' : ''}`}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: faq.id * 0.1 }}
               >
-                <span className="question-number">01</span>
-                <span className="question-text">Meet Dr. Vriksh. Where Plant Survival Becomes Plant Thriving.</span>
-                <ChevronDown 
-                  className={`chevron ${openFAQ === 1 ? 'rotated' : ''}`}
-                  size={20}
-                />
-              </button>
+                <button
+                  className="faq-question"
+                  onClick={() => setOpenFAQ(openFAQ === faq.id ? null : faq.id)}
+                  aria-expanded={openFAQ === faq.id}
+                >
+                  <span className="question-number">{String(faq.id).padStart(2, '0')}</span>
+                  <span className="question-text">{faq.question}</span>
+                  <ChevronDown 
+                    className={`chevron ${openFAQ === faq.id ? 'rotated' : ''}`}
+                    size={20}
+                  />
+                </button>
 
-              <AnimatePresence>
-                {openFAQ === 1 && (
-                  <motion.div
-                    className="faq-answer"
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                  >
-                    <div className="answer-content">
-                      <p>
-                        Your plant is wilting. You're scrolling through Google at 11 PM. You've already tried everything you found on YouTube. This is where most plant parents give up. Dr. Vriksh doesn't let them. We're a network of certified horticulturists who believe every plant—and every plant parent—deserves expert care. Not generic tips. Not one-size-fits-all solutions. Real expertise. Real answers. Real transformation. Through 15-minute video consultations, we diagnose what's actually wrong, create personalized care plans, and guide you toward long-term success. Because your plant didn't choose to struggle. And neither should you. Whether you're rescuing a dying plant or preventing the next failure, Dr. Vriksh is your partner in green growth.
-                      </p>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
+                <AnimatePresence>
+                  {openFAQ === faq.id && (
+                    <motion.div
+                      className="faq-answer"
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                    >
+                      <div className="answer-content">
+                        <p>{faq.answer}</p>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            ))}
           </div>
         </div>
       </motion.div>

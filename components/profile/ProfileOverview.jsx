@@ -1,6 +1,7 @@
 "use client";
 import React from 'react';
 import Image from '@/components/general/ImgWithLoader';
+import Button from '@/components/general/Button';
 import { showSuccessToast } from '@/lib/toastHelpers';
 
 export default function ProfileOverview({ profile, onEdit }) {
@@ -25,10 +26,10 @@ export default function ProfileOverview({ profile, onEdit }) {
       </div>
 
       <div className="overview-actions">
-        <button className="btn primary" onClick={() => onEdit?.()}>Edit Profile</button>
-        <button className="btn secondary" onClick={() => showSuccessToast('Profile saved locally (demo)')}>
+        <Button variant="primary" size="md" onClick={() => onEdit?.()}>Edit Profile</Button>
+        <Button variant="secondary" size="md" onClick={() => showSuccessToast('Profile saved locally (demo)')}>
           Save Profile
-        </button>
+        </Button>
       </div>
     </section>
   );

@@ -9,6 +9,7 @@ import { showSuccessToast, showErrorToast } from '@/lib/toastHelpers';
 import { clearCart } from '@/lib/slices/cartSlice';
 import TheLoader from '@/components/general/TheLoader';
 import '@/styles/checkout.scss';
+import Button from '@/components/general/Button';
 import { auth } from '@/lib/firebaseConfig';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { mergeAndSyncCart, loadCartFromLocalStorage } from '@/lib/cartUtils';
@@ -385,9 +386,9 @@ const CheckoutPage = () => {
               )}
             </div>
 
-            <button className="btn-add-address" onClick={() => setShowAddAddress(true)}>
+            <Button variant="primary" size="md" onClick={() => setShowAddAddress(true)}>
               + Add New Address
-            </button>
+            </Button>
 
             {showAddAddress && (
               <form className="address-form" onSubmit={handleAddAddress}>
@@ -435,12 +436,12 @@ const CheckoutPage = () => {
                   required
                 />
                 <div className="form-buttons">
-                  <button type="button" className="btn-cancel" onClick={() => setShowAddAddress(false)}>
+                  <Button type="button" variant="ghost" size="md" onClick={() => setShowAddAddress(false)}>
                     Cancel
-                  </button>
-                  <button type="submit" className="btn-submit">
+                  </Button>
+                  <Button type="submit" variant="primary" size="md">
                     Save Address
-                  </button>
+                  </Button>
                 </div>
               </form>
             )}
@@ -457,19 +458,19 @@ const CheckoutPage = () => {
                     <input type="password" placeholder="Confirm Password" value={createConfirm} onChange={(e) => setCreateConfirm(e.target.value)} />
                   </div>
                   <div className="step-actions">
-                    <button className="btn-primary" onClick={handleCreateAccountAndProceed} disabled={!selectedAddress || creatingAccount}>
+                    <Button variant="primary" size="md" onClick={handleCreateAccountAndProceed} disabled={!selectedAddress || creatingAccount}>
                       {creatingAccount ? 'Creating account...' : 'Create account & Continue'}
-                    </button>
-                    <button className="btn-ghost" onClick={() => { setProfile({ name: '', email: createEmail, phone: createPhone }); setStep(2); }} disabled={!selectedAddress || !createEmail || !createPhone}>
+                    </Button>
+                    <Button variant="ghost" size="md" onClick={() => { setProfile({ name: '', email: createEmail, phone: createPhone }); setStep(2); }} disabled={!selectedAddress || !createEmail || !createPhone}>
                       Continue as guest
-                    </button>
+                    </Button>
                   </div>
                 </>
               ) : (
                 <div className="step-actions">
-                  <button className="btn-primary" onClick={handleProceedToPayment} disabled={!selectedAddress}>
+                  <Button variant="primary" size="md" onClick={handleProceedToPayment} disabled={!selectedAddress}>
                     Proceed to Payment
-                  </button>
+                  </Button>
                 </div>
               )}
             </div>
@@ -526,18 +527,18 @@ const CheckoutPage = () => {
               <p>
                 {selectedAddress?.state} - {selectedAddress?.pincode}
               </p>
-              <button className="btn-change" onClick={() => setStep(1)}>
+              <Button variant="ghost" size="sm" className="btn-change" onClick={() => setStep(1)}>
                 Change Address
-              </button>
+              </Button>
             </div>
 
             <div className="step-actions">
-              <button className="btn-back" onClick={() => setStep(1)}>
+              <Button variant="ghost" size="md" className="btn-back" onClick={() => setStep(1)}>
                 Back
-              </button>
-              <button className="btn-primary" onClick={handlePayment} disabled={processing}>
+              </Button>
+              <Button variant="primary" size="md" onClick={handlePayment} disabled={processing}>
                 {processing ? 'Processing...' : `Pay ₹${totals.total.toFixed(2)}`}
-              </button>
+              </Button>
             </div>
           </div>
         )}
@@ -551,12 +552,12 @@ const CheckoutPage = () => {
             <p className="confirmation-message">Thank you for your order! We've sent a confirmation email to {profile.email}</p>
 
             <div className="order-actions">
-              <button className="btn-primary" onClick={() => router.push(`/orders/${orderData.order_id}`)}>
+              <Button variant="primary" size="md" onClick={() => router.push(`/orders/${orderData.order_id}`)}>
                 View Order Details
-              </button>
-              <button className="btn-secondary" onClick={() => router.push('/products')}>
+              </Button>
+              <Button variant="secondary" size="md" onClick={() => router.push('/products')}>
                 Continue Shopping
-              </button>
+              </Button>
             </div>
           </div>
         )}

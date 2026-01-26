@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
 import { setStickyHeaderData } from '@/lib/stickyHeaderStore';
 import { Search, Package } from 'lucide-react';
+import { showSuccessToast, showErrorToast } from '@/lib/toastHelpers';
 import '@/styles/pages.scss';
 
 export default function TrackOrder() {
@@ -16,8 +17,16 @@ export default function TrackOrder() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    if (!orderId.trim()) {
+      showErrorToast('Please enter a valid order ID');
+      return;
+    }
+
     // Track order logic here
-    alert(`Tracking order: ${orderId}`);
+    showSuccessToast(`Tracking order: ${orderId}`);
+    // You can add API call here to fetch order details
+    setOrderId('');
   };
 
   return (

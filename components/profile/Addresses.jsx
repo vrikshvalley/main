@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from 'react';
+import Button from '@/components/general/Button';
 import { showErrorToast, showSuccessToast } from '@/lib/toastHelpers';
 
 export default function Addresses({ addresses = [], onAdd, onEdit, onDelete }) {
@@ -24,7 +25,7 @@ export default function Addresses({ addresses = [], onAdd, onEdit, onDelete }) {
     <section className="addresses card">
       <div className="section-header">
         <h3>My Addresses</h3>
-        <button className="btn small" onClick={() => setAdding(true)}>+ Add</button>
+        <Button variant="primary" size="sm" onClick={() => setAdding(true)}>+ Add</Button>
       </div>
 
       <div className="addresses-list">
@@ -37,8 +38,8 @@ export default function Addresses({ addresses = [], onAdd, onEdit, onDelete }) {
                 <p className="meta">{a.locality} • {a.pincode}</p>
               </div>
               <div className="address-actions">
-                <button className="btn tiny" onClick={() => onEdit(a)}>Edit</button>
-                <button className="btn tiny danger" onClick={() => onDelete(a.id)}>Delete</button>
+                <Button variant="secondary" size="sm" onClick={() => onEdit(a)}>Edit</Button>
+                <Button variant="danger" size="sm" onClick={() => onDelete(a.id)}>Delete</Button>
               </div>
             </div>
           ))
@@ -54,8 +55,8 @@ export default function Addresses({ addresses = [], onAdd, onEdit, onDelete }) {
           <input placeholder="Locality / Area" value={form.locality} onChange={e => setForm({...form, locality: e.target.value})} required />
           <input placeholder="Pincode" value={form.pincode} maxLength={6} onChange={e => setForm({...form, pincode: e.target.value.replace(/[^0-9]/g,'')})} required />
           <div className="form-actions">
-            <button type="button" className="btn secondary" onClick={() => setAdding(false)}>Cancel</button>
-            <button type="submit" className="btn primary">Save</button>
+            <Button type="button" variant="ghost" size="md" onClick={() => setAdding(false)}>Cancel</Button>
+            <Button type="submit" variant="primary" size="md">Save</Button>
           </div>
         </form>
       )}

@@ -30,6 +30,7 @@ import Topbar from "@/components/general/Topbar";
 import Footer from "@/components/general/Footer";
 import Link from "next/link";
 import Image from "next/image";
+import Button from "@/components/general/Button";
 import "@/styles/cartPage.scss";
 
 export default function CartPage() {
@@ -158,10 +159,10 @@ export default function CartPage() {
         <div className="cart-page-container">
           {/* Header */}
           <div className="cart-header">
-            <button className="back-button" onClick={() => router.back()}>
+            <Button variant="ghost" size="md" onClick={() => router.back()}>
               <ArrowLeft size={20} />
               Continue Shopping
-            </button>
+            </Button>
             <h1 className="cart-title">
               <ShoppingBag size={32} />
               Your Cart
@@ -269,9 +270,9 @@ export default function CartPage() {
                   <span className="note">Includes free shipping</span>
                 </div>
 
-                <button className="checkout-btn" onClick={handleCheckout}>
+                <Button variant="primary" size="lg" fullWidth onClick={handleCheckout}>
                   Proceed to Checkout
-                </button>
+                </Button>
 
                 {!user && (
                   <p className="login-prompt">
