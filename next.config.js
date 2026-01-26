@@ -4,6 +4,20 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
+  async redirects() {
+    return [
+      {
+        source: "/blog",
+        destination: "/blogs",
+        permanent: true,
+      },
+      {
+        source: "/blog/:slug",
+        destination: "/blogs/:slug",
+        permanent: true,
+      },
+    ];
+  },
   experimental: {
     serverActions: {
       bodySizeLimit: "2mb",

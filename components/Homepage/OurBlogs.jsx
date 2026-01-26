@@ -34,7 +34,7 @@ export default function OurBlogs() {
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
-              <Link href={`/blog/${blog.slug}`} className="blog-image-wrapper">
+              <Link href={`/blogs/${blog.slug}`} className="blog-image-wrapper">
                 <Image 
                   src={blog.image}
                   alt={blog.title}
@@ -63,7 +63,7 @@ export default function OurBlogs() {
                   </span>
                 </div>
 
-                <Link href={`/blog/${blog.slug}`}>
+                <Link href={`/blogs/${blog.slug}`}>
                   <h3 className="blog-title">{blog.title}</h3>
                 </Link>
 
@@ -74,7 +74,7 @@ export default function OurBlogs() {
                     <User size={16} />
                     <span>{blog.author}</span>
                   </div>
-                  <Link href={`/blog/${blog.slug}`} className="read-more">
+                  <Link href={`/blogs/${blog.slug}`} className="read-more">
                     Read More
                     <ArrowRight size={16} />
                   </Link>

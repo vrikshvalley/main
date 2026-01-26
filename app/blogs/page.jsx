@@ -52,7 +52,7 @@ export default function BlogPage() {
           {filteredBlogs.length > 0 ? (
             filteredBlogs.map(blog => (
               <article key={blog.id} className="blog-card">
-                <Link href={`/blog/${blog.slug}`} className="blog-image-wrapper">
+                <Link href={`/blogs/${blog.slug}`} className="blog-image-wrapper">
                   <Image 
                     src={blog.image}
                     alt={blog.title}
@@ -79,7 +79,7 @@ export default function BlogPage() {
                     </span>
                   </div>
 
-                  <Link href={`/blog/${blog.slug}`}>
+                  <Link href={`/blogs/${blog.slug}`}>
                     <h2 className="blog-title">{blog.title}</h2>
                   </Link>
 
@@ -90,7 +90,7 @@ export default function BlogPage() {
                       <User size={16} />
                       <span>{blog.author}</span>
                     </div>
-                    <Link href={`/blog/${blog.slug}`} className="read-more">
+                    <Link href={`/blogs/${blog.slug}`} className="read-more">
                       Read More
                       <ArrowRight size={16} />
                     </Link>

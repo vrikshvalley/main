@@ -8,7 +8,9 @@ export default function sitemap() {
     "/contact-us",
     "/faqs",
     "/products",
-    "/blog",
+    "/blogs",
+    "/offers",
+    "/testimonials",
   ].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date().toISOString(),

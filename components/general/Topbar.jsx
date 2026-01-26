@@ -19,15 +19,15 @@ export default function Topbar() {
           <Image src="/white-logo.png" alt="Logo" width={30} height={30} />
         </div>
         <nav className="topbar-links">
-          <Link href="/blog">Blog</Link>
+          <Link href="/blogs">Blog</Link>
           <span className="separator">|</span>
           <Link onClick={handleClick} href="#" className="hide-on-mobile">Consulting</Link>
           <span className="separator hide-on-mobile">|</span>
-          <Link onClick={handleClick} href="#">Offers</Link>
+          <Link href="/offers">Offers</Link>
           <span className="separator hide-on-mobile">|</span>
-          <Link href="#testimonials" className="hide-on-mobile">Testimonials</Link>
+          <Link href="/testimonials" className="hide-on-mobile">Testimonials</Link>
           <span className="separator hide-on-mobile">|</span>
-          <Link href="#faqs" className="hide-on-mobile">FAQ</Link>
+          <Link href="/faqs" className="hide-on-mobile">FAQ</Link>
           <span className="separator">|</span>
           <Link 
             href="https://wa.me/919204745612?text=I%20am%20interested%20in%20bulk%20orders"

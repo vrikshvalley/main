@@ -658,6 +658,10 @@ $grey-dark: #374151;
           &:active {
             transform: translateY(0);
           }
+          @media (min-width: 480px) {
+            padding: 10px 0px;
+            
+          }
         }
 
         .results-count {
@@ -823,7 +827,7 @@ $grey-dark: #374151;
           }
 
           // Hide view toggle on mobile since grid is always 1 column
-          @media (max-width: 480px) {
+          @media (min-width: 480px) {
             display: none;
           }
         }
@@ -1033,7 +1037,7 @@ $grey-dark: #374151;
   background: $white;
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 4px 16px rgba($teal, 0.9);
+  box-shadow: 0 4px 16px rgba(#0e3400, 0.9);
   border: 1.5px solid rgba($teal, 0.1);
   transition: all 0.3s ease;
   cursor: pointer;
@@ -1045,7 +1049,7 @@ $grey-dark: #374151;
   &:hover {
     transform: translateY(-4px);
     box-shadow: 0 8px 24px rgba($teal, 0.15);
-    border: 2px solid rgba($yellow,1);
+    border: 2px solid rgba($teal,1);
 
     .product-image {
       transform: scale(1.05);
@@ -1253,6 +1257,49 @@ $grey-dark: #374151;
         font-weight: 700;
         color: $teal;
         font-family: 'Alumni Sans', sans-serif;
+
+        .price-container {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+
+          .price-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+
+            .current-price {
+              font-size: 1.5rem;
+              font-weight: 700;
+              color: $teal;
+            }
+
+            .original-price {
+              font-size: 1.1rem;
+              font-weight: 500;
+              color: #9ca3af;
+              text-decoration: line-through;
+            }
+
+            .discount-badge {
+              font-size: 0.75rem;
+              font-weight: 700;
+              color: $white;
+              background: linear-gradient(135deg, #ef4444, #dc2626);
+              padding: 0.25rem 0.5rem;
+              border-radius: 6px;
+              text-transform: uppercase;
+              letter-spacing: 0.5px;
+            }
+          }
+
+          .price-suffix {
+            font-size: 0.875rem;
+            color: $grey-medium;
+            font-weight: 500;
+          }
+        }
       }
 
       .add-to-cart-button {

@@ -1,0 +1,250 @@
+@use 'sass:color';
+@use 'variables' as *;
+
+.offers-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, rgba($teal, 0.03) 0%, rgba($white, 1) 100%);
+
+  .offers-hero {
+    background: linear-gradient(135deg, $teal 0%, color.adjust($teal, $lightness: -10%) 100%);
+    padding: 4rem 2rem;
+    text-align: center;
+    color: $white;
+    box-shadow: 0 4px 20px rgba($teal, 0.2);
+
+    @media (max-width: 768px) {
+      padding: 3rem 1.5rem;
+    }
+
+    .hero-content {
+      max-width: 800px;
+      margin: 0 auto;
+
+      .hero-icon {
+        margin-bottom: 1rem;
+        animation: sparkle 2s ease-in-out infinite;
+      }
+
+      h1 {
+        font-size: 3rem;
+        font-weight: 800;
+        margin: 0 0 1rem 0;
+        font-family: 'Playfair Display', serif;
+
+        @media (max-width: 768px) {
+          font-size: 2rem;
+        }
+      }
+
+      p {
+        font-size: 1.25rem;
+        margin: 0;
+        opacity: 0.95;
+
+        @media (max-width: 768px) {
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+
+  .offers-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+
+    @media (max-width: 768px) {
+      padding: 2rem 1rem;
+    }
+  }
+
+  .offers-filters {
+    background: $white;
+    padding: 1.5rem;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .filter-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      color: $deep-green;
+      font-size: 1rem;
+    }
+
+    .filter-buttons {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+
+      .filter-btn {
+        padding: 0.75rem 1.5rem;
+        border: 2px solid rgba($teal, 0.2);
+        background: $white;
+        color: $deep-green;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        &:hover {
+          border-color: $teal;
+          background: rgba($teal, 0.05);
+          transform: translateY(-2px);
+        }
+
+        &.active {
+          background: linear-gradient(135deg, $teal, color.adjust($teal, $lightness: -10%));
+          color: $white;
+          border-color: $teal;
+          box-shadow: 0 4px 12px rgba($teal, 0.3);
+        }
+
+        @media (max-width: 768px) {
+          padding: 0.6rem 1rem;
+          font-size: 0.85rem;
+        }
+      }
+    }
+  }
+
+  .offers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+
+    @media (max-width: 768px) {
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 480px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .product-skeleton {
+    background: $white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+    .skeleton-image {
+      width: 100%;
+      height: 280px;
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
+    }
+
+    .skeleton-text {
+      height: 20px;
+      margin: 1rem;
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
+      border-radius: 4px;
+
+      &.short {
+        width: 60%;
+      }
+    }
+  }
+
+  .no-offers {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem 2rem;
+
+    p {
+      font-size: 1.25rem;
+      color: $grey-dark;
+      margin-bottom: 1.5rem;
+    }
+
+    button {
+      padding: 1rem 2rem;
+      background: linear-gradient(135deg, $teal, color.adjust($teal, $lightness: -10%));
+      color: $white;
+      border: none;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba($teal, 0.3);
+      }
+    }
+  }
+
+  .offers-footer {
+    text-align: center;
+    padding: 2rem;
+    background: rgba($teal, 0.05);
+    border-radius: 16px;
+    border: 2px dashed rgba($teal, 0.3);
+
+    p {
+      font-size: 1.1rem;
+      color: $deep-green;
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+    }
+
+    .browse-all-btn {
+      display: inline-block;
+      padding: 1rem 2.5rem;
+      background: linear-gradient(135deg, $teal, color.adjust($teal, $lightness: -10%));
+      color: $white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba($teal, 0.3);
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba($teal, 0.4);
+      }
+    }
+  }
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.1) rotate(10deg);
+  }
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}

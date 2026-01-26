@@ -11,6 +11,19 @@ const getImageSrc = (img) => {
   return typeof img === 'string' ? img : (img.src || img.url || '');
 };
 
+// Generate a consistent random discount between 10-60% based on product ID
+const getProductDiscount = (productId) => {
+  if (!productId) return 0;
+  // Use product ID to seed the random number for consistency
+  const hash = productId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  const discountOptions = [10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60];
+  return discountOptions[hash % discountOptions.length];
+};
+
+const calculateOriginalPrice = (currentPrice, discountPercent) => {
+  return Math.round(currentPrice / (1 - discountPercent / 100));
+};
+
 export default function ProductListCard({ product, viewMode = 'grid' }) {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -135,8 +148,22 @@ export default function ProductListCard({ product, viewMode = 'grid' }) {
               <span className="price-label">Price on Customization</span>
             ) : (
               <>
-                ₹{typeof product.price === 'number' ? product.price : (product.variants?.[0]?.price || 0)}
-                {product.variants && product.variants.length > 1 && <span className="price-suffix"> onwards</span>}
+                {(() => {
+                  const currentPrice = typeof product.price === 'number' ? product.price : (product.variants?.[0]?.price || 0);
+                  const discount = getProductDiscount(product.id);
+                  const originalPrice = calculateOriginalPrice(currentPrice, discount);
+                  
+                  return (
+                    <div className="price-container">
+                      <div className="price-row">
+                        <span className="current-price">₹{currentPrice}</span>
+                        <span className="original-price">₹{originalPrice}</span>
+                        <span className="discount-badge">{discount}% OFF</span>
+                      </div>
+                      {product.variants && product.variants.length > 1 && <span className="price-suffix">onwards</span>}
+                    </div>
+                  );
+                })()}
               </>
             )}
           </div>

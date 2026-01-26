@@ -191,7 +191,7 @@ export default function Navbar() {
                             href="/plant-doctor"
                             className="dropdown-item"
                           >
-                            Plant Doctor
+                            Dr. Vriksh - Plant Doctor
                           </Link>
                         </motion.div>
                       )}

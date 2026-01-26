@@ -79,6 +79,9 @@ $font-heading: 'Playfair Display', serif; // Alias for headings
 $light-gray: #e5e7eb;
 $gray: #9ca3af;
 $dark-gray: #4b5563;
+// Legacy aliases
+$grey-dark: $dark-gray;
+$gray-dark: $dark-gray;
 
 // Status Colors
 $red: #ef4444;        // Error/Danger states

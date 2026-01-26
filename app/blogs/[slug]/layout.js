@@ -17,7 +17,7 @@ export async function generateMetadata({ params }) {
     openGraph: {
       title: blog.title,
       description: blog.excerpt,
-      url: `https://vrikshvalley.com/blog/${blog.slug}`,
+      url: `https://vrikshvalley.com/blogs/${blog.slug}`,
       images: [
         {
           url: blog.image,

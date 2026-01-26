@@ -40,6 +40,7 @@ export default function WhereNatureMeetsNurturePage() {
       
       <div className="page-content">
         <section className="content-section">
+          <h2>The Beginning</h2>
           <p>
             I remember life in Kolkata's bustling streets as a young dreamer, craving the quiet whispers of the forest. In 2019, a move to Ranchi unlocked something deep inside me. I realized plants weren't just decorations anymore—they were conversations, and gardens weren't just spaces, they were sanctuaries. That awakening planted the seed for Vriksh Valley. Through long walks among dew-drenched leaves and dusty nurseries, I understood that every leaf has a story and every gardener needs a friend.
           </p>
