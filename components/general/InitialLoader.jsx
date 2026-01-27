@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import '@/styles/initialLoader.scss';
+// Note: removed direct import of global SCSS to avoid Turbopack client-proxy issues
+// Styles are applied via global stylesheet in app layout instead.
 
 export default function InitialLoader() {
   const [isLoading, setIsLoading] = useState(true);
@@ -71,11 +72,11 @@ export default function InitialLoader() {
                 <motion.span
                   className="scrollingText"
                   key={currentTextIndex}
-                  initial={{ y: 12, opacity: 0, scale: 0.98 }}
-                  animate={{ y: 0, opacity: 1, scale: 1 }}
-                  exit={{ y: -10, opacity: 0, scale: 0.99 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
                   transition={{
-                    duration: 0.18,
+                    duration: 0.25,
                     ease: [0.25, 0.1, 0.25, 1]
                   }}
                 >
@@ -86,11 +87,12 @@ export default function InitialLoader() {
                 {showValley && (
                   <motion.span
                     className="valleyText"
-                    initial={{ opacity: 0, x: 40, y: 4 }}
+                    initial={{ opacity: 0, x: 30, y: 2 }}
                     animate={{ opacity: 1, x: 0, y: 0 }}
+                    exit={{ opacity: 0, x: 10 }}
                     transition={{
-                      duration: 0.5,
-                      ease: [0.4, 0, 0.2, 1]
+                      duration: 0.32,
+                      ease: [0.25, 0.1, 0.25, 1]
                     }}
                   >
                     Valley

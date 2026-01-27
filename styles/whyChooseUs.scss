@@ -2,8 +2,12 @@
 @use 'variables' as *;
 
 .why-choose-us {
-  padding: 4rem 0;
+  padding: 3rem 0;
   overflow: hidden;
+
+  @media (max-width: 768px) {
+    padding: 2rem 0;
+  }
 }
 
 .scroll-container {

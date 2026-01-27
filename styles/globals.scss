@@ -6,7 +6,8 @@
   --fg: #{$text-primary};
   --brand: #{$accent-primary};
   --muted: #{$text-secondary};
-  --home-section-padding: 4rem 1.5rem;
+  --home-section-padding: 3rem 1.5rem;
+  --home-section-padding-mobile: 2rem 1rem;
   --home-heading-size: 3rem;
   --home-heading-margin: 1.5rem;
 }
@@ -239,33 +240,25 @@ a:hover {
 
   @media (max-width: 1024px) {
     &.home-section {
-      padding: 3rem 1.25rem;
+      padding: 2.5rem 1.25rem;
     }
 
     &.home-section h2 {
-      font-size: 3rem;
+      font-size: 2.5rem;
       margin-bottom: 1.25rem;
     }
   }
 
   @media (max-width: 768px) {
     &.home-section {
-      padding: 1.5rem 1.25rem;
-    }
-  }
-
-  @media (max-width: 480px) {
-    &.home-section {
-      padding: 1.5rem 1rem;
+      padding: var(--home-section-padding-mobile);
     }
 
     &.home-section h2 {
-      font-size: 3rem;
+      font-size: 2rem;
       margin-bottom: 1rem;
     }
-  }
 
-  @media (max-width: 768px) {
     scroll-snap-align: none; // Disable on mobile
     scroll-margin-top: 80px; // Smaller offset on mobile
   }

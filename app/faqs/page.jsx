@@ -99,7 +99,6 @@ export default function FAQs() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <HelpCircle className="header-icon" />
             <h2 className="section-title">Frequently Asked Questions</h2>
             <p className="section-subtitle">
               Find answers to common questions about our products and services

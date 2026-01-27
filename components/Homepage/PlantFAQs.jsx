@@ -78,7 +78,6 @@ export default function PlantFAQs() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <HelpCircle className="header-icon" color="white"/>
           <h2 className="section-title">Plant Care FAQs</h2>
           <p className="section-subtitle">
             Find answers to the most common questions about plant care

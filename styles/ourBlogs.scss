@@ -1,12 +1,12 @@
 @use 'variables' as *;
 
 .our-blogs {
-  padding: 4rem 2rem;
+  padding: 3rem 1.5rem;
   margin: 1rem auto;
   background: linear-gradient(135deg, rgba($dark-green, 0.03) 0%, rgba($deep-green, 0.05) 100%);
 
   @media (max-width: 768px) {
-    padding: 3rem 1rem;
+    padding: 2rem 1rem;
   }
 }
 

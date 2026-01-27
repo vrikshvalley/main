@@ -1,12 +1,16 @@
 @use 'variables' as *;
 
 .bring-nature-home {
-  padding: 0;
+  padding: 3rem 1.5rem;
   max-width: 1400px;
   margin: 0 auto;
   background: transparent;
   position: relative;
   font-family: 'Playfair Display', serif;
+
+  @media (max-width: 768px) {
+    padding: 2rem 1rem;
+  }
 
   .content-container {
     display: grid;

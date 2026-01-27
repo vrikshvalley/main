@@ -2,11 +2,19 @@
 @use 'variables' as *;
 
 .category-circles {
-  padding: 0rem 1rem;
+  padding: 3rem 1.5rem;
   max-width: 1500px;
   margin: 1rem auto;
-  overflow: visible; // Allow elements to scale beyond container
-  
+  overflow: visible;
+
+  @media (max-width: 768px) {
+    padding: 2rem 1rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 1.5rem 1rem;
+  }
+
   h2 {
     text-align: center;
     margin-bottom: 1.5rem;
@@ -95,50 +103,34 @@
   }
 
   @media (max-width: 768px) {
-    padding: 1.5rem 0rem;
+    padding: 0;
     margin: 0rem auto;
-    
+
     .circle-container {
       overflow-x: auto;
       overflow-y: visible;
-      gap: 2.5rem;
-      padding: 1rem;
+      gap: 2rem;
+      padding: 1rem 0.5rem;
       justify-content: flex-start;
       scroll-snap-type: x mandatory;
       -webkit-overflow-scrolling: touch;
+      flex-wrap: nowrap;
       
-      // Show scrollbar on mobile for better UX
       &::-webkit-scrollbar {
-        display: block;
-        height: 6px;
-      }
-      
-      &::-webkit-scrollbar-track {
-        background: rgba($primary-bg, 0.1);
-        border-radius: 3px;
-        margin: 0 1rem;
-      }
-      
-      &::-webkit-scrollbar-thumb {
-        background: rgba($accent-primary, 0.6);
-        border-radius: 3px;
-        
-        &:hover {
-          background: rgba($accent-primary, 0.9);
-        }
+        display: none;
       }
     }
 
     .circle-item {
       scroll-snap-align: center;
-      min-width: 100px;
-      
+      min-width: 90px;
+
       .circle-icon {
-        width: 90px;
-        height: 90px;
-        
+        width: 84px;
+        height: 84px;
+
         .category-emoji {
-          font-size: 2.75rem;
+          font-size: 2.6rem;
         }
 
         .category-image {
@@ -150,22 +142,22 @@
   }
 
   @media (max-width: 480px) {
-    padding: 0.5rem;
-    
+    padding: 0;
+
     .circle-container {
-      gap: 2rem;
-      padding:0.75rem;
+      gap: 1.5rem;
+      padding: 1rem 0.5rem;
     }
 
     .circle-item {
-      width: 90px;
+      width: 80px;
 
       .circle-icon {
-        width: 90px;
-        height: 90px;
-        
+        width: 80px;
+        height: 80px;
+
         .category-emoji {
-          font-size: 2.5rem;
+          font-size: 2.25rem;
         }
 
         .category-image {
@@ -175,7 +167,7 @@
       }
 
       p {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         font-weight: 700;
       }
     }

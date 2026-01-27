@@ -41,6 +41,7 @@ export default function OurStory() {
       <div className="page-content">
 
         <div className="content-section">
+          <h2>The Origin</h2>
           <p>
             In the heart of Kolkata's bustling streets, where concrete towers kissed the sky and green seemed like a fading memory, a young mind dreamed of something different. Urban life was comfortable, predictable—but nature always whispered from somewhere far away, calling out like a song forgotten but never unheard.
           </p>

@@ -2,14 +2,14 @@
 @use 'variables' as *;
 
 .impact-counter {
-  padding: 3rem 2rem;
+  padding: 3rem 1.5rem;
   margin: 1rem auto;
   background: transparent;
   position: relative;
   overflow: hidden;
 
   @media (max-width: 768px) {
-    padding: 3rem 1.5rem;
+    padding: 2rem 1rem;
   }
 
   @media (max-width: 480px) {

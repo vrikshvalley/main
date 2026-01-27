@@ -1,4 +1,5 @@
 import "../styles/globals.scss";
+import "../styles/initialLoader.scss";
 import Providers from "./providers";
 import AutoLogoutProvider from "@/components/general/AutoLogoutProvider";
 import InitialLoader from "@/components/general/InitialLoader";

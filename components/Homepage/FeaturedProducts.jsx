@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination } from 'swiper/modules';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import { getProducts } from '@/lib/services/productService';
 import ProductListCard from '@/components/products/ProductListCard';
 import 'swiper/css';
@@ -46,6 +46,7 @@ const cardVariants = {
 export default function FeaturedProducts() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
   const viewAllLink = '/products?filter=featured';
   
   useEffect(() => {
@@ -63,6 +64,18 @@ export default function FeaturedProducts() {
       }
     };
     fetchProducts();
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (typeof window !== 'undefined') {
+        setIsMobile(window.matchMedia('(max-width: 767px)').matches);
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
   
   return (
@@ -93,9 +106,14 @@ export default function FeaturedProducts() {
         <div style={{ padding: '2rem', textAlign: 'center' }}>Loading...</div>
       ) : products.length > 0 ? (
         <Swiper
-          modules={[Navigation, Pagination]}
+          modules={[Navigation, Pagination, Autoplay]}
           navigation
           pagination={{ clickable: true }}
+          autoplay={isMobile ? {
+            delay: 3000,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true
+          } : false}
           spaceBetween={20}
           slidesPerView={1}
           breakpoints={{

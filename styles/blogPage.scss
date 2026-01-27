@@ -44,7 +44,7 @@
   h1 {
     font-family: $font-primary;
     font-size: 3rem;
-    color: inherit;
+    color: $white;
     margin-bottom: 0.5rem;
 
     @media (max-width: 1024px) {

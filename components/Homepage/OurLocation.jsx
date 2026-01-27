@@ -22,10 +22,7 @@ export default function OurLocation() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="section-title">
-            <MapPin className="title-icon" color='white' />
-            Our Store Location
-          </h2>
+          <h2 className="section-title">Our Store Location</h2>
           <p className="section-subtitle">
             Visit our beautiful nursery and explore nature's finest collection
           </p>
