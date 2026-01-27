@@ -337,7 +337,7 @@
 .team-role {
   font-family: $font-secondary;
   font-size: 1rem;
-  color: #ffffff; /* make role (mover) text white for contrast */
+  color: $primary-bg; /* make role (mover) text white for contrast */
   font-weight: 600;
   margin-bottom: 1rem;
   text-transform: uppercase;
