@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination } from 'swiper/modules';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import { getProducts } from '@/lib/services/productService';
 import ProductListCard from '@/components/products/ProductListCard';
 import 'swiper/css';
@@ -46,6 +46,21 @@ export default function NewArrivals() {
     fetchProducts();
   }, []);
 
+  // match FeaturedProducts structure: chunk into pairs so slider slides mirror featured layout
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (typeof window !== 'undefined') {
+        setIsMobile(window.matchMedia('(max-width: 767px)').matches);
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <motion.section 
       className="featured-products"
@@ -68,23 +83,33 @@ export default function NewArrivals() {
         <div style={{ padding: '2rem', textAlign: 'center' }}>Loading...</div>
       ) : products.length > 0 ? (
         <Swiper
-          modules={[Navigation, Pagination]}
+          modules={[Navigation, Pagination, Autoplay]}
           navigation
           pagination={{ clickable: true }}
+          autoplay={isMobile ? {
+            delay: 3000,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true
+          } : false}
           spaceBetween={20}
-          slidesPerView={1}
-          breakpoints={{
-            480: { slidesPerView: 2, spaceBetween: 15 },
-            768: { slidesPerView: 3, spaceBetween: 20 },
-            1024: { slidesPerView: 4, spaceBetween: 24 },
-          }}
+          slidesPerView={1} // each slide will contain two products (chunked below)
           className="featured-products-slider"
         >
-          {products.map(product => (
-            <SwiperSlide key={product.id}>
-              <ProductListCard product={product} viewMode="grid" />
-            </SwiperSlide>
-          ))}
+          {(() => {
+            const chunks = [];
+            for (let i = 0; i < products.length; i += 2) chunks.push(products.slice(i, i + 2));
+            return chunks.map((pair, idx) => (
+              <SwiperSlide key={`pair-${idx}`}>
+                <div className="slide-row">
+                  {pair.map((product) => (
+                    <div className="slide-card" key={product.id}>
+                      <ProductListCard product={product} viewMode="grid" />
+                    </div>
+                  ))}
+                </div>
+              </SwiperSlide>
+            ));
+          })()}
         </Swiper>
       ) : (
         <div style={{ padding: '2rem', textAlign: 'center', color: '#999' }}>No products available</div>
