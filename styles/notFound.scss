@@ -143,7 +143,7 @@
     padding: 2rem 1.5rem;
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 400px) {
     padding: 1.5rem 1rem;
   }
 }
@@ -165,7 +165,7 @@
     gap: 0.5rem;
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 400px) {
     font-size: 4rem;
   }
 
@@ -183,7 +183,7 @@
         font-size: 4rem;
       }
 
-      @media (max-width: 480px) {
+      @media (max-width: 400px) {
         font-size: 3rem;
       }
     }
@@ -211,7 +211,7 @@
     font-size: 1.8rem;
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 400px) {
     font-size: 1.4rem;
   }
 }
@@ -226,7 +226,7 @@
     font-size: 1rem;
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 400px) {
     font-size: 0.9rem;
   }
 }
@@ -292,7 +292,7 @@
   margin-bottom: 2rem;
   font-style: italic;
 
-  @media (max-width: 480px) {
+  @media (max-width: 400px) {
     font-size: 0.9rem;
   }
 }
@@ -317,7 +317,7 @@
     transition: all 0.3s ease;
     font-family: 'Alumni Sans', serif;
 
-    @media (max-width: 480px) {
+    @media (max-width: 400px) {
       padding: 0.75rem 1.25rem;
       font-size: 0.9rem;
     }
@@ -356,7 +356,7 @@
     color: rgba($primary-bg, 0.7);
     margin-bottom: 1rem;
 
-    @media (max-width: 480px) {
+    @media (max-width: 400px) {
       font-size: 0.9rem;
     }
   }
@@ -377,7 +377,7 @@
       border-radius: 8px;
       background: rgba($accent-primary, 0.1);
 
-      @media (max-width: 480px) {
+      @media (max-width: 400px) {
         font-size: 0.85rem;
         padding: 0.4rem 0.8rem;
       }

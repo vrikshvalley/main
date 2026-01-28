@@ -15,7 +15,7 @@
       height: 300px;
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: 400px) {
       height: 250px;
     }
 
@@ -54,7 +54,7 @@
           font-size: 2.5rem;
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 400px) {
           font-size: 2rem;
         }
       }
@@ -69,7 +69,7 @@
           font-size: 1.1rem;
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 400px) {
           font-size: 1rem;
         }
       }
@@ -80,7 +80,7 @@
     padding: 0;
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 400px) {
     padding: 0;
   }
 }
@@ -114,7 +114,7 @@
     border-radius: 20px;
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 400px) {
     padding: 2rem 1.5rem;
     margin: 1.5rem 0.75rem;
     border-radius: 16px;
@@ -149,7 +149,7 @@
       font-size: 2.75rem;
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: 400px) {
       font-size: 2.25rem;
     }
   }
@@ -162,7 +162,7 @@
     font-weight: 400;
     line-height: 1.6;
 
-    @media (max-width: 480px) {
+    @media (max-width: 400px) {
       font-size: 1rem;
     }
   }
@@ -198,7 +198,7 @@
       border-radius: 2px;
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: 400px) {
       font-size: 1.75rem;
       padding-left: 1rem;
     }
@@ -212,7 +212,7 @@
     font-weight: 600;
     font-family: 'Alumni Sans', sans-serif;
 
-    @media (max-width: 480px) {
+    @media (max-width: 400px) {
       font-size: 1.4rem;
     }
   }
@@ -224,7 +224,7 @@
     margin-bottom: 1.5rem;
     font-weight: 400;
 
-    @media (max-width: 480px) {
+    @media (max-width: 400px) {
       font-size: 1rem;
       line-height: 1.75;
     }
@@ -238,7 +238,7 @@
     border-radius: 12px;
     border-left: 3px solid rgba($teal, 0.3);
 
-    @media (max-width: 480px) {
+    @media (max-width: 400px) {
       margin-left: 0.5rem;
       padding: 1.25rem;
     }
@@ -255,7 +255,7 @@
         color: $teal;
       }
 
-      @media (max-width: 480px) {
+      @media (max-width: 400px) {
         font-size: 1rem;
       }
     }
@@ -286,7 +286,7 @@
   gap: 2rem;
   margin-top: 3.5rem;
 
-  @media (max-width: 480px) {
+  @media (max-width: 400px) {
     gap: 1.5rem;
     grid-template-columns: 1fr;
   }
@@ -331,7 +331,7 @@
     }
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 400px) {
     padding: 2rem 1.5rem;
   }
 
@@ -348,7 +348,7 @@
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 4px 16px rgba($teal, 0.2);
 
-    @media (max-width: 480px) {
+    @media (max-width: 400px) {
       width: 60px;
       height: 60px;
       margin-bottom: 1.5rem;
@@ -362,7 +362,7 @@
     font-weight: 700;
     font-family: 'Alumni Sans', sans-serif;
 
-    @media (max-width: 480px) {
+    @media (max-width: 400px) {
       font-size: 1.25rem;
     }
   }
@@ -374,7 +374,7 @@
     transition: all 0.2s ease;
     font-weight: 500;
 
-    @media (max-width: 480px) {
+    @media (max-width: 400px) {
       font-size: 0.95rem;
     }
   }
@@ -397,7 +397,7 @@
   line-height: 1.75;
   box-shadow: 0 2px 12px rgba($teal, 0.08);
 
-  @media (max-width: 480px) {
+  @media (max-width: 400px) {
     padding: 1.5rem;
     font-size: 1rem;
   }
@@ -871,7 +871,7 @@
       box-shadow: 0 6px 20px rgba($teal, 0.3);
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: 400px) {
       padding: 0.875rem 2rem;
       font-size: 1rem;
     }

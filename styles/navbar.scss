@@ -290,7 +290,7 @@
         }
       }
 
-      @media (max-width: 480px) {
+      @media (max-width: 400px) {
         width: calc(100vw - 2rem);
         padding: 1rem 1.25rem;
 
@@ -999,7 +999,7 @@ color.adjust($accent-primary, $lightness: -5%);
     }
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 400px) {
     .nav-container {
       padding: 0.5rem 0.75rem;
       gap: 0.5rem;

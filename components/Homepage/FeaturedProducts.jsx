@@ -115,28 +115,27 @@ export default function FeaturedProducts() {
             pauseOnMouseEnter: true
           } : false}
           spaceBetween={20}
-          slidesPerView={1}
-          breakpoints={{
-            480: {
-              slidesPerView: 2,
-              spaceBetween: 15,
-            },
-            768: {
-              slidesPerView: 3,
-              spaceBetween: 20,
-            },
-            1024: {
-              slidesPerView: 4,
-              spaceBetween: 24,
-            },
-          }}
+          slidesPerView={1} // each slide will contain two products
           className="featured-products-slider"
         >
-          {products.map((product) => (
-            <SwiperSlide key={product.id}>
-              <ProductListCard product={product} viewMode="grid" />
-            </SwiperSlide>
-          ))}
+          {(() => {
+            // chunk products into pairs so each SwiperSlide shows 2 products
+            const chunks = [];
+            for (let i = 0; i < products.length; i += 2) {
+              chunks.push(products.slice(i, i + 2));
+            }
+            return chunks.map((pair, idx) => (
+              <SwiperSlide key={`pair-${idx}`}>
+                <div className="slide-row">
+                  {pair.map((product) => (
+                    <div className="slide-card" key={product.id}>
+                      <ProductListCard product={product} viewMode="grid" />
+                    </div>
+                  ))}
+                </div>
+              </SwiperSlide>
+            ));
+          })()}
         </Swiper>
       ) : (
         <div style={{ padding: '2rem', textAlign: 'center', color: '#999' }}>

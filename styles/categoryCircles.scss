@@ -11,7 +11,7 @@
     padding: 2rem 1rem;
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 400px) {
     padding: 1.5rem 1rem;
   }
 
@@ -41,7 +41,10 @@
     /* Prevent wrapping so it stays in one row */
     flex-wrap: nowrap;
   }
-
+  .no-horizontal-padding {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
   .circle-item {
     flex: 0 0 auto;
     text-align: center;
@@ -141,14 +144,17 @@
     }
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 400px) {
     padding: 0;
 
     .circle-container {
       gap: 1.5rem;
       padding: 1rem 0.5rem;
     }
-
+    .no-horizontal-padding{
+      padding-left: 0;
+      padding-right: 0;
+    }
     .circle-item {
       width: 80px;
 

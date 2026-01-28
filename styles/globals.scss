@@ -272,3 +272,30 @@ a:hover {
     scroll-margin-top: 90px;
   }
 }
+
+// Remove horizontal padding for specific home sections on small screens
+@media (max-width: 400px) {
+  /* Target sections that have the inner blocks as direct children:
+     - .category-circles (CategoryCircles.jsx)
+     - .why-choose-us (WhyChooseUs.jsx)
+     These are often rendered as the direct child of a scroll-section / home-section. */
+  
+  .scroll-section > .category-circles,
+  .scroll-section > .why-choose-us,
+  /* Fallback: if classes are applied directly on the section itself */
+  .category-circles,
+  .why-choose-us {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  /* Clear inner container paddings so inner content aligns with viewport edges */
+  .category-circles .circle-container,
+  .why-choose-us .scroll-container,
+  .category-circles .scroll-container {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}

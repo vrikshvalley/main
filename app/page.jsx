@@ -69,6 +69,7 @@ export default function Home() {
       />
 
       {/* Category Section */}
+      <div className="no-horizontal-padding">
       <motion.section
         id="categories"
         className="scroll-section home-section"
@@ -78,7 +79,8 @@ export default function Home() {
         variants={sectionVariants}
       >
         <CategoryCircles />
-      </motion.section>
+        </motion.section>
+        </div>
 
       {/* Featured Products Section */}
       <motion.section
