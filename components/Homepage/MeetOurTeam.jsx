@@ -82,7 +82,6 @@ const cardVariants = {
 
 function MeetOurTeam() {
   const [isMobile, setIsMobile] = useState(false);
-  const [expandedId, setExpandedId] = useState(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -96,9 +95,7 @@ function MeetOurTeam() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const toggleExpand = (id) => {
-    setExpandedId(expandedId === id ? null : id);
-  };
+  // Per-card expansion handled inside each card component
 
   return (
     <section className="meet-our-team">
@@ -134,82 +131,58 @@ function MeetOurTeam() {
           >
             {teamMembers.map((member) => (
               <SwiperSlide key={member.id}>
-                <motion.div 
-                  className={`team-card ${member.size || ''} ${expandedId === member.id ? 'expanded' : ''}`}
-                  variants={cardVariants}
-                >
-                  <div className="team-image-wrapper">
-                    <Image
-                      src={member.image}
-                      alt={member.name}
-                      width={300}
-                      height={300}
-                      className="team-image"
-                      loading="lazy"
-                      quality={75}
-                    />
-                    <div className="team-overlay">
-                      <div className="social-links">
-                        <a href={`mailto:${member.email}`} className="social-link" aria-label="Email">
-                          <Mail size={20} />
-                        </a>
-                        <a href={member.linkedin} className="social-link" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
-                          <Linkedin size={20} />
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="team-info" onClick={() => toggleExpand(member.id)}>
-                    <h3 className="team-name">{member.name}</h3>
-                    <p className="team-role">{member.role}</p>
-                    <p className="team-bio">{member.bio}</p>
-                    {member.bio && <button className="expand-btn">{expandedId === member.id ? 'Show Less' : 'Show More'}</button>}
-                  </div>
-                </motion.div>
+                <TeamCard member={member} />
               </SwiperSlide>
             ))}
           </Swiper>
         ) : (
           <motion.div className="team-grid" variants={containerVariants}>
             {teamMembers.map((member) => (
-              <motion.div 
-                key={member.id} 
-                className={`team-card ${member.size || ''} ${expandedId === member.id ? 'expanded' : ''}`}
-                variants={cardVariants}
-              >
-                <div className="team-image-wrapper">
-                  <Image
-                    src={member.image}
-                    alt={member.name}
-                    width={300}
-                    height={300}
-                    className="team-image"
-                    loading="lazy"
-                    quality={75}
-                  />
-                  <div className="team-overlay">
-                    <div className="social-links">
-                      <a href={`mailto:${member.email}`} className="social-link" aria-label="Email">
-                        <Mail size={20} />
-                      </a>
-                      <a href={member.linkedin} className="social-link" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
-                        <Linkedin size={20} />
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <div className="team-info" onClick={() => toggleExpand(member.id)}>
-                  <h3 className="team-name">{member.name}</h3>
-                  <p className="team-role">{member.role}</p>
-                  <p className="team-bio">{member.bio}</p>
-                  {member.bio && <button className="expand-btn">{expandedId === member.id ? 'Show Less' : 'Show More'}</button>}
-                </div>
-              </motion.div>
+              <TeamCard member={member} key={member.id} />
             ))}
           </motion.div>
         )}
       </motion.div>
     </section>
+  );
+}
+
+function TeamCard({ member }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  return (
+    <motion.div 
+      className={`team-card ${member.size || ''} ${isExpanded ? 'expanded' : ''}`}
+      variants={cardVariants}
+    >
+      <div className="team-image-wrapper">
+        <Image
+          src={member.image}
+          alt={member.name}
+          width={300}
+          height={300}
+          className="team-image"
+          loading="lazy"
+          quality={75}
+        />
+        <div className="team-overlay">
+          <div className="social-links">
+            <a href={`mailto:${member.email}`} className="social-link" aria-label="Email">
+              <Mail size={20} />
+            </a>
+            <a href={member.linkedin} className="social-link" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
+              <Linkedin size={20} />
+            </a>
+          </div>
+        </div>
+      </div>
+      <div className="team-info" onClick={() => setIsExpanded((s) => !s)}>
+        <h3 className="team-name">{member.name}</h3>
+        <p className="team-role">{member.role}</p>
+        <p className="team-bio">{member.bio}</p>
+        {member.bio && <button className="expand-btn">{isExpanded ? 'Show Less' : 'Show More'}</button>}
+      </div>
+    </motion.div>
   );
 }
 

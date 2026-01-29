@@ -313,8 +313,8 @@ export default function ProductPage({ product }) {
             </div>
           )}
 
-          {/* Variant selection (for products with price variants) - excluding default */}
-          {filteredVariants && filteredVariants.length > 1 && (
+          {/* Variant selection (for products with price variants) - including all variants */}
+          {filteredVariants && filteredVariants.length > 0 && (
             <div className="option-group">
               <label>Select Variant:</label>
               <div className="options variant-options">
@@ -354,14 +354,28 @@ export default function ProductPage({ product }) {
           {/* Buttons */}
           <div className="actions">
             {product.priceOnCustomization ? (
-              <a 
-                href="https://wa.me/919204745612?text=Hi, I'm interested in customizing this product"
-                className="contact-customize"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Contact for Customization
-              </a>
+              <>
+                <a 
+                  href={`https://wa.me/919204745612?text=${encodeURIComponent(
+                    `Hi, I'm interested in customizing this product:\n\nProduct: ${product.name || ''}\nLink: ${typeof window !== 'undefined' ? window.location.href : ''}`
+                  )}`}
+                  className="contact-customize"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Contact for Customization
+                </a>
+                <Button
+                  variant="secondary"
+                  size="lg"
+                  onClick={() => {
+                    const orderText = `Hi, I'd like to place an order:\n\nProduct: ${product.name || ''}\nQuantity: ${quantity}\nLink: ${typeof window !== 'undefined' ? window.location.href : ''}`;
+                    window.open(`https://wa.me/919204745612?text=${encodeURIComponent(orderText)}`, '_blank', 'noopener noreferrer');
+                  }}
+                >
+                  Show Order on WhatsApp
+                </Button>
+              </>
             ) : (
               <>
                 <Button

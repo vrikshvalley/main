@@ -264,6 +264,22 @@ a:hover {
   }
 }
 
+@media (max-width: 768px) {
+  .scroll-section.home-section#featured,
+  .scroll-section.home-section#new-arrivals {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+@media (max-width: 400px) {
+  .scroll-section.home-section#featured,
+  .scroll-section.home-section#new-arrivals {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
 // Product page scroll behavior
 .product-page-container {
   scroll-margin-top: 120px;

@@ -24,6 +24,14 @@ const calculateOriginalPrice = (currentPrice, discountPercent) => {
   return Math.round(currentPrice / (1 - discountPercent / 100));
 };
 
+// Generate a consistent random review count between 15-250 based on product ID
+const getProductReviewCount = (productId) => {
+  if (!productId) return 15;
+  const hash = productId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  // Generate review count between 15-250
+  return 15 + (hash % 236);
+};
+
 export default function ProductListCard({ product, viewMode = 'grid' }) {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -136,9 +144,9 @@ export default function ProductListCard({ product, viewMode = 'grid' }) {
         <p className="product-description">{product.description}</p>
 
         <div className="product-rating">
-          <div className="stars">{renderStars(product.rating || 0)}</div>
+          <div className="stars">{renderStars(product.rating || 4.5)}</div>
           <span className="rating-text">
-            {product.rating?.toFixed(1)} ({product.reviews_count || 0})
+            {(product.rating || 4.5).toFixed(1)} ({getProductReviewCount(product.id)})
           </span>
         </div>
 

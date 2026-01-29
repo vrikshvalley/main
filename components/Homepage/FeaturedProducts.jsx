@@ -46,7 +46,7 @@ const cardVariants = {
 export default function FeaturedProducts() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isMobile, setIsMobile] = useState(false);
+  const [viewportWidth, setViewportWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
   const viewAllLink = '/products?filter=featured';
   
   useEffect(() => {
@@ -69,7 +69,7 @@ export default function FeaturedProducts() {
   useEffect(() => {
     const handleResize = () => {
       if (typeof window !== 'undefined') {
-        setIsMobile(window.matchMedia('(max-width: 767px)').matches);
+        setViewportWidth(window.innerWidth);
       }
     };
 
@@ -77,6 +77,14 @@ export default function FeaturedProducts() {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  const isMobile = viewportWidth < 768;
+  const isDesktop = viewportWidth >= 1024;
+  const itemsPerSlide = isDesktop ? 4 : 2;
+  const slides = [];
+  for (let i = 0; i < products.length; i += itemsPerSlide) {
+    slides.push(products.slice(i, i + itemsPerSlide));
+  }
   
   return (
     <motion.section 
@@ -114,28 +122,26 @@ export default function FeaturedProducts() {
             disableOnInteraction: false,
             pauseOnMouseEnter: true
           } : false}
-          spaceBetween={20}
-          slidesPerView={1} // each slide will contain two products
+          spaceBetween={16}
+          slidesPerView={1}
+          breakpoints={{
+            0: { slidesPerView: 1, spaceBetween: 12 },
+            768: { slidesPerView: 1, spaceBetween: 16 },
+            1024: { slidesPerView: 1, spaceBetween: 20 }
+          }}
           className="featured-products-slider"
         >
-          {(() => {
-            // chunk products into pairs so each SwiperSlide shows 2 products
-            const chunks = [];
-            for (let i = 0; i < products.length; i += 2) {
-              chunks.push(products.slice(i, i + 2));
-            }
-            return chunks.map((pair, idx) => (
-              <SwiperSlide key={`pair-${idx}`}>
-                <div className="slide-row">
-                  {pair.map((product) => (
-                    <div className="slide-card" key={product.id}>
-                      <ProductListCard product={product} viewMode="grid" />
-                    </div>
-                  ))}
-                </div>
-              </SwiperSlide>
-            ));
-          })()}
+          {slides.map((group, index) => (
+            <SwiperSlide key={`featured-slide-${index}`}>
+              <div className="slide-grid">
+                {group.map((product) => (
+                  <div className="slide-card" key={product.id}>
+                    <ProductListCard product={product} viewMode="grid" />
+                  </div>
+                ))}
+              </div>
+            </SwiperSlide>
+          ))}
         </Swiper>
       ) : (
         <div style={{ padding: '2rem', textAlign: 'center', color: '#999' }}>

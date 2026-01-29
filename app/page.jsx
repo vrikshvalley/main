@@ -116,6 +116,7 @@ export default function Home() {
 
       {/* New Arrivals Section */}
       <motion.section
+        id="new-arrivals"
         className="scroll-section home-section"
         initial="hidden"
         whileInView="visible"

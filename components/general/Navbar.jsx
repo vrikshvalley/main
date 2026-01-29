@@ -25,9 +25,6 @@ export default function Navbar() {
   const [hoveredCategory, setHoveredCategory] = useState(null);
   const [expandedMobileCategory, setExpandedMobileCategory] = useState(null);
   const [categories, setCategories] = useState([]);
-  
-  // Hide search only on main products listing page; show on category and subcategory pages
-  const isListingPage = pathname === '/products';
 
   useEffect(() => {
     async function fetchCategories() {
@@ -205,7 +202,7 @@ export default function Navbar() {
 
         {/* Right: Search + Cart + Profile */}
         <div className="nav-actions">
-          {!isListingPage && <SearchBar />}
+          <SearchBar />
           
           <CartIcon onCartClick={openCart} />
           <ProfileIcon />
