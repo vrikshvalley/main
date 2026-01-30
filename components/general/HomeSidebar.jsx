@@ -27,23 +27,28 @@ export default function HomeSidebar() {
     { id: 'hero', label: 'Home', icon: Home },
     { id: 'categories', label: 'Categories', icon: Grid3x3 },
     { id: 'featured', label: 'Featured', icon: Star },
+    { id: 'new-arrivals', label: 'New Arrivals', icon: TrendingUp },
+    { divider: true },
     { id: 'why-choose', label: 'Why Us', icon: Heart },
     { id: 'impact', label: 'Impact', icon: TrendingUp },
     { id: 'testimonials', label: 'Reviews', icon: MessageCircle },
+    { id: 'team', label: 'Team', icon: Users },
+    { divider: true },
     { id: 'faqs', label: 'FAQs', icon: HelpCircle },
     { id: 'location', label: 'Location', icon: MapPin },
-    { id: 'gallery', label: 'Gallery', icon: ImageIcon },
-    { id: 'about', label: 'About', icon: Info },
-    { id: 'team', label: 'Team', icon: Users },
     { id: 'blogs', label: 'Blogs', icon: BookOpen },
+    { divider: true },
+    { id: 'about', label: 'About', icon: Info },
   ];
 
   useEffect(() => {
     // Store references to all sections
     sections.forEach(section => {
-      const element = document.getElementById(section.id);
-      if (element) {
-        sectionRefs.current[section.id] = element;
+      if (!section.divider) {
+        const element = document.getElementById(section.id);
+        if (element) {
+          sectionRefs.current[section.id] = element;
+        }
       }
     });
 
@@ -51,12 +56,14 @@ export default function HomeSidebar() {
       const scrollPosition = window.scrollY + window.innerHeight / 3;
 
       for (const section of sections) {
-        const element = sectionRefs.current[section.id];
-        if (element) {
-          const { offsetTop, offsetHeight } = element;
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-            setActiveSection(section.id);
-            break;
+        if (!section.divider) {
+          const element = sectionRefs.current[section.id];
+          if (element) {
+            const { offsetTop, offsetHeight } = element;
+            if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+              setActiveSection(section.id);
+              break;
+            }
           }
         }
       }
@@ -86,7 +93,13 @@ export default function HomeSidebar() {
       transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
     >
       <nav className="sidebar-nav">
-        {sections.map((section) => {
+        {sections.map((section, idx) => {
+          if (section.divider) {
+            return (
+              <div key={`divider-${idx}`} className="sidebar-divider" />
+            );
+          }
+          
           const Icon = section.icon;
           return (
             <button

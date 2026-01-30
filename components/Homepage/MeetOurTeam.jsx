@@ -5,9 +5,8 @@ import { memo, useState, useEffect } from 'react';
 import Image from '@/components/general/ImgWithLoader';
 import { Mail, Linkedin } from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination } from 'swiper/modules';
+import { Pagination } from 'swiper/modules';
 import 'swiper/css';
-import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import '@/styles/meetOurTeam.scss';
 
@@ -25,7 +24,7 @@ const teamMembers = [
   {
     id: 2,
     name: "Debayan Mukherjee",
-    role: "Developer and Digital Gardener",
+    role: "Lead Technical Developer",
     image: "/debayan.png",
     bio: "Debayan isn't just a coder—he's the gardener of Vriksh Valley's digital landscape, shaping online experiences that feel like a quiet walk through a thriving garden: clean, inviting, and subtly rooted in nature. Every seamless scroll through our catalogue, every effortless checkout, every feature that makes plant‑parenting easier—he engineers the vision into reality, planting the effortless love you feel for your online garden.🌱",
     email: "astrodebayan.18@gmail.com",
@@ -116,8 +115,7 @@ function MeetOurTeam() {
 
         {isMobile ? (
           <Swiper
-            modules={[Navigation, Pagination]}
-            navigation
+            modules={[Pagination]}
             pagination={{ clickable: true }}
             spaceBetween={20}
             slidesPerView={1}
@@ -150,6 +148,13 @@ function MeetOurTeam() {
 function TeamCard({ member }) {
   const [isExpanded, setIsExpanded] = useState(false);
 
+  // Handle toggle with proper event handling
+  const handleToggleExpand = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsExpanded((s) => !s);
+  };
+
   return (
     <motion.div 
       className={`team-card ${member.size || ''} ${isExpanded ? 'expanded' : ''}`}
@@ -176,11 +181,11 @@ function TeamCard({ member }) {
           </div>
         </div>
       </div>
-      <div className="team-info" onClick={() => setIsExpanded((s) => !s)}>
+      <div className="team-info">
         <h3 className="team-name">{member.name}</h3>
         <p className="team-role">{member.role}</p>
         <p className="team-bio">{member.bio}</p>
-        {member.bio && <button className="expand-btn">{isExpanded ? 'Show Less' : 'Show More'}</button>}
+        {member.bio && <button className="expand-btn" onClick={handleToggleExpand}>{isExpanded ? 'Show Less' : 'Show More'}</button>}
       </div>
     </motion.div>
   );

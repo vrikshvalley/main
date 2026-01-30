@@ -88,6 +88,78 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Vriksh Valley",
+    url: "https://vrikshvalley.com",
+    logo: "https://vrikshvalley.com/big-logo.png",
+    description:
+      "Elevate your home with handpicked, specially curated greenery and artisanal planters, creating a tranquil, nature-inspired haven.",
+    contactPoint: {
+      "@type": "ContactPoint",
+      telephone: "+91-9204745612",
+      contactType: "Customer Service",
+      areaServed: "IN",
+      availableLanguage: ["English", "Hindi"],
+    },
+    sameAs: [
+      "https://www.instagram.com/vrikshvalley",
+      "https://www.facebook.com/vrikshvalley",
+    ],
+    potentialAction: {
+      "@type": "SearchAction",
+      target: "https://vrikshvalley.com/search?q={search_term_string}",
+      "query-input": "required name=search_term_string",
+    },
+  };
+
+  const siteNavigationData = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: [
+      {
+        "@type": "SiteNavigationElement",
+        position: 1,
+        name: "Indoor Plants",
+        description:
+          "Breathe life into your home – lush indoor plants to purify and uplift your space.",
+        url: "https://vrikshvalley.com/category/indoor-plants",
+      },
+      {
+        "@type": "SiteNavigationElement",
+        position: 2,
+        name: "Succulents",
+        description:
+          "Stunning succulents – low-maintenance green companions that bring calm and joy.",
+        url: "https://vrikshvalley.com/category/succulents",
+      },
+      {
+        "@type": "SiteNavigationElement",
+        position: 3,
+        name: "Ceramic Planters",
+        description:
+          "Handcrafted ceramic planters – stylish, artisanal homes for your beloved plants.",
+        url: "https://vrikshvalley.com/category/ceramic-planters",
+      },
+      {
+        "@type": "SiteNavigationElement",
+        position: 4,
+        name: "Decor",
+        description:
+          "Nature-inspired decor – accents to transform your space into a serene sanctuary.",
+        url: "https://vrikshvalley.com/category/decor",
+      },
+      {
+        "@type": "SiteNavigationElement",
+        position: 5,
+        name: "Contact Us",
+        description: "Let's Talk Plants. Questions? Custom orders? We're here.",
+        url: "https://vrikshvalley.com/contact-us",
+      },
+    ],
+  };
+
   return (
     <html lang="en">
       <head>
@@ -103,6 +175,16 @@ export default function RootLayout({ children }) {
         <link
           rel="apple-touch-icon"
           href="https://vrikshvalley.com/favicon.ico"
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(siteNavigationData),
+          }}
         />
       </head>
       <body>

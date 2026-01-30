@@ -1,4 +1,4 @@
-// Payment Status Page - User lands here after PhonePe payment
+// Payment Status Page - User lands here after Razorpay payment
 "use client";
 
 import { useEffect, useState, Suspense } from "react";
@@ -29,7 +29,7 @@ function PaymentStatusContent() {
       const data = await response.json();
 
       if (data.success) {
-        // Check PhonePe status codes
+        // Check Razorpay status codes
         if (data.status === "PAYMENT_SUCCESS") {
           setStatus("success");
           setPaymentData(data.data);

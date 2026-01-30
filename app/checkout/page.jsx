@@ -129,7 +129,7 @@ const CheckoutPage = () => {
     const paymentStatus = params.get('status');
 
     if (callbackOrderId && paymentStatus) {
-      // Coming back from PhonePe redirect
+      // Coming back from payment redirect
       if (paymentStatus === 'success') {
         handlePaymentCallback(callbackOrderId);
       } else {
@@ -199,12 +199,12 @@ const CheckoutPage = () => {
       // Create callback URL
       const callbackUrl = `${window.location.origin}/checkout?order_id=${orderId}&status=success`;
 
-      // Create PhonePe order via API
+      // Create Razorpay order via API
       const orderResponse = await fetch('/api/payment/create-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          amount: Math.round(totals.total * 100), // Convert rupees to paisa for PhonePe
+          amount: Math.round(totals.total * 100), // Convert rupees to paisa for Razorpay
           merchantOrderId: orderId,
           redirectUrl: callbackUrl,
           customerName: profile.name,
@@ -218,7 +218,7 @@ const CheckoutPage = () => {
         throw new Error(error?.message || 'Failed to create payment order');
       }
 
-      // Redirect to PhonePe payment page
+      // Redirect to Razorpay payment page
       window.location.href = redirectUrl;
     } catch (error) {
       console.error('Payment error:', error);
@@ -240,7 +240,7 @@ const CheckoutPage = () => {
 
       const orderContext = JSON.parse(orderContextStr);
 
-      // Verify payment with PhonePe
+      // Verify payment with Razorpay
       const verifyResponse = await fetch('/api/payment/verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -261,10 +261,10 @@ const CheckoutPage = () => {
         orderId: callbackOrderId,
         status: 'confirmed',
         paymentStatus: 'paid',
-        paymentMethod: 'phonepe',
-        phonepeMerchantOrderId: callbackOrderId,
-        phonepeOrderId: orderId,
-        phonepeTransactionId: transactionId,
+        paymentMethod: 'razorpay',
+        razorpayOrderId: callbackOrderId,
+        razorpayPaymentId: orderId,
+        razorpaySignature: transactionId,
         items: orderContext.cartItems.map((item) => ({
           product_id: item.id,
           name: item.name,
@@ -291,8 +291,8 @@ const CheckoutPage = () => {
         throw new Error('Failed to create order');
       }
 
-      // Create Shiprocket order
-      await fetch('/api/shipping/create-order', {
+      // Create Delhivery shipment
+      await fetch('/api/shipping/create-shipment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

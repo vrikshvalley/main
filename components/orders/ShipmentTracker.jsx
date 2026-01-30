@@ -207,7 +207,7 @@ export default function ShipmentTracker({ order, compact = false }) {
               rel="noopener noreferrer"
               className="track-link"
             >
-              Track on Shiprocket <ExternalLink size={16} />
+              Track on Delhivery <ExternalLink size={16} />
             </a>
           )}
         </div>

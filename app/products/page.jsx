@@ -176,6 +176,8 @@ export default function ProductsPage() {
       page: currentPage,
       limit: productsPerPage,
       searchQuery: searchQuery.trim() || null,
+      featured: filter === 'featured' ? true : null,
+      new_arrival: filter === 'new-arrivals' ? true : null,
     });
 
     setProducts(result.products);
@@ -274,6 +276,14 @@ export default function ProductsPage() {
       </div>
 
       <div className="main-products-container">
+        {/* Backdrop Overlay */}
+        {showFilters && (
+          <div 
+            className="filters-backdrop"
+            onClick={() => setShowFilters(false)}
+          />
+        )}
+
         {/* Filters Sidebar */}
         <aside className={`filters-sidebar ${showFilters ? 'show' : 'hide'}`}>
           <div className="filters-header">

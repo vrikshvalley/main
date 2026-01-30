@@ -224,6 +224,55 @@ export default function Navbar() {
       {/* Mobile dropdown rendered into document.body to avoid stacking context issues */}
       {menuOpen && (typeof document !== 'undefined' ? createPortal(
         <div className="mobile-menu" role="dialog" aria-modal="true">
+          {/* Home Navigation Section */}
+          <div className="mobile-nav-section">
+            <h3 className="mobile-nav-title">Navigation</h3>
+            <Link 
+              href="/#hero" 
+              className="mobile-nav-item" 
+              onClick={() => setMenuOpen(false)}
+            >
+              Home
+            </Link>
+            <Link 
+              href="/#featured" 
+              className="mobile-nav-item" 
+              onClick={() => setMenuOpen(false)}
+            >
+              Featured
+            </Link>
+            <Link 
+              href="/#new-arrivals" 
+              className="mobile-nav-item" 
+              onClick={() => setMenuOpen(false)}
+            >
+              New Arrivals
+            </Link>
+            <Link 
+              href="/#why-choose" 
+              className="mobile-nav-item" 
+              onClick={() => setMenuOpen(false)}
+            >
+              Why Us
+            </Link>
+            <Link 
+              href="/#testimonials" 
+              className="mobile-nav-item" 
+              onClick={() => setMenuOpen(false)}
+            >
+              Reviews
+            </Link>
+            <Link 
+              href="/#team" 
+              className="mobile-nav-item" 
+              onClick={() => setMenuOpen(false)}
+            >
+              Team
+            </Link>
+          </div>
+
+          {/* Categories Section */}
+          <div className="mobile-categories-section">
           {categories.map((category) => (
             <div key={category.slug} className="mobile-category">
               <div className="mobile-category-header">
@@ -302,6 +351,7 @@ export default function Navbar() {
               </AnimatePresence>
             </div>
           ))}
+          </div>
         </div>,
         document.body
       ) : null)}

@@ -109,7 +109,7 @@ function SampleOrderContent() {
 
       if (data.success) {
         setPaymentResponse(data);
-        // Redirect to PhonePe payment page
+        // Redirect to Razorpay payment page
         if (data.paymentUrl) {
           window.location.href = data.paymentUrl;
         }

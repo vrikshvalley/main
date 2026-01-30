@@ -36,7 +36,12 @@ export default function NewArrivals() {
     const fetchProducts = async () => {
       try {
         const { data: allProducts } = await getProducts({ new_arrival: true, pageSize: 12 });
-        setProducts(allProducts || []);
+        // Ensure all products have new_arrivals flag set to true for badge display
+        const productsWithFlag = (allProducts || []).map(product => ({
+          ...product,
+          new_arrivals: true
+        }));
+        setProducts(productsWithFlag);
       } catch (error) {
         console.error('Error fetching new arrivals:', error);
       } finally {
