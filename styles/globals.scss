@@ -228,9 +228,9 @@ a:hover {
   scroll-snap-stop: normal;
   scroll-margin-top: 100px; // Offset for navbar height
 
-  &.home-section {
-    padding: var(--home-section-padding);
-  }
+  // &.home-section {
+  //   padding: var(--home-section-padding);
+  // }
 
   &.home-section h2 {
     margin: 0 0 var(--home-heading-margin);
@@ -239,9 +239,6 @@ a:hover {
   }
 
   @media (max-width: 1024px) {
-    &.home-section {
-      padding: 2.5rem 1.25rem;
-    }
 
     &.home-section h2 {
       font-size: 2.5rem;
@@ -250,9 +247,6 @@ a:hover {
   }
 
   @media (max-width: 768px) {
-    &.home-section {
-      padding: var(--home-section-padding-mobile);
-    }
 
     &.home-section h2 {
       font-size: 2rem;
@@ -264,21 +258,7 @@ a:hover {
   }
 }
 
-@media (max-width: 768px) {
-  .scroll-section.home-section#featured,
-  .scroll-section.home-section#new-arrivals {
-    padding-left: 0;
-    padding-right: 0;
-  }
-}
 
-@media (max-width: 400px) {
-  .scroll-section.home-section#featured,
-  .scroll-section.home-section#new-arrivals {
-    padding-left: 0;
-    padding-right: 0;
-  }
-}
 
 // Product page scroll behavior
 .product-page-container {
@@ -289,29 +269,4 @@ a:hover {
   }
 }
 
-// Remove horizontal padding for specific home sections on small screens
-@media (max-width: 400px) {
-  /* Target sections that have the inner blocks as direct children:
-     - .category-circles (CategoryCircles.jsx)
-     - .why-choose-us (WhyChooseUs.jsx)
-     These are often rendered as the direct child of a scroll-section / home-section. */
-  
-  .scroll-section > .category-circles,
-  .scroll-section > .why-choose-us,
-  /* Fallback: if classes are applied directly on the section itself */
-  .category-circles,
-  .why-choose-us {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-  }
 
-  /* Clear inner container paddings so inner content aligns with viewport edges */
-  .category-circles .circle-container,
-  .why-choose-us .scroll-container,
-  .category-circles .scroll-container {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-  }
-}

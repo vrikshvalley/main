@@ -273,6 +273,7 @@ export default function Navbar() {
 
           {/* Categories Section */}
           <div className="mobile-categories-section">
+            <h3 className="mobile-nav-title">Categories</h3>
           {categories.map((category) => (
             <div key={category.slug} className="mobile-category">
               <div className="mobile-category-header">

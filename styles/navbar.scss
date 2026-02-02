@@ -692,22 +692,22 @@ color.adjust($accent-primary, $lightness: -5%);
     z-index: 100050;
     animation: slideDown 0.3s ease-out;
 
+    .mobile-nav-title {
+      font-family: 'Alumni Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: $accent-primary;
+      margin-bottom: 0.75rem;
+      padding-left: 1rem;
+    }
+
     /* Navigation Section Styling */
     .mobile-nav-section {
       width: 100%;
       padding: 1.5rem 1rem 1rem;
       border-bottom: 2px solid rgba($accent-primary, 0.2);
-
-      .mobile-nav-title {
-        font-family: 'Alumni Sans', sans-serif;
-        font-size: 0.85rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        color: $accent-primary;
-        margin-bottom: 0.75rem;
-        padding-left: 1rem;
-      }
 
       .mobile-nav-item {
         display: block;
@@ -750,21 +750,12 @@ color.adjust($accent-primary, $lightness: -5%);
     /* Categories Section Styling */
     .mobile-categories-section {
       width: 100%;
-      padding: 1rem 0;
+      padding: 1.5rem 0 1rem;
+      border-top: 1px solid rgba($primary-bg, 0.1);
 
-      &::before {
-        content: 'Shop by Category';
-        display: block;
-        font-family: 'Alumni Sans', sans-serif;
-        font-size: 0.85rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        color: $text-primary;
-        padding: 1rem 1.5rem 0.75rem;
-        margin-bottom: 0.5rem;
-        border-top: 1px solid rgba($primary-bg, 0.1);
-        padding-top: 1.5rem;
+      .mobile-nav-title {
+        color: $accent-primary;
+        padding-left: 1.5rem;
       }
     }
 

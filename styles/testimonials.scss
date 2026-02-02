@@ -53,6 +53,12 @@
     max-height: 300px;
     min-width: 250px; // align with grid min column size
 
+    @media (min-width: 769px) {
+      height: 300px;
+      min-height: 300px;
+      max-height: 300px;
+    }
+
     &:hover {
       transform: translateY(-8px);
       box-shadow: $shadow-strong;

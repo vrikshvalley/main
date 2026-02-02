@@ -159,6 +159,12 @@
     gap: 1.25rem;
     transition: all 0.3s ease;
 
+    @media (min-width: 769px) {
+      height: 300px;
+      min-height: 300px;
+      max-height: 300px;
+    }
+
     &:hover {
       transform: translateY(-8px);
       box-shadow: 0 12px 30px rgba($teal, 0.15);
