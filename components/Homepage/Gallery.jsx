@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect, useState, useRef } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import Image from '@/components/general/ImgWithLoader';
+import AnimatedText from '@/components/general/AnimatedText';
 import '@/styles/gallery.scss';
 
 export default function Gallery() {
@@ -15,11 +16,16 @@ export default function Gallery() {
     { id: 6, src: '/loginSlider/(1).webp', alt: 'Premium Plants - Handpicked for your space' },
     { id: 7, src: '/loginSlider/(2).webp', alt: 'Indoor Paradise - Bring nature inside' },
     { id: 8, src: '/loginSlider/(3).webp', alt: 'Garden Dreams - Create your own oasis' },
-    { id: 9, src: '/loginSlider/(4).webp', alt: 'Green Living - Embrace sustainability' },
-    { id: 10, src: '/loginSlider/(5).webp', alt: 'Plant Paradise - Your green journey starts here' },
+    { id: 9, src: '/loginSlider/(5).webp', alt: 'Plant Paradise - Your green journey starts here' },
   ];
 
   const [activeImage, setActiveImage] = useState(null);
+  const sectionRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start']
+  });
+  const gridY = useTransform(scrollYProgress, [0, 1], [20, -20]);
 
   useEffect(() => {
     const onKeyDown = (e) => {
@@ -31,6 +37,7 @@ export default function Gallery() {
 
   return (
     <motion.section 
+      ref={sectionRef}
       className="gallery"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
@@ -45,13 +52,24 @@ export default function Gallery() {
           viewport={{ once: true, amount: 0.2, margin: "0px" }}
           transition={{ duration: 0.5, ease: "easeOut" }}
         >
-          <h1 style={{ fontSize: "3rem", fontWeight: "700" }} className="section-title">Our Gallery</h1>
-          <p className="section-subtitle">
-            Explore the beauty of nature through our collection
-          </p>
+          <p className="cursive-subtitle">Moments in Green</p>
+          <AnimatedText
+            as="h1"
+            text="Our Gallery"
+            className="section-title"
+            delay={0.1}
+            stagger={0.05}
+          />
+          <AnimatedText
+            as="p"
+            text="Explore the beauty of nature through our collection"
+            className="section-subtitle"
+            delay={0.2}
+            stagger={0.02}
+          />
         </motion.div>
 
-        <div className="gallery-grid">
+        <motion.div className="gallery-grid" style={{ y: gridY }}>
           {galleryImages.map((image, index) => (
             <motion.div
               key={image.id}
@@ -91,7 +109,7 @@ export default function Gallery() {
               </div>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
 
       <AnimatePresence>

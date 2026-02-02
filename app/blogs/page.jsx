@@ -61,6 +61,10 @@ export default function BlogPage() {
                     className="blog-image"
                   />
                   <div className="blog-category">{blog.category}</div>
+                  <div className="blog-date-bookmark">
+                    <span className="bookmark-month">{new Date(blog.date).toLocaleDateString('en-US', { month: 'short' })}</span>
+                    <span className="bookmark-day">{new Date(blog.date).getDate()}</span>
+                  </div>
                 </Link>
 
                 <div className="blog-content">

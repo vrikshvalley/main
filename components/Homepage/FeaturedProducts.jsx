@@ -9,6 +9,8 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import { getProducts } from '@/lib/services/productService';
 import ProductListCard from '@/components/products/ProductListCard';
+import AnimatedText from '@/components/general/AnimatedText';
+import { useMouseGlow } from '@/lib/hooks/useMouseGlow';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -48,6 +50,7 @@ export default function FeaturedProducts() {
   const [loading, setLoading] = useState(true);
   const [viewportWidth, setViewportWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
   const viewAllLink = '/products?filter=featured';
+  const { ref, glowPosition, handleMouseMove, handleMouseLeave } = useMouseGlow();
   
   useEffect(() => {
     const fetchProducts = async () => {
@@ -85,9 +88,41 @@ export default function FeaturedProducts() {
   for (let i = 0; i < products.length; i += itemsPerSlide) {
     slides.push(products.slice(i, i + itemsPerSlide));
   }
+
+  // Attach mouse tracking to parent wrapper
+  useEffect(() => {
+    if (!ref.current) return;
+    const wrapper = ref.current.closest('.featured-section-wrapper');
+    if (!wrapper) return;
+
+    const handleMouseMove = (e) => {
+      const rect = wrapper.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
+        wrapper.style.setProperty('--glow-x', `${x}px`);
+        wrapper.style.setProperty('--glow-y', `${y}px`);
+      }
+    };
+
+    const handleMouseLeave = () => {
+      wrapper.style.setProperty('--glow-x', '-999px');
+      wrapper.style.setProperty('--glow-y', '-999px');
+    };
+
+    wrapper.addEventListener('mousemove', handleMouseMove);
+    wrapper.addEventListener('mouseleave', handleMouseLeave);
+
+    return () => {
+      wrapper.removeEventListener('mousemove', handleMouseMove);
+      wrapper.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }, []);
   
   return (
     <motion.section 
+      ref={ref}
       className="featured-products"
       initial="hidden"
       whileInView="visible"
@@ -95,12 +130,16 @@ export default function FeaturedProducts() {
       variants={containerVariants}
     >
       <div className="featured-header">
-        <motion.h2 
-          className="featured-title"
-          variants={cardVariants}
-        >
-          Featured Products
-        </motion.h2>
+        <div className="featured-header-left">
+          <p className="cursive-subtitle">Handpicked Greens</p>
+          <AnimatedText
+            as="h2"
+            text="Featured Products"
+            className="featured-title"
+            delay={0.1}
+            stagger={0.05}
+          />
+        </div>
         <motion.div variants={cardVariants}>
           <Link href={viewAllLink} className="view-all-link">
             View All
@@ -134,10 +173,21 @@ export default function FeaturedProducts() {
           {slides.map((group, index) => (
             <SwiperSlide key={`featured-slide-${index}`}>
               <div className="slide-grid">
-                {group.map((product) => (
-                  <div className="slide-card" key={product.id}>
+                {group.map((product, cardIndex) => (
+                  <motion.div 
+                    className="slide-card" 
+                    key={product.id}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: false, amount: 0.2 }}
+                    transition={{ 
+                      delay: cardIndex * 0.15,
+                      duration: 0.6,
+                      ease: [0.22, 1, 0.36, 1]
+                    }}
+                  >
                     <ProductListCard product={product} viewMode="grid" />
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             </SwiperSlide>

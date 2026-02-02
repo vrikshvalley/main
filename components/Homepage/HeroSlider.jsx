@@ -9,6 +9,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import 'swiper/css/effect-fade';
 import '@/styles/heroSlider.scss';
+import ImpactCounter from '@/components/Homepage/ImpactCounter';
 
 const slides = [
   { src: '/heroSlider/(1).webp', srcMobile: '/heroSliderMobile/(1).webp', alt: 'Premium Plant Collection' },
@@ -113,40 +114,50 @@ export default function HeroSlider() {
         viewport={{ once: true, amount: 0.3 }}
         variants={contentVariants}
       >
-        <motion.button 
-          className="badge badge-clickable" 
-          variants={itemVariants}
-          onClick={handleNatureNurture}
-          aria-label="Learn about where nature meets nurture"
-        >
-          🌿 Where Nature Meets Nurture
-        </motion.button>
-        
-        <motion.h1 className="heroTitle" variants={itemVariants}>
-          Welcome to Vriksh Valley
-        </motion.h1>
-        
-        <motion.p className="heroSubtitle" variants={itemVariants}>
-          Every home deserves a touch of green. Transform your space into a sanctuary where plants thrive and life slows down to the gentle rhythm of growth
-        </motion.p>
+        <div className="heroInner">
+          <div className="heroLeft">
+            <motion.button 
+              className="badge badge-clickable" 
+              variants={itemVariants}
+              onClick={handleNatureNurture}
+              aria-label="Learn about where nature meets nurture"
+            >
+              🌿 Where Nature Meets Nurture
+            </motion.button>
+            
+            <motion.h1 className="heroTitle" variants={itemVariants}>
+              Welcome to Vriksh Valley
+            </motion.h1>
+            
+            <motion.p className="heroSubtitle" variants={itemVariants}>
+              Every home deserves a touch of green. Transform your space into a sanctuary where plants thrive and life slows down to the gentle rhythm of growth
+            </motion.p>
 
-        <motion.div className="features" variants={itemVariants}>
-          <div className="feature">Healthy Plants</div>
-          <div className="feature">Eco Packaging</div>
-          <div className="feature">Expert Support</div>
-        </motion.div>
+            <motion.div className="features" variants={itemVariants}>
+              <div className="feature">Healthy Plants</div>
+              <div className="feature">Eco Packaging</div>
+              <div className="feature">Expert Support</div>
+            </motion.div>
 
-        <motion.div className="ctaButtons" variants={itemVariants}>
-          <button className="ctaButton" onClick={handleJoinMovement}>
-            Join the Green Movement
-          </button>
-          {/* <button className="ctaButtonSecondary" onClick={handleLearnMore}>
-            Our Story
-          </button> */}
-          <button className="ctaButtonSecondary" onClick={() => router.push('/products')}>
-            Shop Now
-          </button>
-        </motion.div>
+            <motion.div className="ctaButtons" variants={itemVariants}>
+              <button className="ctaButton" onClick={handleJoinMovement}>
+                Join the Green Movement
+              </button>
+              {/* <button className="ctaButtonSecondary" onClick={handleLearnMore}>
+                Our Story
+              </button> */}
+              <button className="ctaButtonSecondary" onClick={() => router.push('/products')}>
+                Shop Now
+              </button>
+            </motion.div>
+          </div>
+
+          <div className="heroRight" id="impact">
+            <div className="heroImpact">
+              <ImpactCounter variant="hero" showHeader={true} />
+            </div>
+          </div>
+        </div>
       </motion.div>
     </div>
   );

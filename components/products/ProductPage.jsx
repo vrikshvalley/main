@@ -398,9 +398,9 @@ export default function ProductPage({ product }) {
             )}
           </div>
 
-          {/* Product Meta */}
+          {/* Product Meta - Mobile View (In Details) */}
           {(product.maintenanceLevel || product.petFriendly || product.care_level || product.light || product.water || product.stock_status) && (
-            <div className="product-meta">
+            <div className="product-meta product-meta-mobile">
               {product.maintenanceLevel && (
                 <div className="meta-item">
                   <strong>Maintenance:</strong> {product.maintenanceLevel}
@@ -434,6 +434,42 @@ export default function ProductPage({ product }) {
             </div>
           )}
         </div>
+
+        {/* Product Meta - Desktop View (Below Image Viewer) */}
+        {(product.maintenanceLevel || product.petFriendly || product.care_level || product.light || product.water || product.stock_status) && (
+          <div className="product-meta product-meta-desktop">
+            {product.maintenanceLevel && (
+              <div className="meta-item">
+                <strong>Maintenance:</strong> {product.maintenanceLevel}
+              </div>
+            )}
+            {product.petFriendly && (
+              <div className="meta-item">
+                <strong>Pet-Friendly:</strong> {product.petFriendly}
+              </div>
+            )}
+            {product.care_level && (
+              <div className="meta-item">
+                <strong>Care Level:</strong> {product.care_level}
+              </div>
+            )}
+            {product.light && (
+              <div className="meta-item">
+                <strong>Light:</strong> {product.light}
+              </div>
+            )}
+            {product.water && (
+              <div className="meta-item">
+                <strong>Water:</strong> {product.water}
+              </div>
+            )}
+            {product.stock_status && (
+              <div className="meta-item">
+                <strong>Status:</strong> {product.stock_status.replace('_', ' ').toUpperCase()}
+              </div>
+            )}
+          </div>
+        )}
       </section>
 
       {/* Light Guide - Only for plant category products */}

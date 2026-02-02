@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { motion, useMotionValue, animate } from 'framer-motion';
 import useMeasure from 'react-use-measure';
+import AnimatedText from '@/components/general/AnimatedText';
 import '@/styles/whyChooseUs.scss';
 
 const FAST_DURATION = 25;
@@ -56,6 +57,30 @@ export default function WhyChooseUs() {
 
   return (
     <section className="why-choose-us">
+      <motion.div
+        className="why-choose-header"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: false, amount: 0.2 }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <p className="cursive-subtitle">Why Vriksh Valley</p>
+        <AnimatedText
+          as="h2"
+          text="Why Choose Us"
+          className="why-choose-title"
+          delay={0.1}
+          stagger={0.05}
+        />
+        <AnimatedText
+          as="p"
+          text="Small details that make a big difference for your green space"
+          className="why-choose-subtitle"
+          delay={0.2}
+          stagger={0.02}
+        />
+      </motion.div>
+
       <div className="scroll-container">
         <motion.div 
           className="scroll-content"

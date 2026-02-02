@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, HelpCircle } from 'lucide-react';
+import AnimatedText from '@/components/general/AnimatedText';
 import '@/styles/plantFAQs.scss';
 
 export default function PlantFAQs() {
@@ -75,13 +76,24 @@ export default function PlantFAQs() {
           className="section-header"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: false, margin: "-50px" }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="section-title">Plant Care FAQs</h2>
-          <p className="section-subtitle">
-            Find answers to the most common questions about plant care
-          </p>
+          <p className="cursive-subtitle">Quick Answers</p>
+          <AnimatedText
+            as="h2"
+            text="Plant Care FAQs"
+            className="section-title"
+            delay={0.1}
+            stagger={0.05}
+          />
+          <AnimatedText
+            as="p"
+            text="Find answers to the most common questions about plant care"
+            className="section-subtitle"
+            delay={0.2}
+            stagger={0.02}
+          />
         </motion.div>
 
         <div className="faqs-grid">
@@ -91,8 +103,8 @@ export default function PlantFAQs() {
               className={`faq-item ${openFAQs.includes(faq.id) ? 'active' : ''}`}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              viewport={{ once: false, margin: "-50px" }}
+              transition={{ duration: 0.5, delay: index * 0.05 }}
             >
               <button
                 className="faq-question"

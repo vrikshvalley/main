@@ -54,6 +54,10 @@
   &:hover {
     animation-play-state: paused;
   }
+
+  &.reverse {
+    animation: scroll-reverse var(--speed, 30s) linear infinite;
+  }
 }
 
 .ads-item {
@@ -143,5 +147,14 @@
   }
   100% {
     transform: translateX(-50%);
+  }
+}
+
+@keyframes scroll-reverse {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
   }
 }

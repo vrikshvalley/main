@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { memo, useState, useEffect } from 'react';
 import Image from '@/components/general/ImgWithLoader';
 import { Mail, Linkedin } from 'lucide-react';
+import AnimatedText from '@/components/general/AnimatedText';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
 import 'swiper/css';
@@ -116,11 +117,21 @@ function MeetOurTeam() {
         variants={containerVariants}
       >
         <motion.div className="team-header" variants={cardVariants}>
-          <h2 className="team-title">Meet Our Green Squad</h2>
-          <p className="team-subtitle">
-            The passionate individuals behind Vriksh Valley, <br />
-            dedicated to bringing nature to your doorstep
-          </p>
+          <p className="cursive-subtitle">Our Green Family</p>
+          <AnimatedText
+            as="h2"
+            text="Meet Our Green Squad"
+            className="team-title"
+            delay={0.1}
+            stagger={0.05}
+          />
+          <AnimatedText
+            as="p"
+            text="The passionate individuals behind Vriksh Valley, dedicated to bringing nature to your doorstep"
+            className="team-subtitle"
+            delay={0.2}
+            stagger={0.02}
+          />
         </motion.div>
 
         {isMobile ? (
@@ -195,7 +206,6 @@ function TeamCard({ member }) {
         <h3 className="team-name">{member.name}</h3>
         <p className="team-role">{member.role}</p>
         <p className="team-bio">{member.bio}</p>
-        {member.bio && <button className="expand-btn" onClick={handleToggleExpand}>{isExpanded ? 'Show Less' : 'Show More'}</button>}
       </div>
     </motion.div>
   );

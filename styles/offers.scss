@@ -6,11 +6,27 @@
   background: linear-gradient(135deg, rgba($teal, 0.03) 0%, rgba($white, 1) 100%);
 
   .offers-hero {
-    background: linear-gradient(135deg, $teal 0%, color.adjust($teal, $lightness: -10%) 100%);
+      position: relative;
+      background-image: url('/Offers.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
     padding: 4rem 2rem;
     text-align: center;
     color: $white;
     box-shadow: 0 4px 20px rgba($teal, 0.2);
+      overflow: hidden;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba($teal, 0.7) 0%, rgba($deep-green, 0.8) 100%);
+        z-index: 1;
+      }
 
     @media (max-width: 768px) {
       padding: 3rem 1.5rem;
@@ -19,6 +35,8 @@
     .hero-content {
       max-width: 800px;
       margin: 0 auto;
+        position: relative;
+        z-index: 2;
 
       .hero-icon {
         margin-bottom: 1rem;

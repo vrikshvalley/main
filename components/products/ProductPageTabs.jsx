@@ -64,7 +64,7 @@ export default function ProductPageTabs({ product }) {
                 {isBoxOpen && (
                   <div className="dropdown-content">
                     <ul className="points-list">
-                      {product.whatsInTheBox.split(',').map((item, index) => (
+                      {product.whatsInTheBox.split(/[,|]/).map((item, index) => (
                         <li key={index}>{item.trim()}</li>
                       ))}
                     </ul>
@@ -86,7 +86,7 @@ export default function ProductPageTabs({ product }) {
                 {isCareOpen && (
                   <div className="dropdown-content">
                     <ul className="points-list">
-                      {product.additionalDetails.split(',').map((item, index) => (
+                      {product.additionalDetails.split(/[,|]/).map((item, index) => (
                         <li key={index}>{item.trim()}</li>
                       ))}
                     </ul>

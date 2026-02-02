@@ -1,6 +1,8 @@
 'use client';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef } from 'react';
 import Image from '@/components/general/ImgWithLoader';
+import AnimatedText from '@/components/general/AnimatedText';
 import '@/styles/aboutUs.scss';
 
 const sectionVariants = {
@@ -42,26 +44,47 @@ const textVariants = {
 };
 
 export default function About() {
+  const sectionRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start']
+  });
+  const imageY = useTransform(scrollYProgress, [0, 1], [20, -20]);
+
   return (
     <motion.section 
+      ref={sectionRef}
       className="about-section"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: false, amount: 0.3, margin: "0px 0px -50px 0px" }}
       variants={sectionVariants}
     >
-      <motion.h2 variants={sectionVariants}>About Us</motion.h2>
+      <p className="cursive-subtitle">Our Roots</p>
+      <AnimatedText
+        as="h2"
+        text="About Us"
+        className="section-title"
+        delay={0.1}
+        stagger={0.05}
+      />
       <div className="about-grid">
         <motion.div className="about-content" variants={textVariants}>
-          <p>
-            Welcome to Vriksh Valley, where nature meets nurture. We believe that every home, balcony and workspace deserves a touch of green. It is not just for beauty—it is also for balance and well-being, along with harmony. Our journey began with a simple thought: What if plants were not just decor? What if they were daily companions that inspire mindfulness and joy?
-          </p>
-          <p>
-            We are more than an online plant destination at Vriksh Valley. We are a community that celebrates growth in every form. From lush indoor plants to air purifiers to flowering varieties and garden essentials, we bring the best of nature to your doorstep. Each plant is handpicked and nurtured with care—delivered with the same love we would give our own.
-          </p>
+          <AnimatedText
+            as="p"
+            text="Welcome to Vriksh Valley, where nature meets nurture. We believe that every home, balcony and workspace deserves a touch of green. It is not just for beauty—it is also for balance and well-being, along with harmony. Our journey began with a simple thought: What if plants were not just decor? What if they were daily companions that inspire mindfulness and joy?"
+            delay={0.15}
+            stagger={0.02}
+          />
+          <AnimatedText
+            as="p"
+            text="We are more than an online plant destination at Vriksh Valley. We are a community that celebrates growth in every form. From lush indoor plants to air purifiers to flowering varieties and garden essentials, we bring the best of nature to your doorstep. Each plant is handpicked and nurtured with care—delivered with the same love we would give our own."
+            delay={0.25}
+            stagger={0.02}
+          />
         </motion.div>
         
-        <motion.div className="about-image-container" variants={imageVariants}>
+        <motion.div className="about-image-container" variants={imageVariants} style={{ y: imageY }}>
           <div className="image-wrapper image-square">
             <Image
               src="/aboutUsHome.jpg"

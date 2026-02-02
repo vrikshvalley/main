@@ -1,7 +1,9 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef } from 'react';
 import Image from '@/components/general/ImgWithLoader';
+import AnimatedText from '@/components/general/AnimatedText';
 import '@/styles/bringNatureHome.scss';
 
 const containerVariants = {
@@ -42,8 +44,16 @@ const imageVariants = {
 };
 
 export default function BringNatureHome() {
+  const sectionRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start']
+  });
+  const imageY = useTransform(scrollYProgress, [0, 1], [30, -30]);
+
   return (
     <motion.section
+      ref={sectionRef}
       className="bring-nature-home"
       initial="hidden"
       whileInView="visible"
@@ -52,16 +62,20 @@ export default function BringNatureHome() {
     >
       <div className="content-container">
         <div className="content-wrapper">
+          <p className="cursive-subtitle">Garden Living</p>
           <motion.h2 variants={textVariants}>
             Bring Nature Home, <br />
             <span className="highlight">One Leaf at a Time</span> 🌿
           </motion.h2>
-          <motion.p variants={textVariants}>
-            We don't just deliver plants-we bring the essence of nature into your life. Each plant is handpicked, nurtured with care, and packed with the freshness of earth. From lush greens to vibrant blooms, let nature breathe life into your space. Grow nature, and connect with the beauty that surrounds us-because every leaf tells a story, and yours is just beginning.
-          </motion.p>
+          <AnimatedText
+            as="p"
+            text="We don't just deliver plants-we bring the essence of nature into your life. Each plant is handpicked, nurtured with care, and packed with the freshness of earth. From lush greens to vibrant blooms, let nature breathe life into your space. Grow nature, and connect with the beauty that surrounds us-because every leaf tells a story, and yours is just beginning."
+            delay={0.15}
+            stagger={0.02}
+          />
         </div>
         
-        <motion.div className="image-card" variants={imageVariants}>
+        <motion.div className="image-card" variants={imageVariants} style={{ y: imageY }}>
           <div className="image-wrapper">
             <Image
               src="/bringNature.jpg"

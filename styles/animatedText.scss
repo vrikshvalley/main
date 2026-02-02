@@ -1,0 +1,27 @@
+.animated-text {
+  display: inline-block;
+  width: 100%;
+}
+
+.animated-text .word {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+.cursive-subtitle {
+  font-family: 'Italianno', cursive;
+  font-size: 1.2rem;
+  color: #ffffff !important;
+  margin-bottom: 10px;
+  letter-spacing: 0.2px;
+  display: block;
+  text-align: inherit;
+  position: relative;
+  width: 100%;
+  order: -1;
+  
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    margin-bottom: 8px;
+  }
+}

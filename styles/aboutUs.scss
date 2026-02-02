@@ -27,13 +27,13 @@
   .about-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 3rem;
-    align-items: start; // align both columns to the top for consistent starting edge
+    gap: 2.5rem;
+    align-items: stretch;
     align-content: start;
 
     // ensure direct children start at same top
     & > * {
-      align-self: start;
+      align-self: stretch;
     }
 
     @media (max-width: 968px) {
@@ -91,15 +91,16 @@
 
   .about-image-container {
     width: 100%;
+    height: 100%;
     display: flex;
-    justify-content: flex-end; // push image to the right column edge
+    justify-content: flex-start; // keep image aligned with content column
   }
 
   .image-wrapper {
     position: relative;
     width: 100%;
-    max-width: 380px; // smaller square image
-    aspect-ratio: 1/1;
+    height: 100%;
+    max-width: none;
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);

@@ -6,6 +6,7 @@ import InitialLoader from "@/components/general/InitialLoader";
 import TheLoader from "@/components/general/TheLoader";
 import GlobalCartModal from "@/components/cart/GlobalCartModal";
 import ToastContainer from "@/components/general/ToastContainer";
+import ScrollProgress from "@/components/general/ScrollProgress";
 
 export const metadata = {
   metadataBase: new URL("https://vrikshvalley.com"),
@@ -197,6 +198,7 @@ export default function RootLayout({ children }) {
         `,
           }}
         />
+        <ScrollProgress />
         <InitialLoader />
         <TheLoader fullscreen showOnRouteChange />
         <Providers>

@@ -157,7 +157,7 @@ const cardVariants = {
     y: 0,
     scale: 1,
     transition: {
-      duration: 0.5,
+      duration: 0.9,
       ease: [0.22, 1, 0.36, 1]
     }
   }
@@ -303,14 +303,18 @@ export default function TestimonialsPage() {
             ref={gridRef}
             className="testimonials-grid"
             initial="hidden"
-            animate="visible"
+            whileInView="visible"
+            viewport={{ once: false, amount: 0.1, margin: "0px 0px -100px 0px" }}
             variants={containerVariants}
           >
-            {testimonialsData.map((testimonial) => (
+            {testimonialsData.map((testimonial, index) => (
               <motion.div 
                 key={testimonial.id} 
                 className="testimonial-card"
-                variants={cardVariants}
+                initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: false, margin: "-50px" }}
+                transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: index * 0.05 }}
               >
                 <div className="card-header">
                   <Image

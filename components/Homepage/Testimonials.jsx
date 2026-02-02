@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import Image from '@/components/general/ImgWithLoader';
+import AnimatedText from '@/components/general/AnimatedText';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCards, Autoplay } from 'swiper/modules';
 import 'swiper/css';
@@ -138,7 +139,7 @@ const cardVariants = {
     y: 0,
     scale: 1,
     transition: {
-      duration: 0.6,
+      duration: 0.9,
       ease: [0.22, 1, 0.36, 1]
     }
   }
@@ -190,8 +191,21 @@ export default function Testimonials() {
 
   return (
     <section className="testimonials-section">
-      <h2 className="testimonials-title">What Our Customers Say</h2>
-      <p className='testimonials-subtitle'> Don’t just take our word for it—see what our plant lover community has to say.</p>
+      <p className="cursive-subtitle">Community Love</p>
+      <AnimatedText
+        as="h2"
+        text="What Our Customers Say"
+        className="testimonials-title"
+        delay={0.1}
+        stagger={0.05}
+      />
+      <AnimatedText
+        as="p"
+        text="Don’t just take our word for it—see what our plant lover community has to say."
+        className="testimonials-subtitle"
+        delay={0.2}
+        stagger={0.02}
+      />
       
       {isMobile ? (
         <div className="testimonials-swiper-container">

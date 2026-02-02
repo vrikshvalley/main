@@ -5,6 +5,8 @@ import { Star, ShoppingCart, Heart } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { addItem } from '@/lib/slices/cartSlice';
+import { createPortal } from 'react-dom';
+import ProductPage from '@/components/products/ProductPage';
 
 const getImageSrc = (img) => {
   if (!img) return '';
@@ -36,6 +38,7 @@ export default function ProductListCard({ product, viewMode = 'grid' }) {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const intervalRef = useRef(null);
   const dispatch = useDispatch();
 
@@ -58,6 +61,28 @@ export default function ProductListCard({ product, viewMode = 'grid' }) {
       }
     };
   }, [isHovering, product.images]);
+
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    if (isModalOpen) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }
+  }, [isModalOpen]);
+
+  useEffect(() => {
+    if (!isModalOpen) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setIsModalOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isModalOpen]);
 
   const handleAddToCart = (e) => {
     e.preventDefault();
@@ -99,7 +124,15 @@ export default function ProductListCard({ product, viewMode = 'grid' }) {
   };
 
   return (
-    <Link href={`/products/${product.slug}`} className={`product-list-card ${viewMode}`}>
+    <>
+    <Link
+      href={`/products/${product.slug}`}
+      className={`product-list-card ${viewMode}`}
+      onClick={(e) => {
+        e.preventDefault();
+        setIsModalOpen(true);
+      }}
+    >
       <div 
         className="product-image-wrapper"
         onMouseEnter={() => setIsHovering(true)}
@@ -248,5 +281,29 @@ export default function ProductListCard({ product, viewMode = 'grid' }) {
         )}
       </div>
     </Link>
+
+    {isModalOpen && typeof document !== 'undefined' && createPortal(
+      <div className="product-modal-overlay" onClick={() => setIsModalOpen(false)}>
+        <div className="product-modal" onClick={(e) => e.stopPropagation()}>
+          <button
+            className="product-modal-close"
+            onClick={() => setIsModalOpen(false)}
+            aria-label="Close product details"
+          >
+            ✕
+          </button>
+          <div className="product-modal-content">
+            <div className="product-modal-header">
+              <Link href={`/products/${product.slug}`} className="product-modal-link">
+                Open full page
+              </Link>
+            </div>
+            <ProductPage product={product} />
+          </div>
+        </div>
+      </div>,
+      document.body
+    )}
+    </>
   );
 }

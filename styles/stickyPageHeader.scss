@@ -9,8 +9,8 @@
   opacity: 0;
   background: linear-gradient(180deg, rgba($dark-green, 0.95) 0%, rgba($dark-green, 0.85) 100%);
   
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
   border-bottom: 2px solid rgba($teal, 0.3);
   z-index: 999; // Below modals (1000+) but above most content
   overflow: hidden;

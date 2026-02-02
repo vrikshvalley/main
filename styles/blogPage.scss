@@ -347,6 +347,68 @@
   }
 }
 
+  .blog-date-bookmark {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: $white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.5rem 0.6rem;
+    min-width: 50px;
+    z-index: 2;
+
+    .bookmark-month {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: $teal;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .bookmark-day {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: $text-primary;
+      line-height: 1;
+      margin-top: 0.1rem;
+    }
+
+    @media (max-width: 768px) {
+      top: 0.75rem;
+      left: 0.75rem;
+      padding: 0.4rem 0.5rem;
+      min-width: 45px;
+
+      .bookmark-month {
+        font-size: 0.65rem;
+      }
+
+      .bookmark-day {
+        font-size: 1.3rem;
+      }
+    }
+
+    @media (max-width: 400px) {
+      top: 0.5rem;
+      left: 0.5rem;
+      padding: 0.3rem 0.4rem;
+      min-width: 40px;
+
+      .bookmark-month {
+        font-size: 0.6rem;
+      }
+
+      .bookmark-day {
+        font-size: 1.1rem;
+      }
+    }
+  }
+
 .blog-content {
   padding: 1.5rem;
   display: flex;

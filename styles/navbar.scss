@@ -11,7 +11,7 @@
   color: $text-primary;
   background-color: $text-primary;
   box-shadow: $shadow-medium;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(25px);
 }
   .nav-container {
   max-width: 1500px;
@@ -694,19 +694,19 @@ color.adjust($accent-primary, $lightness: -5%);
 
     .mobile-nav-title {
       font-family: 'Alumni Sans', sans-serif;
-      font-size: 0.85rem;
-      font-weight: 600;
+      font-size: 0.8rem;
+      font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 1px;
-      color: $accent-primary;
-      margin-bottom: 0.75rem;
-      padding-left: 1rem;
+      letter-spacing: 1.5px;
+      color: rgba($primary-bg, 0.6);
+      margin-bottom: 1rem;
+      padding-left: 1.5rem;
     }
 
     /* Navigation Section Styling */
     .mobile-nav-section {
       width: 100%;
-      padding: 1.5rem 1rem 1rem;
+      padding: 1rem 1rem 0.75rem;
       border-bottom: 2px solid rgba($accent-primary, 0.2);
 
       .mobile-nav-item {
@@ -750,11 +750,11 @@ color.adjust($accent-primary, $lightness: -5%);
     /* Categories Section Styling */
     .mobile-categories-section {
       width: 100%;
-      padding: 1.5rem 0 1rem;
+      padding: 1rem 0 0.75rem;
       border-top: 1px solid rgba($primary-bg, 0.1);
 
       .mobile-nav-title {
-        color: $accent-primary;
+        color: rgba($primary-bg, 0.7);
         padding-left: 1.5rem;
       }
     }

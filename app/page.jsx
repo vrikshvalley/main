@@ -6,6 +6,7 @@ import HeroSlider from "../components/Homepage/HeroSlider";
 import CategoryCircles from "../components/Homepage/CategoryCircles";
 import FeaturedProducts from "../components/Homepage/FeaturedProducts";
 import NewArrivals from "../components/Homepage/NewArrivals";
+import PremiumCollection from "@/components/Homepage/PremiumCollection";
 import WhyChooseUs from "@/components/Homepage/WhyChooseUs";
 import BringNatureHome from "@/components/Homepage/BringNatureHome";
 import ImpactCounter from "@/components/Homepage/ImpactCounter";
@@ -20,6 +21,7 @@ import Footer from "@/components/general/Footer";
 import WhatsAppButton from "@/components/general/WhatsAppButton";
 import HomeSidebar from "@/components/general/HomeSidebar";
 import Ads from "@/components/general/Ads";
+import ShopByCategory from "@/components/Homepage/ShopByCategory";
 
 import { React } from "react";
 import { motion } from "framer-motion";
@@ -31,14 +33,18 @@ export default function Home() {
   const sectionVariants = {
     hidden: { 
       opacity: 0, 
-      y: 50 
+      y: 60,
+      scale: 0.98
     },
     visible: { 
       opacity: 1, 
       y: 0,
+      scale: 1,
       transition: {
-        duration: 0.6,
-        ease: "easeOut"
+        duration: 0.85,
+        ease: [0.22, 1, 0.36, 1],
+        staggerChildren: 0.08,
+        delayChildren: 0.1
       }
     }
   };
@@ -85,7 +91,7 @@ export default function Home() {
       {/* Featured Products Section */}
       <motion.section
         id="featured"
-        className="scroll-section home-section"
+        className="scroll-section home-section featured-section-wrapper"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
@@ -99,6 +105,7 @@ export default function Home() {
         bgColor="yellow" 
         textColor="dark" 
         speed={30}
+        direction="reverse"
         renderLinks={false}
       />
 
@@ -114,10 +121,22 @@ export default function Home() {
         <WhyChooseUs />
       </motion.section>
 
+        {/* Shop By Category Section */}
+        <motion.section
+          id="shop-by-category"
+          className="scroll-section home-section"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={sectionVariants}
+        >
+          <ShopByCategory />
+        </motion.section>
+
       {/* New Arrivals Section */}
       <motion.section
         id="new-arrivals"
-        className="scroll-section home-section"
+        className="scroll-section home-section new-arrivals-section-wrapper"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
@@ -137,16 +156,16 @@ export default function Home() {
         <BringNatureHome />
       </motion.section>
 
-      {/* Impact Counter Section */}
+      {/* Premium Collection Section */}
       <motion.section
-        id="impact"
-        className="scroll-section home-section"
+        id="premium-collection"
+        className="scroll-section home-section premium-section-wrapper"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
         variants={sectionVariants}
       >
-        <ImpactCounter />
+        <PremiumCollection />
       </motion.section>
 
       {/* Testimonials Section */}
@@ -207,6 +226,17 @@ export default function Home() {
         variants={sectionVariants}
       >
         <About />
+      </motion.section>
+
+      {/* Impact Counter (Mobile Only) */}
+      <motion.section
+        className="scroll-section home-section impact-mobile-only"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={sectionVariants}
+      >
+        <ImpactCounter variant="compact" showHeader={false} />
       </motion.section>
 
       {/* Meet Our Team Section */}

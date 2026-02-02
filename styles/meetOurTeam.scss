@@ -84,17 +84,6 @@
   gap: 2.5rem;
   padding: 1rem;
 
-  @media (min-width: 769px) {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 2.5rem;
-  }
-
-  @media (max-width: 1024px) {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
-  }
-
   @media (max-width: 768px) {
     flex-direction: column;
     gap: 1.5rem;
@@ -103,6 +92,19 @@
 
   @media (max-width: 400px) {
     gap: 1.5rem;
+  }
+
+  @media (min-width: 769px) and (max-width: 1024px) {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+
+  @media (min-width: 1025px) {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: auto;
+    gap: 2rem;
   }
 }
 
@@ -183,42 +185,6 @@
 
   @media (max-width: 768px) {
     border-radius: 16px;
-  }
-
-  // Founder card (slightly larger)
-  &.large {
-    @media (min-width: 769px) {
-      transform: scale(1.05);
-    }
-
-    .team-image-wrapper {
-      height: 320px;
-
-      @media (max-width: 768px) {
-        height: 250px;
-      }
-    }
-
-    &:hover {
-      @media (min-width: 769px) {
-        transform: scale(1.05) translateY(-8px);
-      }
-      
-      @media (max-width: 768px) {
-        transform: translateY(-8px);
-      }
-    }
-  }
-
-  // Regular team members
-  &.small {
-    .team-image-wrapper {
-      height: 300px;
-
-      @media (max-width: 768px) {
-        height: 250px;
-      }
-    }
   }
 }
 
@@ -406,27 +372,7 @@
 }
 
 .expand-btn {
-  background: none;
-  border: 1px solid $accent-primary;
-  color: $accent-primary;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.85rem;
-  font-weight: 600;
-  transition: all 0.2s ease;
-  margin-top: auto;
-  align-self: flex-start;
-
-  &:hover {
-    background: $accent-primary;
-    color: $white;
-  }
-
-  @media (max-width: 400px) {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.8rem;
-  }
+  display: none;
 }
 
 // Mobile fallback: ensure team section is visible if JS animations don't trigger

@@ -14,10 +14,10 @@
 
   .content-container {
     display: grid;
-    grid-template-columns: 1fr 0.5fr;
-    gap: 4rem;
-    align-items: start;
-    justify-content: space-evenly;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+    align-items: stretch;
+    justify-content: space-between;
   }
 
   .content-wrapper {
@@ -60,17 +60,16 @@
     background: $white;
     border-radius: 16px;
     padding: 0.5rem;
-    margin-left: auto;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
     border: 3px solid $white;
-    width: 80%;
+    width: 100%;
     align-self: center;
     margin-top: 1.5rem;
     
     .image-wrapper {
       position: relative;
       width: 100%;
-      aspect-ratio: 2/1.5;
+      height: 100%;
       border-radius: 17px;
       overflow: hidden;
       margin-bottom: 1rem;
@@ -96,7 +95,7 @@
 
   @media (max-width: 1024px) {
     .content-container {
-      gap: 3rem;
+      gap: 2.5rem;
     }
 
     h2 {

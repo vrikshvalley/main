@@ -112,8 +112,8 @@ export default function CategoryCircles() {
                   <Image 
                     src={imagePath}
                     alt={category.name}
-                    width={120}
-                    height={120}
+                    width={140}
+                    height={140}
                     className="category-image"
                   />
                 </div>

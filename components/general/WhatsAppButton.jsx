@@ -1,11 +1,16 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { siWhatsapp } from 'simple-icons';
 import '@/styles/whatsappButton.scss';
 
 export default function WhatsAppButton() {
+  const pathname = usePathname();
   const message = 'Hello! I am interested in your plants.';
+  
+  // Only show on homepage
+  if (pathname !== '/') return null;
   
   const openWhatsApp = () => {
     const url = `https://wa.me/+919204745612?text=${encodeURIComponent(message)}`;

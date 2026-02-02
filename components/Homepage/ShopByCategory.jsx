@@ -1,0 +1,231 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import Link from 'next/link';
+import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import Image from '@/components/general/ImgWithLoader';
+import AnimatedText from '@/components/general/AnimatedText';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import '@/styles/shopByCategory.scss';
+
+const categories = [
+  { name: 'Plants', image: '/Plants.png', slug: 'plants', description: 'Fresh & Green' },
+  { name: 'Seeds', image: '/seeds.png', slug: 'seeds', description: 'Grow Your Own' },
+  { name: 'Planters', image: '/Pots.jpg', slug: 'planters', description: 'Stylish Homes' },
+  { name: 'Plant Care', image: '/Plant care.jpg', slug: 'plant-care', description: 'Keep Them Thriving' },
+  { name: 'Decor', image: '/Decor.jpg', slug: 'decor', description: 'Nature-Inspired' },
+  { name: 'Plant Tools', image: '/Plant tools.jpg', slug: 'accessories', description: 'Essential Gear' }
+];
+
+const getImageForSubcategory = (name) => {
+  const imageMap = {
+    'Indoor Plants': '/Plants.png',
+    'Succulents': '/Plants.png',
+    'Flowering Plants': '/Plants.png',
+    'Foliage Plants': '/Plants.png',
+    'Hanging Plants': '/Plants.png',
+    'Air Plants': '/Plants.png',
+    'Cacti': '/Plants.png',
+    'Herbs': '/seeds.png',
+    'Vegetables': '/seeds.png',
+    'Herbs & Microgreens': '/seeds.png',
+    'Bonsai': '/Plants.png',
+    'Aquatic Plants': '/Plants.png'
+  };
+  return imageMap[name] || '/Plants.png';
+};
+
+const allSubcategories = [
+  { name: 'Indoor Plants' },
+  { name: 'Succulents' },
+  { name: 'Flowering Plants' },
+  { name: 'Foliage Plants' },
+  { name: 'Hanging Plants' },
+  { name: 'Air Plants' },
+  { name: 'Cacti' },
+  { name: 'Herbs' },
+  { name: 'Vegetables' },
+  { name: 'Herbs & Microgreens' },
+  { name: 'Bonsai' },
+  { name: 'Aquatic Plants' }
+];
+
+const getRandomSubcategories = () => {
+  const shuffled = [...allSubcategories].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, 12);
+};
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.2
+    }
+  }
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: [0.22, 1, 0.36, 1]
+    }
+  }
+};
+
+export default function ShopByCategory() {
+  const [subcategories, setSubcategories] = useState([]);
+
+  useEffect(() => {
+    setSubcategories(getRandomSubcategories());
+  }, []);
+
+  const SubcategoryCard = ({ subcategory, index }) => (
+    <motion.div 
+      className="subcategory-card"
+      variants={cardVariants}
+    >
+      <Link href={`/products/search?q=${encodeURIComponent(subcategory.name)}`}>
+        <div className="subcategory-image-wrapper">
+          <Image 
+            src={getImageForSubcategory(subcategory.name)}
+            alt={subcategory.name}
+            fill
+            sizes="100px"
+            className="subcategory-image"
+          />
+        </div>
+        <span>{subcategory.name}</span>
+      </Link>
+    </motion.div>
+  );
+
+  return (
+    <section className="shop-by-category">
+      <motion.div 
+        className="category-container"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: false, amount: 0.2 }}
+        variants={containerVariants}
+      >
+        <motion.div className="category-header" variants={cardVariants}>
+          <p className="cursive-subtitle">Explore Our Collection</p>
+          <AnimatedText
+            as="h2"
+            text="Shop By Category"
+            className="category-title"
+            delay={0.1}
+            stagger={0.05}
+          />
+          <AnimatedText
+            as="p"
+            text="Find exactly what your green space needs"
+            className="category-description"
+            delay={0.2}
+            stagger={0.02}
+          />
+        </motion.div>
+
+        {/* Main Categories Slider */}
+        <div className="categories-slider-wrapper">
+          <Swiper
+            modules={[Navigation, Pagination]}
+            navigation={{
+              nextEl: '.category-slider-next',
+              prevEl: '.category-slider-prev',
+            }}
+            pagination={{ clickable: true, el: '.category-slider-pagination' }}
+            slidesPerView={1}
+            spaceBetween={20}
+            breakpoints={{
+              640: { slidesPerView: 2 },
+              1024: { slidesPerView: 3 },
+              1280: { slidesPerView: 6 },
+            }}
+            className="category-slider"
+          >
+            {categories.map((category) => (
+              <SwiperSlide key={category.slug}>
+                <motion.div variants={cardVariants}>
+                  <Link href={`/products/category/${category.slug}`} className="category-card">
+                    <div className="category-image-wrapper">
+                      <Image
+                        src={category.image}
+                        alt={category.name}
+                        fill
+                        sizes="(max-width: 768px) 50vw, 25vw"
+                        className="category-image"
+                      />
+                      <div className="category-overlay" />
+                    </div>
+                    <div className="category-info">
+                      <h3>{category.name}</h3>
+                      <p>{category.description}</p>
+                      <span className="category-arrow">
+                        <ArrowRight size={20} />
+                      </span>
+                    </div>
+                  </Link>
+                </motion.div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+          
+          <button className="category-slider-prev" aria-label="Previous categories">
+            <ChevronLeft size={24} />
+          </button>
+          <button className="category-slider-next" aria-label="Next categories">
+            <ChevronRight size={24} />
+          </button>
+          <div className="category-slider-pagination" />
+        </div>
+
+        {/* Subcategories Section */}
+        <div className="subcategories-section">
+          <h3 className="subcategories-title">Explore More</h3>
+          <Swiper
+            modules={[Navigation, Pagination]}
+            navigation={{
+              nextEl: '.subcategory-slider-next',
+              prevEl: '.subcategory-slider-prev',
+            }}
+            pagination={{ clickable: true, el: '.subcategory-slider-pagination' }}
+            slidesPerView={1}
+            spaceBetween={15}
+            breakpoints={{
+              640: { slidesPerView: 3 },
+              1024: { slidesPerView: 4 },
+              1280: { slidesPerView: 6 },
+            }}
+            className="subcategory-slider"
+          >
+            {subcategories.map((subcategory, index) => (
+              <SwiperSlide key={`${subcategory.name}-${index}`}>
+                <SubcategoryCard subcategory={subcategory} index={index} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+
+          <button className="subcategory-slider-prev" aria-label="Previous subcategories">
+            <ChevronLeft size={20} />
+          </button>
+          <button className="subcategory-slider-next" aria-label="Next subcategories">
+            <ChevronRight size={20} />
+          </button>
+          <div className="subcategory-slider-pagination" />
+        </div>
+      </motion.div>
+    </section>
+  );
+}

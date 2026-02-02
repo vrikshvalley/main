@@ -244,8 +244,8 @@
   position: absolute;
   top: 0.6rem;
   right: 0.8rem;
-  background: rgba($white, 0.08);
-  color: $white;
+  background: rgba($accent-primary, 0.15);
+  color: $accent-primary;
   border: none;
   width: 32px;
   height: 32px;
@@ -256,7 +256,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s ease, transform 0.2s ease;
+  transition: background 0.2s ease, transform 0.2s ease, color 0.2s ease;
 
   @media (hover: hover) {
     &:hover {

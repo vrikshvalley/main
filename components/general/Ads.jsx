@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Leaf } from 'lucide-react';
 import '@/styles/ads.scss';
 
-export default function Ads({ items = [], bgColor = 'primary', speed = 30, textColor, renderLinks = true }) {
+export default function Ads({ items = [], bgColor = 'primary', speed = 30, textColor, renderLinks = true, direction = 'normal' }) {
   // First item is always "Bring nature home..." - don't make it a link
   const firstItem = items[0];
   const categoryItems = items.slice(1); // Rest are category links
@@ -19,7 +19,7 @@ export default function Ads({ items = [], bgColor = 'primary', speed = 30, textC
         className="ads-marquee"
         style={{ '--speed': `${speed}s` }}
       >
-        <div className="ads-content">
+        <div className={`ads-content ${direction === 'reverse' ? 'reverse' : ''}`}>
           {/* First item - not a link */}
           {firstItem && (
             <>
