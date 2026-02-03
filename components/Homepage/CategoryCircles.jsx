@@ -95,12 +95,12 @@ export default function CategoryCircles() {
           // Map category names to their image files in public folder
           // These are the fixed images that will always be used
           const imageMap = {
-            'Plants': '/Plants.jpg',
-            'Seeds': '/seeds.jpg',
-            'Planters': '/Pots.jpg',
-            'Plant Care': '/Plant care.jpg', 
-            'Decor': '/Decor.jpg',
-            'Accessories': '/Plant tools.jpg'
+            'Plants': '/categories/Plants.jpg',
+            'Seeds': '/categories/seeds.jpg',
+            'Planters': '/categories/Pots.jpg',
+            'Plant Care': '/categories/Plant care.jpg', 
+            'Decor': '/categories/Decor.jpg',
+            'Accessories': '/categories/Plant tools.jpg'
           };
           
           const imagePath = imageMap[category.name] || '/logo.png';

@@ -61,9 +61,21 @@ export default function ImgWithLoader({
 
   const handleOnError = useMemo(() => {
     return (e) => {
-      setError(true);
-      setLoaded(true);
-      if (typeof onError === "function") onError(e);
+      const currentSrc = imgProps && imgProps.src;
+      if (typeof onError === "function") {
+        try { onError(e); } catch (_) {}
+      }
+      // Give parent a short moment to update the `src` (fallback). If the
+      // src remains unchanged after a tick, mark as error so the placeholder
+      // is shown. This prevents the component from short-circuiting parent
+      // fallback logic by immediately setting error state.
+      setTimeout(() => {
+        const newSrc = imgProps && imgProps.src;
+        if (newSrc === currentSrc) {
+          setError(true);
+          setLoaded(true);
+        }
+      }, 50);
     };
   }, [onError]);
 

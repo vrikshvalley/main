@@ -1,11 +1,14 @@
 .animated-text {
   display: inline-block;
   width: 100%;
+ 
 }
 
 .animated-text .word {
   display: inline-block;
   will-change: transform, opacity;
+   font-family: "Playfair Display", serif;
+   
 }
 
 .cursive-subtitle {

@@ -598,10 +598,10 @@
 // Plant Care Page
 .page-container[data-page="plant-care"] {
   .page-hero-wrapper {
-    background-image: url('/PlantCarePageDesktop.png');
+    background-image: url('/categories/PlantCarePageDesktop.png');
 
     @media (max-width: 768px) {
-      background-image: url('/Plant CarePageMobile.png');
+      background-image: url('/categories/Plant CarePageMobile.png');
     }
   }
 }
@@ -620,10 +620,10 @@
 // Products/Plants Page
 .page-container[data-page="plants"] {
   .page-hero-wrapper {
-    background-image: url('/PlantsPageDesktop.png');
+    background-image: url('/categories/PlantsPageDesktop.png');
 
     @media (max-width: 768px) {
-      background-image: url('/PlantsPageMobile.png');
+      background-image: url('/categories/PlantsPageMobile.png');
     }
   }
 }
@@ -631,10 +631,10 @@
 // Seeds Page
 .page-container[data-page="seeds"] {
   .page-hero-wrapper {
-    background-image: url('/SeedsPageDesktop.png');
+    background-image: url('/categories/SeedsPageDesktop.png');
 
     @media (max-width: 768px) {
-      background-image: url('/SeedsPageMobile.png');
+      background-image: url('/categories/SeedsPageMobile.png');
     }
   }
 }
@@ -642,10 +642,10 @@
 // Planters/Pots Page
 .page-container[data-page="planters"] {
   .page-hero-wrapper {
-    background-image: url('/PlantersPageDesktop.png');
+    background-image: url('/categories/PlantersPageDesktop.png');
 
     @media (max-width: 768px) {
-      background-image: url('/PlantersPageMobile.png');
+      background-image: url('/categories/PlantersPageMobile.png');
     }
   }
 }
@@ -653,10 +653,10 @@
 // Decor Page
 .page-container[data-page="decor"] {
   .page-hero-wrapper {
-    background-image: url('/DecorPageDesktop.png');
+    background-image: url('/categories/DecorPageDesktop.png');
 
     @media (max-width: 768px) {
-      background-image: url('/DecorPageMobile.png');
+      background-image: url('/categories/DecorPageMobile.png');
     }
   }
 }
@@ -664,10 +664,10 @@
 // Accessories Page
 .page-container[data-page="accessories"] {
   .page-hero-wrapper {
-    background-image: url('/AccessoriesPageDesktop.png');
+    background-image: url('/categories/AccessoriesPageDesktop.png');
 
     @media (max-width: 768px) {
-      background-image: url('/AccessoriesPageMobile.png');
+      background-image: url('/categories/AccessoriesPageMobile.png');
     }
   }
 }

@@ -36,6 +36,8 @@ export default function CategoryPage() {
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState('grid');
   const [searchQuery, setSearchQuery] = useState('');
+
+
   
   // Fetch category data
   useEffect(() => {

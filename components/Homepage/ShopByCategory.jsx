@@ -13,31 +13,24 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import '@/styles/shopByCategory.scss';
 
-const categories = [
-  { name: 'Plants', image: '/Plants.png', slug: 'plants', description: 'Fresh & Green' },
-  { name: 'Seeds', image: '/seeds.png', slug: 'seeds', description: 'Grow Your Own' },
-  { name: 'Planters', image: '/Pots.jpg', slug: 'planters', description: 'Stylish Homes' },
-  { name: 'Plant Care', image: '/Plant care.jpg', slug: 'plant-care', description: 'Keep Them Thriving' },
-  { name: 'Decor', image: '/Decor.jpg', slug: 'decor', description: 'Nature-Inspired' },
-  { name: 'Plant Tools', image: '/Plant tools.jpg', slug: 'accessories', description: 'Essential Gear' }
-];
+// Top-level categories are replaced by subcategories for the "Shop By Category" display
 
 const getImageForSubcategory = (name) => {
   const imageMap = {
-    'Indoor Plants': '/Plants.png',
-    'Succulents': '/Plants.png',
-    'Flowering Plants': '/Plants.png',
-    'Foliage Plants': '/Plants.png',
-    'Hanging Plants': '/Plants.png',
-    'Air Plants': '/Plants.png',
-    'Cacti': '/Plants.png',
-    'Herbs': '/seeds.png',
-    'Vegetables': '/seeds.png',
-    'Herbs & Microgreens': '/seeds.png',
-    'Bonsai': '/Plants.png',
-    'Aquatic Plants': '/Plants.png'
+    'Indoor Plants': '/subcategories/IndoorPlantsMobile.png',
+    'Succulents': '/subcategories/SucculentsMobile.png',
+    'Flowering Plants': '/subcategories/FloweringPlantsMobile.png',
+    'Foliage Plants': '/subcategories/FoliagePlantsMobile.png',
+    'Hanging Plants': '/subcategories/HangingPlantsMobile.png',
+    'Air Plants': '/subcategories/AirPlantsMobile.png',
+    'Cactus': '/subcategories/CactusMobile.png',
+    'Herbs': '/subcategories/MedicinalandHerbPlantsMobile.png',
+    'Vegetables': '/subcategories/VegetableSeedsMobile.png',
+    'Herbs & Microgreens': '/subcategories/MicrogreenandHerbsMobile.png',
+    'Bonsai': '/subcategories/BonsaiMobile.png',
+    'Aquatic Plants': '/subcategories/AquaticPlantsMobile.png'
   };
-  return imageMap[name] || '/Plants.png';
+  return imageMap[name] || '/subcategories/Plants.png';
 };
 
 const allSubcategories = [
@@ -47,7 +40,7 @@ const allSubcategories = [
   { name: 'Foliage Plants' },
   { name: 'Hanging Plants' },
   { name: 'Air Plants' },
-  { name: 'Cacti' },
+  { name: 'Cactus' },
   { name: 'Herbs' },
   { name: 'Vegetables' },
   { name: 'Herbs & Microgreens' },
@@ -58,6 +51,28 @@ const allSubcategories = [
 const getRandomSubcategories = () => {
   const shuffled = [...allSubcategories].sort(() => Math.random() - 0.5);
   return shuffled.slice(0, 12);
+};
+
+const slugify = (str) =>
+  str
+    .toLowerCase()
+    .replace(/&/g, 'and')
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-');
+
+const pascalize = (str) =>
+  str
+    .split(/\s+|&/)
+    .map(s => s.replace(/[^a-z0-9]/gi, ''))
+    .filter(Boolean)
+    .map(s => s.charAt(0).toUpperCase() + s.slice(1))
+    .join('');
+
+// Prefer images located in `/subcategories/` (mobile variant first)
+const imagePathFromName = (name) => {
+  const pascal = pascalize(name);
+  return `/subcategories/${pascal}Mobile.png`;
 };
 
 const containerVariants = {
@@ -91,24 +106,50 @@ export default function ShopByCategory() {
   }, []);
 
   const SubcategoryCard = ({ subcategory, index }) => (
-    <motion.div 
-      className="subcategory-card"
-      variants={cardVariants}
-    >
+    <motion.div className="subcategory-card" variants={cardVariants}>
+      <SubcategoryCardInner subcategory={subcategory} />
+    </motion.div>
+  );
+
+  function SubcategoryCardInner({ subcategory }) {
+    const [srcIndex, setSrcIndex] = useState(0);
+
+    const pascal = pascalize(subcategory.name);
+    const slug = slugify(subcategory.name);
+
+    // candidate srcs in order of preference
+    const candidates = [
+      subcategory.image || null,
+      // Prefer the manual map provided by getImageForSubcategory
+      getImageForSubcategory(subcategory.name),
+      `/subcategories/${pascal}Mobile.png`,
+      `/subcategories/${pascal}Desktop.png`,
+      `/subcategories/${slug}.jpg`,
+      '/subcategories/Plants.png'
+    ].filter(Boolean);
+
+    const src = candidates[srcIndex] || candidates[candidates.length - 1];
+
+    const handleImgError = () => {
+      if (srcIndex < candidates.length - 1) setSrcIndex(i => i + 1);
+    };
+
+    return (
       <Link href={`/products/search?q=${encodeURIComponent(subcategory.name)}`}>
         <div className="subcategory-image-wrapper">
-          <Image 
-            src={getImageForSubcategory(subcategory.name)}
+          <Image
+            src={src}
             alt={subcategory.name}
             fill
             sizes="100px"
             className="subcategory-image"
+            onError={handleImgError}
           />
         </div>
         <span>{subcategory.name}</span>
       </Link>
-    </motion.div>
-  );
+    );
+  }
 
   return (
     <section className="shop-by-category">
@@ -123,7 +164,7 @@ export default function ShopByCategory() {
           <p className="cursive-subtitle">Explore Our Collection</p>
           <AnimatedText
             as="h2"
-            text="Shop By Category"
+            text="Shop by categories"
             className="category-title"
             delay={0.1}
             stagger={0.05}
@@ -137,7 +178,7 @@ export default function ShopByCategory() {
           />
         </motion.div>
 
-        {/* Main Categories Slider */}
+        {/* Top 6 Subcategories (displayed in place of categories) */}
         <div className="categories-slider-wrapper">
           <Swiper
             modules={[Navigation, Pagination]}
@@ -155,14 +196,14 @@ export default function ShopByCategory() {
             }}
             className="category-slider"
           >
-            {categories.map((category) => (
-              <SwiperSlide key={category.slug}>
+            {subcategories.slice(0, 6).map((subcategory, idx) => (
+              <SwiperSlide key={`${subcategory.name}-top-${idx}`}>
                 <motion.div variants={cardVariants}>
-                  <Link href={`/products/category/${category.slug}`} className="category-card">
+                  <Link href={`/products/search?q=${encodeURIComponent(subcategory.name)}`} className="category-card">
                     <div className="category-image-wrapper">
                       <Image
-                        src={category.image}
-                        alt={category.name}
+                        src={getImageForSubcategory(subcategory.name)}
+                        alt={subcategory.name}
                         fill
                         sizes="(max-width: 768px) 50vw, 25vw"
                         className="category-image"
@@ -170,8 +211,8 @@ export default function ShopByCategory() {
                       <div className="category-overlay" />
                     </div>
                     <div className="category-info">
-                      <h3>{category.name}</h3>
-                      <p>{category.description}</p>
+                      <h3>{subcategory.name}</h3>
+                      <p>{subcategory.description || ''}</p>
                       <span className="category-arrow">
                         <ArrowRight size={20} />
                       </span>
@@ -181,11 +222,11 @@ export default function ShopByCategory() {
               </SwiperSlide>
             ))}
           </Swiper>
-          
-          <button className="category-slider-prev" aria-label="Previous categories">
+
+          <button className="category-slider-prev" aria-label="Previous subcategories (top)">
             <ChevronLeft size={24} />
           </button>
-          <button className="category-slider-next" aria-label="Next categories">
+          <button className="category-slider-next" aria-label="Next subcategories (top)">
             <ChevronRight size={24} />
           </button>
           <div className="category-slider-pagination" />
@@ -210,11 +251,15 @@ export default function ShopByCategory() {
             }}
             className="subcategory-slider"
           >
-            {subcategories.map((subcategory, index) => (
-              <SwiperSlide key={`${subcategory.name}-${index}`}>
-                <SubcategoryCard subcategory={subcategory} index={index} />
-              </SwiperSlide>
-            ))}
+              {subcategories.slice(6).map((subcategory, index) => {
+                // Build image path from subcategory name for 'Explore More'
+                const nameBasedSrc = imagePathFromName(subcategory.name);
+                return (
+                  <SwiperSlide key={`${subcategory.name}-more-${index}`}>
+                    <SubcategoryCard subcategory={{ ...subcategory, image: nameBasedSrc }} index={index} />
+                  </SwiperSlide>
+                );
+              })}
           </Swiper>
 
           <button className="subcategory-slider-prev" aria-label="Previous subcategories">

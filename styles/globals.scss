@@ -1,5 +1,7 @@
 @use "sass:color";
 @use 'variables' as *;
+@use 'animatedText' as *;
+
 
 :root {
   --bg: #{$primary-bg};
@@ -101,7 +103,7 @@ body {
   --sb-size: 10px;
 }
 
-@import './animatedText.scss';
+
 
 body::-webkit-scrollbar {
   display: none;
