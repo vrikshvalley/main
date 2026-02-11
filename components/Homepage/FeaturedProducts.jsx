@@ -131,7 +131,7 @@ export default function FeaturedProducts() {
     >
       <div className="featured-header">
         <div className="featured-header-left">
-          <p className="cursive-subtitle">Handpicked Greens</p>
+          <p className="left cursive-subtitle">Handpicked Greens</p>
           <AnimatedText
             as="h2"
             text="Featured Products"

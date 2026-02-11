@@ -17,7 +17,7 @@
     color: $text-primary;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     font-weight: 700;
-    font-family: 'Playfair Display', serif;
+    font-family: 'Helvetica', Arial, sans-serif;
 
     @media (max-width: 768px) {
       font-size: 1.8rem;
@@ -30,7 +30,7 @@
     margin-bottom: 3rem;
     color: rgba($white, 0.85);
     font-weight: 400;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Bricolage Grotesque', sans-serif;
 
     @media (max-width: 768px) {
       font-size: 1rem;
@@ -80,7 +80,7 @@
       right: 15px;
       font-size: 6rem;
       color: rgba(28, 158, 91, 0.08);
-      font-family: 'Playfair Display', serif;
+      font-family: 'Helvetica', Arial, sans-serif;
       line-height: 1;
       pointer-events: none;
     }
@@ -202,7 +202,7 @@
           font-size: 1.05rem;
           margin: 0;
           font-weight: 700;
-          font-family: 'Playfair Display', serif;
+          font-family: 'Helvetica', Arial, sans-serif;
           letter-spacing: 0.3px;
 
           @media (max-width: 768px) {
@@ -224,17 +224,13 @@
       line-height: 1.8;
       color: rgba(0, 0, 0, 0.8);
       margin: 0;
-      display: -webkit-box;
-      -webkit-line-clamp: 6;
-      line-clamp: 6;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      text-overflow: ellipsis;
       flex: 1;
       font-style: italic;
       position: relative;
       z-index: 1;
-      font-family: 'Raleway', sans-serif;
+      font-family: 'Bricolage Grotesque', sans-serif;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
 
       @media (max-width: 768px) {
         font-size: 0.95rem;

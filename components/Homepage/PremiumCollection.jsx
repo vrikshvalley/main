@@ -101,7 +101,7 @@ export default function PremiumCollection() {
     >
       <div className="featured-header">
         <div className="featured-header-left">
-          <p className="cursive-subtitle">Premium Picks</p>
+          <p className="left cursive-subtitle">Premium Picks</p>
           <AnimatedText
             as="h2"
             text="Premium Collection"

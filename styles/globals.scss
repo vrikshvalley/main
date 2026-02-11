@@ -14,8 +14,41 @@
   --home-heading-margin: 1.5rem;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+/* Helvetica Font Family */
+@font-face {
+  font-family: 'Helvetica';
+  src: url('/fonts/helvetica/Helvetica.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Helvetica';
+  src: url('/fonts/helvetica/Helvetica-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Helvetica';
+  src: url('/fonts/helvetica/Helvetica-Oblique.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Helvetica';
+  src: url('/fonts/helvetica/Helvetica-BoldOblique.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Import Bricolage Grotesque and Italianno from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Italianno&display=swap');
 
 * { 
@@ -79,13 +112,14 @@ html, body {
 
 body {
   margin: 0;
-  font-family: Playfair Display, serif;
+  font-family: 'Helvetica', Arial, sans-serif;
   color: var(--fg);
-  background: linear-gradient(rgba(32, 27, 0, 0.516), rgba(0, 50, 17, 0.926)), url('/1.jpg');
+  background: linear-gradient(rgba(0, 0, 0, 0.444), rgba(0, 0, 0, 0.207)), url('/1.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
+  backdrop-filter: blur(2px);
   overflow-x: hidden;
   width: 100%;
   position: relative;
@@ -103,11 +137,13 @@ body {
   --sb-size: 10px;
 }
 
-
-
 body::-webkit-scrollbar {
-  display: none;
-  width: 0;
+  width: var(--sb-size);
+  
+  @media (max-width: 768px) {
+    display: none;
+    width: 0;
+  }
 }
 
 body::-webkit-scrollbar-track {
@@ -118,11 +154,20 @@ body::-webkit-scrollbar-track {
 body::-webkit-scrollbar-thumb {
   background: var(--sb-thumb-color);
   border-radius: 6px;
+  
+  &:hover {
+    background: lighten(#3a7f22, 10%);
+  }
 }
 
 @supports not selector(::-webkit-scrollbar) {
   body {
-    scrollbar-width: none;
+    scrollbar-width: thin;
+    scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+    
+    @media (max-width: 768px) {
+      scrollbar-width: none;
+    }
   }
 }
 a { 
@@ -163,7 +208,7 @@ a:hover {
   color: $text-dark;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-family: $font-secondary sans-serif;
+  font-family: 'Bricolage Grotesque', sans-serif;
   font-size: 1.1rem;
   font-weight: 600;
 }
@@ -261,3 +306,6 @@ a:hover {
       scroll-margin-top: 120px;
     }
   }
+.left {
+  text-align: left;
+}

@@ -3,7 +3,7 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination, Navigation, EffectFade } from 'swiper/modules';
 import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
+import { color, motion } from 'framer-motion';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
@@ -126,7 +126,7 @@ export default function HeroSlider() {
             </motion.button>
             
             <motion.h1 className="heroTitle" variants={itemVariants}>
-              Welcome to Vriksh Valley
+              Welcome to <br/><span style={{ "color": "#35e498" }}>Vriksh</span> Valley
             </motion.h1>
             
             <motion.p className="heroSubtitle" variants={itemVariants}>

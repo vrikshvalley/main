@@ -62,7 +62,7 @@ export default function BringNatureHome() {
     >
       <div className="content-container">
         <div className="content-wrapper">
-          <p className="cursive-subtitle">Garden Living</p>
+          <p className="left cursive-subtitle ">Garden Living</p>
           <motion.h2 variants={textVariants}>
             Bring Nature Home, <br />
             <span className="highlight">One Leaf at a Time</span> 🌿

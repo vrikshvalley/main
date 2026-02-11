@@ -27,10 +27,8 @@
     display: flex;
     width: 100%;
     flex-direction: row;
-    align-items: center;
-    justify-content: space-evenly;
-    
-    gap: 10rem;
+    align-items: flex-start;
+    justify-content: space-between;
     padding: 1rem 0; // Add vertical padding to prevent clipping
     overflow: visible; // Allow overflow for scaling
     

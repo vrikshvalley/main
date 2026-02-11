@@ -99,11 +99,15 @@ const cardVariants = {
 };
 
 export default function ShopByCategory() {
-  const [subcategories, setSubcategories] = useState([]);
-
-  useEffect(() => {
-    setSubcategories(getRandomSubcategories());
-  }, []);
+  // Fixed 6 subcategories for Explore More - no longer random
+  const exploreMoreSubcategories = [
+    { name: 'Indoor Plants' },
+    { name: 'Succulents' },
+    { name: 'Flowering Plants' },
+    { name: 'Foliage Plants' },
+    { name: 'Hanging Plants' },
+    { name: 'Air Plants' }
+  ];
 
   const SubcategoryCard = ({ subcategory, index }) => (
     <motion.div className="subcategory-card" variants={cardVariants}>
@@ -145,6 +149,9 @@ export default function ShopByCategory() {
             className="subcategory-image"
             onError={handleImgError}
           />
+          <span className="subcategory-arrow">
+            <ArrowRight size={14} />
+          </span>
         </div>
         <span>{subcategory.name}</span>
       </Link>
@@ -196,7 +203,7 @@ export default function ShopByCategory() {
             }}
             className="category-slider"
           >
-            {subcategories.slice(0, 6).map((subcategory, idx) => (
+            {exploreMoreSubcategories.map((subcategory, idx) => (
               <SwiperSlide key={`${subcategory.name}-top-${idx}`}>
                 <motion.div variants={cardVariants}>
                   <Link href={`/products/search?q=${encodeURIComponent(subcategory.name)}`} className="category-card">
@@ -251,7 +258,7 @@ export default function ShopByCategory() {
             }}
             className="subcategory-slider"
           >
-              {subcategories.slice(6).map((subcategory, index) => {
+              {exploreMoreSubcategories.map((subcategory, index) => {
                 // Build image path from subcategory name for 'Explore More'
                 const nameBasedSrc = imagePathFromName(subcategory.name);
                 return (

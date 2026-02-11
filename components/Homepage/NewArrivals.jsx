@@ -117,7 +117,7 @@ export default function NewArrivals() {
     >
       <div className="featured-header">
         <div className="featured-header-left">
-          <p className="cursive-subtitle">Freshly Arrived</p>
+          <p className="left cursive-subtitle">Freshly Arrived</p>
           <AnimatedText
             as="h2"
             text="New Arrivals"

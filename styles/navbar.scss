@@ -232,13 +232,13 @@
           outline: none;
           background: transparent;
           color: $primary-bg;
-          font-family: 'Playfair Display', serif;
+          font-family: 'Helvetica', Arial, sans-serif;
           font-size: 0.95rem;
           font-weight: 500;
 
           &::placeholder {
             color: rgba($primary-bg, 0.6);
-            font-family: 'Playfair Display', serif;
+            font-family: 'Helvetica', Arial, sans-serif;
           }
         }
       }
@@ -578,7 +578,7 @@ color.adjust($accent-primary, $lightness: -5%);
       input {
         padding: 0.5rem 0.8rem 0.5rem 2.75rem;
         border-radius: 20px;
-        font-family: 'Playfair Display', serif;
+        font-family: 'Helvetica', Arial, sans-serif;
         font-size: 0.95rem;
         font-weight: 500;
         border: 2px solid rgba($primary-bg, 0.2);
@@ -590,7 +590,7 @@ color.adjust($accent-primary, $lightness: -5%);
         &::placeholder {
           font-size: 0.9rem;
           color: rgba($primary-bg, 0.6);
-          font-family: 'Playfair Display', serif;
+          font-family: 'Helvetica', Arial, sans-serif;
         }
         
         &:focus {

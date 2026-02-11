@@ -96,8 +96,8 @@ export default function CategoryCircles() {
           // These are the fixed images that will always be used
           const imageMap = {
             'Plants': '/categories/Plants.jpg',
-            'Seeds': '/categories/seeds.jpg',
-            'Planters': '/categories/Pots.jpg',
+            'Seeds': '/categories/seeds.png',
+            'Planters': '/categories/Pots.png',
             'Plant Care': '/categories/Plant care.jpg', 
             'Decor': '/categories/Decor.jpg',
             'Accessories': '/categories/Plant tools.jpg'
