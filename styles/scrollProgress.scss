@@ -1,18 +1,54 @@
+
 @use 'variables' as *;
 
-.scroll-progress-bar {
-  position: fixed;
-  top: 60px; // Below navbar
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, $teal 0%, $accent-primary 50%, $yellow 100%);
-  transform-origin: 0%;
-  z-index: 999;
-  box-shadow: 0 2px 8px rgba($accent-primary, 0.3);
+.growing-stem-container {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 50vh;
+    width: 4px;
+    background: rgba(0,0,0,0.1);
+    border-radius: 10px;
+    z-index: 1000;
+    
+    // Hide on mobile
+    display: none;
+    @media (min-width: 1024px) {
+        display: block;
+    }
 
-  @media (max-width: 768px) {
-    top: 50px; // Adjust for mobile navbar height
-    height: 2px;
-  }
+    .stem-fill {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(180deg, #81c784 0%, #2e7d32 100%);
+        border-radius: 10px;
+        transform-origin: top center;
+    }
+
+    .seed-top {
+        position: absolute;
+        top: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 12px;
+        height: 12px;
+        background: #5d4037;
+        border-radius: 50% 0 50% 50%;
+        transform: translateX(-50%) rotate(45deg);
+    }
+
+    .flower-bottom {
+        position: absolute;
+        bottom: -30px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 24px;
+        opacity: 0;
+        transition: opacity 0.3s, transform 0.5s;
+    }
 }
+

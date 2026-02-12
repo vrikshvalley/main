@@ -3,7 +3,7 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination, Navigation, EffectFade } from 'swiper/modules';
 import { useRouter } from 'next/navigation';
-import { color, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
@@ -46,6 +46,8 @@ const itemVariants = {
   }
 };
 
+// photosynthesisVariants removed — static colors used for hero title
+
 export default function HeroSlider() {
   const router = useRouter();
 
@@ -80,7 +82,7 @@ export default function HeroSlider() {
             prevEl: '.swiper-button-prev',
           }}
           autoplay={{ 
-            delay: 3000, 
+            delay: 4000, 
             disableOnInteraction: false,
             pauseOnMouseEnter: true 
           }}
@@ -93,15 +95,24 @@ export default function HeroSlider() {
         >
           {slides.map((slide, idx) => (
             <SwiperSlide key={idx}>
-              <picture>
-                <source media="(max-width: 768px)" srcSet={slide.srcMobile} />
-                <img
-                  src={slide.src}
-                  alt={slide.alt}
-                  loading={idx === 0 ? 'eager' : 'lazy'}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
-                />
-              </picture>
+              {({ isActive }) => (
+                 <motion.div 
+                   style={{ width: '100%', height: '100%' }}
+                   initial={{ clipPath: 'circle(0% at 50% 50%)' }}
+                   animate={{ clipPath: isActive ? 'circle(150% at 50% 50%)' : 'circle(0% at 50% 50%)' }}
+                   transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
+                 >
+                    <picture>
+                      <source media="(max-width: 768px)" srcSet={slide.srcMobile} />
+                      <img
+                        src={slide.src}
+                        alt={slide.alt}
+                        loading={idx === 0 ? 'eager' : 'lazy'}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
+                      />
+                    </picture>
+                 </motion.div>
+              )}
             </SwiperSlide>
           ))}
         </Swiper>
@@ -125,8 +136,28 @@ export default function HeroSlider() {
               🌿 Where Nature Meets Nurture
             </motion.button>
             
-            <motion.h1 className="heroTitle" variants={itemVariants}>
-              Welcome to <br/><span style={{ "color": "#35e498" }}>Vriksh</span> Valley
+            <motion.h1 
+              className="heroTitle" 
+              variants={itemVariants}
+            >
+             <motion.span
+                style={{
+                  color: '#ffffff',
+                  display: 'inline-block'
+                }}
+             >
+              Welcome to 
+             </motion.span>
+             <br/>
+             <motion.span 
+               style={{ 
+                  color: '#35e498',
+                  display: 'inline-block'
+                }}
+              
+             >
+                Vriksh 
+              </motion.span><span>Valley</span>
             </motion.h1>
             
             <motion.p className="heroSubtitle" variants={itemVariants}>

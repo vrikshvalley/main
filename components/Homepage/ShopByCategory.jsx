@@ -87,197 +87,80 @@ const containerVariants = {
 };
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, scale: 0.9 },
   visible: { 
     opacity: 1, 
-    y: 0,
+    scale: 1,
     transition: {
-      duration: 0.6,
+      duration: 0.5,
       ease: [0.22, 1, 0.36, 1]
     }
   }
 };
 
+// Bento Span Pattern
+const BENTO_PATTERNS = [
+  'span-2x2', 'span-1x1', 'span-1x2', 
+  'span-1x1', 'span-2x1', 'span-1x1',
+  'span-1x1', 'span-1x1', 'span-2x2',
+  'span-1x2', 'span-1x1', 'span-1x1'
+];
+
 export default function ShopByCategory() {
-  // Fixed 6 subcategories for Explore More - no longer random
-  const exploreMoreSubcategories = [
-    { name: 'Indoor Plants' },
-    { name: 'Succulents' },
-    { name: 'Flowering Plants' },
-    { name: 'Foliage Plants' },
-    { name: 'Hanging Plants' },
-    { name: 'Air Plants' }
-  ];
-
-  const SubcategoryCard = ({ subcategory, index }) => (
-    <motion.div className="subcategory-card" variants={cardVariants}>
-      <SubcategoryCardInner subcategory={subcategory} />
-    </motion.div>
-  );
-
-  function SubcategoryCardInner({ subcategory }) {
-    const [srcIndex, setSrcIndex] = useState(0);
-
-    const pascal = pascalize(subcategory.name);
-    const slug = slugify(subcategory.name);
-
-    // candidate srcs in order of preference
-    const candidates = [
-      subcategory.image || null,
-      // Prefer the manual map provided by getImageForSubcategory
-      getImageForSubcategory(subcategory.name),
-      `/subcategories/${pascal}Mobile.png`,
-      `/subcategories/${pascal}Desktop.png`,
-      `/subcategories/${slug}.jpg`,
-      '/subcategories/Plants.png'
-    ].filter(Boolean);
-
-    const src = candidates[srcIndex] || candidates[candidates.length - 1];
-
-    const handleImgError = () => {
-      if (srcIndex < candidates.length - 1) setSrcIndex(i => i + 1);
-    };
-
-    return (
-      <Link href={`/products/search?q=${encodeURIComponent(subcategory.name)}`}>
-        <div className="subcategory-image-wrapper">
-          <Image
-            src={src}
-            alt={subcategory.name}
-            fill
-            sizes="100px"
-            className="subcategory-image"
-            onError={handleImgError}
-          />
-          <span className="subcategory-arrow">
-            <ArrowRight size={14} />
-          </span>
-        </div>
-        <span>{subcategory.name}</span>
-      </Link>
-    );
-  }
+  const [categories, setCategories] = useState([]);
+  
+  useEffect(() => {
+    // Determine categories to show
+    setCategories(allSubcategories.slice(0, 12));
+  }, []);
 
   return (
     <section className="shop-by-category">
-      <motion.div 
-        className="category-container"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: false, amount: 0.2 }}
-        variants={containerVariants}
-      >
-        <motion.div className="category-header" variants={cardVariants}>
-          <p className="cursive-subtitle">Explore Our Collection</p>
-          <AnimatedText
-            as="h2"
-            text="Shop by categories"
-            className="category-title"
-            delay={0.1}
-            stagger={0.05}
-          />
-          <AnimatedText
-            as="p"
-            text="Find exactly what your green space needs"
-            className="category-description"
-            delay={0.2}
-            stagger={0.02}
-          />
+      <div className="category-container">
+        <div className="category-header">
+          <AnimatedText text="Curated Collections" className="cursive-subtitle" />
+          <h2 className="category-title">Shop by Category</h2>
+          <p className="category-description">Explore our hand-picked selections for every space.</p>
+        </div>
+
+        <motion.div 
+          className="bento-grid"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+        >
+          {categories.map((cat, index) => {
+            const spanClass = BENTO_PATTERNS[index % BENTO_PATTERNS.length];
+            const linkHref = `/category/${slugify(cat.name)}`;
+            
+            return (
+              <motion.div 
+                key={cat.name}
+                className={`bento-item ${spanClass}`}
+                variants={cardVariants}
+              >
+                <Link href={linkHref} style={{ display: 'block', width: '100%', height: '100%', position: 'relative' }}>
+                  <Image 
+                    src={getImageForSubcategory(cat.name)}
+                    alt={cat.name}
+                    fill
+                    sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                    className="category-image"
+                    style={{ objectFit: 'cover' }}
+                  />
+                  <div className="bento-content">
+                    <h3>{cat.name}</h3>
+                    <div className="explore-link">
+                      Explore <ArrowRight size={16} style={{ marginLeft: '4px' }} />
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
+            );
+          })}
         </motion.div>
-
-        {/* Top 6 Subcategories (displayed in place of categories) */}
-        <div className="categories-slider-wrapper">
-          <Swiper
-            modules={[Navigation, Pagination]}
-            navigation={{
-              nextEl: '.category-slider-next',
-              prevEl: '.category-slider-prev',
-            }}
-            pagination={{ clickable: true, el: '.category-slider-pagination' }}
-            slidesPerView={1}
-            spaceBetween={20}
-            breakpoints={{
-              640: { slidesPerView: 2 },
-              1024: { slidesPerView: 3 },
-              1280: { slidesPerView: 6 },
-            }}
-            className="category-slider"
-          >
-            {exploreMoreSubcategories.map((subcategory, idx) => (
-              <SwiperSlide key={`${subcategory.name}-top-${idx}`}>
-                <motion.div variants={cardVariants}>
-                  <Link href={`/products/search?q=${encodeURIComponent(subcategory.name)}`} className="category-card">
-                    <div className="category-image-wrapper">
-                      <Image
-                        src={getImageForSubcategory(subcategory.name)}
-                        alt={subcategory.name}
-                        fill
-                        sizes="(max-width: 768px) 50vw, 25vw"
-                        className="category-image"
-                      />
-                      <div className="category-overlay" />
-                    </div>
-                    <div className="category-info">
-                      <h3>{subcategory.name}</h3>
-                      <p>{subcategory.description || ''}</p>
-                      <span className="category-arrow">
-                        <ArrowRight size={20} />
-                      </span>
-                    </div>
-                  </Link>
-                </motion.div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-
-          <button className="category-slider-prev" aria-label="Previous subcategories (top)">
-            <ChevronLeft size={24} />
-          </button>
-          <button className="category-slider-next" aria-label="Next subcategories (top)">
-            <ChevronRight size={24} />
-          </button>
-          <div className="category-slider-pagination" />
-        </div>
-
-        {/* Subcategories Section */}
-        <div className="subcategories-section">
-          <h3 className="subcategories-title">Explore More</h3>
-          <Swiper
-            modules={[Navigation, Pagination]}
-            navigation={{
-              nextEl: '.subcategory-slider-next',
-              prevEl: '.subcategory-slider-prev',
-            }}
-            pagination={{ clickable: true, el: '.subcategory-slider-pagination' }}
-            slidesPerView={1}
-            spaceBetween={15}
-            breakpoints={{
-              640: { slidesPerView: 3 },
-              1024: { slidesPerView: 4 },
-              1280: { slidesPerView: 6 },
-            }}
-            className="subcategory-slider"
-          >
-              {exploreMoreSubcategories.map((subcategory, index) => {
-                // Build image path from subcategory name for 'Explore More'
-                const nameBasedSrc = imagePathFromName(subcategory.name);
-                return (
-                  <SwiperSlide key={`${subcategory.name}-more-${index}`}>
-                    <SubcategoryCard subcategory={{ ...subcategory, image: nameBasedSrc }} index={index} />
-                  </SwiperSlide>
-                );
-              })}
-          </Swiper>
-
-          <button className="subcategory-slider-prev" aria-label="Previous subcategories">
-            <ChevronLeft size={20} />
-          </button>
-          <button className="subcategory-slider-next" aria-label="Next subcategories">
-            <ChevronRight size={20} />
-          </button>
-          <div className="subcategory-slider-pagination" />
-        </div>
-      </motion.div>
+      </div>
     </section>
   );
 }

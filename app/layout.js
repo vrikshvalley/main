@@ -6,7 +6,8 @@ import InitialLoader from "@/components/general/InitialLoader";
 import TheLoader from "@/components/general/TheLoader";
 import GlobalCartModal from "@/components/cart/GlobalCartModal";
 import ToastContainer from "@/components/general/ToastContainer";
-import ScrollProgress from "@/components/general/ScrollProgress";
+// ScrollProgress removed - using native scrollbar
+import HomeSidebar from "@/components/general/HomeSidebar";
 
 export const metadata = {
   metadataBase: new URL("https://vrikshvalley.com"),
@@ -198,13 +199,14 @@ export default function RootLayout({ children }) {
         `,
           }}
         />
-        <ScrollProgress />
+        {/* ScrollProgress removed - using native scrollbar */}
         <InitialLoader />
         <TheLoader fullscreen showOnRouteChange />
         <Providers>
           <AutoLogoutProvider>
             <GlobalCartModal />
             <ToastContainer />
+            <HomeSidebar />
             <div className="container">{children}</div>
           </AutoLogoutProvider>
         </Providers>

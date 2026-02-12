@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import Image from 'next/image';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
 import PageTitle from '@/components/general/PageTitle';
+import AboutScrollyTelling from '@/components/Homepage/AboutScrollyTelling';
 import { setStickyHeaderData } from '@/lib/stickyHeaderStore';
 import '@/styles/pages.scss';
 
@@ -80,12 +81,9 @@ export default function AboutUs() {
             The green journey does not end with one plant. It begins there. Choosing Vriksh Valley helps you join a movement that values sustainability, along with self-care and connections with the earth. We can together turn cities into living ecosystems and homes into lush sanctuaries.
           </p>
 
-          <h2>Our Story of Growth</h2>
-          <p>
-            What started as a small passion project has blossomed into a thriving green community. The idea of Vriksh Valley sprouted from the dare to make urban spaces more breathable and meaningful. Our roots are deepening. Every sapling we deliver varies in this story of growth and gratitude.
-          </p>
-          <p>
-            Join the Vriksh Valley family. Let us grow happiness, one leaf at a time.
+          <AboutScrollyTelling />
+          <p className="text-center italic mb-12">
+            What started as a small passion project has blossomed into a thriving green community. The idea of Vriksh Valley sprouted from the dare to make urban spaces more breathable and meaningful. Our roots are deepening. Every sapling we deliver varies in this story of growth and gratitude. Join the Vriksh Valley family. Let us grow happiness, one leaf at a time.
           </p>
 
           <h2>Contact Us</h2>

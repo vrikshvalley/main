@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import { addItem } from '@/lib/slices/cartSlice';
 import { createPortal } from 'react-dom';
 import ProductPage from '@/components/products/ProductPage';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const getImageSrc = (img) => {
   if (!img) return '';
@@ -36,31 +37,12 @@ const getProductReviewCount = (productId) => {
 
 export default function ProductListCard({ product, viewMode = 'grid' }) {
   const [isWishlisted, setIsWishlisted] = useState(false);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const intervalRef = useRef(null);
   const dispatch = useDispatch();
 
-  // Auto-rotate images on hover
-  useEffect(() => {
-    if (isHovering && product.images && product.images.length > 1) {
-      intervalRef.current = setInterval(() => {
-        setCurrentImageIndex((prev) => (prev + 1) % product.images.length);
-      }, 1000);
-    } else {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-      setCurrentImageIndex(0);
-    }
-
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, [isHovering, product.images]);
+  const primaryImage = getImageSrc(product.images?.[0]);
+  const secondaryImage = product.images?.[1] ? getImageSrc(product.images[1]) : primaryImage;
 
   useEffect(() => {
     if (typeof document === 'undefined') return;
@@ -123,6 +105,17 @@ export default function ProductListCard({ product, viewMode = 'grid' }) {
     return stars;
   };
 
+  // Tag Logic
+  // Determine if this product is a plant (by category, tags or explicit type)
+  const categoryStr = (product.category || '').toString().toLowerCase();
+  const tags = (product.tags || []).map(t => (typeof t === 'string' ? t.toLowerCase() : ''));
+  const isPlantProduct = categoryStr.includes('plant') || tags.includes('plant') || (product.type || '').toString().toLowerCase() === 'plant' || (product.productType || '').toString().toLowerCase() === 'plant';
+
+  // Tag Logic - only apply these badges for plant products
+  const isPetFriendly = isPlantProduct && (product.petFriendly === 'Yes' || product.petFriendly === true || product.petFriendly === 'true' || tags.includes('pet-friendly') || tags.includes('pet friendly'));
+  // Mock Low Light based on ID if not present (for demo) but only for plants
+  const isLowLight = isPlantProduct && (product.light === 'Low' || product.light === 'low' || tags.includes('low-light') || tags.includes('low light') || (!product.light && (product.id || '').charCodeAt(0) % 3 === 0));
+
   return (
     <>
     <Link
@@ -133,17 +126,41 @@ export default function ProductListCard({ product, viewMode = 'grid' }) {
         setIsModalOpen(true);
       }}
     >
-      <div 
+      <motion.div 
         className="product-image-wrapper"
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
+        whileHover={{ scale: 1.05, rotate: 1 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        style={{ overflow: 'hidden', transformOrigin: 'center center' }} // Ensure overflow hidden for zoom
       >
-        {product.images && product.images[0] ? (
-          <img 
-            src={getImageSrc(product.images[currentImageIndex]) || getImageSrc(product.images[0])} 
-            alt={product.name} 
-            className="product-image" 
-          />
+        {primaryImage ? (
+           <>
+            <motion.img 
+              src={primaryImage} 
+              alt={product.name} 
+              className="product-image"
+              style={{ position: 'relative', zIndex: 1 }}
+              transition={{ duration: 0.3 }}
+            />
+            {/* Secondary Image Cross-fade */}
+            {secondaryImage && secondaryImage !== primaryImage && (
+              <motion.img
+                 src={secondaryImage}
+                 alt={`${product.name} view 2`}
+                 className="product-image"
+                 style={{ 
+                   position: 'absolute', 
+                   top: 0, 
+                   left: 0, 
+                   zIndex: 2,
+                   opacity: 0
+                 }}
+                 animate={{ opacity: isHovering ? 1 : 0 }}
+                 transition={{ duration: 0.4 }}
+              />
+            )}
+           </>
         ) : (
           <div className="product-image-placeholder">
             <span>🌿</span>
@@ -162,6 +179,36 @@ export default function ProductListCard({ product, viewMode = 'grid' }) {
           <div className="new-arrivals-badge">New Arrival</div>
         )}
 
+        {/* Dynamic Glowing Tags */}
+        <div style={{ position: 'absolute', bottom: '10px', left: '10px', zIndex: 5, display: 'flex', gap: '5px', flexDirection: 'column', alignItems: 'flex-start' }}>
+            {isPetFriendly && (
+              <motion.div 
+                animate={{ boxShadow: ["0 0 0px rgba(28, 158, 91, 0)", "0 0 10px rgba(28, 158, 91, 0.6)", "0 0 0px rgba(28, 158, 91, 0)"] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                style={{ 
+                    background: 'rgba(28, 158, 91, 0.9)', color: 'white', 
+                    padding: '4px 8px', borderRadius: '4px', fontSize: '0.7rem',
+                    backdropFilter: 'blur(4px)', fontWeight: '500'
+                }}
+              >
+               🐾 Pet Friendly
+              </motion.div>
+            )}
+             {isLowLight && (
+              <motion.div 
+                animate={{ boxShadow: ["0 0 0px rgba(13, 110, 253, 0)", "0 0 10px rgba(13, 110, 253, 0.6)", "0 0 0px rgba(13, 110, 253, 0)"] }}
+                transition={{ duration: 2, repeat: Infinity, delay: 1 }}
+                style={{ 
+                    background: 'rgba(13, 110, 253, 0.9)', color: 'white', 
+                    padding: '4px 8px', borderRadius: '4px', fontSize: '0.7rem',
+                    backdropFilter: 'blur(4px)', fontWeight: '500'
+                }}
+              >
+               🌑 Low Light
+              </motion.div>
+            )}
+        </div>
+
         <button 
           className={`wishlist-button ${isWishlisted ? 'active' : ''}`}
           onClick={toggleWishlist}
@@ -169,7 +216,7 @@ export default function ProductListCard({ product, viewMode = 'grid' }) {
         >
           <Heart size={18} fill={isWishlisted ? 'currentColor' : 'none'} />
         </button>
-      </div>
+      </motion.div>
 
       <div className="product-info">
         <div className="product-category">{product.category}</div>

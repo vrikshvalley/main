@@ -19,11 +19,10 @@ import MeetOurTeam from "@/components/Homepage/MeetOurTeam";
 import OurBlogs from "@/components/Homepage/OurBlogs";
 import Footer from "@/components/general/Footer";
 import WhatsAppButton from "@/components/general/WhatsAppButton";
-import HomeSidebar from "@/components/general/HomeSidebar";
 import Ads from "@/components/general/Ads";
 import ShopByCategory from "@/components/Homepage/ShopByCategory";
+import ParallaxDivider from "@/components/general/ParallaxDivider";
 
-import { React } from "react";
 import { motion } from "framer-motion";
 
 export default function Home() {
@@ -53,19 +52,14 @@ export default function Home() {
     <>
       <Topbar />
       <Navbar />
-      <HomeSidebar />
       
-      {/* Hero Section */}
-      <motion.section
+      {/* Hero Section - No motion wrapper to avoid containing block for fixed elements */}
+      <section
         id="hero"
         className="scroll-section"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
-        variants={sectionVariants}
       >
         <HeroSlider />
-      </motion.section>
+      </section>
 
       <Ads 
         items={['New Arrivals', 'Premium Collection', 'Indoor Plants', 'Outdoor Plants', 'Succulents', 'Bonsai']} 
@@ -144,6 +138,8 @@ export default function Home() {
       >
         <NewArrivals />
       </motion.section>
+      
+      <ParallaxDivider />
 
       {/* Bring Nature Home Section */}
       <motion.section

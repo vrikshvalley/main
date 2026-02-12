@@ -1,6 +1,7 @@
 'use client';
 
-import React from 'react';
+import React, { useRef } from 'react';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
 import '@/styles/button.scss';
 
 /**
@@ -27,6 +28,7 @@ const Button = React.forwardRef(({
   onClick,
   type = 'button',
   fullWidth = false,
+  magnetic = true, // Enable magnetic effect by default
   ...props
 }, ref) => {
   const classes = [
@@ -38,13 +40,43 @@ const Button = React.forwardRef(({
     className
   ].filter(Boolean).join(' ');
 
+  // Magnetic Logic
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const springConfig = { damping: 15, stiffness: 150, mass: 0.1 };
+  const springX = useSpring(x, springConfig);
+  const springY = useSpring(y, springConfig);
+
+  const handleMouseMove = (e) => {
+    if (!magnetic || disabled || loading) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const distanceX = e.clientX - centerX;
+    const distanceY = e.clientY - centerY;
+    
+    // Limit the movement
+    x.set(distanceX * 0.2); 
+    y.set(distanceY * 0.2);
+  };
+
+  const handleMouseLeave = () => {
+      x.set(0); 
+      y.set(0);
+  };
+
   return (
-    <button
+    <motion.button
       ref={ref}
       type={type}
       className={classes}
       disabled={disabled || loading}
       onClick={onClick}
+      style={magnetic && !disabled ? { x: springX, y: springY } : {}}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      whileTap={{ scale: 0.95 }}
       {...props}
     >
       <span className="btn-content">
@@ -63,7 +95,7 @@ const Button = React.forwardRef(({
           <Icon className="btn-icon btn-icon-right" size={18} />
         )}
       </span>
-    </button>
+    </motion.button>
   );
 });
 

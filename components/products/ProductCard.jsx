@@ -9,16 +9,18 @@ import "@/styles/products.scss";
 const cardVariants = {
   hidden: { 
     opacity: 0, 
-    y: 40,
-    scale: 0.95
+    y: 50,
+    scale: 0.8
   },
   visible: { 
     opacity: 1, 
     y: 0,
     scale: 1,
     transition: {
-      duration: 0.8,
-      ease: [0.22, 1, 0.36, 1]
+      type: "spring",
+      stiffness: 100,
+      damping: 10,
+      mass: 0.5
     }
   }
 };
