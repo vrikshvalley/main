@@ -2,25 +2,30 @@
 @use 'variables' as *;
 
 .about-section {
-  padding: 3rem 1.5rem;
-  max-width: 1500px;
-  margin: 0 auto;
-  border-radius: 16px;
+  padding: 0;
+  max-width: 100%;
+  margin: 0;
+  border-radius: 0;
+  background-color: $white;
+  width: 100%;
 
   @media (max-width: 768px) {
-    padding: 2rem 1rem;
+    padding: 0;
   }
 
   h2 {
     font-size: 2rem;
     margin-bottom: 1.8rem;
+    margin-top: 0;
+    padding: 3rem 1.5rem 0;
     font-weight: 600;
-    color: $text-primary;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    color: $dark-green;
+    text-shadow: none;
     text-align: left;
     @media (max-width: 400px) {
       font-size: 1.5rem;
       text-align: center;
+      padding: 2rem 1rem 0;
     }
   }
 
@@ -30,6 +35,9 @@
     gap: 2.5rem;
     align-items: stretch;
     align-content: start;
+    padding: 0 1.5rem 3rem;
+    max-width: 1400px;
+    margin: 0 auto;
 
     // ensure direct children start at same top
     & > * {
@@ -39,6 +47,7 @@
     @media (max-width: 968px) {
       grid-template-columns: 1fr;
       gap: 2rem;
+      padding: 0 1rem 2rem;
     }
   }
 
@@ -47,16 +56,18 @@
     flex-direction: column;
     gap: 1.5rem;
     text-align: left;
+    padding: 0;
 
     @media (max-width: 968px) {
       text-align: center;
+      padding: 0;
     }
 
     p {
       font-size: 1.15rem;
       line-height: 1.8;
-      color: $text-primary;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+      color: $dark-green;
+      text-shadow: none;
       margin: 0;
       font-weight: 600;
 
@@ -65,7 +76,7 @@
         font-size: 1.4rem;
         font-weight: 600;
         line-height: 1.9;
-        color: $text-primary;
+        color: $dark-green;
         font-family: 'Helvetica', Arial, sans-serif;
       }
 
@@ -91,20 +102,21 @@
 
   .about-image-container {
     width: 100%;
-    height: 100%;
     display: flex;
     justify-content: flex-start; // keep image aligned with content column
+    max-height: 500px;
   }
 
   .image-wrapper {
     position: relative;
     width: 100%;
-    height: 100%;
+    height: auto;
+    aspect-ratio: 1;
     max-width: none;
-    border-radius: 12px;
+    border-radius: 0;
     overflow: hidden;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-    border: 3px solid rgba($white, 0.12);
+    box-shadow: none;
+    border: none;
 
     .about-image {
       width: 100%;

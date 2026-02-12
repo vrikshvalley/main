@@ -256,14 +256,14 @@
     }
 
     &:hover {
-      background: rgba($accent-primary, 0.15);
-      border-color: $accent-primary;
-      color: $text-primary;
-      transform: translateX(2px);
-      box-shadow: 0 4px 12px rgba($accent-primary, 0.2);
+      background: $white;
+      border-color: rgba($accent-primary, 0.12);
+      color: $text-secondary;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba($dark-green, 0.12);
 
       svg {
-        transform: translateX(3px);
+        transform: translateX(4px);
       }
     }
 

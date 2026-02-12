@@ -7,13 +7,13 @@
 .animated-text .word {
   display: inline-block;
   will-change: transform, opacity;
-  font-family: 'Italianno', Arial, sans-serif;
+  font-family: 'Bricolage Grotesk', Arial, sans-serif;
    
 }
 
 .cursive-subtitle {
   font-family: 'Italianno', cursive;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   color: #ffffff !important;
   margin-bottom: 10px;
   letter-spacing: 0.2px;
@@ -22,6 +22,10 @@
   position: relative;
   width: 100%;
   order: -1;
+  
+  .word {
+    font-family: 'Italianno', cursive;
+  }
   
   &.left {
     text-align: left;

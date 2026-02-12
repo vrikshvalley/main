@@ -117,10 +117,14 @@
     height: auto;
     display: flex;
     align-items: stretch; /* ensure slides stretch the card height */
+    justify-content: center; /* center the single card per slide */
+    padding: 0 1rem; /* gutter around card */
   }
 
   .team-card {
     height: 100%;
+    width: 100%;
+    max-width: 760px; /* constrain card on larger screens while allowing full width on mobile */
   }
 
   .swiper-pagination {
@@ -197,7 +201,7 @@
   will-change: transform;
 
   @media (max-width: 768px) {
-    height: 250px;
+    height: 320px;
   }
 
   @media (max-width: 400px) {
@@ -208,14 +212,15 @@
 .team-image {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* fill the box */
+  object-fit: cover; /* ensure full-bleed images on mobile */
   transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
   will-change: transform;
   background: linear-gradient(135deg, $dark-green, $deep-green);
   transform-origin: center center;
 
   @media (max-width: 768px) {
-    object-fit: contain;
+    object-fit: cover;
+    height: 100%;
   }
 }
 
@@ -343,12 +348,13 @@
   transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
   
   @media (max-width: 768px) {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    /* Show full bio on mobile slides — do not clamp */
+    display: block;
+    -webkit-line-clamp: unset;
+    line-clamp: unset;
+    -webkit-box-orient: unset;
+    overflow: visible;
+    text-overflow: clip;
   }
 
   .team-card.expanded & {
@@ -377,7 +383,7 @@
 
 // Mobile fallback: ensure team section is visible if JS animations don't trigger
 @media (max-width: 768px) {
-  .meet-our-team,
+    .meet-our-team,
   .meet-our-team .team-container,
   .meet-our-team .team-header,
   .meet-our-team .team-grid,
@@ -388,4 +394,11 @@
     transform: none !important;
     transition: none !important;
   }
+}
+
+/* Force full-width team cards on small screens */
+@media (max-width: 768px) {
+  .team-grid { padding: 0; }
+  .team-card { width: 100%; border-radius: 12px; }
+  .team-image-wrapper { height: 320px; }
 }

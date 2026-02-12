@@ -96,12 +96,9 @@ export default function HeroSlider() {
           {slides.map((slide, idx) => (
             <SwiperSlide key={idx}>
               {({ isActive }) => (
-                 <motion.div 
-                   style={{ width: '100%', height: '100%' }}
-                   initial={{ clipPath: 'circle(0% at 50% 50%)' }}
-                   animate={{ clipPath: isActive ? 'circle(150% at 50% 50%)' : 'circle(0% at 50% 50%)' }}
-                   transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
-                 >
+                   <div 
+                     style={{ width: '100%', height: '100%' }}
+                   >
                     <picture>
                       <source media="(max-width: 768px)" srcSet={slide.srcMobile} />
                       <img
@@ -111,7 +108,7 @@ export default function HeroSlider() {
                         style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
                       />
                     </picture>
-                 </motion.div>
+                  </div>
               )}
             </SwiperSlide>
           ))}
@@ -172,7 +169,7 @@ export default function HeroSlider() {
 
             <motion.div className="ctaButtons" variants={itemVariants}>
               <button className="ctaButton" onClick={handleJoinMovement}>
-                Join the Green Movement
+                Join Us
               </button>
               {/* <button className="ctaButtonSecondary" onClick={handleLearnMore}>
                 Our Story

@@ -258,7 +258,7 @@ const ProfilePage = () => {
   return (
     <div className="profilePage">
       <div className="brandHeader">
-        <Image src="/white-logo.png" alt="Vriksh Valley" width={60} height={60} className="logo" />
+        <Image src="/big-logo.png" alt="Vriksh Valley" width={60} height={60} className="logo" />
         <div className="brandInfo">
           <h1>Vriksh Valley</h1>
           <p>Pure. Organic. Natural.</p>

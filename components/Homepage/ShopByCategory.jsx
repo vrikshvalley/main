@@ -34,18 +34,18 @@ const getImageForSubcategory = (name) => {
 };
 
 const allSubcategories = [
-  { name: 'Indoor Plants' },
-  { name: 'Succulents' },
-  { name: 'Flowering Plants' },
-  { name: 'Foliage Plants' },
-  { name: 'Hanging Plants' },
-  { name: 'Air Plants' },
-  { name: 'Cactus' },
-  { name: 'Herbs' },
-  { name: 'Vegetables' },
-  { name: 'Herbs & Microgreens' },
-  { name: 'Bonsai' },
-  { name: 'Aquatic Plants' }
+  { name: 'Indoor Plants', tagline: 'Transform your space with lush greenery' },
+  { name: 'Succulents', tagline: 'Low-maintenance beauty at its finest' },
+  { name: 'Flowering Plants', tagline: 'Bloom your way to happiness' },
+  { name: 'Foliage Plants', tagline: 'Bring layers of color indoors' },
+  { name: 'Hanging Plants', tagline: 'Elevate your décor vertically' },
+  { name: 'Air Plants', tagline: 'Nature\'s air-purifying wonders' },
+  { name: 'Cactus', tagline: 'Desert elegance meets modern living' },
+  { name: 'Herbs', tagline: 'Fresh herbs at your fingertips' },
+  { name: 'Vegetables', tagline: 'Homegrown goodness starts here' },
+  { name: 'Herbs & Microgreens', tagline: 'The best seeds online for health' },
+  { name: 'Bonsai', tagline: 'Miniature trees, maximum beauty' },
+  { name: 'Aquatic Plants', tagline: 'Create your underwater oasis' }
 ];
 
 const getRandomSubcategories = () => {
@@ -100,10 +100,10 @@ const cardVariants = {
 
 // Bento Span Pattern
 const BENTO_PATTERNS = [
-  'span-2x2', 'span-1x1', 'span-1x2', 
+  'span-2x1', 'span-1x1', 'span-1x1', 
   'span-1x1', 'span-2x1', 'span-1x1',
-  'span-1x1', 'span-1x1', 'span-2x2',
-  'span-1x2', 'span-1x1', 'span-1x1'
+  'span-1x1', 'span-1x1', 'span-2x1',
+  'span-1x1', 'span-1x1', 'span-1x1'
 ];
 
 export default function ShopByCategory() {
@@ -151,6 +151,7 @@ export default function ShopByCategory() {
                   />
                   <div className="bento-content">
                     <h3>{cat.name}</h3>
+                    {cat.tagline && <p className="bento-tagline">{cat.tagline}</p>}
                     <div className="explore-link">
                       Explore <ArrowRight size={16} style={{ marginLeft: '4px' }} />
                     </div>

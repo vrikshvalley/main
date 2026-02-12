@@ -29,7 +29,6 @@ export default function HomeSidebar() {
 
   const sections = [
     { id: 'hero', label: 'Home', icon: Home },
-    { id: 'categories', label: 'Categories', icon: Grid3x3 },
     { id: 'featured', label: 'Featured', icon: Star },
     { id: 'new-arrivals', label: 'New Arrivals', icon: TrendingUp },
     { id: 'why-choose', label: 'Why Us', icon: Heart },

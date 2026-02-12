@@ -6,6 +6,7 @@ import InitialLoader from "@/components/general/InitialLoader";
 import TheLoader from "@/components/general/TheLoader";
 import GlobalCartModal from "@/components/cart/GlobalCartModal";
 import ToastContainer from "@/components/general/ToastContainer";
+import ScrollToTop from "@/components/general/ScrollToTop";
 // ScrollProgress removed - using native scrollbar
 import HomeSidebar from "@/components/general/HomeSidebar";
 
@@ -206,6 +207,7 @@ export default function RootLayout({ children }) {
           <AutoLogoutProvider>
             <GlobalCartModal />
             <ToastContainer />
+            <ScrollToTop />
             <HomeSidebar />
             <div className="container">{children}</div>
           </AutoLogoutProvider>

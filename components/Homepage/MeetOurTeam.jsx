@@ -138,14 +138,9 @@ function MeetOurTeam() {
           <Swiper
             modules={[Pagination]}
             pagination={{ clickable: true }}
-            spaceBetween={20}
+            spaceBetween={16}
             slidesPerView={1}
-            breakpoints={{
-              480: {
-                slidesPerView: 2,
-                spaceBetween: 15,
-              },
-            }}
+            centeredSlides={true}
             className="team-swiper"
           >
             {teamMembers.map((member) => (
