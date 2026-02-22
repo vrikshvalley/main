@@ -382,58 +382,18 @@
   display: block;
   border-radius: 20px;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.21);
-  
-  -webkit-backdrop-filter: blur(8px);backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: transparent;
+  border: 1px solid rgba(57, 150, 99, 0.2);
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.1),
-    inset 0 0 34px 17px rgba(255, 255, 255, 0.17);
+    0 8px 32px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   text-decoration: none;
   transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.8),
-      transparent
-    );
-    z-index: 2;
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 1px;
-    height: 100%;
-    background: linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.8),
-      transparent,
-      rgba(255, 255, 255, 0.3)
-    );
-    z-index: 2;
-  }
-
   &:hover {
     transform: translateY(-8px);
     box-shadow: 
-      0 12px 48px rgba(0, 0, 0, 0.15),
-      inset 0 1px 0 rgba(255, 255, 255, 0.6),
-      inset 0 -1px 0 rgba(255, 255, 255, 0.15),
-      inset 0 0 34px 17px rgba(255, 255, 255, 0.25);
+      0 12px 48px rgba(0, 0, 0, 0.15);
 
     .category-image {
       transform: scale(1.1);
@@ -462,6 +422,7 @@
   width: 100%;
   height: 280px;
   overflow: hidden;
+  border-radius: 20px;
   background: rgba($primary-bg, 0.05);
 
   @media (max-width: 768px) {
@@ -591,6 +552,7 @@
     height: 100%;
     object-fit: cover;
     transition: transform 0.6s ease;
+    border-radius: 24px;
   }
   
   &:hover img {

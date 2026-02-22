@@ -35,10 +35,10 @@
     bottom: 0;
     background: linear-gradient(
       135deg,
-      rgba($dark-green, 0.6) 0%,
-      rgba($deep-green, 0.4) 30%,
-      rgba($dark-green, 0.3) 60%,
-      rgba($dark-green, 0.5) 100%
+      rgba($dark-green, 0.15) 0%,
+      rgba($deep-green, 0.1) 30%,
+      rgba($dark-green, 0.08) 60%,
+      rgba($dark-green, 0.12) 100%
     );
     z-index: 2;
     pointer-events: none;
@@ -50,19 +50,13 @@
     height: 100%;
   }
 
-  // Blur effect on slider images
+  // Slider images
   .swiper-slide {
     position: relative;
 
     img,
     picture {
-      filter: blur(4px);
-      transition: filter 0.4s ease;
-    }
-
-    &:hover img,
-    &:hover picture {
-      filter: blur(0px);
+      transition: transform 0.4s ease;
     }
 
     picture,
@@ -71,16 +65,6 @@
       height: 100%;
     }
   }
-
-  // When hovering over the entire hero container or its content children, remove blur
-  &:hover .swiper-slide {
-    img,
-    picture {
-      filter: blur(0px);
-    }
-  }
-
-
 
   // Pagination styling
 .swiper-pagination{
@@ -329,6 +313,7 @@
   line-height: 1.6;
   color: $text-primary;
   max-width: 700px;
+  font-family: 'Source Sans 3', sans-serif;
 
 
   @media (max-width: 768px) {

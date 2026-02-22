@@ -4,6 +4,7 @@ import { useParams } from 'next/navigation';
 import { useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 import { Calendar, Clock, User, ArrowLeft, Tag, ArrowRight } from 'lucide-react';
 import Topbar from '@/components/general/Topbar';
 import Navbar from '@/components/general/Navbar';
@@ -11,12 +12,14 @@ import Footer from '@/components/general/Footer';
 import WhatsAppButton from '@/components/general/WhatsAppButton';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
 import { getBlogBySlug, getRelatedBlogs } from '@/lib/blogData';
+import { useSplitType } from '@/lib/hooks/useSplitType';
 import '@/styles/blogPost.scss';
 
 export default function BlogPost() {
   const params = useParams();
   const blog = getBlogBySlug(params.slug);
   const relatedBlogs = getRelatedBlogs(params.slug, 3);
+  const titleRef = useSplitType('.blog-hero-title', { delay: 0.1, stagger: 0.05, duration: 0.7 });
 
   useEffect(() => {
     const body = document.querySelector('.content-body');
@@ -97,8 +100,13 @@ export default function BlogPost() {
         ]} 
       />
       
-      <article className="blog-post-wrapper">
-        <div className="blog-hero-banner">
+      <article className="blog-post-wrapper" ref={titleRef}>
+        <motion.div 
+          className="blog-hero-banner"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+        >
           <div className="hero-background-image">
             <Image 
               src={blog.image}
@@ -121,7 +129,7 @@ export default function BlogPost() {
               </span>
             </div>
             
-            <h1 className="blog-title">{blog.title}</h1>
+            <h1 className="blog-title blog-hero-title">{blog.title}</h1>
             
             {blog.excerpt && <p className="blog-excerpt">{blog.excerpt}</p>}
             
@@ -140,9 +148,15 @@ export default function BlogPost() {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="blog-content-container">
+        <motion.div 
+          className="blog-content-container"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.6 }}
+        >
           <div 
             className="content-body"
             dangerouslySetInnerHTML={{ __html: blog.content }}
@@ -163,11 +177,17 @@ export default function BlogPost() {
               Back to All Blogs
             </Link>
           </div>
-        </div>
+        </motion.div>
       </article>
 
       {relatedBlogs.length > 0 && (
-        <section className="related-blogs">
+        <motion.section 
+          className="related-blogs"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.6 }}
+        >
           <div className="related-blogs-container">
             <h2>Related Articles</h2>
             <div className="related-blogs-grid">
@@ -212,7 +232,7 @@ export default function BlogPost() {
               ))}
             </div>
           </div>
-        </section>
+        </motion.section>
       )}
 
       <Footer />

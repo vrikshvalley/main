@@ -67,9 +67,12 @@
     color: $dark-green;
     text-decoration: none;
     transition: all 0.2s ease;
-    padding: 0.25rem 0.5rem;
+    padding: 0.5rem 0.75rem;
     border-radius: 4px;
     font-weight: 500;
+    min-height: 44px;
+    min-width: 44px;
+    justify-content: center;
 
     &:hover {
       color: $teal;
@@ -87,7 +90,8 @@
     }
 
     @media (max-width: 768px) {
-      padding: 0.2rem 0.4rem;
+      padding: 0.4rem 0.6rem;
+      min-height: 40px;
 
       svg {
         width: 12px;
@@ -96,7 +100,7 @@
     }
 
     @media (max-width: 400px) {
-      padding: 0.15rem 0.3rem;
+      padding: 0.35rem 0.5rem;
 
       svg {
         width: 11px;

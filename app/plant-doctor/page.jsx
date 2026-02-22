@@ -10,6 +10,7 @@ import Image from '@/components/general/ImgWithLoader';
 import Button from '@/components/general/Button';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
+import { useSplitType } from '@/lib/hooks/useSplitType';
 import '@/styles/plantDoctor.scss';
 
 const PLANT_DOCTOR_PRODUCT = {
@@ -97,6 +98,7 @@ export default function PlantDoctor() {
   const dispatch = useDispatch();
   const { user, loading: authLoading } = useAuth();
   const razorpayWindowRef = useRef(null);
+  const heroTitleRef = useSplitType('.hero-section h1', { delay: 0.1, stagger: 0.05, duration: 0.7 });
 
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
@@ -300,6 +302,7 @@ export default function PlantDoctor() {
       {/* Enhanced Hero Section with Alternating Image & Content */}
       <motion.div
         className="hero-section"
+        ref={heroTitleRef}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}

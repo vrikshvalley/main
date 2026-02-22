@@ -8,8 +8,8 @@ export default function AnimatedText({
   as = 'p',
   className = '',
   delay = 0,
-  stagger = 0.04,
-  duration = 0.5,
+  stagger = 0.08,
+  duration = 0.9,
   viewport = { once: false, amount: 0.2 }
 }) {
   const words = String(text).split(' ');
@@ -28,10 +28,11 @@ export default function AnimatedText({
   };
 
   const child = {
-    hidden: { opacity: 0, y: 8 },
+    hidden: { opacity: 0, y: 20, filter: 'blur(10px)' },
     visible: {
       opacity: 1,
       y: 0,
+      filter: 'blur(0px)',
       transition: { duration, ease: [0.22, 1, 0.36, 1] }
     }
   };

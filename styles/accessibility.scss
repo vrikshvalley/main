@@ -1,0 +1,94 @@
+@use "_variables.scss" as *;
+
+// Skip link - visible only on focus
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: $dark-green;
+  color: $text-light;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  font-weight: 600;
+  z-index: 10000;
+  border-radius: 0 0 4px 0;
+  
+  &:focus {
+    top: 0;
+  }
+}
+
+// Improve keyboard navigation focus indicators
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid $accent-primary;
+  outline-offset: 2px;
+}
+
+// Ensure interactive elements have visible focus
+*:focus-visible {
+  outline: 2px solid $accent-primary;
+  outline-offset: 2px;
+}
+
+// Screen reader only text
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+// Touch target size guidelines
+// Ensure all interactive elements are minimum 44x44px on mobile
+button,
+a[role="button"],
+input[type="submit"],
+input[type="reset"],
+input[type="checkbox"],
+input[type="radio"] {
+  min-height: 44px;
+  min-width: 44px;
+
+  @media (max-width: 768px) {
+    min-height: 44px;
+    min-width: 44px;
+    padding: max(0.5rem, calc((44px - 1em) / 2)) max(0.75rem, calc((44px - 1em) / 2));
+  }
+}
+
+// Icon-only buttons need especial care
+[role="button"] svg,
+button svg,
+a svg {
+  pointer-events: none; // Don't block clicks on the button
+}
+
+// Improve link tap targets via padding
+a {
+  padding: 0.25rem 0.5rem; // Adds some padding for touch
+
+  // In mobile contexts, increase padding
+  @media (max-width: 768px) {
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+// Prevent accidental taps
+@media (hover: none) and (pointer: coarse) {
+  // Mobile devices with touch
+  button,
+  a[role="button"],
+  .btn {
+    min-height: 48px;
+    min-width: 48px;
+  }
+}

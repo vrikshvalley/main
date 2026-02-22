@@ -16,7 +16,7 @@
 .custom-toast {
   font-family: 'Helvetica', Arial, sans-serif;
   background: rgba($white, 0.98) !important;
-  backdrop-filter: blur(25px);
+  backdrop-filter: blur(8px);
   border-radius: 16px !important;
   box-shadow: 0 8px 32px rgba($dark-green, 0.15),
               0 4px 16px rgba($teal, 0.1) !important;

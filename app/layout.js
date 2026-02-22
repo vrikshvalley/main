@@ -7,8 +7,17 @@ import TheLoader from "@/components/general/TheLoader";
 import GlobalCartModal from "@/components/cart/GlobalCartModal";
 import ToastContainer from "@/components/general/ToastContainer";
 import ScrollToTop from "@/components/general/ScrollToTop";
+import SkipLink from "@/components/general/SkipLink";
 // ScrollProgress removed - using native scrollbar
 import HomeSidebar from "@/components/general/HomeSidebar";
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  themeColor: "#073b22",
+};
 
 export const metadata = {
   metadataBase: new URL("https://vrikshvalley.com"),
@@ -191,6 +200,7 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body>
+        <SkipLink />
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -209,7 +219,7 @@ export default function RootLayout({ children }) {
             <ToastContainer />
             <ScrollToTop />
             <HomeSidebar />
-            <div className="container">{children}</div>
+            <div className="container" id="main-content">{children}</div>
           </AutoLogoutProvider>
         </Providers>
       </body>

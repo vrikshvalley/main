@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, useInView, useMotionValue, useSpring } from 'framer-motion';
 import { Droplets, Leaf, TreeDeciduous } from 'lucide-react';
+import { useSplitType } from '@/lib/hooks/useSplitType';
 import '@/styles/impactCounter.scss';
 
 function Counter({ value }) {
@@ -40,9 +41,10 @@ function Counter({ value }) {
 export default function ImpactCounter({ variant = 'default', showHeader = true }) {
   const isCompact = variant === 'compact';
   const showImpactHeader = showHeader && variant !== 'hero';
+  const titleRef = useSplitType('.impact-counter .section-title', { delay: 0.1, stagger: 0.05, duration: 0.6 });
 
   return (
-    <section className={`impact-counter impact-${variant}`}>
+    <section className={`impact-counter impact-${variant}`} ref={titleRef}>
       <div className="counter-container">
         {showHeader && variant === 'hero' && (
           <motion.div 

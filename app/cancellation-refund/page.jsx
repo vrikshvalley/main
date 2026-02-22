@@ -3,9 +3,12 @@ import { useEffect } from 'react';
 import Image from 'next/image';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
 import { setStickyHeaderData } from '@/lib/stickyHeaderStore';
+import { useSplitType } from '@/lib/hooks/useSplitType';
 import '@/styles/pages.scss';
 
 export default function CancellationReturn() {
+  const bannerRef = useSplitType('.hero-banner h1', { delay: 0.1, stagger: 0.05, duration: 0.7 });
+
   useEffect(() => {
     setStickyHeaderData({ title: "Cancellation & Refund Policy", subtitle: "Clear and transparent policies for your peace of mind" });
     return () => setStickyHeaderData({ title: null, subtitle: null });
@@ -15,7 +18,7 @@ export default function CancellationReturn() {
     <div className="page-container">
       
       {/* Hero Banner */}
-      <div className="hero-banner">
+      <div className="hero-banner" ref={bannerRef}>
         <picture>
           <source media="(max-width: 768px)" srcSet="/CancellationTermsMobile.png" />
           <Image

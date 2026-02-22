@@ -4,9 +4,12 @@ import Image from 'next/image';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
 import { setStickyHeaderData } from '@/lib/stickyHeaderStore';
 import { Mail, Phone, MapPin, MessageCircle } from 'lucide-react';
+import { useSplitType } from '@/lib/hooks/useSplitType';
 import '@/styles/pages.scss';
 
 export default function ContactUs() {
+  const bannerRef = useSplitType('.hero-banner h1', { delay: 0.1, stagger: 0.05, duration: 0.7 });
+
   useEffect(() => {
     setStickyHeaderData({ title: "Contact Us", subtitle: "We'd love to hear from you" });
     return () => setStickyHeaderData({ title: null, subtitle: null });
@@ -16,7 +19,7 @@ export default function ContactUs() {
     <div className="page-container">
       
       {/* Hero Banner */}
-      <div className="hero-banner contact-us-hero">
+      <div className="hero-banner contact-us-hero" ref={bannerRef}>
         <picture>
           <source media="(max-width: 768px)" srcSet="/ContactUsMobile.png" />
           <Image

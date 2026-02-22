@@ -158,7 +158,7 @@ export default function HeroSlider() {
             </motion.h1>
             
             <motion.p className="heroSubtitle" variants={itemVariants}>
-              Every home deserves a touch of green. Transform your space into a sanctuary where plants thrive and life slows down to the gentle rhythm of growth
+              Every home deserves a touch of green. <br/>Transform your space into a sanctuary where plants thrive and life slows down to the gentle rhythm of growth
             </motion.p>
 
             <motion.div className="features" variants={itemVariants}>

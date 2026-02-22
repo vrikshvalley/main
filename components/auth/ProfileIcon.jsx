@@ -42,7 +42,7 @@ export default function ProfileIcon() {
             </Link>
           </>
         ) : (
-          <Link href="/auth/signin" className="auth-link">Sign in</Link>
+          <Link href="/auth/signin" className="auth-link">Login</Link>
         )}
       </div>
     </div>

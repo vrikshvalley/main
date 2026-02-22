@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 import { Calendar, Clock, User, ArrowRight } from 'lucide-react';
 import Topbar from '@/components/general/Topbar';
 import Navbar from '@/components/general/Navbar';
@@ -10,10 +11,36 @@ import Footer from '@/components/general/Footer';
 import WhatsAppButton from '@/components/general/WhatsAppButton';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
 import { blogPosts, getAllCategories } from '@/lib/blogData';
+import { useSplitType } from '@/lib/hooks/useSplitType';
 import '@/styles/blogPage.scss';
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (i) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: i * 0.1,
+      duration: 0.5,
+      ease: 'easeOut'
+    }
+  })
+};
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.2
+    }
+  }
+};
 
 export default function BlogPage() {
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const headerRef = useSplitType('.blog-page-header h1', { delay: 0.2, stagger: 0.05, duration: 0.6 });
   
   const categories = ['All', ...getAllCategories()];
   
@@ -28,30 +55,59 @@ export default function BlogPage() {
       <Navbar />
       <Breadcrumbs items={[{ label: 'Blogs' }]} />
       
-      <div className="blog-page">
-        <div className="blog-page-header">
+      <div className="blog-page" ref={headerRef}>
+        <motion.div 
+          className="blog-page-header"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.6 }}
+        >
           <h1>Our Blogs</h1>
           <p>Expert tips, guides, and inspiration for plant lovers</p>
-        </div>
+        </motion.div>
 
-        <div className="blog-filters">
+        <motion.div 
+          className="blog-filters"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
           <div className="category-filters">
-            {categories.map(category => (
-              <button
+            {categories.map((category, idx) => (
+              <motion.button
                 key={category}
                 className={`category-btn ${selectedCategory === category ? 'active' : ''}`}
                 onClick={() => setSelectedCategory(category)}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.05 }}
               >
                 {category}
-              </button>
+              </motion.button>
             ))}
           </div>
-        </div>
+        </motion.div>
 
-        <div className="blog-grid">
+        <motion.div 
+          className="blog-grid"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+        >
           {filteredBlogs.length > 0 ? (
-            filteredBlogs.map(blog => (
-              <article key={blog.id} className="blog-card">
+            filteredBlogs.map((blog, idx) => (
+              <motion.article 
+                key={blog.id} 
+                className="blog-card"
+                variants={itemVariants}
+                custom={idx}
+              >
                 <Link href={`/blogs/${blog.slug}`} className="blog-image-wrapper">
                   <Image 
                     src={blog.image}
@@ -100,17 +156,23 @@ export default function BlogPage() {
                     </Link>
                   </div>
                 </div>
-              </article>
+              </motion.article>
             ))
           ) : (
-            <div className="no-results">
+            <motion.div 
+              className="no-results"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
               <p>No articles found matching your criteria.</p>
               <button onClick={() => { setSelectedCategory('All'); }}>
                 Clear Filters
               </button>
-            </div>
+            </motion.div>
           )}
-        </div>
+        </motion.div>
       </div>
 
       <Footer />

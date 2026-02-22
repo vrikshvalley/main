@@ -5,9 +5,12 @@ import Breadcrumbs from '@/components/general/Breadcrumbs';
 import PageTitle from '@/components/general/PageTitle';
 import AboutScrollyTelling from '@/components/Homepage/AboutScrollyTelling';
 import { setStickyHeaderData } from '@/lib/stickyHeaderStore';
+import { useSplitType } from '@/lib/hooks/useSplitType';
 import '@/styles/pages.scss';
 
 export default function AboutUs() {
+  const bannerRef = useSplitType('.hero-banner h1', { delay: 0.1, stagger: 0.05, duration: 0.7 });
+
   useEffect(() => {
     setStickyHeaderData({ title: "About Us", subtitle: "Where nature meets nurture" });
     return () => setStickyHeaderData({ title: null, subtitle: null });
@@ -17,7 +20,7 @@ export default function AboutUs() {
     <div className="page-container">
       
       {/* Hero Banner */}
-      <div className="hero-banner about-us-hero">
+      <div className="hero-banner about-us-hero" ref={bannerRef}>
         <picture>
           <source media="(max-width: 768px)" srcSet="/AboutusPageMobile.png" />
           <Image

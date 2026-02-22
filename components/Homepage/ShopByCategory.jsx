@@ -140,14 +140,14 @@ export default function ShopByCategory() {
                 className={`bento-item ${spanClass}`}
                 variants={cardVariants}
               >
-                <Link href={linkHref} style={{ display: 'block', width: '100%', height: '100%', position: 'relative' }}>
+                <Link href={linkHref} style={{ position: 'absolute', inset: 0, display: 'block' }}>
                   <Image 
                     src={getImageForSubcategory(cat.name)}
                     alt={cat.name}
                     fill
                     sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                     className="category-image"
-                    style={{ objectFit: 'cover' }}
+                    style={{ objectFit: 'cover', objectPosition: 'center' }}
                   />
                   <div className="bento-content">
                     <h3>{cat.name}</h3>
