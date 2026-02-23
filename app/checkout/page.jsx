@@ -25,6 +25,7 @@ const CheckoutPage = () => {
   const [loading, setLoading] = useState(true);
   const [processing, setProcessing] = useState(false);
   const [profile, setProfile] = useState(null);
+  const [userId, setUserId] = useState(null); // Track userId for both authenticated and guest orders
   // Inline account creation for guest users
   const [createEmail, setCreateEmail] = useState('');
   const [createPhone, setCreatePhone] = useState('');
@@ -44,9 +45,9 @@ const CheckoutPage = () => {
     pincode: '',
   });
 
-  // Payment step
-  const [orderData, setOrderData] = useState(null);
-  const [merchantOrderId, setMerchantOrderId] = useState(null);
+  // Shipping cost calculation
+  const [shippingCost, setShippingCost] = useState(0);
+  const [calculatingShipping, setCalculatingShipping] = useState(false);
 
   // Check authentication and load user data
   useEffect(() => {
@@ -59,6 +60,9 @@ const CheckoutPage = () => {
         return;
       }
 
+      // User is logged in - set userId
+      setUserId(user.uid);
+
       if (Object.keys(cartItems).length === 0) {
         showErrorToast('Your cart is empty');
         router.push('/');
@@ -69,7 +73,10 @@ const CheckoutPage = () => {
       if (profileData) {
         setProfile(profileData);
         if (profileData.address && profileData.address.length > 0) {
-          setSelectedAddress(profileData.address[0]);
+          const defaultAddress = profileData.address[0];
+          setSelectedAddress(defaultAddress);
+          // Calculate shipping cost for default address
+          calculateShippingCost(defaultAddress);
         }
       }
 
@@ -111,6 +118,9 @@ const CheckoutPage = () => {
       const mergedCart = await mergeAndSyncCart(newUser.uid, guestCart);
       dispatch(setCart(mergedCart));
 
+      // ✅ Set userId for the newly created account
+      setUserId(newUser.uid);
+
       showSuccessToast('Account created — continuing to payment');
       // small delay to allow auth state propagation
       setTimeout(() => setStep(2), 400);
@@ -146,6 +156,26 @@ const CheckoutPage = () => {
       return;
     }
 
+    // Validate pincode serviceability with Delhivery
+    try {
+      const serviceabilityResponse = await fetch('/api/shipping/check-pincode', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pincode: addressForm.pincode }),
+      });
+
+      const serviceabilityData = await serviceabilityResponse.json();
+
+      if (!serviceabilityData.success || !serviceabilityData.data?.delivery) {
+        showErrorToast(`Delivery not available for pincode ${addressForm.pincode}`);
+        return;
+      }
+    } catch (error) {
+      console.error('Pincode validation error:', error);
+      showErrorToast('Could not validate pincode. Please try again.');
+      return;
+    }
+
     const newAddress = {
       id: Date.now(),
       ...addressForm,
@@ -163,6 +193,48 @@ const CheckoutPage = () => {
     setShowAddAddress(false);
     setAddressForm({ line1: '', line2: '', locality: '', city: '', state: '', pincode: '' });
     showSuccessToast('Address added successfully');
+    
+    // Calculate shipping cost for the new address
+    calculateShippingCost(newAddress);
+  };
+
+  const calculateShippingCost = async (address) => {
+    if (!address || !address.pincode) return;
+    
+    setCalculatingShipping(true);
+    try {
+      // Calculate total weight from cart items (assume 0.5kg per item as placeholder)
+      const totalWeight = cartItems.reduce((sum, item) => sum + (0.5 * item.quantity), 0.5);
+      
+      // Calculate total declared value from cart items
+      const declaredValue = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      
+      const costResponse = await fetch('/api/shipping/calculate-cost', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          originPin: process.env.NEXT_PUBLIC_SELLER_PINCODE || '110001', // Default to Delhi if not set
+          destinationPin: address.pincode,
+          weight: totalWeight,
+          paymentMode: 'Prepaid',
+          declaredValue: declaredValue,
+        }),
+      });
+
+      const costData = await costResponse.json();
+
+      if (costData.success && costData.data?.totalAmount) {
+        setShippingCost(costData.data.totalAmount);
+      } else {
+        // Fallback: use fixed shipping cost if calculation fails
+        setShippingCost(50); // Default ₹50 shipping
+      }
+    } catch (error) {
+      console.error('Shipping cost calculation error:', error);
+      setShippingCost(50); // Default ₹50 shipping on error
+    } finally {
+      setCalculatingShipping(false);
+    }
   };
 
   const handleProceedToPayment = () => {
@@ -177,9 +249,12 @@ const CheckoutPage = () => {
     setProcessing(true);
 
     try {
-      // Calculate order totals
-      const totals = orderService.calculateOrderTotals(cartItems, 0, 0); // No shipping/discount for now
+      // Calculate order totals with actual shipping cost
+      const totals = orderService.calculateOrderTotals(cartItems, shippingCost, 0);
       const orderId = orderService.generateOrderId();
+      
+      // For guest orders without userId, we'll use 'guest_' prefix for reference
+      const orderUserId = userId || `guest_${Math.random().toString(36).substr(2, 9)}`;
 
       // Store order context in localStorage before redirect
       const orderContext = {
@@ -188,11 +263,12 @@ const CheckoutPage = () => {
         cartItems,
         selectedAddress,
         profile: {
-          name: profile.name,
+          name: profile.name || '',
           email: profile.email,
           phone: profile.phone,
         },
-        userId: user.uid,
+        userId: orderUserId,
+        isGuestOrder: !userId, // Flag to identify guest orders
       };
       localStorage.setItem('pending_order', JSON.stringify(orderContext));
 
@@ -292,7 +368,7 @@ const CheckoutPage = () => {
       }
 
       // Create Delhivery shipment
-      await fetch('/api/shipping/create-shipment', {
+      const shipmentResponse = await fetch('/api/shipping/create-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -300,6 +376,15 @@ const CheckoutPage = () => {
           order: createdOrder,
         }),
       });
+
+      const shipmentData = await shipmentResponse.json();
+      
+      if (!shipmentData.success) {
+        console.error('Shipment creation failed:', shipmentData.error);
+        showErrorToast('Shipment creation failed: ' + (shipmentData.error?.message || 'Unknown error'));
+        // Continue order flow but mark for manual shipment creation
+        // Note: Order is created but shipment may need manual intervention
+      }
 
       // Send order confirmation email
       await fetch('/api/email/order-confirmation', {
@@ -334,7 +419,7 @@ const CheckoutPage = () => {
 
   if (loading) return <TheLoader fullscreen />;
 
-  const totals = orderService.calculateOrderTotals(cartItems, 0, 0);
+  const totals = orderService.calculateOrderTotals(cartItems, shippingCost, 0);
 
   return (
     <div className="checkout-page">
@@ -366,7 +451,10 @@ const CheckoutPage = () => {
                   <div
                     key={addr.id}
                     className={`address-card ${selectedAddress?.id === addr.id ? 'selected' : ''}`}
-                    onClick={() => setSelectedAddress(addr)}
+                    onClick={() => {
+                      setSelectedAddress(addr);
+                      calculateShippingCost(addr);
+                    }}
                   >
                     <input type="radio" checked={selectedAddress?.id === addr.id} readOnly />
                     <div className="address-details">
@@ -382,7 +470,10 @@ const CheckoutPage = () => {
                   </div>
                 ))
               ) : (
-                <p className="no-address">No saved addresses. Please add a delivery address.</p>
+                <div className="no-address">
+                  <p>📍 No saved addresses. Please add a delivery address to proceed with checkout.</p>
+                  {!user && <p style={{fontSize: '0.9rem', color: '#999', marginTop: '5px'}}>You can continue as guest or create an account after adding an address.</p>}
+                </div>
               )}
             </div>
 
@@ -450,7 +541,8 @@ const CheckoutPage = () => {
             <div className="inline-account-section">
               {!user ? (
                 <>
-                  <h3>Create an account to save your details</h3>
+                  <h3>🔐 Choose your checkout method</h3>
+                  <p style={{fontSize: '0.95rem', color: '#666', marginBottom: '15px'}}>Create an account to save your address and order history, or continue as a guest.</p>
                   <div className="create-account-form">
                     <input type="email" placeholder="Email" value={createEmail} onChange={(e) => setCreateEmail(e.target.value)} />
                     <input type="tel" placeholder="Phone" value={createPhone} onChange={(e) => setCreatePhone(e.target.value)} />
@@ -459,10 +551,28 @@ const CheckoutPage = () => {
                   </div>
                   <div className="step-actions">
                     <Button variant="primary" size="md" onClick={handleCreateAccountAndProceed} disabled={!selectedAddress || creatingAccount}>
-                      {creatingAccount ? 'Creating account...' : 'Create account & Continue'}
+                      {creatingAccount ? 'Creating account...' : '✓ Create Account & Continue'}
                     </Button>
-                    <Button variant="ghost" size="md" onClick={() => { setProfile({ name: '', email: createEmail, phone: createPhone }); setStep(2); }} disabled={!selectedAddress || !createEmail || !createPhone}>
-                      Continue as guest
+                    <Button variant="ghost" size="md" onClick={() => { 
+                      if (!selectedAddress) {
+                        showErrorToast('Please select or add a delivery address');
+                        return;
+                      }
+                      if (!createEmail || !createPhone) {
+                        showErrorToast('Please enter email and phone number');
+                        return;
+                      }
+                      // Create guest profile with address and contact details
+                      setProfile({ 
+                        name: '', 
+                        email: createEmail, 
+                        phone: createPhone,
+                        address: [selectedAddress],
+                        isGuest: true // Flag to identify guest orders
+                      }); 
+                      setStep(2); 
+                    }} disabled={!selectedAddress || !createEmail || !createPhone}>
+                      Guest checkout
                     </Button>
                   </div>
                 </>

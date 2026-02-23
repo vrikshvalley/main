@@ -5,7 +5,6 @@ import { useRouter, useParams } from 'next/navigation';
 import { useAuth } from '@/lib/AuthContext';
 import Button from '@/components/general/Button';
 import orderService from '@/lib/services/orderService';
-import delhiveryService from '@/lib/services/delhiveryService';
 import { toast } from 'react-toastify';
 import Image from 'next/image';
 import { Check, Package, Truck, MapPin, X, RotateCcw } from 'lucide-react';
@@ -73,9 +72,15 @@ export default function OrderDetailsPage() {
 
   const fetchTrackingData = async (waybill) => {
     try {
-      const { data, error } = await delhiveryService.trackShipment(waybill);
-      if (!error && data) {
-        setTrackingData(data);
+      const response = await fetch('/api/shipping/track', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ waybill: waybill }),
+      });
+
+      const result = await response.json();
+      if (result.success && result.data) {
+        setTrackingData(result.data);
       }
     } catch (error) {
       console.error('Error fetching tracking data:', error);
@@ -92,8 +97,19 @@ export default function OrderDetailsPage() {
     try {
       // Cancel in Delhivery if waybill exists
       if (order.waybill) {
-        const { error: delhiveryError } = await delhiveryService.cancelShipment(order.waybill);
-        if (delhiveryError) {
+        try {
+          const cancelResponse = await fetch('/api/shipping/cancel', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ waybill: order.waybill }),
+          });
+
+          const cancelResult = await cancelResponse.json();
+          if (!cancelResult.success) {
+            console.error('Delhivery cancellation error:', cancelResult.error);
+            // Continue with order cancellation even if Delhivery fails
+          }
+        } catch (delhiveryError) {
           console.error('Delhivery cancellation error:', delhiveryError);
           // Continue with order cancellation even if Delhivery fails
         }

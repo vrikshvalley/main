@@ -52,6 +52,8 @@ export default function Navbar() {
     fetchCategories();
   }, []);
 
+  
+
   // Add/remove class to body when menu opens/closes
   useEffect(() => {
     if (typeof document !== 'undefined') {
@@ -144,7 +146,7 @@ export default function Navbar() {
               onMouseEnter={() => setHoveredCategory(category.slug)}
               onMouseLeave={() => setHoveredCategory(null)}
             >
-              <Link href={`/category/${category.slug}`} className="category-link">
+                <Link href={`/category/${category.slug}`} className="category-link">
                 {category.name}
               </Link>
 
@@ -279,7 +281,7 @@ export default function Navbar() {
               <div className="mobile-category-header">
                 {category.subcategories && category.subcategories.length > 0 && category.slug !== 'accessories' ? (
                   <div className="mobile-category-with-subs">
-                    {expandedMobileCategory === category.slug ? (
+                      {expandedMobileCategory === category.slug ? (
                       <Link
                         href={`/category/${category.slug}`}
                         className="mobile-category-link-active"

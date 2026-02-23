@@ -256,9 +256,6 @@ export default function CartModal({ isOpen, onClose }) {
                   <span> View Full Cart</span>
                 </button>
 
-                {!user && (
-                  <p className="login-prompt">🔐 Please log in to proceed to checkout</p>
-                )}
                 <button 
                   className="checkout-btn"
                 >

@@ -102,6 +102,15 @@ export default function CategoryCircles() {
             'Decor': '/categories/Decor.jpg',
             'Accessories': '/categories/Plant tools.jpg'
           };
+          // Display name overrides for UI (original name -> display label)
+          const displayNameMap = {
+            'Plants': 'Botanicals',
+            'Seeds': 'Propagules',
+            'Planters': 'Vessels',
+            'Decor': 'Accents',
+            'Accessories': 'Essentials',
+            'Plant Care': 'Nourishment'
+          };
           
           const imagePath = imageMap[category.name] || '/logo.png';
           
@@ -117,7 +126,7 @@ export default function CategoryCircles() {
                     className="category-image"
                   />
                 </div>
-                <p>{category.name}</p>
+                <p>{displayNameMap[category.name] || category.name}</p>
               </motion.div>
             </Link>
           );

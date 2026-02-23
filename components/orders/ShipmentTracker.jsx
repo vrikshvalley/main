@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import delhiveryService from '@/lib/services/delhiveryService';
 import { Package, Truck, MapPin, Clock, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
 import '@/styles/shipmentTracker.scss';
 
@@ -24,13 +23,19 @@ export default function ShipmentTracker({ order, compact = false }) {
     setError(null);
     
     try {
-      const { data, error: trackError } = await delhiveryService.trackShipment(order.waybill);
+      const response = await fetch('/api/shipping/track', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ waybill: order.waybill }),
+      });
+
+      const result = await response.json();
       
-      if (trackError) {
-        setError('Failed to fetch tracking data');
-        console.error('Tracking error:', trackError);
+      if (!result.success) {
+        setError(result.error?.message || 'Failed to fetch tracking data');
+        console.error('Tracking error:', result.error);
       } else {
-        setTracking(data);
+        setTracking(result.data);
       }
     } catch (err) {
       setError('An error occurred while fetching tracking data');

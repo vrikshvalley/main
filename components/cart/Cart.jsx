@@ -245,9 +245,6 @@ export default function Cart() {
             </div>
             
             <div className="cart-footer">
-              {!user && (
-                <p className="login-prompt">Please log in to proceed to checkout</p>
-              )}
               <button 
                 className="checkout-btn"
                 disabled

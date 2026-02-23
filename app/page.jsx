@@ -94,14 +94,7 @@ export default function Home() {
         <FeaturedProducts />
       </motion.section>
 
-      <Ads 
-        items={['Free Shipping', 'Expert Care Tips', '100% Organic', 'Healthy Plants Guaranteed']} 
-        bgColor="yellow" 
-        textColor="dark" 
-        speed={30}
-        direction="reverse"
-        renderLinks={false}
-      />
+      {/* Yellow ads banner removed as requested */}
 
       {/* Why Choose Us Section */}
       <motion.section
