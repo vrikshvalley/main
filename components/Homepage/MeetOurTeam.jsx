@@ -44,16 +44,6 @@ const teamMembers = [
   },
   {
     id: 4,
-    name: "Soham Singh",
-    role: "Community Manager",
-    image: "/team/soham.png",
-    bio: "Soham is the friendly face and green thumb behind Vriksh Valley's thriving plant community. Turning rough drafts into polished stories, he crafts engaging content that educates and inspires plant lovers of all levels. From lively social media posts to insightful blog articles, Soham's passion for plants shines through, making every interaction a chance to grow together.🌱", 
-    email: "bantys9890@gmail.com",
-    linkedin: "https://www.linkedin.com/in/soham-shingh-123456789/",
-    size: "small"
-  },
-  {
-    id: 5,
     name: "Ridhima Sen",
     role: "Community Manager",
     image: "/team/ridhima.png",
