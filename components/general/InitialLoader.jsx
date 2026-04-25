@@ -2,12 +2,13 @@
 
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { usePathname } from 'next/navigation';
 // Note: removed direct import of global SCSS to avoid Turbopack client-proxy issues
 // Styles are applied via global stylesheet in app layout instead.
 
 export default function InitialLoader() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [pathname, setPathname] = useState('');
+  const pathname = usePathname();
+  const [isLoading, setIsLoading] = useState(pathname === '/');
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [videoFailed, setVideoFailed] = useState(false);
   const MOTION_DURATION = 300; // ms - matches framer-motion transitions
@@ -32,26 +33,18 @@ export default function InitialLoader() {
   // Current active text object derived from the array and index.
   const currentText = textArray[currentTextIndex] || { text: '' };
 
-  // Determine loader visibility after hydration, but before the browser paints.
+  // Toggle loader whenever route changes to homepage.
   useLayoutEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    const path = window.location.pathname;
-    setPathname(path);
-
-    let navType = 'navigate';
-    try {
-      const navEntry = performance.getEntriesByType?.('navigation')?.[0];
-      if (navEntry?.type) navType = navEntry.type;
-      else if (performance.navigation?.type === 1) navType = 'reload';
-    } catch (error) {
-      navType = 'navigate';
-    }
-
-    if (path === '/' && navType === 'reload') {
+    if (pathname === '/') {
+      setCurrentTextIndex(0);
+      setValleyShown(false);
+      setVideoFailed(false);
       setIsLoading(true);
+      return;
     }
-  }, []);
+
+    setIsLoading(false);
+  }, [pathname]);
 
   // Keep the loader attribute in sync so the layout can hide main content before paint.
   useEffect(() => {
