@@ -3,7 +3,7 @@ import * as emailService from "@/lib/services/emailService";
 
 /**
  * POST /api/email/order-confirmation
- * Sends order confirmation email
+
  */
 export async function POST(request) {
   try {
