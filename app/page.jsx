@@ -94,7 +94,12 @@ export default function Home() {
         <FeaturedProducts />
       </motion.section>
 
-      {/* Yellow ads banner removed as requested */}
+      <Ads
+        items={['Bring Nature Home with Vriksh Valley', 'Rare Plants', 'Terrace Garden', 'Gifting Plants', 'Plant Care Essentials', 'Decor Planters']}
+        bgColor="yellow"
+        textColor="dark"
+        speed={22}
+      />
 
       {/* Why Choose Us Section */}
       <motion.section

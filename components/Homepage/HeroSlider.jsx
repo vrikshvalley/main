@@ -1,23 +1,9 @@
 'use client';
 
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Pagination, Navigation, EffectFade } from 'swiper/modules';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
-import 'swiper/css/effect-fade';
 import '@/styles/heroSlider.scss';
 import ImpactCounter from '@/components/Homepage/ImpactCounter';
-
-const slides = [
-  { src: '/heroSlider/(1).webp', srcMobile: '/heroSliderMobile/(1).webp', alt: 'Premium Plant Collection' },
-  { src: '/heroSlider/(2).webp', srcMobile: '/heroSliderMobile/(2).webp', alt: 'Indoor Green Paradise' },
-  { src: '/heroSlider/(3).webp', srcMobile: '/heroSliderMobile/(3).webp', alt: 'Outdoor Garden Dreams' },
-  { src: '/heroSlider/(4).webp', srcMobile: '/heroSliderMobile/(4).webp', alt: 'Nature\'s Beauty' },
-  { src: '/heroSlider/(5).webp', srcMobile: '/heroSliderMobile/(5).webp', alt: 'Green Living' }
-];
 
 const contentVariants = {
   hidden: { 
@@ -55,10 +41,6 @@ export default function HeroSlider() {
     router.push('/join-green-movement');
   };
 
-  const handleLearnMore = () => {
-    router.push('/our-story');  
-  };
-
   const handleNatureNurture = () => {
     router.push('/where-nature-meets-nurture');
   };
@@ -66,53 +48,16 @@ export default function HeroSlider() {
   return (
     <div className="heroContainer">
       <div className="sliderWrapper">
-        {/* Custom Navigation Arrows - Must be inside sliderWrapper */}
-        <div className="swiper-button-prev"></div>
-        <div className="swiper-button-next"></div>
-        
-        <Swiper
-          modules={[Autoplay, Pagination, Navigation, EffectFade]}
-          spaceBetween={0}
-          slidesPerView={1}
+        <video
+          className="heroVideo"
+          src="/hero.mp4"
+          autoPlay
+          muted
           loop
-          effect="fade"
-          fadeEffect={{ crossFade: true }}
-          navigation={{
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-          }}
-          autoplay={{ 
-            delay: 4000, 
-            disableOnInteraction: false,
-            pauseOnMouseEnter: true 
-          }}
-          pagination={{ 
-            clickable: true,
-            bulletActiveClass: 'swiper-pagination-bullet-active',
-          }}
-          speed={1000}
-          style={{ width: '100%', height: '100%' }}
-        >
-          {slides.map((slide, idx) => (
-            <SwiperSlide key={idx}>
-              {({ isActive }) => (
-                   <div 
-                     style={{ width: '100%', height: '100%' }}
-                   >
-                    <picture>
-                      <source media="(max-width: 768px)" srcSet={slide.srcMobile} />
-                      <img
-                        src={slide.src}
-                        alt={slide.alt}
-                        loading={idx === 0 ? 'eager' : 'lazy'}
-                        style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
-                      />
-                    </picture>
-                  </div>
-              )}
-            </SwiperSlide>
-          ))}
-        </Swiper>
+          playsInline
+          preload="auto"
+          aria-label="Vriksh Valley hero video"
+        />
       </div>
       
       <motion.div 
@@ -171,9 +116,6 @@ export default function HeroSlider() {
               <button className="ctaButton" onClick={handleJoinMovement}>
                 Join Us
               </button>
-              {/* <button className="ctaButtonSecondary" onClick={handleLearnMore}>
-                Our Story
-              </button> */}
               <button className="ctaButtonSecondary" onClick={() => router.push('/products')}>
                 Shop Now
               </button>

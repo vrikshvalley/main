@@ -173,7 +173,7 @@ export default function RootLayout({ children }) {
   };
 
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth" crxlauncher="">
       <head>
         <meta name="apple-mobile-web-app-title" content="Vriksh Valley" />
         <link rel="canonical" href="https://vrikshvalley.com" />
@@ -219,7 +219,9 @@ export default function RootLayout({ children }) {
             <ToastContainer />
             <ScrollToTop />
             <HomeSidebar />
-            <div className="container" id="main-content">{children}</div>
+            <div className="container" id="main-content">
+              {children}
+            </div>
           </AutoLogoutProvider>
         </Providers>
       </body>

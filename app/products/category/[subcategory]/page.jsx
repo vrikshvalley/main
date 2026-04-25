@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useLayoutEffect } from 'react';
 import { useParams } from 'next/navigation';
-import { motion, useScroll, useTransform } from 'framer-motion';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
 import { getProducts } from '@/lib/productHelpers';
 import { ChevronDown, X, Grid, List, Search } from 'lucide-react';
@@ -14,18 +13,6 @@ import '@/styles/products.scss';
 export default function SubcategoryPage() {
   const params = useParams();
   const subcategory = params.subcategory?.replace(/-/g, ' ') || '';
-  
-  // Framer Motion scroll hook for parallax effect
-  const { scrollY } = useScroll();
-  const headerY = useTransform(scrollY, [0, 500], [0, 150]);
-  
-  // Debug parallax
-  useEffect(() => {
-    const unsubscribe = headerY.on('change', (latest) => {
-      console.log('Subcategory Page - headerY:', latest);
-    });
-    return () => unsubscribe();
-  }, [headerY]);
   
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -120,13 +107,10 @@ export default function SubcategoryPage() {
               }
             }
           `}</style>
-          <motion.div 
-            className="header-content"
-            style={{ y: headerY }}
-          >
+          <div className="header-content">
             <h1>{subcategory.charAt(0).toUpperCase() + subcategory.slice(1)}</h1>
             <p>Explore our collection of {subcategory} plants and products</p>
-          </motion.div>
+          </div>
         </div>
 
         <div className="main-products-container">

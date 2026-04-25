@@ -111,6 +111,9 @@ export default function Navbar() {
     setExpandedMobileCategory(expandedMobileCategory === slug ? null : slug);
   };
 
+  const isCategoryActive = (slug) => pathname === `/category/${slug}`;
+  const isSubcategoryActive = (categorySlug, subcategorySlug) => pathname === `/category/${categorySlug}/${subcategorySlug}`;
+
   const handleMobileCategoryPress = (category) => {
     const hasSubs = category.subcategories && category.subcategories.length > 0 && category.slug !== 'accessories';
     if (!hasSubs) {
@@ -146,7 +149,10 @@ export default function Navbar() {
               onMouseEnter={() => setHoveredCategory(category.slug)}
               onMouseLeave={() => setHoveredCategory(null)}
             >
-                <Link href={`/category/${category.slug}`} className="category-link">
+                <Link
+                  href={`/category/${category.slug}`}
+                  className={`category-link${isCategoryActive(category.slug) ? ' is-active' : ''}`}
+                >
                 {category.name}
               </Link>
 
@@ -171,7 +177,7 @@ export default function Navbar() {
                         >
                           <Link 
                             href={`/category/${category.slug}/${subcategory.slug}`}
-                            className="dropdown-item"
+                            className={`dropdown-item${isSubcategoryActive(category.slug, subcategory.slug) ? ' is-active' : ''}`}
                           >
                             {subcategory.name}
                           </Link>
@@ -284,7 +290,7 @@ export default function Navbar() {
                       {expandedMobileCategory === category.slug ? (
                       <Link
                         href={`/category/${category.slug}`}
-                        className="mobile-category-link-active"
+                        className={`mobile-category-link-active${isCategoryActive(category.slug) ? ' is-active' : ''}`}
                         onClick={() => setMenuOpen(false)}
                       >
                         <span>{category.name}</span>
@@ -292,7 +298,7 @@ export default function Navbar() {
                     ) : (
                       <button
                         type="button"
-                        className="mobile-category-text"
+                        className={`mobile-category-text${isCategoryActive(category.slug) ? ' is-active' : ''}`}
                         onClick={() => handleMobileCategoryPress(category)}
                       >
                         {category.name}
@@ -312,6 +318,7 @@ export default function Navbar() {
                 ) : (
                   <Link 
                     href={`/category/${category.slug}`}
+                    className={`mobile-category-link${isCategoryActive(category.slug) ? ' is-active' : ''}`}
                     onClick={() => setMenuOpen(false)}
                   >
                     {category.name}
@@ -333,7 +340,7 @@ export default function Navbar() {
                       <Link
                         key={subcategory.slug}
                         href={`/category/${category.slug}/${subcategory.slug}`}
-                        className="mobile-subcategory-item"
+                        className={`mobile-subcategory-item${isSubcategoryActive(category.slug, subcategory.slug) ? ' is-active' : ''}`}
                         onClick={() => setMenuOpen(false)}
                       >
                         {subcategory.name}

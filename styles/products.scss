@@ -74,15 +74,16 @@ $grey-dark: #374151;
       padding: 2rem 2rem;
       position: sticky;
       bottom: 10%;
-      scroll-behavior: smooth;
       z-index: 1;
 
       @media (max-width: 768px) {
         padding: 1.5rem 1.5rem;
+        top: clamp(64px, 16vh, 140px);
       }
 
       @media (max-width: 400px) {
         padding: 1rem 1rem;
+        top: clamp(56px, 12vh, 120px);
       }
 
       .category-icon {

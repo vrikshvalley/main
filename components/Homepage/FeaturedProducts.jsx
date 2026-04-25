@@ -1,6 +1,5 @@
 'use client';
 
-import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
@@ -50,7 +49,7 @@ export default function FeaturedProducts() {
   const [loading, setLoading] = useState(true);
   const [viewportWidth, setViewportWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
   const viewAllLink = '/products?filter=featured';
-  const { ref, glowPosition, handleMouseMove, handleMouseLeave } = useMouseGlow();
+  const { ref } = useMouseGlow();
   
   useEffect(() => {
     const fetchProducts = async () => {

@@ -25,6 +25,14 @@
   width: 100%;
   height: 100%;
 
+  .heroVideo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
   // Gradient overlay for better text readability
   &::after {
     content: '';

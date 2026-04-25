@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import Breadcrumbs from '@/components/general/Breadcrumbs';
 import { getProducts, getPriceRange } from '@/lib/productHelpers';
 import { getCategories } from '@/lib/services/productService';
@@ -32,18 +32,6 @@ export default function ProductsPage() {
     window.addEventListener('popstate', onPopstate);
     return () => window.removeEventListener('popstate', onPopstate);
   }, []);
-  
-  // Framer Motion scroll hook for parallax effect
-  const { scrollY } = useScroll();
-  const headerY = useTransform(scrollY, [0, 500], [0, 150]);
-  
-  // Debug parallax
-  useEffect(() => {
-    const unsubscribe = headerY.on('change', (latest) => {
-      console.log('Products Page - headerY:', latest);
-    });
-    return () => unsubscribe();
-  }, [headerY]);
   
   const [pageTitle, setPageTitle] = useState('Our Products');
   const [pageSubtitle, setPageSubtitle] = useState('Discover our curated collection');

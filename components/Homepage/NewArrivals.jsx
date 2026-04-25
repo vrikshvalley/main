@@ -39,7 +39,7 @@ export default function NewArrivals() {
   const [loading, setLoading] = useState(true);
   const [viewportWidth, setViewportWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
   const viewAllLink = '/products?filter=new-arrivals';
-  const { ref, glowPosition, handleMouseMove, handleMouseLeave } = useMouseGlow();
+  const { ref } = useMouseGlow();
 
   useEffect(() => {
     const fetchProducts = async () => {

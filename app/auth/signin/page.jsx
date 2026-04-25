@@ -147,7 +147,14 @@ function LoginContent() {
           <>
             {/* Logo */}
             <div className="brand-logo">
-              <Image src="/big-logo.png" alt="Vriksh Valley" width={220} height={60} priority />
+              <Image
+                src="/big-logo.png"
+                alt="Vriksh Valley"
+                width={204}
+                height={42}
+                style={{ width: 'min(200px, 100%)', height: 'auto' }}
+                priority
+              />
             </div>
 
             {/* Header */}

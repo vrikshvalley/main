@@ -6,43 +6,85 @@ import { motion, AnimatePresence } from 'framer-motion';
 // Styles are applied via global stylesheet in app layout instead.
 
 export default function InitialLoader() {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [pathname, setPathname] = useState('');
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
-  const [showVriksh, setShowVriksh] = useState(false);
-  const [showValley, setShowValley] = useState(false);
+  const [videoFailed, setVideoFailed] = useState(false);
+  const MOTION_DURATION = 300; // ms - matches framer-motion transitions
+  const VALLEY_DELAY = 80; // ms delay before showing 'Valley' so both texts match
 
-  // Array of text in different languages
-  const textArray = ['वृक्ष', 'বৃক্ষ', 'ବୃକ୍ଷ', 'وڻ', 'વૃક્ષ', 'ಮರ', 'చెట్టు', 'மரம்', 'മരം', 'ꯔꯨ', 'Vriksh'];
+  const [valleyShown, setValleyShown] = useState(false);
 
+  // Array of script-aware text entries to ensure proper rendering per language.
   useEffect(() => {
-    // Set pathname on client side only
-    setPathname(window.location.pathname);
+    // Determine pathname and whether this navigation was a reload.
+    const path = window.location.pathname;
+    setPathname(path);
 
-    // Scroll through different language texts with count-up style
-    const textInterval = setInterval(() => {
-      setCurrentTextIndex((prev) => {
-        if (prev < textArray.length - 1) {
-          return prev + 1;
-        } else {
-          clearInterval(textInterval);
-          // After showing "Vriksh", show "Valley" beside it
-          setTimeout(() => setShowValley(true), 400);
+    let navType = 'navigate';
+    try {
+      const navEntry = performance.getEntriesByType && performance.getEntriesByType('navigation') && performance.getEntriesByType('navigation')[0];
+      if (navEntry && navEntry.type) navType = navEntry.type; // 'navigate', 'reload', 'back_forward', 'prerender'
+      else if (performance.navigation && performance.navigation.type === 1) navType = 'reload';
+    } catch (e) {
+      // ignore
+    }
+
+    // Only show the initial loader on the homepage when the page load was a full reload.
+    if (path === '/' && navType === 'reload') {
+      setIsLoading(true);
+    }
+  }, []);
+
+  // Start the text sequence only when the loader becomes visible.
+  useEffect(() => {
+    if (!isLoading) return;
+
+    const motionDuration = MOTION_DURATION; // ms
+    const cadence = [motionDuration + 120 + EXTRA_HOLD, motionDuration + 300 + EXTRA_HOLD, motionDuration + 300 + EXTRA_HOLD, motionDuration + 120 + EXTRA_HOLD];
+    let step = 0;
+    let textTimer;
+    let exitTimer;
+
+    const runSequence = () => {
+      textTimer = setTimeout(() => {
+        setCurrentTextIndex((prev) => {
+          if (prev < textArray.length - 1) {
+            step += 1;
+            runSequence();
+            return prev + 1;
+          }
+
+          exitTimer = setTimeout(() => setIsLoading(false), motionDuration + 400 + EXTRA_HOLD);
           return prev;
-        }
-      });
-    }, 180); // Smoother, less rushed timing
+        });
+      }, cadence[step % cadence.length]);
+    };
 
-    // Complete animation and hide loader
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 3800);
+    runSequence();
+
+    const valleyTimer = setTimeout(() => setValleyShown(true), VALLEY_DELAY + MOTION_DURATION);
 
     return () => {
-      clearInterval(textInterval);
-      clearTimeout(timer);
+      clearTimeout(textTimer);
+      clearTimeout(exitTimer);
+      clearTimeout(valleyTimer);
     };
-  }, []);
+  }, [isLoading]);
+  
+
+  useEffect(() => {
+    if (pathname !== '/') return;
+
+    const previousOverflow = document.body.style.overflow;
+    if (isLoading) {
+      document.body.style.overflow = 'hidden';
+    }
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isLoading, pathname]);
 
   // Only show on homepage
   if (pathname !== '/' && pathname !== '') return null;
@@ -52,14 +94,29 @@ export default function InitialLoader() {
       {isLoading && (
         <motion.div
           className="initialLoader"
-          initial={{ opacity: 1 }}
+          initial={false}
+          animate={{ opacity: 1, scale: 1 }}
           exit={{ 
             opacity: 0,
-            transition: { duration: 0.6, ease: [0.4, 0, 0.2, 1] }
+            scale: 4,
+            transition: { duration: 1, ease: [0.4, 0, 0.2, 1] }
           }}
         >
-          {/* Green Background */}
-          <div className="loaderBackground" />
+          <div className="loaderBackground">
+            <video
+              className="loaderBackgroundVideo"
+              autoPlay
+              muted
+              
+              playsInline
+              
+              onError={() => setVideoFailed(true)}
+            >
+              <source src="/hero.mp4" type="video/mp4" />
+            </video>
+            <div className="loaderBackgroundOverlay" />
+            {videoFailed && <div className="loaderBackgroundFallback" />}
+          </div>
 
           {/* Content Container */}
           <div className="loaderContent">
@@ -70,33 +127,30 @@ export default function InitialLoader() {
             >
               <div className="brandWrapper">
                 <motion.span
-                  className="scrollingText"
+                  className={`scrollingText ${currentText.className || ''}`.trim()}
+                  dir={currentText.dir || 'ltr'}
                   key={currentTextIndex}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
                   transition={{
-                    duration: 0.25,
+                    duration: MOTION_DURATION / 1000,
                     ease: [0.25, 0.1, 0.25, 1]
                   }}
                 >
-                  {textArray[currentTextIndex]}
+                  {currentText.text}
                 </motion.span>
 
-                {/* Valley - appears beside Vriksh */}
-                {showValley && (
+                {!valleyShown ? (
                   <motion.span
                     className="valleyText"
-                    initial={{ opacity: 0, x: 30, y: 2 }}
-                    animate={{ opacity: 1, x: 0, y: 0 }}
-                    exit={{ opacity: 0, x: 10 }}
-                    transition={{
-                      duration: 0.32,
-                      ease: [0.25, 0.1, 0.25, 1]
-                    }}
+                    initial={{ opacity: 0, x: 30 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: MOTION_DURATION / 1000, delay: VALLEY_DELAY / 1000, ease: [0.25, 0.1, 0.25, 1] }}
                   >
                     Valley
                   </motion.span>
+                ) : (
+                  <span className="valleyText">Valley</span>
                 )}
               </div>
             </motion.div>

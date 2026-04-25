@@ -4,7 +4,6 @@ import { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { motion, useScroll, useTransform } from 'framer-motion';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay } from 'swiper/modules';
 import Topbar from '@/components/general/Topbar';
@@ -25,10 +24,6 @@ export default function CategoryPage() {
   const params = useParams();
   const categorySlug = params.category;
   const productsContainerRef = useRef(null);
-  
-  // Framer Motion scroll hook for parallax effect
-  const { scrollY } = useScroll();
-  const headerY = useTransform(scrollY, [0, 500], [0, 150]);
   
   const [category, setCategory] = useState(null);
 
@@ -243,15 +238,12 @@ export default function CategoryPage() {
               }
             }
           `}</style>
-          <motion.div 
-            className="header-content"
-            style={{ y: headerY }}
-          >
+          <div className="header-content">
             <div className="category-icon">{category.icon}</div>
             <h1>{category.name}</h1>
             <p>{category.description || `Browse our collection of ${category.name.toLowerCase()}`}</p>
             <p className="products-count">{totalProducts} products available</p>
-          </motion.div>
+          </div>
         </div>
 
        

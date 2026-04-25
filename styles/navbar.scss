@@ -93,6 +93,15 @@
           width: 100%;
         }
       }
+
+      &.is-active {
+        color: $accent-primary;
+
+        &::after {
+          width: 100%;
+          background: $accent-primary;
+        }
+      }
     }
 
     // Dropdown Menu
@@ -151,6 +160,15 @@
           );
           color: $accent-primary;
           transform: translateX(4px);
+        }
+
+        &.is-active {
+          color: $accent-primary;
+          background: linear-gradient(135deg,
+            rgba($accent-primary, 0.16) 0%,
+            rgba($accent-primary, 0.08) 100%
+          );
+          font-weight: 600;
         }
       }
     }
@@ -648,7 +666,7 @@ color.adjust($accent-primary, $lightness: -5%);
       min-height: 44px;
 
       svg, img {
-        margin-bottom: 2px;
+        margin-bottom: 0px;
         width: 24px;
         height: 24px;
         display: block;
@@ -851,6 +869,12 @@ color.adjust($accent-primary, $lightness: -5%);
         &:active {
           transform: translateX(4px);
         }
+
+        &.is-active {
+          color: $accent-primary;
+          border-left-color: $accent-primary;
+          background: rgba($accent-primary, 0.08);
+        }
       }
 
       .mobile-category-with-subs {
@@ -875,6 +899,12 @@ color.adjust($accent-primary, $lightness: -5%);
           text-align: left;
           width: 100%;
           cursor: pointer;
+
+          &.is-active {
+            color: $accent-primary;
+            border-left: 3px solid $accent-primary;
+            background: rgba($accent-primary, 0.08);
+          }
         }
 
         .mobile-category-link-active {
@@ -889,6 +919,11 @@ color.adjust($accent-primary, $lightness: -5%);
 
           &:hover {
             color: $teal;
+          }
+
+          &.is-active {
+            border-left: 3px solid $accent-primary;
+            background: rgba($accent-primary, 0.08);
           }
         }
 
@@ -953,6 +988,12 @@ color.adjust($accent-primary, $lightness: -5%);
 
       &:active {
         transform: translateX(2px);
+      }
+
+      &.is-active {
+        color: $accent-primary;
+        background: rgba($accent-primary, 0.12);
+        font-weight: 600;
       }
     }
   }

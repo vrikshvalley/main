@@ -47,7 +47,12 @@
       position: relative;
       display: inline-block;
       white-space: nowrap;
+      padding: 0;
+    }
 
+    .auth-link {
+      margin: 2px 0 0;
+      
       &:hover {
         cursor: pointer;
         font-weight: bold;
