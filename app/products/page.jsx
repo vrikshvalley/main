@@ -256,7 +256,7 @@ export default function ProductsPage() {
           `}</style>
         <motion.div 
           className="header-content"
-          style={{ y: headerY }}
+          
         >
           <h1>{pageTitle}</h1>
           <p>{pageSubtitle}</p>
