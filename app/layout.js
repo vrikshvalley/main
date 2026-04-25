@@ -173,8 +173,29 @@ export default function RootLayout({ children }) {
   };
 
   return (
-    <html lang="en" data-scroll-behavior="smooth" crxlauncher="">
+    <html
+      suppressHydrationWarning
+      lang="en"
+      data-scroll-behavior="smooth"
+      crxlauncher=""
+    >
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+          (function () {
+            try {
+              if (window.location.pathname !== '/') return;
+              var navEntry = performance.getEntriesByType && performance.getEntriesByType('navigation') && performance.getEntriesByType('navigation')[0];
+              var navType = navEntry && navEntry.type ? navEntry.type : (performance.navigation && performance.navigation.type === 1 ? 'reload' : 'navigate');
+              if (navType === 'reload') {
+                document.documentElement.setAttribute('data-initial-loader', '1');
+              }
+            } catch (e) {}
+          })();
+        `,
+          }}
+        />
         <meta name="apple-mobile-web-app-title" content="Vriksh Valley" />
         <link rel="canonical" href="https://vrikshvalley.com" />
         <meta name="theme-color" content="#073b22" />

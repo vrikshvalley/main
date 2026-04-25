@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 // Note: removed direct import of global SCSS to avoid Turbopack client-proxy issues
 // Styles are applied via global stylesheet in app layout instead.
@@ -14,34 +14,62 @@ export default function InitialLoader() {
   const VALLEY_DELAY = 80; // ms delay before showing 'Valley' so both texts match
 
   const [valleyShown, setValleyShown] = useState(false);
+  // Text sequence shown before the word "Valley". Use the full Indic set.
+  const textArray = [
+    { text: 'वृक्ष', className: 'script-devanagari', dir: 'ltr' },
+    { text: 'বৃক্ষ', className: 'script-bengali', dir: 'ltr' },
+    { text: 'ବୃକ୍ଷ', className: 'script-odia', dir: 'ltr' },
+    { text: 'وڻ', className: 'script-arabic rtl', dir: 'rtl' },
+    { text: 'વૃક્ષ', className: 'script-gujarati', dir: 'ltr' },
+    { text: 'ಮರ', className: 'script-kannada', dir: 'ltr' },
+    { text: 'చెట్టు', className: 'script-telugu', dir: 'ltr' },
+    { text: 'மரம்', className: 'script-tamil', dir: 'ltr' },
+    { text: 'മരം', className: 'script-malayalam', dir: 'ltr' },
+    { text: 'ꯔꯨ', className: 'script-meitei', dir: 'ltr' },
+    { text: 'Vriksh', className: 'script-latin', dir: 'ltr' }
+  ];
 
-  // Array of script-aware text entries to ensure proper rendering per language.
-  useEffect(() => {
-    // Determine pathname and whether this navigation was a reload.
+  // Current active text object derived from the array and index.
+  const currentText = textArray[currentTextIndex] || { text: '' };
+
+  // Determine loader visibility after hydration, but before the browser paints.
+  useLayoutEffect(() => {
+    if (typeof window === 'undefined') return;
+
     const path = window.location.pathname;
     setPathname(path);
 
     let navType = 'navigate';
     try {
-      const navEntry = performance.getEntriesByType && performance.getEntriesByType('navigation') && performance.getEntriesByType('navigation')[0];
-      if (navEntry && navEntry.type) navType = navEntry.type; // 'navigate', 'reload', 'back_forward', 'prerender'
-      else if (performance.navigation && performance.navigation.type === 1) navType = 'reload';
-    } catch (e) {
-      // ignore
+      const navEntry = performance.getEntriesByType?.('navigation')?.[0];
+      if (navEntry?.type) navType = navEntry.type;
+      else if (performance.navigation?.type === 1) navType = 'reload';
+    } catch (error) {
+      navType = 'navigate';
     }
 
-    // Only show the initial loader on the homepage when the page load was a full reload.
     if (path === '/' && navType === 'reload') {
       setIsLoading(true);
     }
   }, []);
+
+  // Keep the loader attribute in sync so the layout can hide main content before paint.
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+
+    if (isLoading) {
+      document.documentElement.setAttribute('data-initial-loader', '1');
+    } else {
+      document.documentElement.removeAttribute('data-initial-loader');
+    }
+  }, [isLoading]);
 
   // Start the text sequence only when the loader becomes visible.
   useEffect(() => {
     if (!isLoading) return;
 
     const motionDuration = MOTION_DURATION; // ms
-    const cadence = [motionDuration + 120 + EXTRA_HOLD, motionDuration + 300 + EXTRA_HOLD, motionDuration + 300 + EXTRA_HOLD, motionDuration + 120 + EXTRA_HOLD];
+    const cadence = [motionDuration + 120, motionDuration + 300, motionDuration + 300, motionDuration + 120];
     let step = 0;
     let textTimer;
     let exitTimer;
@@ -55,7 +83,7 @@ export default function InitialLoader() {
             return prev + 1;
           }
 
-          exitTimer = setTimeout(() => setIsLoading(false), motionDuration + 400 + EXTRA_HOLD);
+          exitTimer = setTimeout(() => setIsLoading(false), motionDuration + 400);
           return prev;
         });
       }, cadence[step % cadence.length]);
@@ -86,9 +114,6 @@ export default function InitialLoader() {
     };
   }, [isLoading, pathname]);
 
-  // Only show on homepage
-  if (pathname !== '/' && pathname !== '') return null;
-
   return (
     <AnimatePresence mode="wait">
       {isLoading && (
@@ -96,10 +121,10 @@ export default function InitialLoader() {
           className="initialLoader"
           initial={false}
           animate={{ opacity: 1, scale: 1 }}
-          exit={{ 
+          exit={{
             opacity: 0,
             scale: 4,
-            transition: { duration: 1, ease: [0.4, 0, 0.2, 1] }
+            transition: { duration: 1, ease: [0.4, 0, 0.2, 1] },
           }}
         >
           <div className="loaderBackground">
@@ -107,9 +132,7 @@ export default function InitialLoader() {
               className="loaderBackgroundVideo"
               autoPlay
               muted
-              
               playsInline
-              
               onError={() => setVideoFailed(true)}
             >
               <source src="/hero.mp4" type="video/mp4" />
@@ -121,10 +144,7 @@ export default function InitialLoader() {
           {/* Content Container */}
           <div className="loaderContent">
             {/* Scrolling Text Animation */}
-            <motion.div
-              className="scrollingTextContainer"
-              initial={{ opacity: 1 }}
-            >
+            <motion.div className="scrollingTextContainer" initial={{ opacity: 1 }}>
               <div className="brandWrapper">
                 <motion.span
                   className={`scrollingText ${currentText.className || ''}`.trim()}
@@ -134,7 +154,7 @@ export default function InitialLoader() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{
                     duration: MOTION_DURATION / 1000,
-                    ease: [0.25, 0.1, 0.25, 1]
+                    ease: [0.25, 0.1, 0.25, 1],
                   }}
                 >
                   {currentText.text}
@@ -145,7 +165,11 @@ export default function InitialLoader() {
                     className="valleyText"
                     initial={{ opacity: 0, x: 30 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: MOTION_DURATION / 1000, delay: VALLEY_DELAY / 1000, ease: [0.25, 0.1, 0.25, 1] }}
+                    transition={{
+                      duration: MOTION_DURATION / 1000,
+                      delay: VALLEY_DELAY / 1000,
+                      ease: [0.25, 0.1, 0.25, 1],
+                    }}
                   >
                     Valley
                   </motion.span>

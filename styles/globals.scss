@@ -117,6 +117,14 @@ html {
   }
 }
 
+html[data-initial-loader='1'] body {
+  overflow: hidden;
+}
+
+html[data-initial-loader='1'] #main-content {
+  visibility: hidden;
+}
+
 /* Hide native scrollbars on mobile for a cleaner UI (touch scrolling preserved) */
 @media (max-width: 768px) {
   html, body {
