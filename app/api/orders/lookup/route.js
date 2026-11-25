@@ -23,8 +23,9 @@ export async function POST(request) {
     const snap = await adminDb().collection(ORDERS).doc(String(orderId).trim().slice(0, 64)).get();
     const o = snap.exists ? snap.data() : null;
     if (!o || String(o.customer_email || "").toLowerCase() !== String(email).trim().toLowerCase()) return notFound();
-    if (o.payment_status === "pending") return notFound();
+    if (["pending", "failed"].includes(o.payment_status) || o.status === "pending_payment") return notFound();
 
+    const showTracking = o.status !== "cancelled" && Boolean(o.waybill);
     return NextResponse.json({
       order: {
         order_id: o.order_id,
@@ -36,8 +37,8 @@ export async function POST(request) {
         appointment: o.appointment || null,
         items: (o.items || []).map((i) => ({ name: i.name, quantity: i.quantity, options: [i.variant, i.size, i.color].filter(Boolean).join(", ") })),
         shipment_status: o.shipment_status || null,
-        waybill: o.waybill || null,
-        tracking_url: o.waybill ? `https://www.delhivery.com/track-v2/package/${encodeURIComponent(o.waybill)}` : null,
+        waybill: showTracking ? o.waybill : null,
+        tracking_url: showTracking ? `https://www.delhivery.com/track-v2/package/${encodeURIComponent(o.waybill)}` : null,
       },
     });
   } catch (error) {

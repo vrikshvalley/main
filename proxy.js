@@ -19,7 +19,9 @@ export function proxy(request) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
-  if (isAdminPath) return NextResponse.rewrite(new URL("/__not-found", request.url));
+  if (isAdminPath || pathname.startsWith("/api/admin/")) {
+    return NextResponse.rewrite(new URL("/__not-found", request.url));
+  }
   return NextResponse.next();
 }
 

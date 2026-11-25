@@ -37,7 +37,7 @@ export default function AdminGate({ children }) {
   return (
     <>
       <header className="adm-bar">
-        <a href="/admin" className="adm-brand">Vriksh Valley <span>Admin</span></a>
+        <a href="/" className="adm-brand">Vriksh Valley <span>Admin</span></a>
         <span className="adm-bar__user">{user.email}</span>
         <button className="adm-btn" onClick={() => signOut(auth)}>Sign out</button>
       </header>
