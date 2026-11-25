@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { auth } from '@/lib/firebaseConfig';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
+import { useDispatch } from 'react-redux';
+import { addItem } from '@/lib/slices/cartSlice';
 import TheLoader from '@/components/general/TheLoader';
 import Button from '@/components/general/Button';
 import ConfirmModal from '@/components/general/ConfirmModal';
@@ -26,6 +28,7 @@ const ProfilePage = () => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   const router = useRouter();
+  const dispatch = useDispatch();
   
   // Confirmation modal hook
   const confirmModal = useConfirmModal();
@@ -52,13 +55,15 @@ const ProfilePage = () => {
 
       // Fetch profile via service
       const { data, error } = await userService.getProfile(currentUser.uid);
-      if (error) {
-        // try creating minimal profile
+      if (error?.message === 'Profile not found') {
+        // Create minimal profile only when genuinely missing
         const oauthName = currentUser.displayName || null;
         const newProfileData = { id: currentUser.uid, email: currentUser.email, name: oauthName, address: [] };
         const created = await userService.createProfile(newProfileData);
         if (!created.error) setProfile(created.data?.[0] || newProfileData);
         else setProfile(newProfileData);
+      } else if (error) {
+        toastError('Could not load profile. Please refresh.');
       } else {
         setProfile(data);
       }
@@ -179,7 +184,7 @@ const ProfilePage = () => {
     return (
       <div className="profilePage">
         <div className="brandHeader">
-          <Image src="/logo.png" alt="Vriksh Valley" width={60} height={60} className="logo" />
+          <Image src="/logo.webp" alt="Vriksh Valley" width={60} height={60} className="logo" />
           <div className="brandInfo">
             <h1>Vriksh Valley</h1>
             <p>Pure. Organic. Natural.</p>
@@ -236,15 +241,6 @@ const ProfilePage = () => {
             </form>
           </div>
         </div>
-
-        {toast && (
-          <div className={`toast ${toast.type}`}>
-            <div className="toastContent">
-              <span className="toastIcon">{toast.type === 'success' ? '✓' : '✕'}</span>
-              <span className="toastMessage">{toast.message}</span>
-            </div>
-          </div>
-        )}
       </div>
     );
   }
@@ -258,7 +254,7 @@ const ProfilePage = () => {
   return (
     <div className="profilePage">
       <div className="brandHeader">
-        <Image src="/logo.png" alt="Vriksh Valley" width={60} height={60} className="logo" />
+        <Image src="/logo.webp" alt="Vriksh Valley" width={60} height={60} className="logo" />
         <div className="brandInfo">
           <h1>Vriksh Valley</h1>
           <p>Pure. Organic. Natural.</p>
@@ -273,7 +269,7 @@ const ProfilePage = () => {
           </aside>
 
           <main className="mainContent">
-            <OrderHistory userId={user?.id} />
+            <OrderHistory userId={user?.uid} />
             <Addresses addresses={profile?.address || []}
                        onAdd={handleAddAddress}
                        onEdit={openEditAddress}
@@ -281,7 +277,27 @@ const ProfilePage = () => {
 
             <Payments payments={profile?.payments || []} onSetDefault={(id) => { /* implement if needed */ }} />
 
-            <Wishlist items={profile?.wishlist || []} onRemove={async (id) => { await userService.removeWishlistItem(user.id, id); const refreshed = await userService.getProfile(user.id); if (!refreshed.error) setProfile(refreshed.data); }} onAddToCart={(item) => { /* wire to cart */ }} />
+            <Wishlist
+              items={profile?.wishlist || []}
+              onRemove={async (id) => {
+                if (!user?.uid) return;
+                await userService.removeWishlistItem(user.uid, id);
+                const refreshed = await userService.getProfile(user.uid);
+                if (!refreshed.error) setProfile(refreshed.data);
+              }}
+              onAddToCart={(item) => {
+                if (!item?.id) return;
+                dispatch(addItem({
+                  id: item.id,
+                  slug: item.slug || null,
+                  name: item.name || 'Product',
+                  price: Number(item.price || 0),
+                  image: item.image || '/logo.webp',
+                  qty: 1,
+                  quantity: 1,
+                }));
+              }}
+            />
           </main>
         </div>
       </div>

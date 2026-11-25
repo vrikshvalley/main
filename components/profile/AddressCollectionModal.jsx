@@ -91,6 +91,8 @@ export default function AddressCollectionModal({ user, onComplete, onSkip }) {
     const addressData = {
       id: `addr_${Date.now()}`,
       ...formData,
+      line1: formData.address_line1,
+      line2: formData.address_line2,
       is_default: true,
       created_at: new Date().toISOString()
     };

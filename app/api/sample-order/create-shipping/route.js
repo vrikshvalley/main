@@ -1,13 +1,18 @@
 // API Route: Create Shipping with Delhivery
 import { NextResponse } from "next/server";
+import { requireAdmin } from "@/lib/serverAuth";
+import { testRoutesDisabled } from "@/lib/server/http";
 import {
   createShipment,
   checkServiceability,
-  calculateShippingCost,
 } from "@/lib/services/delhiveryService";
 
 // GET endpoint for testing Delhivery configuration
 export async function GET(request) {
+  const disabled = testRoutesDisabled();
+  if (disabled) return disabled;
+  const auth = await requireAdmin(request);
+  if (auth.response) return auth.response;
   try {
     console.log("\n=== Testing Delhivery Configuration ===");
 
@@ -54,13 +59,18 @@ export async function GET(request) {
 }
 
 export async function POST(request) {
+  const disabled = testRoutesDisabled();
+  if (disabled) return disabled;
+  const auth = await requireAdmin(request);
+  if (auth.response) return auth.response;
   try {
-    const { orderId, customer, address, items, amount } = await request.json();
+    const body = await request.json().catch(() => null);
+    const { orderId, customer, address, items, amount } = body || {};
 
     // Validate required fields
-    if (!orderId || !customer || !address || !items) {
+    if (!orderId || !customer || !address || !Array.isArray(items) || items.length === 0 || !Number.isFinite(Number(amount)) || Number(amount) <= 0) {
       return NextResponse.json(
-        { success: false, error: "Missing required fields" },
+        { success: false, error: "Missing or invalid required fields" },
         { status: 400 }
       );
     }

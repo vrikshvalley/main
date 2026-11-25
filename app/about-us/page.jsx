@@ -22,9 +22,9 @@ export default function AboutUs() {
       {/* Hero Banner */}
       <div className="hero-banner about-us-hero" ref={bannerRef}>
         <picture>
-          <source media="(max-width: 768px)" srcSet="/AboutusPageMobile.png" />
+          <source media="(max-width: 768px)" srcSet="/pages/AboutusPageMobile.webp" />
           <Image
-            src="/AboutusPageDesktop.png"
+            src="/pages/AboutusPageDesktop.webp"
             alt="About Us - Vriksh Valley"
             fill
             priority

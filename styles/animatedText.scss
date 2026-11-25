@@ -1,38 +1,75 @@
+// ============================================
+// AnimatedText: fades up once when scrolled into view.
+// [data-inview] is set by lib/inView.js; only opacity and transform animate.
+// ============================================
+
 .animated-text {
   display: inline-block;
   width: 100%;
- 
 }
 
 .animated-text .word {
   display: inline-block;
-  will-change: transform, opacity;
-  font-family: 'Source Sans 3', sans-serif;
-   
+  font-family: var(--font-body), sans-serif;
 }
 
+.animated-text.is-split .word,
+.animated-text.is-block {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity var(--at-duration, 0.7s) cubic-bezier(0.22, 1, 0.36, 1),
+    transform var(--at-duration, 0.7s) cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.animated-text.is-split .word {
+  transition-delay: calc(var(--at-delay, 0s) + var(--i, 0) * var(--at-stagger, 0.06s));
+}
+
+.animated-text.is-block {
+  transition-delay: var(--at-delay, 0s);
+}
+
+.animated-text[data-inview='true'].is-split .word,
+.animated-text[data-inview='true'].is-block {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animated-text.is-split .word,
+  .animated-text.is-block {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+// Section eyebrow label (class name kept for compatibility; no script font)
 .cursive-subtitle {
-  font-family: 'Italianno', cursive;
-  font-size: 1.5rem;
-  color: #ffffff !important;
-  margin-bottom: 10px;
-  letter-spacing: 0.2px;
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: rgba(#ffffff, 0.75) !important;
+  margin-bottom: 0.75rem;
   display: block;
   text-align: center;
   position: relative;
   width: 100%;
   order: -1;
-  
+
   .word {
-    font-family: 'Italianno', cursive;
+    font-family: inherit;
   }
-  
+
   &.left {
     text-align: left;
   }
-  
+
   @media (max-width: 768px) {
-    font-size: 1rem;
-    margin-bottom: 8px;
+    font-size: 0.72rem;
+    margin-bottom: 0.5rem;
   }
 }

@@ -1,294 +1,246 @@
-@use 'sass:color';
 @use 'variables' as *;
 
-.gallery {
-  padding: 3rem 1.5rem;
-  background: transparent;
-  position: relative;
-  z-index: 2;
+// Homepage gallery: two endless photo reels drifting in opposite directions.
+// All classes are scoped (vv-gallery__*, vv-reel*).
 
-  @media (max-width: 768px) {
-    padding: 2rem 1rem;
-  }
-
-  @media (max-width: 400px) {
-    padding: 2rem 1rem;
-  }
-}
-
-.gallery-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 2;
-}
-
-.section-header {
-  text-align: center;
-  margin-bottom: 4rem;
-
-  @media (max-width: 768px) {
-    margin-bottom: 3rem;
-  }
-
-  @media (max-width: 400px) {
-    margin-bottom: 2rem;
-  }
-
-  .header-icon {
-    width: 48px;
-    height: 48px;
-    color: $teal;
-    margin: 0 auto 1rem;
-    stroke-width: 1.5px;
-
-    @media (max-width: 400px) {
-      width: 40px;
-      height: 40px;
-    }
-  }
-}
-
-.section-title {
-  font-family: 'Helvetica', Arial, sans-serif;
-  font-size: 4rem;
-  font-weight: 600;
-  color: $white;
-  margin-bottom: 1rem;
-  letter-spacing: -0.5px;
-
-  @media (max-width: 768px) {
-    font-size: 2.8rem;
-  }
-
-  @media (max-width: 400px) {
-    font-size: 2.2rem;
-  }
-}
-
-.section-subtitle {
-  font-size: 1.15rem;
-  color: rgba($white, 0.85);
-  font-weight: 300;
-
-  @media (max-width: 768px) {
-    font-size: 1.05rem;
-  }
-
-  @media (max-width: 400px) {
-    font-size: 1rem;
-  }
-}
-
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-
-  @media (max-width: 992px) {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.25rem;
-  }
-
-  @media (max-width: 640px) {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem;
-  }
-}
-
-.gallery-item {
-  border-radius: 4px;
+.vv-gallery {
+  padding: 4rem 0;
   overflow: hidden;
-  box-shadow: none;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-  will-change: transform;
-  
 
-  @media (hover: hover) {
-    &:hover {
-      transform: translateY(-2px);
+  @media (max-width: 768px) {
+    padding: 3rem 0;
+  }
+}
 
-      .gallery-image {
-        transform: scale(1.02);
-      }
+.vv-gallery__header {
+  text-align: center;
+  padding: 0 1.25rem;
+  margin-bottom: 2.25rem;
+}
 
-      .image-overlay {
-        opacity: 1;
-      }
-    }
+.vv-gallery__title {
+  font-size: clamp(1.9rem, 4vw, 2.75rem);
+  font-weight: 700;
+  color: $white;
+  margin: 0.25rem 0 0.5rem;
+
+  .word {
+    font-family: inherit;
+  }
+}
+
+.vv-gallery__subtitle {
+  max-width: 540px;
+  margin: 0 auto;
+  color: rgba($white, 0.82);
+  font-size: 1.02rem;
+}
+
+.vv-gallery__reels {
+  display: grid;
+  gap: 1rem;
+  // soft fade at both edges
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+
+.vv-reel {
+  overflow: hidden;
+}
+
+.vv-reel__track {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  width: max-content;
+  animation: vvReel 60s linear infinite;
+
+  .is-reverse & {
+    animation-direction: reverse;
+    animation-duration: 52s;
   }
 
-  // Touch devices - show overlay on tap
-  @media (hover: none) {
-    .image-overlay {
-      opacity: 0.8;
+  .vv-reel:hover &,
+  .vv-reel:focus-within & {
+    animation-play-state: paused;
+  }
+}
+
+// the track holds two copies, so moving by half its width loops seamlessly
+@keyframes vvReel {
+  from { transform: translateX(0); }
+  to { transform: translateX(calc(-50% - 0.5rem)); }
+}
+
+.vv-reel__item {
+  position: relative;
+  flex: 0 0 auto;
+  width: clamp(220px, 26vw, 340px);
+  aspect-ratio: 4 / 3;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.3);
+
+  .is-reverse & {
+    aspect-ratio: 3 / 4;
+    width: clamp(160px, 18vw, 250px);
+  }
+
+  @media (max-width: 768px) {
+    width: 60vw;
+
+    .is-reverse & {
+      width: 42vw;
     }
   }
 }
 
-.image-wrapper {
+.vv-reel__button {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  padding: 0;
+  background: rgba($white, 0.08);
+  cursor: zoom-in;
+
+  img {
+    object-fit: cover;
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  &:hover img,
+  &:focus-visible img {
+    transform: scale(1.06);
+  }
+
+  &:focus-visible {
+    outline: 3px solid $yellow;
+    outline-offset: -3px;
+  }
+}
+
+.vv-reel__caption {
+  position: absolute;
+  left: 0.75rem;
+  bottom: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  max-width: calc(100% - 1.5rem);
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: rgba($white, 0.92);
+  color: $dark-green;
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+
+  .vv-reel__button:hover &,
+  .vv-reel__button:focus-visible & {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (hover: none) {
+    display: none;
+  }
+}
+
+// Reduced motion: no drifting, just a swipeable row
+@media (prefers-reduced-motion: reduce) {
+  .vv-reel {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+  }
+
+  .vv-reel__track {
+    animation: none;
+  }
+
+  .vv-reel__item {
+    scroll-snap-align: start;
+  }
+
+  .vv-reel__item[aria-hidden='true'] {
+    display: none;
+  }
+}
+
+// ---- Lightbox (native <dialog>) ----
+
+.vv-gallery__dialog {
+  width: min(92vw, 1100px);
+  max-height: 92vh;
+  margin: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 22px;
+  background: $dark-green;
+  color: $white;
+  overflow: hidden;
+
+  &::backdrop {
+    background: rgba(0, 0, 0, 0.75);
+  }
+
+  &[open] {
+    animation: vvDialogIn 0.25s ease-out;
+  }
+}
+
+.vv-gallery__figure {
+  position: relative;
+  margin: 0;
+
+  figcaption {
+    padding: 0.9rem 1.25rem 1.1rem;
+    font-size: 0.98rem;
+  }
+}
+
+.vv-gallery__full {
   position: relative;
   width: 100%;
   aspect-ratio: 4 / 3;
-  overflow: hidden;
-  background: rgba($white, 0.02);
+  max-height: calc(92vh - 60px);
 
-  @media (max-width: 640px) {
-    aspect-ratio: 16 / 9;
-  }
-
-  .gallery-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.6s ease-out;
-    will-change: transform;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    filter: brightness(0.95);
-  }
-
-  .image-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      to top,
-      rgba($dark-green, 0.95) 0%,
-      rgba($dark-green, 0.6) 50%,
-      rgba($dark-green, 0.2) 100%
-    );
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-
-    @media (max-width: 768px) {
-      padding: 1.5rem;
-    }
-
-    @media (max-width: 400px) {
-      padding: 1rem;
-    }
-
-    p {
-      color: $white;
-      font-size: 1.6rem;
-      font-family: 'HostGrotesk', sans-serif;
-      font-weight: 600;
-      text-align: center;
-      margin: 0;
-      transform: translateY(0);
-
-      @media (max-width: 768px) {
-        font-size: 0.95rem;
-      }
-
-      @media (max-width: 400px) {
-        font-size: 0.9rem;
-      }
-    }
+  img {
+    object-fit: contain;
   }
 }
 
-// Mobile fallback: ensure gallery items are visible if animations don't trigger
-@media (max-width: 768px) {
-  .gallery,
-  .gallery-container,
-  .section-header,
-  .gallery-grid,
-  .gallery-item,
-  .image-wrapper,
-  .gallery-image,
-  .image-overlay {
-    opacity: 1 !important;
-    transform: none !important;
-    transition: none !important;
-  }
-}
-
-.gallery-modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem;
-  z-index: 9999;
-  backdrop-filter: blur(2px);
-
-  @media (max-width: 640px) {
-    padding: 1rem;
-  }
-}
-
-.gallery-modal__content {
-  position: relative;
-  background: rgba($dark-green, 0.92);
-  border: 1px solid rgba($white, 0.1);
-  border-radius: 12px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
-  padding: 1rem 1rem 1.5rem;
-  max-width: 1100px;
-  width: min(90vw, 1100px);
-  color: $white;
-
-  @media (max-width: 640px) {
-    padding: 0.75rem 0.75rem 1.25rem;
-  }
-}
-
-.gallery-modal__close {
+.vv-gallery__close {
   position: absolute;
-  top: 0.6rem;
-  right: 0.8rem;
-  background: rgba($accent-primary, 0.15);
-  color: $accent-primary;
-  border: none;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 1.1rem;
-  line-height: 1;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 2;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s ease, transform 0.2s ease, color 0.2s ease;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba($white, 0.9);
+  color: $dark-green;
+  cursor: pointer;
 
-  @media (hover: hover) {
-    &:hover {
-      background: rgba($white, 0.15);
-      transform: scale(1.05);
-    }
+  &:focus-visible {
+    outline: 3px solid $yellow;
+    outline-offset: 2px;
   }
 }
 
-.gallery-modal__image-wrapper {
-  width: 100%;
-  background: rgba($white, 0.04);
-  border-radius: 10px;
-  overflow: hidden;
-  border: 1px solid rgba($white, 0.06);
-}
-
-.gallery-modal__image {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-.gallery-modal__caption {
-  margin: 0.9rem 0 0;
-  font-size: 1.05rem;
-  font-weight: 500;
-  text-align: center;
-
-  @media (max-width: 640px) {
-    font-size: 0.95rem;
+@keyframes vvDialogIn {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
   }
 }

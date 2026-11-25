@@ -1,11 +1,14 @@
 // API Route: Payment Callback/Webhook from Razorpay
 import { NextResponse } from "next/server";
+import { testRoutesDisabled } from "@/lib/server/http";
 import {
   verifyWebhookSignature,
   fetchPayment,
 } from "@/lib/services/razorpayService";
 
 export async function POST(request) {
+  const disabled = testRoutesDisabled();
+  if (disabled) return disabled;
   try {
     const body = await request.text();
     const signature = request.headers.get("x-razorpay-signature");
@@ -28,25 +31,26 @@ export async function POST(request) {
       );
     }
 
-    const event = JSON.parse(body);
+    let event;
+    try {
+      event = JSON.parse(body);
+    } catch {
+      return NextResponse.json({ success: false, error: "Bad JSON payload" }, { status: 400 });
+    }
 
     // Handle different webhook events
-    switch (event.event) {
+    switch (event?.event) {
       case "payment.captured":
-        console.log("Payment captured:", event.payload.payment.entity.id);
-        // Update order status in database
-        // Send confirmation email
-        // Trigger shipping process
+        console.log("Payment captured:", event?.payload?.payment?.entity?.id);
         break;
       case "payment.failed":
-        console.log("Payment failed:", event.payload.payment.entity.id);
-        // Update order status
+        console.log("Payment failed:", event?.payload?.payment?.entity?.id);
         break;
       case "order.paid":
-        console.log("Order paid:", event.payload.order.entity.id);
+        console.log("Order paid:", event?.payload?.order?.entity?.id);
         break;
       default:
-        console.log("Unhandled event:", event.event);
+        break;
     }
 
     return NextResponse.json({

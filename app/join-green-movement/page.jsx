@@ -37,10 +37,10 @@ export default function JoinGreenMovementPage() {
         <picture>
           <source 
             media="(max-width: 768px)" 
-            srcSet="/JoinGreenMobile.png" 
+            srcSet="/pages/JoinGreenMobile.webp" 
           />
           <Image
-            src="/JoinGreenDesktop.png"
+            src="/pages/JoinGreenDesktop.webp"
             alt="Join the Green Movement - Vriksh Valley"
             fill
             priority

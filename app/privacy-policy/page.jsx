@@ -22,10 +22,10 @@ export default function PrivacyPolicy() {
         <picture>
           <source 
             media="(max-width: 768px)" 
-            srcSet="/PrivacyPoliciesMobile.png" 
+            srcSet="/pages/PrivacyPoliciesMobile.webp" 
           />
           <Image
-            src="/PrivacyPoliciesDesktop.png"
+            src="/pages/PrivacyPoliciesDesktop.webp"
             alt="Privacy Policy - Vriksh Valley"
             fill
             priority
@@ -120,7 +120,7 @@ export default function PrivacyPolicy() {
           <p>
             For privacy-related queries or to exercise your data rights, contact us at:<br />
             <strong>Phone:</strong> +91 92047 45612<br />
-            <strong>Email:</strong> support@vrikshvalley.com
+            <strong>Email:</strong> contact@vrikshvalley.com
           </p>
         </div>
       </div>

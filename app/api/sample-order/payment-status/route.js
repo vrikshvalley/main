@@ -1,8 +1,14 @@
 // API Route: Check Payment Status
 import { NextResponse } from "next/server";
+import { requireAdmin } from "@/lib/serverAuth";
+import { testRoutesDisabled } from "@/lib/server/http";
 import { fetchPayment, fetchOrder } from "@/lib/services/razorpayService";
 
 export async function GET(request) {
+  const disabled = testRoutesDisabled();
+  if (disabled) return disabled;
+  const auth = await requireAdmin(request);
+  if (auth.response) return auth.response;
   try {
     const { searchParams } = new URL(request.url);
     const paymentId = searchParams.get("paymentId");

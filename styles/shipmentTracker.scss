@@ -169,7 +169,7 @@
       width: 32px;
       height: 32px;
       border: 3px solid #e5e7eb;
-      border-top-color: #2d5016;
+      border-top-color: var(--vv-green-700);
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
       margin: 0 auto 12px;
@@ -185,7 +185,7 @@
     .retry-btn {
       margin-top: 12px;
       padding: 8px 16px;
-      background: #2d5016;
+      background: var(--vv-green-700);
       color: white;
       border: none;
       border-radius: 6px;
@@ -234,7 +234,7 @@
       width: 12px;
       height: 12px;
       border-radius: 50%;
-      background: #2d5016;
+      background: var(--vv-green-700);
       flex-shrink: 0;
       margin-top: 4px;
       position: relative;
@@ -302,7 +302,7 @@
   align-items: center;
   gap: 8px;
   padding: 10px 20px;
-  background: #2d5016;
+  background: var(--vv-green-700);
   color: white;
   text-decoration: none;
   border-radius: 8px;

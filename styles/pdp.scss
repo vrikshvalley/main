@@ -1,0 +1,924 @@
+@use 'variables' as *;
+@use 'stone' as *;
+
+// ============================================
+// PRODUCT DETAIL PAGE (pdp-*)
+// Cream panel on the brand background, sticky gallery + buy box,
+// WhatsApp as the primary action.
+// ============================================
+
+.pdp {
+  max-width: 1280px;
+  margin: 1.5rem auto 0;
+  padding: clamp(1rem, 3vw, 2.25rem);
+  border-radius: 28px;
+  background: $white;
+  color: $dark-green;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+
+  @media (max-width: 768px) {
+    margin: 0.75rem 0.5rem 0;
+    border-radius: 22px;
+    padding: 0.85rem;
+  }
+
+  &--quickview {
+    margin: 0;
+    box-shadow: none;
+    border-radius: 0;
+  }
+}
+
+.pdp-crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.85rem;
+  color: rgba($dark-green, 0.6);
+
+  a {
+    color: rgba($dark-green, 0.75);
+
+    &:hover {
+      color: $teal;
+    }
+  }
+
+  [aria-current] {
+    color: $dark-green;
+    font-weight: 700;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.78rem;
+    margin: 0.25rem 0.25rem 0.85rem;
+  }
+}
+
+.pdp-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  align-items: start;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+}
+
+// ---- Gallery ----
+
+.pdp-gallery {
+  position: sticky;
+  top: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  @media (max-width: 900px) {
+    position: static;
+  }
+}
+
+.pdp-stage {
+  position: relative;
+  border-radius: 22px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: inset 0 0 0 1px rgba($dark-green, 0.08);
+
+  .wishlist-button,
+  .wishlist-btn {
+    position: absolute;
+    top: 0.85rem;
+    right: 0.85rem;
+    z-index: 3;
+  }
+}
+
+.pdp-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  &:focus-visible {
+    outline: 3px solid $yellow;
+    outline-offset: -3px;
+  }
+}
+
+.pdp-slide {
+  position: relative;
+  flex: 0 0 100%;
+  aspect-ratio: 1 / 1;
+  scroll-snap-align: center;
+
+  img {
+    object-fit: cover;
+  }
+}
+
+.pdp-dots {
+  position: absolute;
+  left: 50%;
+  bottom: 0.85rem;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.35rem;
+  padding: 0.35rem 0.55rem;
+  border-radius: 999px;
+  background: rgba($dark-green, 0.55);
+
+  span {
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: rgba($white, 0.55);
+    transition: width 0.25s ease, background 0.25s ease;
+
+    &.is-active {
+      width: 18px;
+      background: $white;
+    }
+  }
+}
+
+.pdp-thumbs {
+  display: flex;
+  gap: 0.6rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  @media (max-width: 900px) {
+    display: none; // phones swipe the main image; dots show position
+  }
+}
+
+.pdp-thumb {
+  position: relative;
+  flex: 0 0 76px;
+  height: 76px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  background: #fff;
+  cursor: pointer;
+  opacity: 0.65;
+  transition: opacity 0.2s ease, border-color 0.2s ease;
+
+  img {
+    object-fit: cover;
+  }
+
+  &:hover,
+  &.is-active {
+    opacity: 1;
+  }
+
+  &.is-active {
+    border-color: $dark-green;
+  }
+
+  &:focus-visible {
+    outline: 3px solid $yellow;
+    outline-offset: 2px;
+  }
+}
+
+// ---- Buy box ----
+
+.pdp-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  padding-top: 0.25rem;
+}
+
+.pdp-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.pdp-badge {
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: rgba($teal, 0.14);
+  color: $deep-green;
+
+  &--new {
+    background: $dark-green;
+    color: $white;
+  }
+
+  &--hot {
+    background: $yellow;
+    color: $dark-green;
+  }
+}
+
+.pdp-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.9rem, 3.4vw, 2.75rem);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: $dark-green;
+}
+
+.pdp-price {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  font-size: 2rem;
+  font-weight: 700;
+  color: $dark-green;
+
+  &--custom {
+    font-size: 1.5rem;
+  }
+}
+
+.pdp-mrp {
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: rgba($dark-green, 0.5);
+}
+
+.pdp-save {
+  align-self: center;
+  padding: 0.2rem 0.55rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  background: $yellow;
+  color: $dark-green;
+}
+
+.pdp-price-note {
+  margin-top: 0.25rem;
+  color: rgba($dark-green, 0.7);
+}
+
+.pdp-stock {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.92rem;
+  font-weight: 700;
+
+  &.is-in {
+    color: $deep-green;
+  }
+
+  &.is-out {
+    color: #b42318;
+  }
+}
+
+.pdp-stock-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 0 0 currentColor;
+  animation: pdpPing 2s ease-out infinite;
+
+  .is-out & {
+    animation: none;
+  }
+}
+
+.pdp-desc {
+  p {
+    font-size: 1rem;
+    line-height: 1.65;
+    color: rgba($dark-green, 0.82);
+
+    &.is-clamped {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  }
+}
+
+.pdp-link-btn {
+  margin-top: 0.35rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: $teal;
+  font-weight: 700;
+  font-size: 0.92rem;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.pdp-facts {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.pdp-fact {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.75rem 0.8rem;
+  border-radius: 14px;
+  background: rgba($teal, 0.09);
+  font-size: 0.88rem;
+  line-height: 1.35;
+  color: $dark-green;
+
+  svg {
+    flex: 0 0 auto;
+    color: $deep-green;
+    margin-top: 0.1rem;
+  }
+
+  small {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba($dark-green, 0.55);
+    margin-bottom: 0.1rem;
+  }
+
+  &--petWarn {
+    background: rgba($yellow, 0.18);
+
+    svg {
+      color: #9a6700;
+    }
+  }
+}
+
+.pdp-fixed-option {
+  font-size: 0.95rem;
+  color: rgba($dark-green, 0.8);
+}
+
+.pdp-option {
+  border: 0;
+  padding: 0;
+  margin: 0;
+
+  legend {
+    margin-bottom: 0.5rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba($dark-green, 0.6);
+
+    span {
+      margin-left: 0.35rem;
+      letter-spacing: normal;
+      text-transform: none;
+      color: $dark-green;
+    }
+  }
+}
+
+.pdp-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.pdp-chip {
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
+  border: 1.5px solid rgba($dark-green, 0.2);
+  background: #fff;
+  color: $dark-green;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+
+  &:hover {
+    border-color: $dark-green;
+  }
+
+  &.is-active {
+    background: $dark-green;
+    border-color: $dark-green;
+    color: $white;
+  }
+
+  &:focus-visible {
+    outline: 3px solid $yellow;
+    outline-offset: 2px;
+  }
+}
+
+.pdp-buy {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.65rem;
+  margin-top: 0.25rem;
+
+  .pdp-cta--cart {
+    grid-column: 1 / -1;
+  }
+
+  @media (max-width: 420px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pdp-qty {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  border: 1.5px solid rgba($dark-green, 0.2);
+  background: #fff;
+
+  button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 52px;
+    border: 0;
+    background: none;
+    color: $dark-green;
+    cursor: pointer;
+
+    &:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    &:focus-visible {
+      outline: 3px solid $yellow;
+      outline-offset: -3px;
+      border-radius: 999px;
+    }
+  }
+
+  output {
+    min-width: 2ch;
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.05rem;
+  }
+
+  @media (max-width: 420px) {
+    justify-self: start;
+  }
+}
+
+.pdp-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  min-height: 54px;
+  padding: 0 1.5rem;
+  border-radius: 999px;
+  font-family: var(--font-heading);
+  font-size: 1.02rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  &:focus-visible {
+    outline: 3px solid $yellow;
+    outline-offset: 3px;
+  }
+
+  &--whatsapp {
+    border: 0;
+    background: $dark-green;
+    color: $white;
+
+    &:hover:not(:disabled) {
+      background: $deep-green;
+    }
+  }
+
+  // a polished jade stone, a step lighter than the WhatsApp button
+  &--cart {
+    @include stone(#1d6b45);
+  }
+}
+
+.pdp-trust {
+  list-style: none;
+  display: grid;
+  gap: 0.55rem;
+  padding: 1rem 1.1rem;
+  border-radius: 16px;
+  border: 1px dashed rgba($dark-green, 0.22);
+  font-size: 0.9rem;
+  color: rgba($dark-green, 0.85);
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
+
+  svg {
+    flex: 0 0 auto;
+    color: $teal;
+    margin-top: 0.1rem;
+  }
+}
+
+// ---- Sticky buy bar (phones) ----
+
+.pdp-sticky {
+  display: none;
+
+  @media (max-width: 900px) {
+    position: fixed;
+    left: 0.5rem;
+    right: 0.5rem;
+    bottom: calc(0.5rem + env(safe-area-inset-bottom));
+    z-index: 950;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 0.6rem 0.6rem 1rem;
+    border-radius: 20px;
+    background: $white;
+    color: $dark-green;
+    box-shadow: 0 12px 34px rgba(0, 0, 0, 0.3);
+    transform: translateY(140%);
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+
+    &.is-visible {
+      transform: none;
+    }
+
+    .pdp-cta {
+      min-height: 46px;
+      padding: 0 1.1rem;
+      font-size: 0.92rem;
+      white-space: nowrap;
+    }
+  }
+}
+
+.pdp-sticky-info {
+  min-width: 0;
+  flex: 1;
+
+  strong {
+    display: block;
+    font-size: 0.88rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  span {
+    font-weight: 700;
+    font-size: 1.05rem;
+  }
+}
+
+// ---- Details section ----
+
+.pdp-details {
+  max-width: 1280px;
+  margin: 1.5rem auto 0;
+  padding: clamp(1.25rem, 3vw, 2.25rem);
+  border-radius: 28px;
+  background: $white;
+  color: $dark-green;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.2);
+
+  @media (max-width: 768px) {
+    margin: 0.75rem 0.5rem 0;
+    border-radius: 22px;
+    padding: 1.1rem;
+  }
+}
+
+.pdp-details-title {
+  font-size: clamp(1.4rem, 2.6vw, 1.9rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 1.25rem;
+}
+
+.pdp-details-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pdp-card {
+  padding: 1.4rem;
+  border-radius: 20px;
+  background: rgba($teal, 0.07);
+
+  h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+  }
+
+  h4 {
+    margin: 1.25rem 0 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba($dark-green, 0.6);
+  }
+
+  p {
+    line-height: 1.65;
+    color: rgba($dark-green, 0.85);
+    margin-bottom: 0.75rem;
+  }
+}
+
+.pdp-specs {
+  display: grid;
+  gap: 0;
+  margin-top: 0.5rem;
+
+  div {
+    display: grid;
+    grid-template-columns: 9rem 1fr;
+    gap: 1rem;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid rgba($dark-green, 0.1);
+  }
+
+  dt {
+    font-size: 0.85rem;
+    color: rgba($dark-green, 0.6);
+  }
+
+  dd {
+    margin: 0;
+    font-weight: 700;
+    font-size: 0.92rem;
+  }
+}
+
+.pdp-box {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+
+  li {
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    background: #fff;
+    font-size: 0.85rem;
+    border: 1px solid rgba($dark-green, 0.12);
+  }
+}
+
+.pdp-care {
+  list-style: none;
+  display: grid;
+  gap: 0.55rem;
+
+  li {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    padding: 0.7rem 0.8rem;
+    border-radius: 14px;
+    background: #fff;
+  }
+
+  strong {
+    display: block;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba($dark-green, 0.6);
+    margin-bottom: 0.1rem;
+  }
+
+  span {
+    font-size: 0.95rem;
+    line-height: 1.45;
+  }
+}
+
+.pdp-care-icon {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: $dark-green;
+  color: $white !important;
+}
+
+.pdp-light {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 1.75rem;
+  align-items: center;
+  margin: 1rem 0 0;
+  padding: 1.25rem;
+  border-radius: 20px;
+  background: rgba($teal, 0.07);
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+
+  .pdp-light-img {
+    border-radius: 16px;
+    overflow: hidden;
+    background: #fff;
+
+    img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+  }
+
+  h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    line-height: 1.65;
+    color: rgba($dark-green, 0.85);
+  }
+}
+
+@keyframes pdpPing {
+  0% {
+    box-shadow: 0 0 0 0 rgba($teal, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 0 8px rgba($teal, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pdp-stock-dot {
+    animation: none;
+  }
+
+  .pdp-sticky {
+    transition: none;
+  }
+}
+
+.pdp-page {
+  padding-bottom: 1rem;
+}
+
+.pdp-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: -0.4rem;
+  font-size: 0.92rem;
+  color: $dark-green;
+
+  strong {
+    font-weight: 700;
+  }
+
+  span:last-child {
+    color: rgba($dark-green, 0.65);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+}
+
+.pdp-stars {
+  display: inline-flex;
+  gap: 1px;
+  color: #e0a100;
+}
+
+.pdp-info .offer-countdown--card {
+  border-radius: 16px;
+  padding: 0.85rem 1rem;
+}
+
+// ---- Reviews ----
+.pdp-reviews {
+  margin-top: 1rem;
+  padding: 1.4rem;
+  border-radius: 20px;
+  background: rgba($teal, 0.07);
+}
+
+.pdp-reviews-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  margin-bottom: 1rem;
+
+  h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+  }
+}
+
+.pdp-reviews-score {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  strong {
+    font-size: 1.6rem;
+    font-weight: 700;
+  }
+
+  span:last-child {
+    color: rgba($dark-green, 0.65);
+    font-size: 0.9rem;
+  }
+}
+
+.pdp-review-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0.75rem;
+}
+
+.pdp-review {
+  padding: 1rem 1.1rem;
+  border-radius: 16px;
+  background: #fff;
+
+  p {
+    margin: 0.5rem 0 0.75rem;
+    line-height: 1.55;
+    color: rgba($dark-green, 0.85);
+  }
+
+  footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem 0.6rem;
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  time {
+    color: rgba($dark-green, 0.55);
+  }
+}
+
+.pdp-review-source {
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  background: rgba($teal, 0.14);
+  color: $deep-green;
+  font-size: 0.75rem;
+  font-weight: 700;
+}

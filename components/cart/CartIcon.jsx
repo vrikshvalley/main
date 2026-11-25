@@ -8,12 +8,22 @@ export default function CartIcon({ onCartClick }) {
   const count = useSelector(selectCount);
 
   return (
-    <div className='cart-icon' onClick={onCartClick}>
-      <div className="icon-wrapper">
-        <Image src="/cart.png" alt="Cart" width={24} height={24} />
-        {count > 0 && <span className="cart-count">{count}</span>}
-      </div>
-      <div className="cart-link">Cart</div>
-    </div>
+    <button
+      type="button"
+      className="cart-icon nav-action"
+      onClick={onCartClick}
+      aria-label={count > 0 ? `Cart, ${count} item${count === 1 ? '' : 's'}` : 'Cart'}
+    >
+      <span className="icon-wrapper">
+        <Image src="/icons/cart.webp" alt="" width={24} height={24} showLoader={false} />
+        {/* keyed by count so the badge "pops" every time an item is added */}
+        {count > 0 && (
+          <span key={count} className="cart-count" aria-hidden="true">
+            {count > 99 ? '99+' : count}
+          </span>
+        )}
+      </span>
+      <span className="cart-link nav-action-label">Cart</span>
+    </button>
   );
 }

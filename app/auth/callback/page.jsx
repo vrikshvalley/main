@@ -25,7 +25,9 @@
 import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { auth } from '@/lib/firebaseConfig';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, isSignInWithEmailLink } from 'firebase/auth';
+import { completeEmailSignIn } from '@/lib/authHandlers';
+import { safeRedirect } from '@/lib/safeRedirect';
 import { getProfile, createProfile, addAddress } from '@/lib/services/userService';
 import TheLoader from '@/components/general/TheLoader';
 import AddressCollectionModal from '@/components/profile/AddressCollectionModal';
@@ -39,7 +41,7 @@ function AuthCallbackContent() {
 
   useEffect(() => {
     // Get redirect URL from query params or localStorage
-    const redirect = searchParams.get('redirect') || localStorage.getItem('authRedirect') || '/profile';
+    const redirect = safeRedirect(searchParams.get('redirect') || localStorage.getItem('authRedirect'), '/profile');
     setRedirectUrl(redirect);
     
     // Clear the stored redirect
@@ -48,17 +50,28 @@ function AuthCallbackContent() {
 
   useEffect(() => {
     const handleAuth = async () => {
-      const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      // Magic-link emails land here: finish the sign-in first. The same address
+      // used at guest checkout resolves to the account created for that order.
+      if (isSignInWithEmailLink(auth, window.location.href)) {
+        const result = await completeEmailSignIn();
+        if (!result.success) {
+          router.push('/auth/signin');
+          return;
+        }
+      }
+
+      let unsubscribe;
+      unsubscribe = onAuthStateChanged(auth, async (user) => {
         if (user) {
           // Ensure profile exists in database
           const userId = user.uid;
           const userEmail = user.email;
           
           // Check if profile exists
-          const { data: existingProfile } = await getProfile(userId);
+          const { data: existingProfile, error: profileErr } = await getProfile(userId);
 
-          // Create profile if it doesn't exist
-          if (!existingProfile) {
+          // Create profile only when genuinely missing (never on transient read errors)
+          if (!existingProfile && profileErr?.message === 'Profile not found') {
             await createProfile({
               id: userId,
               email: userEmail,
@@ -70,7 +83,7 @@ function AuthCallbackContent() {
             // Show address collection modal for new users
             setCurrentUser(user);
             setShowAddressModal(true);
-          } else {
+          } else if (existingProfile) {
             // Check if user has address
             if (!existingProfile.address || existingProfile.address.length === 0) {
               setCurrentUser(user);
@@ -79,11 +92,13 @@ function AuthCallbackContent() {
               // User has address, redirect to intended page
               router.push(redirectUrl || '/profile');
             }
+          } else {
+            router.push(redirectUrl || '/profile');
           }
         } else {
           router.push('/auth/signin'); // redirect to login on error
         }
-        unsubscribe();
+        queueMicrotask(() => unsubscribe?.());
       });
     };
     

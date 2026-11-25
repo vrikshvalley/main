@@ -1,68 +1,69 @@
-import { NextResponse } from "next/server";
-import * as razorpayService from "@/lib/services/razorpayService";
+import { NextResponse, after } from "next/server";
+import { confirmPayment, fulfilOrder, getOrderAdmin, linkCustomer } from "@/lib/server/orders";
+import { handleRouteError, jsonError, paymentsUnavailable, rateLimited } from "@/lib/server/http";
 
 /**
  * POST /api/payment/verify
- * Verifies Razorpay payment signature and fetches payment details
+ * Body: { orderId, razorpay_order_id, razorpay_payment_id, razorpay_signature }
+ *
+ * Called by the browser after Razorpay Checkout succeeds. The order is only
+ * marked paid after (1) the HMAC signature matches and (2) Razorpay confirms
+ * the payment belongs to this order and the amount is exactly the order total.
+ * Safe to call twice; the Razorpay webhook does the same if the browser never returns.
  */
 export async function POST(request) {
+  const gate = paymentsUnavailable();
+  if (gate) return gate;
+  const limited = rateLimited(request, "verify", { limit: 20 });
+  if (limited) return limited;
+
   try {
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
-      await request.json();
-
-    if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
-      return NextResponse.json(
-        { success: false, error: { message: "Missing required fields" } },
-        { status: 400 }
-      );
+    const body = await request.json().catch(() => null);
+    const { orderId, razorpay_order_id, razorpay_payment_id, razorpay_signature } = body || {};
+    if (!orderId || !razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+      return jsonError("Missing payment details");
     }
 
-    // Verify signature
-    const { data: verificationResult, error: verifyError } =
-      await razorpayService.verifyPaymentSignature({
-        razorpay_order_id,
-        razorpay_payment_id,
-        razorpay_signature,
-      });
+    const { order } = await confirmPayment({
+      orderId: String(orderId),
+      razorpayOrderId: String(razorpay_order_id),
+      razorpayPaymentId: String(razorpay_payment_id),
+      signature: String(razorpay_signature),
+    });
 
-    if (verifyError || !verificationResult.verified) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: { message: verifyError || "Payment verification failed" },
-        },
-        { status: 400 }
-      );
-    }
+    // Quick: attach the order to the customer's account (so the screen can say how to sign in).
+    await linkCustomer(order.order_id).catch((e) => console.error("Linking customer failed:", e.message));
 
-    // Fetch payment details
-    const { data: payment, error: fetchError } =
-      await razorpayService.fetchPayment(razorpay_payment_id);
+    // Slow: book the courier shipment, send the emails and alert the team AFTER the response,
+    // so a slow courier or mail server never delays or fails a successful payment.
+    after(async () => {
+      try {
+        await fulfilOrder(order.order_id);
+      } catch (e) {
+        console.error("Fulfilment after payment failed:", e.message);
+      }
+    });
 
-    if (fetchError) {
-      return NextResponse.json(
-        { success: false, error: { message: fetchError } },
-        { status: 400 }
-      );
-    }
+    // Re-read: the webhook may have done part of the work first.
+    const latest = (await getOrderAdmin(order.order_id).catch(() => null)) || order;
 
     return NextResponse.json({
       success: true,
-      verified: true,
-      orderId: payment.orderId,
-      paymentId: payment.id,
-      amount: payment.amount,
-      currency: payment.currency,
-      status: payment.status,
-      method: payment.method,
-      email: payment.email,
-      contact: payment.contact,
+      order: {
+        orderId: order.order_id,
+        kind: order.kind,
+        status: order.status,
+        paymentStatus: order.payment_status,
+        total: order.total,
+        email: order.customer_email,
+        appointment: order.appointment || null,
+        shipment: latest.shipment_status,
+        // Lets the confirmation screen tell guests how to sign in later.
+        accountCreated: Boolean(latest.account_created),
+        accountLinked: Boolean(latest.customer_linked),
+      },
     });
   } catch (error) {
-    console.error("Verify payment API error:", error);
-    return NextResponse.json(
-      { success: false, error: { message: "Internal server error" } },
-      { status: 500 }
-    );
+    return handleRouteError(error, "verify-payment");
   }
 }

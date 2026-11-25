@@ -2,22 +2,24 @@
 
 import { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Autoplay } from 'swiper/modules';
+import { Navigation } from 'swiper/modules';
 import ProductListCard from '@/components/products/ProductListCard';
 import { getRelatedProducts } from '@/lib/productHelpers';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import '@/styles/relatedProducts.scss';
 
-export default function RelatedProducts({ category, currentProductId }) {
-  const [relatedProducts, setRelatedProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+export default function RelatedProducts({ category, currentProductId, products }) {
+  // Server-provided products render immediately; otherwise fetch client-side.
+  const [relatedProducts, setRelatedProducts] = useState(products || []);
+  const [loading, setLoading] = useState(!products);
 
   useEffect(() => {
-    if (category && currentProductId) {
+    if (!products && category && currentProductId) {
       fetchRelatedProducts();
     }
-  }, [category, currentProductId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [category, currentProductId, products]);
 
   const fetchRelatedProducts = async () => {
     setLoading(true);
@@ -42,14 +44,10 @@ export default function RelatedProducts({ category, currentProductId }) {
         <p className="section-subtitle">You might also like these</p>
 
         <Swiper
-          modules={[Navigation, Autoplay]}
+          modules={[Navigation]}
           slidesPerView={1}
           spaceBetween={12}
           navigation
-          autoplay={{
-            delay: 3500,
-            disableOnInteraction: false,
-          }}
           breakpoints={{
             320: {
               slidesPerView: 1,

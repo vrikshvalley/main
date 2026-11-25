@@ -1,9 +1,15 @@
 // API Route: Create Payment with Razorpay
 import { NextResponse } from "next/server";
+import { requireAdmin } from "@/lib/serverAuth";
+import { testRoutesDisabled } from "@/lib/server/http";
 import { createOrder, rupeesToPaise } from "@/lib/services/razorpayService";
 
 // GET endpoint for testing Razorpay configuration
 export async function GET(request) {
+  const disabled = testRoutesDisabled();
+  if (disabled) return disabled;
+  const auth = await requireAdmin(request);
+  if (auth.response) return auth.response;
   try {
     console.log("\n=== Testing Razorpay Configuration ===");
 
@@ -37,13 +43,19 @@ export async function GET(request) {
 }
 
 export async function POST(request) {
+  const disabled = testRoutesDisabled();
+  if (disabled) return disabled;
+  const auth = await requireAdmin(request);
+  if (auth.response) return auth.response;
   try {
-    const { amount, customer, items } = await request.json();
+    const body = await request.json().catch(() => null);
+    const { amount, customer, items } = body || {};
 
     // Validate required fields
-    if (!amount || !customer?.name || !customer?.phone || !customer?.email) {
+    const numAmount = Number(amount);
+    if (!Number.isFinite(numAmount) || numAmount < 1 || !customer?.name || !customer?.phone || !customer?.email) {
       return NextResponse.json(
-        { success: false, error: "Missing required fields" },
+        { success: false, error: "Missing or invalid required fields" },
         { status: 400 }
       );
     }

@@ -73,7 +73,7 @@ export default function OrderHistory({ userId }) {
             <li key={order.id} className="order-item">
               <div className="order-thumbnail">
                 <img 
-                  src={order.items?.[0]?.image || '/hero1.jpg'} 
+                  src={order.items?.[0]?.image || '/logo.webp'} 
                   alt={order.items?.[0]?.name || 'Product'} 
                   width={72} 
                   height={72} 

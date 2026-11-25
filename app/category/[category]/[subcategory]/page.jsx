@@ -237,7 +237,7 @@ export default function SubcategoryPage() {
           <aside className={`filters-sidebar ${showFilters ? 'show' : 'hide'}`}>
             <div className="filters-header">
                 <h3>
-                  <img src="/hamMenu.png" alt="Filters" width={16} height={16} />
+                  <img src="/icons/hamMenu.webp" alt="Filters" width={16} height={16} />
                   Filters
                 </h3>
                 <button 
@@ -336,7 +336,7 @@ export default function SubcategoryPage() {
                   className="mobile-filter-toggle"
                   onClick={() => setShowFilters(!showFilters)}
                 >
-                  <img src="/hamMenu.png" alt="Filters" width={18} height={18} />
+                  <img src="/icons/hamMenu.webp" alt="Filters" width={18} height={18} />
                   Filters {getActiveFiltersCount() > 0 && `(${getActiveFiltersCount()})`}
                 </button>
                 <p className="results-count">
@@ -448,7 +448,7 @@ export default function SubcategoryPage() {
                       disabled={currentPage === 1}
                       className="pagination-button"
                     >
-                      Previous
+                      ‹ Previous
                     </button>
                     
                     <div className="page-numbers">
@@ -467,6 +467,8 @@ export default function SubcategoryPage() {
                                 window.scrollTo({ top: 0, behavior: 'smooth' });
                               }}
                               className={currentPage === page ? 'active' : ''}
+                            aria-current={currentPage === page ? 'page' : undefined}
+                            aria-label={`Page ${page}`}
                             >
                               {page}
                             </button>
@@ -486,7 +488,7 @@ export default function SubcategoryPage() {
                       disabled={currentPage === totalPages}
                       className="pagination-button"
                     >
-                      Next
+                      Next ›
                     </button>
                   </div>
                 )}

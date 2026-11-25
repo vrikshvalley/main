@@ -235,3 +235,12 @@
     }
   }
 }
+
+// Tablets: six 120px circles plus gaps are wider than the viewport, so let them wrap and centre
+@media (min-width: 769px) and (max-width: 1000px) {
+  .category-circles .circle-container {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.25rem 2rem;
+  }
+}

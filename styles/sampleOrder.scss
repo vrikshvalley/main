@@ -75,13 +75,13 @@
 
       &.active {
         .step-icon {
-          border-color: #48bb78;
-          background: #48bb78;
+          border-color: var(--vv-leaf);
+          background: var(--vv-leaf);
           color: white;
         }
 
         .step-label {
-          color: #48bb78;
+          color: var(--vv-leaf);
         }
       }
 
@@ -188,7 +188,7 @@
           .price {
             font-size: 1.125rem;
             font-weight: 600;
-            color: #48bb78;
+            color: var(--vv-leaf);
           }
         }
       }
@@ -239,7 +239,7 @@
 
         &:focus {
           outline: none;
-          border-color: #48bb78;
+          border-color: var(--vv-leaf);
           box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.1);
         }
       }
@@ -261,7 +261,7 @@
     .btn-primary {
       flex: 1;
       padding: 14px 24px;
-      background: #48bb78;
+      background: var(--vv-leaf);
       color: white;
       border: none;
       border-radius: 8px;
@@ -293,8 +293,8 @@
     .btn-secondary {
       padding: 14px 24px;
       background: white;
-      color: #48bb78;
-      border: 2px solid #48bb78;
+      color: var(--vv-leaf);
+      border: 2px solid var(--vv-leaf);
       border-radius: 8px;
       font-size: 1rem;
       font-weight: 600;
@@ -312,7 +312,7 @@
       padding: 60px 20px;
 
       .spinner {
-        color: #48bb78;
+        color: var(--vv-leaf);
         margin-bottom: 24px;
         animation: spin 1s linear infinite;
       }
@@ -335,7 +335,7 @@
       padding: 40px 20px;
 
       .success-icon {
-        color: #48bb78;
+        color: var(--vv-leaf);
         margin-bottom: 20px;
       }
 
@@ -374,7 +374,7 @@
       padding: 40px 20px;
 
       .success-icon {
-        color: #48bb78;
+        color: var(--vv-leaf);
         margin-bottom: 24px;
       }
 

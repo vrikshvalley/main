@@ -3,12 +3,24 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useAuth } from '@/lib/AuthContext';
+import { authFetch } from '@/lib/authFetch';
 import Button from '@/components/general/Button';
 import orderService from '@/lib/services/orderService';
 import { toast } from 'react-toastify';
 import Image from 'next/image';
 import { Check, Package, Truck, MapPin, X, RotateCcw } from 'lucide-react';
 import '@/styles/orders.scss';
+
+const STATUS_LABELS = {
+  pending: 'Pending',
+  pending_payment: 'Awaiting payment',
+  confirmed: 'Confirmed',
+  shipped: 'Shipped',
+  delivered: 'Delivered',
+  cancelled: 'Cancelled',
+  return_requested: 'Return requested',
+  returned: 'Returned',
+};
 
 export default function OrderDetailsPage() {
   const router = useRouter();
@@ -95,37 +107,22 @@ export default function OrderDetailsPage() {
 
     setActionLoading(true);
     try {
-      // Cancel in Delhivery if waybill exists
-      if (order.waybill) {
-        try {
-          const cancelResponse = await fetch('/api/shipping/cancel', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ waybill: order.waybill }),
-          });
-
-          const cancelResult = await cancelResponse.json();
-          if (!cancelResult.success) {
-            console.error('Delhivery cancellation error:', cancelResult.error);
-            // Continue with order cancellation even if Delhivery fails
-          }
-        } catch (delhiveryError) {
-          console.error('Delhivery cancellation error:', delhiveryError);
-          // Continue with order cancellation even if Delhivery fails
-        }
-      }
-
-      // Cancel in database
-      const { error } = await orderService.cancelOrder(order.order_id, cancelReason);
-      
-      if (error) {
-        toast.error('Failed to cancel order');
+      // The server checks ownership, cancels the Delhivery shipment and
+      // refunds a paid order in full (lib/server/orders.js).
+      const res = await authFetch(`/api/orders/${encodeURIComponent(order.order_id)}/cancel`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reason: cancelReason }),
+      });
+      const result = await res.json().catch(() => ({}));
+      if (!res.ok || !result.success) {
+        toast.error(result?.error?.message || 'Failed to cancel order');
         return;
       }
 
-      toast.success('Order cancelled successfully');
+      toast.success(result.paymentStatus === 'refund_pending' ? 'Order cancelled. Your refund has been started.' : 'Order cancelled successfully');
       setShowCancelModal(false);
-      fetchOrderDetails(); // Refresh order data
+      fetchOrderDetails();
     } catch (error) {
       console.error('Error cancelling order:', error);
       toast.error('An error occurred while cancelling the order');
@@ -142,14 +139,15 @@ export default function OrderDetailsPage() {
 
     setActionLoading(true);
     try {
-      // Note: Delhivery return process may need manual intervention
-      // or specific return pickup request through their RVP API
-      
-      // Update order in database
-      const { error } = await orderService.requestOrderReturn(order.order_id, returnReason);
-      
-      if (error) {
-        toast.error('Failed to request return');
+      // The team reviews the request and books the reverse pickup.
+      const res = await authFetch(`/api/orders/${encodeURIComponent(order.order_id)}/return`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reason: returnReason }),
+      });
+      const result = await res.json().catch(() => ({}));
+      if (!res.ok || !result.success) {
+        toast.error(result?.error?.message || 'Failed to request return');
         return;
       }
 
@@ -165,7 +163,8 @@ export default function OrderDetailsPage() {
   };
 
   const formatPrice = (price) => {
-    return `₹${price.toFixed(2)}`;
+    const n = Number(price);
+    return `₹${(Number.isFinite(n) ? n : 0).toFixed(2)}`;
   };
 
   const formatDate = (dateString) => {
@@ -259,7 +258,7 @@ export default function OrderDetailsPage() {
   }
 
   const timelineSteps = getTimelineSteps();
-  const canCancel = order.status === 'pending' || order.status === 'confirmed';
+  const canCancel = ['pending', 'pending_payment', 'confirmed'].includes(order.status);
   const canReturn = order.status === 'delivered';
 
   return (
@@ -275,7 +274,7 @@ export default function OrderDetailsPage() {
             <p className="order-date">Placed on {formatDate(order.order_date)}</p>
           </div>
           <span className={`status-badge status-${order.status}`}>
-            {order.status}
+            {STATUS_LABELS[order.status] || order.status}
           </span>
         </div>
 
@@ -334,7 +333,7 @@ export default function OrderDetailsPage() {
               {order.items?.map((item, index) => (
                 <div key={index} className="item-row">
                   <Image
-                    src={item.image || '/placeholder-plant.jpg'}
+                    src={item.image || '/logo.webp'}
                     alt={item.name}
                     width={80}
                     height={80}
@@ -355,7 +354,7 @@ export default function OrderDetailsPage() {
             <div className="order-summary">
               <div className="summary-row">
                 <span>Subtotal:</span>
-                <span>{formatPrice(order.subtotal)}</span>
+                <span>{formatPrice((Number(order.subtotal) || 0) + (Number(order.discount) || 0))}</span>
               </div>
               <div className="summary-row">
                 <span>Shipping:</span>

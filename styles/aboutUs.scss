@@ -1,185 +1,225 @@
-@use "sass:color";
 @use 'variables' as *;
 
-.about-section {
-  padding: 0;
-  max-width: 100%;
-  margin: 0;
-  border-radius: 0;
-  background-color: $white;
-  width: 100%;
+// ============================================
+// ABOUT US: organic shapes, story + floating Instagram post
+// (layout modelled on a social-post mockup: dark green, cream curve, leaves)
+// ============================================
+
+.vv-about {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden; // contains the decorative shapes only
+  margin: 2rem auto;
+  max-width: 1320px;
+  border-radius: 32px;
+  background: $dark-green;
+  color: $white;
 
   @media (max-width: 768px) {
-    padding: 0;
+    margin: 1rem 0.5rem;
+    border-radius: 24px;
+  }
+}
+
+.vv-about__shapes {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.vv-about__blob {
+  position: absolute;
+  border-radius: 46% 54% 60% 40% / 52% 40% 60% 48%;
+
+  &--a {
+    width: 520px;
+    height: 520px;
+    left: -160px;
+    top: -180px;
+    background: radial-gradient(circle at 60% 60%, rgba($teal, 0.35), rgba($deep-green, 0.2) 60%, transparent 70%);
   }
 
-  h2 {
-    font-size: 2rem;
-    margin-bottom: 1.8rem;
-    margin-top: 0;
-    padding: 3rem 1.5rem 0;
-    font-weight: 600;
+  &--b {
+    width: 420px;
+    height: 420px;
+    right: 8%;
+    bottom: -200px;
+    background: rgba($deep-green, 0.85);
+  }
+}
+
+// the cream curve behind the post, like the reference
+.vv-about__panel {
+  position: absolute;
+  right: -10%;
+  top: 12%;
+  width: 55%;
+  height: 76%;
+  border-radius: 48% 0 0 52% / 60% 0 0 40%;
+  background: linear-gradient(160deg, #e9e2d3, #d9cfba);
+  opacity: 0.95;
+
+  @media (max-width: 900px) {
+    right: -30%;
+    top: auto;
+    bottom: -4%;
+    width: 120%;
+    height: 48%;
+    border-radius: 50% 50% 0 0 / 30% 30% 0 0;
+  }
+}
+
+.vv-about__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: center;
+  padding: clamp(2rem, 5vw, 4rem);
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+    padding: 2rem 1.25rem 2.5rem;
+  }
+}
+
+// ---- Story ----
+
+.vv-about__story {
+  .cursive-subtitle {
+    color: #35e498 !important;
+  }
+
+  p {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: rgba($white, 0.82);
+    margin-bottom: 1rem;
+    max-width: 560px;
+  }
+}
+
+.vv-about__title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: $white;
+  margin: 0.25rem 0 1.25rem;
+
+  .word {
+    font-family: inherit;
+  }
+}
+
+.vv-about__lead {
+  font-size: 1.22rem !important;
+  color: $white !important;
+}
+
+.vv-about__values {
+  list-style: none;
+  display: grid;
+  gap: 0.6rem;
+  margin: 1.5rem 0 1.75rem;
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+    font-size: 0.98rem;
+    color: rgba($white, 0.85);
+  }
+
+  svg {
+    flex: 0 0 auto;
+    color: #35e498;
+    margin-top: 0.15rem;
+  }
+
+  strong {
+    color: $white;
+  }
+}
+
+.vv-about__follow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.4rem;
+  border-radius: 999px;
+  background: $white;
+  color: $dark-green;
+  font-weight: 700;
+  transition: transform 0.25s ease, background 0.25s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    background: $yellow;
     color: $dark-green;
-    text-shadow: none;
-    text-align: left;
-    @media (max-width: 400px) {
-      font-size: 1.5rem;
-      text-align: center;
-      padding: 2rem 1rem 0;
-    }
   }
 
-  .about-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2.5rem;
-    align-items: stretch;
-    align-content: start;
-    padding: 0 1.5rem 3rem;
-    max-width: 1400px;
-    margin: 0 auto;
+  &:focus-visible {
+    outline: 3px solid $yellow;
+    outline-offset: 3px;
+  }
+}
 
-    // ensure direct children start at same top
-    & > * {
-      align-self: stretch;
-    }
+// ---- Floating Instagram post ----
 
-    @media (max-width: 968px) {
-      grid-template-columns: 1fr;
-      gap: 2rem;
-      padding: 0 1rem 2rem;
-    }
+.vv-about__post {
+  position: relative;
+  justify-self: center;
+  width: 100%;
+  max-width: 400px;
+  padding: 1.5rem 0;
+}
+
+.vv-about__card {
+  position: relative;
+  z-index: 2;
+  padding: 0.6rem;
+  border-radius: 26px;
+  background: #fff;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35);
+  transform: rotate(-2.5deg);
+
+  @media (max-width: 900px) {
+    transform: none;
+  }
+}
+
+.ig-embed {
+  border-radius: 20px;
+  overflow: hidden;
+  min-height: 520px; // reserve space so the card never collapses while Instagram loads
+
+  // Instagram's own embed styles: let it fill the card
+  .instagram-media,
+  iframe {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    border: 0 !important;
+    border-radius: 18px !important;
+    box-shadow: none !important;
   }
 
-  .about-content {
+  // Shown before the embed script loads (or if it is blocked)
+  blockquote.instagram-media:not(iframe) {
     display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    text-align: left;
-    padding: 0;
+    align-items: center;
+    justify-content: center;
+    min-height: 420px;
+    padding: 1.5rem;
+    background: linear-gradient(160deg, rgba($teal, 0.12), rgba($dark-green, 0.06));
 
-    @media (max-width: 968px) {
-      text-align: center;
-      padding: 0;
-    }
-
-    p {
-      font-size: 1.15rem;
-      line-height: 1.8;
+    a {
+      font-weight: 700;
       color: $dark-green;
-      text-shadow: none;
-      margin: 0;
-      font-weight: 600;
-
-      // Make the very first paragraph stand out (larger + bolder)
-      &:first-of-type {
-        font-size: 1.4rem;
-        font-weight: 600;
-        line-height: 1.9;
-        color: $dark-green;
-        font-family: 'Helvetica', Arial, sans-serif;
-      }
-
-      @media (max-width: 768px) {
-        font-size: 1rem;
-        padding: 0 1rem;
-        text-align: left;
-        &:first-of-type {
-          font-size: 1.15rem;
-        }
-      }
-
-      @media (max-width: 400px) {
-        font-size: 0.95rem;
-        
-
-        &:first-of-type {
-          font-size: 1.05rem;
-        }
-      }
-    }
-  }
-
-  .about-image-container {
-    width: 100%;
-    display: flex;
-    justify-content: flex-start; // keep image aligned with content column
-    max-height: 500px;
-  }
-
-  .image-wrapper {
-    position: relative;
-    width: 100%;
-    height: auto;
-    aspect-ratio: 1;
-    max-width: none;
-    border-radius: 0;
-    overflow: hidden;
-    box-shadow: none;
-    border: none;
-
-    .about-image {
-      width: 100%;
-      height: 100%;
-      display: block;
-      object-fit: cover;
-    }
-
-    .image-overlay {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.85) 100%);
-      padding: 2.5rem 1.5rem 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      .about-quote {
-        font-size: 1.05rem;
-        line-height: 1.6;
-        color: $white;
-        font-family: 'Helvetica', Arial, sans-serif;
-        font-style: italic;
-        font-weight: 500;
-        text-align: center;
-        margin: 0;
-        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-
-        @media (max-width: 768px) {
-          font-size: 1rem;
-        }
-
-        @media (max-width: 400px) {
-          font-size: 0.95rem;
-        }
-      }
-    }
-  }
-
-  @media (max-width: 768px) {
-    margin: 3rem auto 2rem;
-
-    h2 {
-      font-size: 1.6rem;
-    }
-
-    .image-wrapper {
-      max-width: 100%;
-      aspect-ratio: 16/9;
-
-      .image-overlay {
-        padding: 1.25rem 1rem 1rem;
-      }
-    }
-  }
-
-  @media (max-width: 400px) {
-    .image-wrapper {
-      .image-overlay {
-        padding: 1.5rem 1rem 1rem;
-      }
+      text-decoration: underline;
+      text-underline-offset: 3px;
     }
   }
 }

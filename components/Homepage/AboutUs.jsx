@@ -1,107 +1,67 @@
-'use client';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef } from 'react';
-import Image from '@/components/general/ImgWithLoader';
+import { Instagram, Sprout, HandHeart, Recycle } from 'lucide-react';
 import AnimatedText from '@/components/general/AnimatedText';
+import InstagramEmbed from '@/components/Homepage/InstagramEmbed';
 import '@/styles/aboutUs.scss';
 
-const sectionVariants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { 
-    opacity: 1, 
-    y: 0,
-    transition: {
-      duration: 0.7,
-      ease: [0.22, 1, 0.36, 1]
-    }
-  }
-};
+const INSTAGRAM_POST = 'https://www.instagram.com/p/DRE4NyXk31s/';
+const INSTAGRAM_PROFILE = 'https://www.instagram.com/vrikshvalley';
 
-const imageVariants = {
-  hidden: { opacity: 0, scale: 0.95 },
-  visible: { 
-    opacity: 1, 
-    scale: 1,
-    transition: {
-      duration: 0.8,
-      delay: 0.2,
-      ease: [0.22, 1, 0.36, 1]
-    }
-  }
-};
-
-const textVariants = {
-  hidden: { opacity: 0, x: -30 },
-  visible: { 
-    opacity: 1, 
-    x: 0,
-    transition: {
-      duration: 0.7,
-      delay: 0.3,
-      ease: [0.22, 1, 0.36, 1]
-    }
-  }
-};
-
+/**
+ * About Us: story on the left, the latest Instagram post floating in a card on
+ * the right over organic shapes. Server component; motion is the CSS
+ * scroll-linked fade only. No fixed heights, so nothing can overflow.
+ */
 export default function About() {
-  const sectionRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start end', 'end start']
-  });
-  const imageY = useTransform(scrollYProgress, [0, 1], [20, -20]);
-
   return (
-    <motion.section 
-      ref={sectionRef}
-      className="about-section"
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: false, amount: 0.3, margin: "0px 0px -50px 0px" }}
-      variants={sectionVariants}
-    >
-      <p className="cursive-subtitle">Our Roots</p>
-      <AnimatedText
-        as="h2"
-        text="About Us"
-        className="section-title"
-        delay={0.1}
-        stagger={0.05}
-      />
-      <div className="about-grid">
-        <motion.div className="about-content" variants={textVariants}>
-          <AnimatedText
-            as="p"
-            text="Welcome to Vriksh Valley, where nature meets nurture. We believe that every home, balcony and workspace deserves a touch of green. It is not just for beauty—it is also for balance and well-being, along with harmony. Our journey began with a simple thought: What if plants were not just decor? What if they were daily companions that inspire mindfulness and joy?"
-            delay={0.15}
-            stagger={0.02}
-          />
-          <AnimatedText
-            as="p"
-            text="We are more than an online plant destination at Vriksh Valley. We are a community that celebrates growth in every form. From lush indoor plants to air purifiers to flowering varieties and garden essentials, we bring the best of nature to your doorstep. Each plant is handpicked and nurtured with care—delivered with the same love we would give our own."
-            delay={0.25}
-            stagger={0.02}
-          />
-        </motion.div>
-        
-        <motion.div className="about-image-container" variants={imageVariants} style={{ y: imageY }}>
-          <div className="image-wrapper image-square">
-            <Image
-              src="/aboutUsHome.jpg"
-              alt="Vriksh Valley - Join our family"
-              width={380}
-              height={380}
-              className="about-image"
-              priority={false}
-            />
-            <div className="image-overlay">
-              <p className="about-quote">
-                Join the Vriksh Valley family. Let us grow happiness, one leaf at a time.
-              </p>
-            </div>
-          </div>
-        </motion.div>
+    <section className="vv-about">
+      <div className="vv-about__shapes" aria-hidden="true">
+        <span className="vv-about__blob vv-about__blob--a" />
+        <span className="vv-about__blob vv-about__blob--b" />
+        <span className="vv-about__panel" />
       </div>
-    </motion.section>
+
+      <div className="vv-about__inner">
+        <div className="vv-about__story scroll-fade">
+          <p className="cursive-subtitle left">Our Roots</p>
+          <AnimatedText as="h2" text="Grown with care, rooted in nature" className="vv-about__title" delay={0.1} stagger={0.05} />
+
+          <p className="vv-about__lead">
+            Vriksh Valley began with a simple thought: what if plants were not just decor, but daily
+            companions that bring calm, balance and joy into every home, balcony and workspace?
+          </p>
+          <p>
+            Today we are a community that celebrates growth in every form. From lush indoor plants and
+            air purifiers to flowering varieties and garden essentials, every plant is handpicked, nurtured
+            in our nursery and delivered with the same love we would give our own.
+          </p>
+
+          <ul className="vv-about__values">
+            <li>
+              <Sprout size={20} aria-hidden="true" />
+              <span><strong>Nursery-grown</strong> and checked before it leaves us</span>
+            </li>
+            <li>
+              <Recycle size={20} aria-hidden="true" />
+              <span><strong>Eco-first</strong> packaging and sustainable planters</span>
+            </li>
+            <li>
+              <HandHeart size={20} aria-hidden="true" />
+              <span><strong>Real help</strong> long after your plant arrives</span>
+            </li>
+          </ul>
+
+          <a className="vv-about__follow" href={INSTAGRAM_PROFILE} target="_blank" rel="noopener noreferrer">
+            <Instagram size={18} aria-hidden="true" />
+            Follow @vrikshvalley
+          </a>
+        </div>
+
+        <div className="vv-about__post scroll-fade">
+          <div className="vv-about__card">
+            <InstagramEmbed url={INSTAGRAM_POST} caption="See this post on Instagram" />
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }

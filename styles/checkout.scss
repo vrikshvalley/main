@@ -1,592 +1,330 @@
-@use "variables" as *;
-@use "sass:color";
+@use 'variables' as *;
+@use 'stone' as *;
 
-.checkout-page {
-  min-height: 100vh;
-  background: $white;
-  padding: 2rem 1rem;
+// ============================================
+// /checkout (ck-*). Builds on the cart page layout (vv-cartpage, vv-summary
+// and vv-btn from cart.scss).
+// ============================================
+
+$cream: #f7f3ea;
+$paper: #fffdf8;
+$mint: #35e498;
+
+.ck .vv-cartpage__head h1 svg {
+  color: $mint;
 }
 
-.checkout-container {
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-// Stepper
-.checkout-stepper {
+.ck-steps {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 3rem;
-  position: relative;
+  gap: 0.5rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: ck;
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 20px;
-    left: 10%;
-    right: 10%;
-    height: 2px;
-    background: rgba($teal, 0.1);
-    z-index: 0;
-  }
-
-  .step {
-    display: flex;
-    flex-direction: column;
+  li {
+    display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    z-index: 1;
-    background: $white;
-    padding: 0 1rem;
+    gap: 0.45rem;
+    padding: 0.35rem 0.85rem 0.35rem 0.4rem;
+    border-radius: 999px;
+    background: rgba($white, 0.08);
+    border: 1px solid rgba($white, 0.16);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: rgba($white, 0.7);
+    counter-increment: ck;
 
-    .step-number {
-      width: 40px;
-      height: 40px;
+    &::before {
+      content: counter(ck);
+      display: grid;
+      place-items: center;
+      width: 22px;
+      height: 22px;
       border-radius: 50%;
-      border: 2px solid rgba($teal, 0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 600;
-      color: rgba($dark-green, 0.5);
-      background: $white;
-      transition: all 0.3s ease;
+      background: rgba($white, 0.15);
+      font-size: 0.75rem;
     }
 
-    span {
-      font-size: 0.875rem;
-      color: rgba($dark-green, 0.5);
-      transition: all 0.3s ease;
-    }
+    &.is-current {
+      background: $cream;
+      color: $dark-green;
 
-    &.active {
-      .step-number {
-        border-color: $teal;
-        background: $teal;
-        color: white;
-      }
-
-      span {
-        color: $teal;
-        font-weight: 600;
-      }
-    }
-
-    &.completed {
-      .step-number {
-        border-color: $dark-green;
+      &::before {
         background: $dark-green;
-        color: white;
-      }
-
-      span {
-        color: $dark-green;
+        color: $white;
       }
     }
   }
 }
 
-// Checkout Step
-.checkout-step {
-  background: white;
-  border-radius: 16px;
-  padding: 2rem;
-  box-shadow: 0 4px 12px rgba(7, 59, 34, 0.08);
+.ck-card {
+  display: grid;
+  gap: 1rem;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border-radius: 28px;
+  background: $cream;
+  color: $dark-green;
+  box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.55);
 
   h2 {
-    color: $dark-green;
-    margin-bottom: 1.5rem;
-    font-size: 1.75rem;
-  }
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 700;
 
-  h3 {
-    color: $dark-green;
-    margin-bottom: 1rem;
-    font-size: 1.25rem;
+    svg {
+      color: #1a8f55;
+    }
   }
 }
 
-// Address Selection
-.address-list {
-  display: flex;
-  flex-direction: column;
+.ck-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 1rem;
-  margin-bottom: 1.5rem;
-}
 
-.address-card {
-  display: flex;
-  gap: 1rem;
-  padding: 1.25rem;
-  border: 2px solid rgba($teal, 0.2);
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &:hover {
-    border-color: $teal;
-    background: rgba(28, 158, 91, 0.05);
-  }
-
-  &.selected {
-    border-color: $teal;
-    background: rgba(28, 158, 91, 0.1);
-
-    input[type='radio'] {
-      accent-color: $teal;
-    }
-  }
-
-  input[type='radio'] {
-    margin-top: 0.25rem;
-    cursor: pointer;
-  }
-
-  .address-details {
-    flex: 1;
-
-    .address-line {
-      margin: 0.25rem 0;
-      color: $dark-green;
-      font-weight: 500;
-    }
-
-    .address-meta {
-      margin: 0.25rem 0;
-      color: rgba($dark-green, 0.5);
-      font-size: 0.875rem;
-    }
+  @media (max-width: 560px) {
+    grid-template-columns: 1fr;
   }
 }
 
-.no-address {
-  text-align: center;
-  padding: 2rem;
-  color: rgba($dark-green, 0.5);
-}
+.ck-field {
+  display: grid;
+  gap: 0.35rem;
+  align-content: start;
 
-.btn-add-address {
-  width: 100%;
-  padding: 1rem;
-  border: 2px dashed $teal;
-  border-radius: 12px;
-  background: transparent;
-  color: $teal;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &:hover {
-    background: rgba(28, 158, 91, 0.05);
-  }
-}
-
-// Address Form
-.address-form {
-  margin-top: 1.5rem;
-  padding: 1.5rem;
-  border: 2px solid rgba($teal, 0.2);
-  border-radius: 12px;
-  background: rgba(249, 245, 241, 0.5);
-
-  h3 {
-    margin-bottom: 1rem;
+  > span {
+    font-size: 0.85rem;
+    font-weight: 700;
   }
 
-  input {
+  input,
+  select {
     width: 100%;
-    padding: 0.75rem;
-    margin-bottom: 1rem;
-    border: 1px solid rgba($teal, 0.2);
-    border-radius: 8px;
-    font-size: 0.9375rem;
+    min-height: 50px;
+    padding: 0.75rem 1rem;
+    border: 1.5px solid rgba($dark-green, 0.14);
+    border-radius: 14px;
+    background: $paper;
+    color: $dark-green;
+    font: inherit;
+    font-size: 1rem;
+    box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.04);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
     &:focus {
       outline: none;
       border-color: $teal;
+      box-shadow: 0 0 0 3px rgba($mint, 0.3);
     }
   }
 
-  .form-buttons {
-    display: flex;
-    gap: 1rem;
+  small {
+    font-size: 0.8rem;
+    color: #c0392b;
+  }
 
-    button {
-      flex: 1;
-      padding: 0.75rem;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
+  &.has-error input,
+  &.has-error select {
+    border-color: #c0392b;
+  }
+}
+
+.ck-pin {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: rgba($dark-green, 0.65) !important;
+
+  &.is-ok {
+    color: #1a8f55 !important;
+    font-weight: 600;
+  }
+}
+
+.ck-spin {
+  animation: ckSpin 0.9s linear infinite;
+}
+
+@keyframes ckSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.ck-saved {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.6rem;
+
+  button {
+    display: grid;
+    gap: 0.15rem;
+    padding: 0.8rem 1rem;
+    border-radius: 16px;
+    text-align: left;
+    cursor: pointer;
+    @include pebble;
+
+    span {
+      font-size: 0.82rem;
+      color: rgba($dark-green, 0.7);
     }
 
-    .btn-cancel {
-      background: white;
-      border: 1px solid rgba($dark-green, 0.5);
-      color: rgba($dark-green, 0.5);
-
-      &:hover {
-        background: rgba($teal, 0.1);
-      }
-    }
-
-    .btn-submit {
-      background: $teal;
-      border: none;
-      color: white;
-
-      &:hover {
-        background: color.adjust($teal, $lightness: -5%);
-      }
+    &.is-active {
+      box-shadow: 0 0 0 2px #1a8f55, 0 6px 14px -8px rgba(0, 0, 0, 0.4);
     }
   }
 }
 
-// Payment Step
-.order-summary {
-  margin-bottom: 2rem;
-  padding: 1.5rem;
-  background: rgba(249, 245, 241, 0.5);
-  border-radius: 12px;
+.ck-check {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.92rem;
 
-  h3 {
-    margin-bottom: 1rem;
+  input {
+    width: 18px;
+    height: 18px;
+    accent-color: #1a8f55;
   }
+}
 
-  .summary-items {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
+.ck-hint {
+  margin: 0;
+  font-size: 0.88rem;
+  color: rgba($dark-green, 0.7);
+
+  a {
+    font-weight: 700;
+    color: $teal;
+    text-decoration: underline;
   }
+}
 
-  .summary-item {
+.ck-lines {
+  display: grid;
+  gap: 0.45rem;
+  max-height: 220px;
+  margin: 0;
+  padding: 0 0 0.75rem;
+  overflow-y: auto;
+  list-style: none;
+  border-bottom: 1px dashed rgba($dark-green, 0.18);
+
+  li {
     display: flex;
-    gap: 1rem;
-    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    font-size: 0.9rem;
 
-    img {
-      width: 60px;
-      height: 60px;
-      object-fit: cover;
-      border-radius: 8px;
+    small {
+      color: rgba($dark-green, 0.6);
     }
 
-    .item-details {
-      flex: 1;
-
-      .item-name {
-        font-weight: 600;
-        color: $dark-green;
-        margin: 0;
-      }
-
-      .item-qty {
-        font-size: 0.875rem;
-        color: rgba($dark-green, 0.5);
-        margin: 0.25rem 0 0 0;
-      }
-    }
-
-    .item-price {
+    span:last-child {
       font-weight: 600;
-      color: $dark-green;
-    }
-  }
-
-  .summary-totals {
-    border-top: 2px solid rgba($teal, 0.2);
-    padding-top: 1rem;
-
-    .total-row {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 0.75rem;
-      color: rgba($dark-green, 0.5);
-
-      &.grand-total {
-        font-size: 1.25rem;
-        font-weight: 700;
-        color: $dark-green;
-        padding-top: 0.75rem;
-        border-top: 2px solid $dark-green;
-        margin-top: 0.5rem;
-      }
+      white-space: nowrap;
     }
   }
 }
 
-.delivery-address {
-  padding: 1.5rem;
-  background: rgba(249, 245, 241, 0.5);
-  border-radius: 12px;
-  margin-bottom: 2rem;
+.ck-secure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  margin: 0;
+  font-size: 0.8rem;
+  color: rgba($dark-green, 0.65);
+}
 
-  h3 {
-    margin-bottom: 0.75rem;
+.ck .vv-summary .vv-btn:disabled {
+  opacity: 0.75;
+  cursor: progress;
+}
+
+// ---- Confirmation / coming soon ----
+
+.ck-done {
+  display: grid;
+  justify-items: center;
+  gap: 0.75rem;
+  max-width: 640px;
+  margin: clamp(1rem, 5vw, 3rem) auto;
+  padding: clamp(2rem, 6vw, 3.5rem) clamp(1.25rem, 4vw, 3rem);
+  border-radius: 32px;
+  background:
+    radial-gradient(100% 60% at 50% 0%, rgba($mint, 0.22), transparent 60%),
+    $cream;
+  color: $dark-green;
+  text-align: center;
+  box-shadow: 0 30px 70px -30px rgba(0, 0, 0, 0.6);
+
+  h1 {
+    margin: 0;
+    font-size: clamp(1.6rem, 4vw, 2.3rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: $dark-green;
   }
 
   p {
-    margin: 0.25rem 0;
-    color: $dark-green;
-  }
-
-  .btn-change {
-    margin-top: 1rem;
-    padding: 0.5rem 1rem;
-    background: transparent;
-    border: 1px solid $teal;
-    border-radius: 8px;
-    color: $teal;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.2s ease;
-
-    &:hover {
-      background: rgba(28, 158, 91, 0.05);
-    }
+    max-width: 480px;
+    margin: 0;
+    color: rgba($dark-green, 0.78);
   }
 }
 
-// Inline Account Creation Section
-.inline-account-section {
-  margin-top: 2rem;
-  padding: 1.5rem;
-  border-radius: 12px;
-  background: linear-gradient(135deg, rgba(28, 158, 91, 0.03) 0%, rgba(249, 245, 241, 0.5) 100%);
-  border: 2px solid rgba($teal, 0.15);
+.ck-done__icon {
+  display: grid;
+  place-items: center;
+  width: 84px;
+  height: 84px;
+  border-radius: 28px;
+  @include stone(#1a8f55);
+  animation: ckPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 
-  h3 {
-    color: $dark-green;
-    font-size: 1.125rem;
-    margin-bottom: 1rem;
-    font-weight: 600;
-  }
-
-  .create-account-form {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-
-    input {
-      width: 100%;
-      padding: 0.875rem;
-      border: 2px solid rgba($teal, 0.2);
-      border-radius: 10px;
-      font-size: 0.9375rem;
-      background: white;
-      transition: all 0.2s ease;
-
-      &:focus {
-        outline: none;
-        border-color: $teal;
-        box-shadow: 0 0 0 3px rgba(28, 158, 91, 0.1);
-      }
-
-      &::placeholder {
-        color: rgba($dark-green, 0.4);
-      }
-
-      &[type='email'],
-      &[type='tel'] {
-        // Full width on single row
-      }
-
-      &[type='password'] {
-        // Two columns
-      }
-    }
-
-    @media (max-width: 640px) {
-      grid-template-columns: 1fr;
-    }
+  &--soft {
+    @include pebble;
   }
 }
 
-// Step Actions
-.step-actions {
-  display: flex;
-  gap: 1rem;
-  justify-content: flex-end;
-  margin-top: 2rem;
-
-  button {
-    padding: 0.875rem 2rem;
-    border-radius: 12px;
-    font-weight: 600;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-  }
-
-  .btn-back {
-    background: white;
-    border: 1px solid rgba($dark-green, 0.5);
-    color: rgba($dark-green, 0.5);
-
-    &:hover:not(:disabled) {
-      background: rgba($teal, 0.1);
-    }
-  }
-
-  .btn-primary {
-    background: $teal;
-    border: none;
-    color: white;
-
-    &:hover:not(:disabled) {
-      background: color.adjust($teal, $lightness: -5%);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(28, 158, 91, 0.3);
-    }
-  }
-
-  .btn-ghost {
-    background: transparent;
-    border: 2px solid $teal;
-    color: $teal;
-
-    &:hover:not(:disabled) {
-      background: rgba(28, 158, 91, 0.08);
-      border-color: color.adjust($teal, $lightness: -5%);
-    }
+@keyframes ckPop {
+  from {
+    transform: scale(0.5) rotate(-10deg);
+    opacity: 0;
   }
 }
 
-// Confirmation Step
-.confirmation {
-  text-align: center;
-  padding: 3rem 2rem;
+.ck-done__next {
+  display: grid;
+  gap: 0.45rem;
+  margin: 0.5rem 0;
+  padding: 1rem 1.25rem;
+  border-radius: 18px;
+  background: rgba($teal, 0.08);
+  list-style: none;
+  text-align: left;
 
-  .success-icon {
-    width: 80px;
-    height: 80px;
-    margin: 0 auto 1.5rem;
-    border-radius: 50%;
-    background: linear-gradient(135deg, $teal 0%, $dark-green 100%);
-    color: white;
+  li {
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-size: 3rem;
+    gap: 0.55rem;
+    font-size: 0.92rem;
   }
 
-  h2 {
-    color: $dark-green;
-    margin-bottom: 0.5rem;
-  }
-
-  .order-id {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: $teal;
-    margin-bottom: 1rem;
-  }
-
-  .confirmation-message {
-    color: rgba($dark-green, 0.5);
-    margin-bottom: 2rem;
-    line-height: 1.6;
-  }
-
-  .order-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    max-width: 400px;
-    margin: 0 auto;
-
-    button {
-      padding: 1rem 2rem;
-      border-radius: 12px;
-      font-weight: 600;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .btn-primary {
-      background: $teal;
-      border: none;
-      color: white;
-
-      &:hover {
-        background: color.adjust($teal, $lightness: -5%);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(28, 158, 91, 0.3);
-      }
-    }
-
-    .btn-secondary {
-      background: white;
-      border: 2px solid $teal;
-      color: $teal;
-
-      &:hover {
-        background: rgba(28, 158, 91, 0.05);
-      }
-    }
+  svg {
+    color: #1a8f55;
   }
 }
 
-// Responsive
-@media (max-width: 768px) {
-  .checkout-page {
-    padding: 1rem 0.5rem;
-  }
-
-  .checkout-stepper {
-    margin-bottom: 2rem;
-
-    .step {
-      padding: 0 0.5rem;
-
-      .step-number {
-        width: 32px;
-        height: 32px;
-        font-size: 0.875rem;
-      }
-
-      span {
-        font-size: 0.75rem;
-      }
-    }
-  }
-
-  .checkout-step {
-    padding: 1.5rem 1rem;
-
-    h2 {
-      font-size: 1.5rem;
-    }
-  }
-
-  .step-actions {
-    flex-direction: column;
-
-    button {
-      width: 100%;
-    }
-  }
-
-  .inline-account-section {
-    .create-account-form {
-      grid-template-columns: 1fr;
-    }
-
-    .step-actions {
-      flex-direction: column;
-    }
-  }
-
-  .address-form .form-buttons {
-    flex-direction: column;
+@media (prefers-reduced-motion: reduce) {
+  .ck-spin,
+  .ck-done__icon {
+    animation: none;
   }
 }

@@ -25,7 +25,9 @@
   .topbar-logo {
     display: flex;
     align-items: center;
+    gap: 0.85rem;
     flex-shrink: 0;
+    min-width: 0;
   }
 
   .impact-text {
@@ -78,7 +80,7 @@
   }
 
   .topbar-links {
-    font-family: 'Alumni Sans', sans-serif;
+    font-family: var(--font-heading), sans-serif;
     display: flex;
     gap: 0.75rem;
     align-items: center;
@@ -197,5 +199,24 @@
 @media (max-width: 768px) {
   body.mobile-menu-open .topbar {
     display: none;
+  }
+}
+
+// Phones: the top bar carries only the live store status; its links move
+// into the hamburger menu (Blog, FAQs, Corporate orders).
+@media (max-width: 600px) {
+  .topbar .topbar-links {
+    display: none;
+  }
+
+  .topbar .topbar-container {
+    justify-content: flex-start;
+  }
+}
+
+// Tablets: the ticker and the full link list don't both fit; keep the essentials
+@media (max-width: 1100px) {
+  .topbar .topbar-links .hide-on-mobile {
+    display: none !important;
   }
 }

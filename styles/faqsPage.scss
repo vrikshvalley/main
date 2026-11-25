@@ -1,0 +1,389 @@
+@use 'variables' as *;
+@use 'stone' as *;
+
+// ============================================
+// /faqs (fq-*): typographic hero, searchable grouped accordion, help rail.
+// ============================================
+
+$cream: #f7f3ea;
+$mint: #35e498;
+
+.fq {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 0 1rem 5rem;
+  color: $white;
+}
+
+.fq-hero {
+  position: relative;
+  max-width: 820px;
+  margin: 0 auto;
+  padding: clamp(3rem, 8vw, 5.5rem) 0 clamp(2rem, 5vw, 3rem);
+  text-align: center;
+
+  h1 {
+    margin: 0.5rem 0 1rem;
+    font-size: clamp(2.4rem, 6.5vw, 4.6rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: $white;
+
+    span {
+      color: $mint;
+    }
+  }
+
+  p {
+    max-width: 520px;
+    margin: 0 auto;
+    font-size: 1.08rem;
+    line-height: 1.6;
+    color: rgba($white, 0.8);
+  }
+}
+
+.fq-hero__glow {
+  position: absolute;
+  inset: -30% -40%;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse 40% 40% at 50% 45%, rgba($mint, 0.2), transparent 70%),
+    radial-gradient(ellipse 25% 25% at 10% 20%, rgba($yellow, 0.14), transparent 70%);
+  pointer-events: none;
+}
+
+.fq-eyebrow {
+  margin: 0;
+  font-size: 0.78rem !important;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: $mint !important;
+}
+
+.fq-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 2rem;
+  max-width: 1140px;
+  margin: 0 auto;
+  align-items: start;
+
+  @media (max-width: 960px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ---- Search + topic chips ----
+
+.fq-tools {
+  display: grid;
+  gap: 0.85rem;
+  margin-bottom: 1.5rem;
+}
+
+.fq-search {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0 1.1rem;
+  border-radius: 999px;
+  background: $cream;
+  color: $dark-green;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.08), 0 14px 30px -18px rgba(0, 0, 0, 0.5);
+
+  input {
+    flex: 1;
+    min-width: 0;
+    height: 54px;
+    border: 0;
+    background: transparent;
+    color: $dark-green;
+    font: inherit;
+    font-size: 1rem;
+    outline: none;
+
+    &::placeholder {
+      color: rgba($dark-green, 0.5);
+    }
+  }
+
+  &:focus-within {
+    box-shadow: 0 0 0 3px rgba($yellow, 0.8), 0 14px 30px -18px rgba(0, 0, 0, 0.5);
+  }
+}
+
+.fq-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+
+  button {
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    border: 1px solid rgba($white, 0.22);
+    background: rgba($white, 0.06);
+    color: $white;
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+
+    &:hover {
+      background: rgba($white, 0.14);
+    }
+
+    &.is-active {
+      @include stone($yellow, $dark-green);
+      border: 0;
+      text-shadow: none;
+    }
+
+    &:focus-visible {
+      outline: 3px solid $yellow;
+      outline-offset: 2px;
+    }
+  }
+}
+
+// ---- Groups + accordion ----
+
+.fq-group {
+  margin-bottom: 2rem;
+
+  h2 {
+    margin: 0 0 0.75rem;
+    padding-left: 0.25rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba($white, 0.7);
+  }
+}
+
+.fq-item {
+  margin-bottom: 0.6rem;
+  border-radius: 20px;
+  background: $cream;
+  color: $dark-green;
+  box-shadow: 0 1px 0 rgba($white, 0.8) inset, 0 12px 28px -20px rgba(0, 0, 0, 0.55);
+  transition: box-shadow 0.25s ease;
+
+  summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.1rem 1.25rem 1.1rem 1.4rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.35;
+    list-style: none;
+    cursor: pointer;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    &:focus-visible {
+      outline: 3px solid $yellow;
+      outline-offset: 2px;
+      border-radius: 20px;
+    }
+  }
+
+  &[open] {
+    box-shadow: 0 1px 0 rgba($white, 0.8) inset, 0 20px 40px -22px rgba(0, 0, 0, 0.6), 0 0 0 2px rgba($mint, 0.55);
+
+    .fq-icon {
+      @include stone;
+
+      &::after {
+        transform: rotate(90deg) scaleX(0);
+      }
+    }
+
+    .fq-answer {
+      animation: fqOpen 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+  }
+}
+
+// a plus that turns into a minus
+.fq-icon {
+  position: relative;
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  @include pebble;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 12px;
+    height: 2px;
+    margin: -1px 0 0 -6px;
+    border-radius: 2px;
+    background: currentColor;
+    transition: transform 0.3s ease;
+  }
+
+  &::after {
+    transform: rotate(90deg);
+  }
+}
+
+.fq-answer {
+  padding: 0 1.4rem 1.3rem;
+
+  p {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.65;
+    color: rgba($dark-green, 0.85);
+  }
+}
+
+@keyframes fqOpen {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+.fq-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.85rem;
+  font-weight: 700;
+  color: $teal;
+  text-decoration: none;
+
+  svg {
+    transition: transform 0.2s ease;
+  }
+
+  &:hover {
+    color: $dark-green;
+
+    svg {
+      transform: translateX(3px);
+    }
+  }
+}
+
+.fq-empty {
+  padding: 1.5rem;
+  border-radius: 20px;
+  background: rgba($white, 0.06);
+  color: rgba($white, 0.85);
+
+  a {
+    color: $mint;
+    font-weight: 700;
+  }
+}
+
+// ---- Help rail ----
+
+.fq-aside {
+  position: sticky;
+  top: 140px;
+  display: grid;
+  gap: 0.75rem;
+
+  @media (max-width: 960px) {
+    position: static;
+  }
+}
+
+.fq-help {
+  padding: 1.5rem;
+  border-radius: 24px;
+  background:
+    radial-gradient(120% 60% at 100% 0%, rgba($mint, 0.25), transparent 60%),
+    $cream;
+  color: $dark-green;
+
+  h2 {
+    margin: 0 0 0.3rem;
+    font-size: 1.3rem;
+    font-weight: 800;
+  }
+
+  p {
+    margin: 0 0 1rem;
+    color: rgba($dark-green, 0.75);
+  }
+}
+
+.fq-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: 50px;
+  border-radius: 999px;
+  font-weight: 700;
+  text-decoration: none;
+
+  &--stone {
+    @include stone(#1a8f55);
+  }
+}
+
+.fq-tile {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 1rem 1.1rem;
+  border-radius: 20px;
+  background: rgba($white, 0.07);
+  border: 1px solid rgba($white, 0.14);
+  color: $white;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.2s ease;
+
+  svg {
+    flex: 0 0 auto;
+    color: $mint;
+  }
+
+  strong {
+    display: block;
+  }
+
+  small {
+    color: rgba($white, 0.7);
+  }
+
+  &:hover {
+    background: rgba($white, 0.13);
+    color: $white;
+    transform: translateY(-2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fq-item[open] .fq-answer {
+    animation: none;
+  }
+}
+
+.fq-help p a {
+  font-weight: 700;
+  color: $teal;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

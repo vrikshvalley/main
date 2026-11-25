@@ -1,11 +1,16 @@
 import { NextResponse } from "next/server";
 import * as delhiveryService from "@/lib/services/delhiveryService";
+import { requireAdmin } from "@/lib/serverAuth";
 
 /**
  * POST /api/shipping/calculate-cost
- * Calculates shipping cost based on shipment details
+ * Calculates shipping cost based on shipment details (store staff only:
+ * shipping is free for customers, so checkout never needs a quote).
  */
 export async function POST(request) {
+  const auth = await requireAdmin(request);
+  if (auth.response) return auth.response;
+
   try {
     const { originPin, destinationPin, weight, paymentMode, declaredValue } =
       await request.json();

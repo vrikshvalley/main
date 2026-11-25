@@ -120,22 +120,25 @@ export default function SearchBar() {
     <>
       {/* Search icon (always visible) */}
       <button
-        className="search-icon-button"
+        type="button"
+        className={`search-icon-button nav-action${searchOpen ? ' is-active' : ''}`}
         onClick={toggleSearch}
+        aria-expanded={searchOpen}
+        aria-label={searchOpen ? 'Close search' : 'Search'}
       >
         <div className="icon-wrapper">
           {searchOpen ? (
             <X size={22} />
           ) : (
             <Image 
-              src="/search-icon.png" 
+              src="/icons/search-icon.webp" 
               alt="Search" 
               width={22} 
               height={22}
             />
           )}
         </div>
-        <span className="search-text">Search</span>
+        <span className="search-text nav-action-label">Search</span>
       </button>
 
       {/* Expanded search bar */}
@@ -155,7 +158,7 @@ export default function SearchBar() {
                   <div className="search-spinner" />
                 ) : (
                   <Image 
-                    src="/search-icon.png" 
+                    src="/icons/search-icon.webp" 
                     alt="Search" 
                     width={18} 
                     height={18}
@@ -203,7 +206,7 @@ export default function SearchBar() {
                         onClick={() => handleSuggestionClick(suggestion)}
                       >
                         <Image 
-                          src="/search-icon.png" 
+                          src="/icons/search-icon.webp" 
                           alt="" 
                           width={14} 
                           height={14}

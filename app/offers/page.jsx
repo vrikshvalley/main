@@ -1,154 +1,111 @@
-'use client';
-
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { Tag, TrendingDown, Sparkles } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import ProductListCard from '@/components/products/ProductListCard';
+import OfferCountdown from '@/components/general/OfferCountdown';
 import { getProducts } from '@/lib/services/productService';
+import { getActiveOffers, offerMatchesProduct, getOfferForProduct } from '@/lib/offers';
+import '@/styles/products.scss';
 import '@/styles/offers.scss';
 
-// Generate discount based on product ID (same logic as ProductListCard)
-const getProductDiscount = (productId) => {
-  if (!productId) return 0;
-  const hash = productId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-  const discountOptions = [10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60];
-  return discountOptions[hash % discountOptions.length];
-};
+// Prices and offer windows stay fresh without a database read per visit.
+export const revalidate = 300;
 
-export default function OffersPage() {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState('all'); // all, high (40%+), medium (20-39%), low (10-19%)
+const PER_OFFER = 8;
 
-  useEffect(() => {
-    async function fetchProducts() {
-      try {
-        const { data: allProducts } = await getProducts({ 
-          sortBy: 'featured',
-          pageSize: 100,
-          inStock: false
-        });
-        setProducts(allProducts || []);
-      } catch (error) {
-        console.error('Error fetching products:', error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchProducts();
-  }, []);
+/**
+ * Offers page. Every offer, countdown and discounted price here comes from
+ * lib/offers.js, the same source the product pages, cart and checkout use.
+ */
+export default async function OffersPage() {
+  const offers = getActiveOffers();
 
-  // Filter products by discount percentage
-  const filteredProducts = products.filter(product => {
-    const discount = getProductDiscount(product.id);
-    
-    if (filter === 'high') return discount >= 40;
-    if (filter === 'medium') return discount >= 20 && discount < 40;
-    if (filter === 'low') return discount >= 10 && discount < 20;
-    return true;
-  }).sort((a, b) => {
-    // Sort by discount percentage descending
-    return getProductDiscount(b.id) - getProductDiscount(a.id);
-  });
+  let catalogue = [];
+  if (offers.length) {
+    const { data } = await getProducts({ pageSize: 1000, sortBy: 'featured' });
+    catalogue = JSON.parse(JSON.stringify(data || []));
+  }
+
+  // A product appears under the offer that actually applies to it (its best one),
+  // so the same plant is not listed twice at two different prices.
+  const sections = offers
+    .map((offer) => {
+      const products = catalogue.filter(
+        (p) => offerMatchesProduct(offer, p) && getOfferForProduct(p)?.id === offer.id && Number(p.stock ?? p.quantity ?? 0) > 0
+      );
+      return { offer, products: products.slice(0, PER_OFFER), total: products.length };
+    })
+    .filter((s) => s.total > 0);
+
+  const best = offers.reduce((m, o) => Math.max(m, o.discountPercent), 0);
 
   return (
     <div className="offers-page">
-      <motion.div 
-        className="offers-hero"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-      >
-        <div className="hero-content">
-          <Sparkles className="hero-icon" size={48} />
-          <h1>Exclusive Offers</h1>
-          <p>Grab amazing deals on your favorite plants - up to 60% OFF!</p>
-        </div>
-      </motion.div>
+      <header className="offers-hero">
+        <p className="offers-eyebrow">Limited-time offers</p>
+        <h1>
+          Save up to <span>{best}%</span> on plants, planters and seeds
+        </h1>
+        <p className="offers-sub">
+          Offer prices apply automatically on the product page, in your cart and when you order on WhatsApp.
+        </p>
+        <OfferCountdown variant="banner" />
+      </header>
 
-      <div className="offers-container">
-        <motion.div 
-          className="offers-filters"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
-          <div className="filter-label">
-            <Tag size={18} />
-            <span>Filter by Discount:</span>
-          </div>
-          <div className="filter-buttons">
-            <button 
-              className={`filter-btn ${filter === 'all' ? 'active' : ''}`}
-              onClick={() => setFilter('all')}
-            >
-              All Offers
-            </button>
-            <button 
-              className={`filter-btn ${filter === 'high' ? 'active' : ''}`}
-              onClick={() => setFilter('high')}
-            >
-              <TrendingDown size={16} />
-              40% & Above
-            </button>
-            <button 
-              className={`filter-btn ${filter === 'medium' ? 'active' : ''}`}
-              onClick={() => setFilter('medium')}
-            >
-              20% - 39%
-            </button>
-            <button 
-              className={`filter-btn ${filter === 'low' ? 'active' : ''}`}
-              onClick={() => setFilter('low')}
-            >
-              10% - 19%
-            </button>
-          </div>
-        </motion.div>
+      {sections.length > 0 ? (
+        <>
+          <nav className="offers-jump" aria-label="Jump to an offer">
+            {sections.map(({ offer, total }) => (
+              <a key={offer.id} href={`#${offer.id}`} className="offers-chip">
+                <strong>{offer.badge}</strong>
+                {offer.title}
+                <span>{total}</span>
+              </a>
+            ))}
+          </nav>
 
-        <div className="offers-grid">
-          {loading ? (
-            [...Array(8)].map((_, i) => (
-              <div key={i} className="product-skeleton">
-                <div className="skeleton-image"></div>
-                <div className="skeleton-text"></div>
-                <div className="skeleton-text short"></div>
+          {sections.map(({ offer, products, total }) => (
+            <section key={offer.id} id={offer.id} className="offer-block" aria-labelledby={`${offer.id}-title`}>
+              <div className="offer-block-head">
+                <div>
+                  <span className="offer-block-badge">{offer.badge}</span>
+                  <h2 id={`${offer.id}-title`}>{offer.title}</h2>
+                  <p>{offer.tagline}</p>
+                </div>
+                <OfferCountdown variant="card" offerId={offer.id} label="Offer" />
               </div>
-            ))
-          ) : filteredProducts.length > 0 ? (
-            filteredProducts.map((product, index) => (
-              <motion.div
-                key={product.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: index * 0.05 }}
-              >
-                <ProductListCard product={product} viewMode="grid" />
-              </motion.div>
-            ))
-          ) : (
-            <div className="no-offers">
-              <p>No offers available in this range</p>
-              <button onClick={() => setFilter('all')}>View All Offers</button>
-            </div>
-          )}
-        </div>
 
-        {!loading && filteredProducts.length > 0 && (
-          <motion.div 
-            className="offers-footer"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          >
-            <p>Found {filteredProducts.length} amazing {filter !== 'all' ? filter : ''} offers just for you!</p>
-            <Link href="/products" className="browse-all-btn">
-              Browse All Products
-            </Link>
-          </motion.div>
-        )}
-      </div>
+              <div className="offer-grid">
+                {products.map((product) => (
+                  <ProductListCard key={product.id} product={product} viewMode="grid" />
+                ))}
+              </div>
+
+              {total > products.length && (
+                <Link
+                  className="offer-more"
+                  href={
+                    offer.match?.category
+                      ? `/category/${offer.match.category.toLowerCase().replace(/\s+/g, '-')}`
+                      : offer.match?.featured
+                        ? '/products?filter=featured'
+                        : '/premium-collection'
+                  }
+                >
+                  See all {total} products in this offer <ArrowRight size={18} aria-hidden="true" />
+                </Link>
+              )}
+            </section>
+          ))}
+        </>
+      ) : (
+        <div className="offers-empty">
+          <h2>New offers are on their way</h2>
+          <p>There are no offers running right now. Browse the full collection in the meantime.</p>
+          <Link href="/products" className="offer-more">
+            Shop all plants <ArrowRight size={18} aria-hidden="true" />
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

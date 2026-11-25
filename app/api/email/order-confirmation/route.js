@@ -1,53 +1,34 @@
 import { NextResponse } from "next/server";
-import * as emailService from "@/lib/services/emailService";
+import { requireAdmin } from "@/lib/serverAuth";
+import { adminDb } from "@/lib/server/firebaseAdmin";
+import { fulfilOrder, ORDERS } from "@/lib/server/orders";
+import { handleRouteError, jsonError } from "@/lib/server/http";
 
 /**
- * POST /api/email/order-confirmation
-
+ * POST /api/email/order-confirmation  { orderId }   (store staff only)
+ *
+ * Confirmation emails are sent automatically after payment; this resends one.
+ * It used to accept a whole order object from any signed-in user, which let
+ * anyone send branded emails to any address.
  */
 export async function POST(request) {
+  const auth = await requireAdmin(request);
+  if (auth.response) return auth.response;
+
   try {
-    const { order } = await request.json();
-
-    if (!order) {
-      return NextResponse.json(
-        { error: { message: "Missing order data" } },
-        { status: 400 }
-      );
+    const { orderId } = (await request.json().catch(() => ({}))) || {};
+    if (!orderId) return jsonError("orderId is required");
+    const ref = adminDb().collection(ORDERS).doc(String(orderId));
+    const snap = await ref.get();
+    if (!snap.exists) return jsonError("Order not found", 404);
+    const order = snap.data();
+    if (order.payment_status !== "paid" || order.status === "cancelled") {
+      return jsonError("Confirmation email can only be sent for paid, active orders", 409);
     }
-
-    const orderData = {
-      orderId: order.order_id,
-      customerName: order.customer_name,
-      orderDate: order.order_date,
-      paymentMethod: order.payment_method,
-      items: order.items.map((item) => ({
-        name: item.name,
-        quantity: item.quantity,
-        price: item.price,
-        image: item.image,
-      })),
-      total: order.total,
-      shippingAddress: order.shipping_address,
-    };
-
-    const { data, error } = await emailService.sendOrderConfirmation(
-      orderData,
-      order.customer_email
-    );
-
-    if (error) {
-      console.error("Email send error:", error);
-      // Don't fail the order if email fails
-      return NextResponse.json({ success: false, error }, { status: 200 });
-    }
-
-    return NextResponse.json({ success: true, data });
+    await ref.update({ email_sent: false });
+    const result = await fulfilOrder(String(orderId));
+    return NextResponse.json({ success: true, emailSent: result.email });
   } catch (error) {
-    console.error("Order confirmation email API error:", error);
-    return NextResponse.json(
-      { success: false, error: { message: "Internal server error" } },
-      { status: 500 }
-    );
+    return handleRouteError(error, "resend-confirmation");
   }
 }

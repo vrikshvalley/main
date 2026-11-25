@@ -210,7 +210,7 @@
     margin-top: 2.5rem;
     margin-bottom: 1.25rem;
     font-weight: 600;
-    font-family: 'Alumni Sans', sans-serif;
+    font-family: var(--font-heading), sans-serif;
 
     @media (max-width: 400px) {
       font-size: 1.4rem;
@@ -360,7 +360,7 @@
     color: $primary-bg;
     margin-bottom: 1rem;
     font-weight: 700;
-    font-family: 'Alumni Sans', sans-serif;
+    font-family: var(--font-heading), sans-serif;
 
     @media (max-width: 400px) {
       font-size: 1.25rem;
@@ -466,10 +466,10 @@
 // Contact Us Page
 .page-container[data-page="contact-us"] {
   .page-hero-wrapper {
-    background-image: url('/ContactUsDesktop.png');
+    background-image: url('/pages/ContactUsDesktop.webp');
 
     @media (max-width: 768px) {
-      background-image: url('/ContactUsMobile.png');
+      background-image: url('/pages/ContactUsMobile.webp');
     }
   }
 }
@@ -477,10 +477,10 @@
 // Our Story Page
 .page-container[data-page="our-story"] {
   .page-hero-wrapper {
-    background-image: url('/OurStoryDesktop.png');
+    background-image: url('/pages/OurStoryDesktop.webp');
 
     @media (max-width: 768px) {
-      background-image: url('/OurStoryMobile.png');
+      background-image: url('/pages/OurStoryDesktop.webp');
     }
   }
 }
@@ -488,10 +488,10 @@
 // FAQs Page
 .page-container[data-page="faqs"] {
   .page-hero-wrapper {
-    background-image: url('/FAQsDesktop.png');
+    background-image: url('/pages/FAQsDesktop.webp');
 
     @media (max-width: 768px) {
-      background-image: url('/FAQsMobile.png');
+      background-image: url('/pages/FAQsMobile.webp');
     }
   }
 }
@@ -499,10 +499,10 @@
 // Privacy Policy Page
 .page-container[data-page="privacy-policy"] {
   .page-hero-wrapper {
-    background-image: url('/PrivacyPoliciesDesktop.png');
+    background-image: url('/pages/PrivacyPoliciesDesktop.webp');
 
     @media (max-width: 768px) {
-      background-image: url('/PrivacyPoliciesMobile.png');
+      background-image: url('/pages/PrivacyPoliciesMobile.webp');
     }
   }
 }
@@ -510,10 +510,10 @@
 // Terms and Conditions Page
 .page-container[data-page="terms-conditions"] {
   .page-hero-wrapper {
-    background-image: url('/TermsandConditionsDesktop.png');
+    background-image: url('/pages/TermsandConditionsDesktop.webp');
 
     @media (max-width: 768px) {
-      background-image: url('/TermsandConditionsMobile.png');
+      background-image: url('/pages/TermsandConditionsMobile.webp');
     }
   }
 }
@@ -521,10 +521,10 @@
 // Terms of Service Page
 .page-container[data-page="terms-of-service"] {
   .page-hero-wrapper {
-    background-image: url('/TermsofServiceDesktop.png');
+    background-image: url('/pages/TermsofServiceDesktop.webp');
 
     @media (max-width: 768px) {
-      background-image: url('/TermsofServiceMobile.png');
+      background-image: url('/pages/TermsofServiceMobile.webp');
     }
   }
 }
@@ -532,10 +532,10 @@
 // Track Order Page
 .page-container[data-page="track-order"] {
   .page-hero-wrapper {
-    background-image: url('/TrackOrderDesktop.png');
+    background-image: url('/pages/TrackOrderDesktop.webp');
 
     @media (max-width: 768px) {
-      background-image: url('/TrackOrderMobile.png');
+      background-image: url('/pages/TrackOrderMobile.webp');
     }
   }
 }
@@ -543,10 +543,10 @@
 // Profile Page
 .page-container[data-page="profile"] {
   .page-hero-wrapper {
-    background-image: url('/ProfileDesktop.png');
+    background-image: url('/pages/ProfileDesktop.webp');
 
     @media (max-width: 768px) {
-      background-image: url('/ProfileMobile.png');
+      background-image: url('/pages/ProfileMobile.webp');
     }
   }
 }
@@ -554,10 +554,10 @@
 // Shipping Policies Page
 .page-container[data-page="shipping-policies"] {
   .page-hero-wrapper {
-    background-image: url('/ShippingPoliciesDesktop.png');
+    background-image: url('/pages/ShippingPoliciesDesktop.webp');
 
     @media (max-width: 768px) {
-      background-image: url('/ShippingPoliciesMobile.png');
+      background-image: url('/pages/ShippingPoliciesMobile.webp');
     }
   }
 }
@@ -565,10 +565,10 @@
 // Disclaimer Page
 .page-container[data-page="disclaimer"] {
   .page-hero-wrapper {
-    background-image: url('/DisclaimerDesktop.png');
+    background-image: url('/pages/DisclaimerDesktop.webp');
 
     @media (max-width: 768px) {
-      background-image: url('/DisclaimerMobile.png');
+      background-image: url('/pages/DisclaimerMobile.webp');
     }
   }
 }
@@ -576,10 +576,10 @@
 // Cancellation/Refund Policy Page
 .page-container[data-page="cancellation-refund"] {
   .page-hero-wrapper {
-    background-image: url('/CancellationTermsDesktop.png');
+    background-image: url('/pages/CancellationTermsDesktop.webp');
 
     @media (max-width: 768px) {
-      background-image: url('/CancellationTermsMobile.png');
+      background-image: url('/pages/CancellationTermsMobile.webp');
     }
   }
 }
@@ -587,10 +587,10 @@
 // Refund Policy Page
 .page-container[data-page="refund-policy"] {
   .page-hero-wrapper {
-    background-image: url('/RefundPolicyDesktop.png');
+    background-image: url('/pages/RefundPolicyDesktop.webp');
 
     @media (max-width: 768px) {
-      background-image: url('/RefundPolicyMobile.png');
+      background-image: url('/pages/RefundPolicyMobile.webp');
     }
   }
 }
@@ -598,10 +598,10 @@
 // Plant Care Page
 .page-container[data-page="plant-care"] {
   .page-hero-wrapper {
-    background-image: url('/categories/PlantCarePageDesktop.png');
+    background-image: url('/categories/PlantCarePageDesktop.webp');
 
     @media (max-width: 768px) {
-      background-image: url('/categories/Plant CarePageMobile.png');
+      background-image: url('/categories/PlantCarePageMobile.webp');
     }
   }
 }
@@ -609,10 +609,10 @@
 // Blog Page
 .page-container[data-page="blogs"] {
   .page-hero-wrapper {
-    background-image: url('/BlogsDesktop.png');
+    background-image: url('/pages/BlogsDesktop.webp');
 
     @media (max-width: 768px) {
-      background-image: url('/BlogsMobile.png');
+      background-image: url('/pages/BlogsMobile.webp');
     }
   }
 }
@@ -620,10 +620,10 @@
 // Products/Plants Page
 .page-container[data-page="plants"] {
   .page-hero-wrapper {
-    background-image: url('/categories/PlantsPageDesktop.png');
+    background-image: url('/categories/PlantsPageDesktop.webp');
 
     @media (max-width: 768px) {
-      background-image: url('/categories/PlantsPageMobile.png');
+      background-image: url('/categories/PlantsPageMobile.webp');
     }
   }
 }
@@ -631,10 +631,10 @@
 // Seeds Page
 .page-container[data-page="seeds"] {
   .page-hero-wrapper {
-    background-image: url('/categories/SeedsPageDesktop.png');
+    background-image: url('/categories/SeedsPageDesktop.webp');
 
     @media (max-width: 768px) {
-      background-image: url('/categories/SeedsPageMobile.png');
+      background-image: url('/categories/SeedsPageMobile.webp');
     }
   }
 }
@@ -642,10 +642,10 @@
 // Planters/Pots Page
 .page-container[data-page="planters"] {
   .page-hero-wrapper {
-    background-image: url('/categories/PlantersPageDesktop.png');
+    background-image: url('/categories/PlantersPageDesktop.webp');
 
     @media (max-width: 768px) {
-      background-image: url('/categories/PlantersPageMobile.png');
+      background-image: url('/categories/PlantersPageMobile.webp');
     }
   }
 }
@@ -653,10 +653,10 @@
 // Decor Page
 .page-container[data-page="decor"] {
   .page-hero-wrapper {
-    background-image: url('/categories/DecorPageDesktop.png');
+    background-image: url('/categories/DecorPageDesktop.webp');
 
     @media (max-width: 768px) {
-      background-image: url('/categories/DecorPageMobile.png');
+      background-image: url('/categories/DecorPageMobile.webp');
     }
   }
 }
@@ -664,10 +664,10 @@
 // Accessories Page
 .page-container[data-page="accessories"] {
   .page-hero-wrapper {
-    background-image: url('/categories/AccessoriesPageDesktop.png');
+    background-image: url('/categories/AccessoriesPageDesktop.webp');
 
     @media (max-width: 768px) {
-      background-image: url('/categories/AccessoriesPageMobile.png');
+      background-image: url('/categories/AccessoriesPageMobile.webp');
     }
   }
 }

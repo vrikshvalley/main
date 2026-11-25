@@ -14,7 +14,7 @@ export default function Wishlist({ items = [], onRemove, onAddToCart }) {
         {items && items.length > 0 ? (
           items.map(it => (
             <div className="wishlist-item" key={it.id}>
-              <img src={it.image || '/hero1.jpg'} alt={it.name} width={72} height={72} />
+              <img src={it.image || '/logo.webp'} alt={it.name} width={72} height={72} />
               <div className="wish-meta">
                 <div className="wish-name">{it.name}</div>
                 <div className="wish-actions">

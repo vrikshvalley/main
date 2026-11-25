@@ -1,0 +1,881 @@
+@use 'variables' as *;
+@use 'stone' as *;
+
+// ============================================
+// Cart: the slide-in drawer and the /cart page share these styles.
+// Cream "paper" surfaces on the brand green, stone buttons, and a single
+// bright accent (the savings strip) so the eye goes to what matters.
+// ============================================
+
+$cream: #f7f3ea;
+$paper: #fffdf8;
+$ink: $dark-green;
+$mint: #35e498;
+
+// ---- Buttons ----
+
+.vv-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  min-height: 50px;
+  padding: 0 1.4rem;
+  border-radius: 999px;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+
+  &--stone {
+    @include stone;
+  }
+
+  &--pebble {
+    @include pebble;
+  }
+
+  &--whatsapp {
+    @include stone(#1a8f55);
+  }
+
+  &--ghost {
+    border: 1.5px solid rgba($ink, 0.18);
+    background: transparent;
+    color: $ink;
+    transition: background 0.2s ease, border-color 0.2s ease;
+
+    &:hover {
+      background: rgba($teal, 0.08);
+      border-color: rgba($ink, 0.35);
+      color: $ink;
+    }
+  }
+
+  &:focus-visible {
+    outline: 3px solid $yellow;
+    outline-offset: 3px;
+  }
+}
+
+// the breathing halo and the stone bevel both use box-shadow; keep the bevel
+.vv-btn--whatsapp.breathe {
+  animation: none;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    animation: vvBreathe 2.8s ease-in-out infinite;
+  }
+}
+
+// ---- Drawer ----
+
+.vv-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.vv-drawer__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(3, 28, 18, 0.55);
+  animation: vvFade 0.25s ease-out;
+  cursor: pointer;
+}
+
+.vv-drawer__panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: min(440px, 100%);
+  height: 100%;
+  height: 100dvh;
+  background:
+    radial-gradient(120% 40% at 100% 0%, rgba($mint, 0.18), transparent 60%),
+    $cream;
+  color: $ink;
+  box-shadow: -24px 0 60px rgba(0, 0, 0, 0.3);
+  animation: vvDrawerIn 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+  outline: none;
+
+  @media (min-width: 641px) {
+    border-radius: 28px 0 0 28px;
+  }
+}
+
+.vv-drawer__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.5rem 1.5rem 1rem;
+
+  h2 {
+    margin: 0.1rem 0 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: $ink;
+  }
+}
+
+.vv-drawer__eyebrow {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: $teal;
+}
+
+.vv-drawer__close {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  cursor: pointer;
+  @include pebble;
+
+  svg {
+    transition: transform 0.3s ease;
+  }
+
+  &:hover svg {
+    transform: rotate(90deg);
+  }
+
+  &:focus-visible {
+    outline: 3px solid $yellow;
+    outline-offset: 2px;
+  }
+}
+
+.vv-drawer__savings {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 1.5rem 0.75rem;
+  padding: 0.65rem 0.9rem;
+  border-radius: 14px;
+  background: linear-gradient(110deg, $yellow, #ffe17a);
+  color: $ink;
+  font-size: 0.9rem;
+  box-shadow: inset 0 1px 0 rgba($white, 0.6), 0 6px 16px -8px rgba(0, 0, 0, 0.35);
+}
+
+.vv-drawer__lines {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  list-style: none;
+  margin: 0;
+  padding: 0.25rem 1.5rem 1rem;
+  display: grid;
+  align-content: start;
+  gap: 0.75rem;
+}
+
+.vv-drawer__foot {
+  display: grid;
+  gap: 0.65rem;
+  padding: 1.1rem 1.5rem calc(1.25rem + env(safe-area-inset-bottom));
+  background: $paper;
+  border-top: 1px solid rgba($ink, 0.08);
+  box-shadow: 0 -12px 30px -18px rgba(0, 0, 0, 0.3);
+
+  .vv-btn {
+    width: 100%;
+  }
+}
+
+.vv-drawer__total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-size: 1rem;
+  font-weight: 600;
+
+  strong {
+    font-size: 1.6rem;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.vv-drawer__note {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  font-size: 0.8rem;
+  color: rgba($ink, 0.65);
+
+  svg {
+    flex: 0 0 auto;
+  }
+}
+
+.vv-drawer__loading {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.5rem 1.5rem;
+}
+
+.vv-skeleton-line {
+  height: 104px;
+  border-radius: 18px;
+  background: linear-gradient(100deg, rgba($ink, 0.05) 30%, rgba($ink, 0.1) 50%, rgba($ink, 0.05) 70%);
+  background-size: 300% 100%;
+  animation: vvShimmer 1.4s linear infinite;
+
+  &--tall {
+    height: 150px;
+  }
+}
+
+@keyframes vvShimmer {
+  from { background-position: 100% 0; }
+  to { background-position: 0 0; }
+}
+
+@keyframes vvDrawerIn {
+  from {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes vvFade {
+  from {
+    opacity: 0;
+  }
+}
+
+// ---- One cart line ----
+
+.vv-line {
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr) auto;
+  gap: 0.9rem;
+  align-items: start;
+  padding: 0.7rem;
+  border-radius: 20px;
+  background: $paper;
+  color: $ink;
+  box-shadow: 0 1px 0 rgba($white, 0.8) inset, 0 8px 20px -14px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba($ink, 0.06);
+  animation: vvLineIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+  &--roomy {
+    grid-template-columns: 132px minmax(0, 1fr) auto;
+    gap: 1.25rem;
+    padding: 0.9rem;
+    border-radius: 24px;
+
+    .vv-line__media {
+      border-radius: 18px;
+    }
+
+    .vv-line__name {
+      font-size: 1.15rem;
+    }
+
+    .vv-line__total {
+      font-size: 1.25rem;
+    }
+
+    @media (max-width: 560px) {
+      grid-template-columns: 88px minmax(0, 1fr) auto;
+      gap: 0.8rem;
+      padding: 0.7rem;
+      align-items: center;
+
+      .vv-line__name {
+        font-size: 1rem;
+      }
+
+      .vv-line__total {
+        align-self: start;
+        font-size: 1rem;
+      }
+    }
+  }
+}
+
+@keyframes vvLineIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.vv-line__media {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 14px;
+  overflow: hidden;
+  background: linear-gradient(160deg, #efe9dd, #e2d9c6);
+
+  img {
+    object-fit: cover;
+  }
+}
+
+.vv-line__placeholder {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  font-size: 1.8rem;
+}
+
+.vv-line__badge {
+  position: absolute;
+  left: 6px;
+  top: 6px;
+  padding: 0.12rem 0.4rem;
+  border-radius: 6px;
+  background: $yellow;
+  color: $ink;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+
+.vv-line__body {
+  min-width: 0;
+}
+
+.vv-line__name {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 0.98rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: $ink;
+  text-decoration: none;
+
+  &:hover {
+    color: $teal;
+  }
+}
+
+.vv-line__details {
+  margin: 0.2rem 0 0;
+  font-size: 0.78rem;
+  color: rgba($ink, 0.6);
+}
+
+.vv-line__unit {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  margin: 0.25rem 0 0.55rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: rgba($ink, 0.85);
+
+  s {
+    font-size: 0.78rem;
+    font-weight: 400;
+    color: rgba($ink, 0.45);
+  }
+
+  small {
+    font-size: 0.72rem;
+    font-weight: 400;
+    color: rgba($ink, 0.55);
+  }
+}
+
+.vv-line__controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.vv-stepper {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px;
+  border-radius: 999px;
+  background: linear-gradient(160deg, #efe8da, #e4dccb);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1), inset 0 -1px 0 rgba($white, 0.7);
+
+  button {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    @include pebble;
+
+    &:focus-visible {
+      outline: 2px solid $yellow;
+      outline-offset: 1px;
+    }
+  }
+
+  output {
+    min-width: 2.1rem;
+    text-align: center;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.vv-line__remove {
+  padding: 0.2rem 0;
+  border: 0;
+  background: none;
+  color: rgba($ink, 0.55);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+
+  &:hover {
+    color: #c0392b;
+  }
+}
+
+.vv-line__total {
+  margin: 0;
+  font-size: 1.02rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: $ink;
+  white-space: nowrap;
+}
+
+// ---- Empty state ----
+
+.vv-cart-empty {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 0.6rem;
+  flex: 1;
+  padding: 1rem 1.75rem 2.5rem;
+  text-align: center;
+
+  h3,
+  h2 {
+    margin: 0.5rem 0 0;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: $ink;
+  }
+
+  p {
+    max-width: 320px;
+    margin: 0;
+    color: rgba($ink, 0.7);
+  }
+
+  &--page {
+    padding: 3rem 1.5rem 4rem;
+    border-radius: 32px;
+    background: $cream;
+    box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.5);
+
+    h2 {
+      font-size: clamp(1.5rem, 3vw, 2rem);
+    }
+
+    p {
+      max-width: 420px;
+    }
+  }
+}
+
+.vv-cart-empty__art {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 170px;
+  height: 200px;
+
+  img {
+    position: relative;
+    width: auto;
+    height: 190px;
+    animation: vvPlantBob 5s ease-in-out infinite;
+  }
+}
+
+.vv-cart-empty__halo {
+  position: absolute;
+  inset: 18% 6% 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba($mint, 0.45), transparent 65%);
+}
+
+@keyframes vvPlantBob {
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50% { transform: translateY(-6px) rotate(1deg); }
+}
+
+.vv-cart-empty__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-top: 0.75rem;
+}
+
+// ---- Cart page ----
+
+.vv-cartpage {
+  position: relative;
+  isolation: isolate;
+  min-height: 70vh;
+  padding: clamp(1.5rem, 4vw, 3rem) 1rem 5rem;
+  overflow: hidden;
+
+  // room for the sticky order bar on phones / tablets
+  @media (max-width: 960px) {
+    padding-bottom: 8rem;
+  }
+}
+
+.vv-cartpage__glow {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse 50% 40% at 85% 0%, rgba($yellow, 0.14), transparent 70%),
+    radial-gradient(ellipse 50% 45% at 0% 30%, rgba($mint, 0.16), transparent 70%);
+  pointer-events: none;
+}
+
+.vv-cartpage__inner {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.vv-cartpage__head {
+  margin-bottom: 1.75rem;
+  color: $white;
+
+  .vv-drawer__eyebrow {
+    margin-top: 1rem;
+    color: $mint;
+  }
+
+  h1 {
+    margin: 0.25rem 0 0;
+    font-size: clamp(1.9rem, 4.5vw, 3.1rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.08;
+    color: $white;
+
+    span {
+      color: $mint;
+    }
+  }
+}
+
+.vv-cartpage__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.9rem 0.45rem 0.7rem;
+  border-radius: 999px;
+  background: rgba($white, 0.1);
+  border: 1px solid rgba($white, 0.18);
+  color: $white;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.2s ease;
+
+  &:hover {
+    background: rgba($white, 0.18);
+    color: $white;
+
+    svg {
+      transform: translateX(-3px);
+    }
+  }
+
+  svg {
+    transition: transform 0.2s ease;
+  }
+}
+
+.vv-cartpage__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  gap: 1.75rem;
+  align-items: start;
+
+  @media (max-width: 960px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.vv-cartpage__list {
+  display: grid;
+  gap: 0.9rem;
+
+  > ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .vv-drawer__savings {
+    margin: 0;
+  }
+
+  .offer-countdown {
+    margin-top: 0.5rem;
+  }
+}
+
+.vv-summary {
+  position: sticky;
+  top: 140px;
+  display: grid;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-radius: 28px;
+  background:
+    radial-gradient(120% 50% at 100% 0%, rgba($mint, 0.2), transparent 60%),
+    $cream;
+  color: $ink;
+  box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.55);
+
+  h2 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 700;
+  }
+
+  dl {
+    display: grid;
+    gap: 0.6rem;
+    margin: 0;
+
+    > div {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      font-size: 0.95rem;
+    }
+
+    dt {
+      color: rgba($ink, 0.7);
+    }
+
+    dd {
+      margin: 0;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .is-saving dd {
+      color: #1a8f55;
+    }
+
+    .is-muted {
+      font-weight: 500;
+      color: rgba($ink, 0.6);
+    }
+  }
+
+  .vv-btn {
+    width: 100%;
+    min-height: 56px;
+    font-size: 1.05rem;
+  }
+
+  @media (max-width: 960px) {
+    position: static;
+  }
+}
+
+.vv-summary__total {
+  padding-top: 0.75rem;
+  border-top: 1px dashed rgba($ink, 0.2);
+
+  dt {
+    color: $ink !important;
+    font-weight: 700;
+  }
+
+  dd {
+    font-size: 1.5rem;
+    font-weight: 800 !important;
+    letter-spacing: -0.02em;
+  }
+}
+
+.vv-summary__trust {
+  list-style: none;
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 1rem;
+  border-radius: 18px;
+  background: rgba($teal, 0.08);
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.86rem;
+    color: rgba($ink, 0.85);
+  }
+
+  svg {
+    flex: 0 0 auto;
+    color: $teal;
+  }
+}
+
+.vv-cartpage__bar {
+  display: none;
+
+  @media (max-width: 960px) {
+    position: fixed;
+    left: 0.75rem;
+    right: 0.75rem;
+    bottom: calc(0.75rem + env(safe-area-inset-bottom));
+    z-index: 900;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.6rem 0.6rem 0.6rem 1.1rem;
+    border-radius: 22px;
+    background: rgba($paper, 0.97);
+    color: $ink;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+
+    small {
+      display: block;
+      font-size: 0.72rem;
+      color: rgba($ink, 0.6);
+    }
+
+    strong {
+      font-size: 1.25rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .vv-btn {
+      min-height: 46px;
+      padding: 0 1.2rem;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vv-drawer__panel,
+  .vv-drawer__backdrop,
+  .vv-line,
+  .vv-cart-empty__art img,
+  .vv-btn--whatsapp.breathe::after {
+    animation: none;
+  }
+}
+
+// subtotal / shipping rows above the total
+.vv-drawer__rows {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  row-gap: 0.3rem;
+  font-size: 0.92rem;
+  color: rgba($ink, 0.75);
+
+  span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  span:nth-child(even) {
+    justify-content: flex-end;
+    font-weight: 600;
+    color: $ink;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.vv-free {
+  padding: 0.05rem 0.5rem;
+  border-radius: 6px;
+  background: rgba(#1a8f55, 0.14);
+  color: #1a8f55 !important;
+  font-size: 0.8rem;
+  font-weight: 800 !important;
+  letter-spacing: 0.06em;
+}
+
+.vv-drawer__total {
+  padding-top: 0.5rem;
+  border-top: 1px dashed rgba($ink, 0.2);
+}
+
+// cart page: benefits row
+.vv-summary__benefits {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: grid;
+    justify-items: center;
+    gap: 0.3rem;
+    padding: 0.7rem 0.4rem;
+    border-radius: 16px;
+    background: rgba($teal, 0.08);
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-align: center;
+    color: rgba($ink, 0.85);
+  }
+
+  span[aria-hidden] {
+    font-size: 1.25rem;
+  }
+}
+
+.vv-cartpage__head h1 {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1rem;
+
+  svg {
+    color: $mint;
+  }
+}
+
+.vv-cartpage__count {
+  margin: 0.35rem 0 0;
+  font-size: 1rem;
+  color: rgba($white, 0.75);
+}

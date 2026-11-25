@@ -20,9 +20,9 @@ export default function TermsOfServices() {
       {/* Hero Banner */}
       <div className="hero-banner terms-services-hero" ref={bannerRef}>
         <picture>
-          <source media="(max-width: 768px)" srcSet="/TermsofServiceMobile.png" />
+          <source media="(max-width: 768px)" srcSet="/pages/TermsofServiceMobile.webp" />
           <Image
-            src="/TermsofServiceDesktop.png"
+            src="/pages/TermsofServiceDesktop.webp"
             alt="Terms of Services - Vriksh Valley"
             fill
             priority
@@ -98,7 +98,7 @@ export default function TermsOfServices() {
 
           <h3>9. Contact</h3>
           <p>
-            For questions about these terms, please contact us at support@vrikshvalley.com
+            For questions about these terms, please contact us at contact@vrikshvalley.com
           </p>
         </div>
       </div>

@@ -20,9 +20,9 @@ export default function CancellationReturn() {
       {/* Hero Banner */}
       <div className="hero-banner" ref={bannerRef}>
         <picture>
-          <source media="(max-width: 768px)" srcSet="/CancellationTermsMobile.png" />
+          <source media="(max-width: 768px)" srcSet="/pages/CancellationTermsMobile.webp" />
           <Image
-            src="/CancellationTermsDesktop.png"
+            src="/pages/CancellationTermsDesktop.webp"
             alt="Cancellation & Refund Policy - Vriksh Valley"
             fill
             priority
@@ -47,7 +47,7 @@ export default function CancellationReturn() {
         <div className="content-section">
           <h2>Refund Eligibility</h2>
           <p>
-            Refunds are eligible for all Vriksh Valley live plants, planters, tools, and accessories if requested within <strong>7 days of delivery. Approved refunds will be credited nto original payment method within 5-7 days.</strong>.
+            Refunds are eligible for all Vriksh Valley live plants, planters, tools, and accessories if requested within <strong>7 days of delivery. Approved refunds will be credited to the original payment method within 7-10 working days.</strong>.
           </p>
 
           <h2>Refund Process</h2>
@@ -91,7 +91,7 @@ export default function CancellationReturn() {
           <p>
             For all cancellation and return queries, reach us at:<br />
             <strong>Phone:</strong> +91 92047 45612<br />
-            <strong>Email:</strong> support@vrikshvalley.com<br />
+            <strong>Email:</strong> contact@vrikshvalley.com<br />
             Our team is available to assist you with your concerns.
           </p>
         </div>

@@ -9,7 +9,8 @@ import {
   Grid3x3, 
   Star, 
   Heart, 
-  TrendingUp, 
+  Sparkles, 
+  Leaf, 
   MessageCircle, 
   HelpCircle, 
   MapPin, 
@@ -24,15 +25,16 @@ export default function HomeSidebar() {
   const pathname = usePathname();
   const [activeSection, setActiveSection] = useState('hero');
   const [hoveredSection, setHoveredSection] = useState(null);
+  const [pastHero, setPastHero] = useState(false);
   const sectionRefs = useRef({});
   // Keep sidebar fixed by default
 
   const sections = [
     { id: 'hero', label: 'Home', icon: Home },
     { id: 'featured', label: 'Featured', icon: Star },
-    { id: 'new-arrivals', label: 'New Arrivals', icon: TrendingUp },
+    { id: 'new-arrivals', label: 'New Arrivals', icon: Sparkles },
     { id: 'why-choose', label: 'Why Us', icon: Heart },
-    { id: 'impact', label: 'Impact', icon: TrendingUp },
+    { id: 'impact', label: 'Impact', icon: Leaf },
     { id: 'testimonials', label: 'Reviews', icon: MessageCircle },
     { id: 'team', label: 'Team', icon: Users },
     { id: 'faqs', label: 'FAQs', icon: HelpCircle },
@@ -57,28 +59,35 @@ export default function HomeSidebar() {
       }
     });
 
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY + window.innerHeight / 3;
+    // Throttled to one pass per animation frame (it reads section positions).
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      // Stay hidden over the hero so it never covers the hero copy.
+      setPastHero(window.scrollY > window.innerHeight * 0.75);
 
+      const scrollPosition = window.scrollY + window.innerHeight / 3;
       for (const section of sections) {
-        if (!section.divider) {
-          const element = sectionRefs.current[section.id];
-          if (element) {
-            const { offsetTop, offsetHeight } = element;
-            if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-              setActiveSection(section.id);
-              break;
-            }
+        const element = sectionRefs.current[section.id];
+        if (element) {
+          const { offsetTop, offsetHeight } = element;
+          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+            setActiveSection(section.id);
+            break;
           }
         }
       }
     };
+    const handleScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
 
-    window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Initial check
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    update(); // Initial check
 
     // Keep sidebar fixed; only track active section on scroll
     return () => {
+      cancelAnimationFrame(frame);
       window.removeEventListener('scroll', handleScroll);
     };
   }, [isHomePage]);
@@ -96,7 +105,7 @@ export default function HomeSidebar() {
   if (!isHomePage) return null;
 
   const sidebar = (
-    <aside className={`home-sidebar fixed`}>
+    <aside className={`home-sidebar fixed ${pastHero ? 'is-visible' : ''}`} aria-hidden={!pastHero}>
       <nav className="sidebar-nav">
             {sections.map((section, idx) => {
               if (section.divider) {

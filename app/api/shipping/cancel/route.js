@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { requireAdmin } from "@/lib/serverAuth";
 import * as delhiveryService from "@/lib/services/delhiveryService";
 
 /**
@@ -6,6 +7,9 @@ import * as delhiveryService from "@/lib/services/delhiveryService";
  * Cancels a shipment before dispatch
  */
 export async function POST(request) {
+  const auth = await requireAdmin(request);
+  if (auth.response) return auth.response;
+
   try {
     const { waybill } = await request.json();
 

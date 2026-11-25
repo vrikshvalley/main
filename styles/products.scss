@@ -1,8 +1,9 @@
 @use 'sass:color';
 @use 'variables' as *;
+@use 'stone' as *;
 // Variables
 $dark-green: #073b22;
-$teal: #1c9e5b;
+// $teal now comes from the shared tokens in _variables.scss (was an off-brand #1c9e5b)
 $cyan: #00ffd5;
 $accent-primary: #fbbf24;
 $cream: #f5f5dc;
@@ -217,6 +218,7 @@ $grey-dark: #374151;
         }
 
         .subcat-image {
+          position: relative;
           width: 100%;
           aspect-ratio: 1;
           border-radius: 8px;
@@ -1350,7 +1352,7 @@ $grey-dark: #374151;
         font-size: 1.5rem;
         font-weight: 700;
         color: $teal;
-        font-family: 'Alumni Sans', sans-serif;
+        font-family: var(--font-heading), sans-serif;
 
         .price-container {
           display: flex;
@@ -1921,5 +1923,258 @@ $grey-dark: #374151;
 
   .product-modal-content {
     padding: 0.75rem 1rem 1.25rem;
+  }
+}
+
+// ---- Offer ribbon and care tags on product cards ----
+.featured-badge.offer-ribbon {
+  background: $dark-green !important;
+  color: $yellow !important;
+  letter-spacing: 0.06em;
+  box-shadow: 0 0 0 0 rgba($yellow, 0.55);
+  animation: vvRibbon 2.6s ease-in-out infinite;
+}
+
+@keyframes vvRibbon {
+  0%, 100% { box-shadow: 0 0 0 0 rgba($yellow, 0.5); }
+  50% { box-shadow: 0 0 0 6px rgba($yellow, 0); }
+}
+
+.card-care-tags {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+}
+
+.card-care-tag {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #fff;
+  animation: vvTagGlow 2.4s ease-in-out infinite;
+
+  &--pet {
+    background: rgba($teal, 0.92);
+    --glow: #{rgba($teal, 0.6)};
+  }
+
+  &--low {
+    background: rgba($dark-green, 0.9);
+    --glow: #{rgba($dark-green, 0.6)};
+    animation-delay: 1.2s;
+  }
+}
+
+@keyframes vvTagGlow {
+  0%, 100% { box-shadow: 0 0 0 0 transparent; }
+  50% { box-shadow: 0 0 10px 0 var(--glow); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .featured-badge.offer-ribbon,
+  .card-care-tag {
+    animation: none;
+  }
+}
+
+// ============================================
+// Pagination: soft pill bar (applies to every product listing)
+// ============================================
+html body .pagination.pagination.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.35rem;
+  width: fit-content;
+  max-width: 100%;
+  margin: 3rem auto 0;
+  padding: 0.4rem;
+  border-radius: 999px;
+  background: rgba($white, 0.92);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+
+  .page-numbers {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+
+    span {
+      padding: 0 0.35rem;
+      color: rgba($dark-green, 0.45);
+      letter-spacing: 0.1em;
+    }
+  }
+
+  .page-numbers button {
+    min-width: 40px;
+    height: 40px;
+    padding: 0 0.6rem;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: $dark-green;
+    font-weight: 600;
+    font-size: 0.95rem;
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+    box-shadow: none;
+    transition: background 0.2s ease, color 0.2s ease;
+
+    &:hover:not(.active) {
+      background: rgba($teal, 0.12);
+    }
+
+    &.active {
+      @include stone;
+    }
+
+    &:focus-visible {
+      outline: 3px solid $yellow;
+      outline-offset: 2px;
+    }
+  }
+
+  .pagination-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    height: 40px;
+    padding: 0 1rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.92rem;
+    cursor: pointer;
+    @include pebble;
+
+    &:disabled {
+      opacity: 0.4;
+      color: $dark-green;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    &:focus-visible {
+      outline: 3px solid $yellow;
+      outline-offset: 2px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    border-radius: 22px;
+
+    .pagination-button {
+      padding: 0 0.75rem;
+    }
+
+    .page-numbers button {
+      min-width: 36px;
+      height: 36px;
+    }
+  }
+}
+
+// ============================================
+// Product card refinement: softer depth, inset image, no layout jiggle on
+// hover (border width stays constant; only transform/shadow animate).
+// `html` prefix lets these win over the nested rules above.
+// ============================================
+html .product-list-card {
+  border-radius: 22px;
+  border: 1px solid rgba($dark-green, 0.08);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 36px rgba(0, 0, 0, 0.22);
+    border: 1px solid rgba($teal, 0.45);
+
+    .add-to-cart-button:not(.disabled) {
+      transform: none;
+    }
+  }
+
+  .product-image-wrapper {
+    width: auto;
+    margin: 0.55rem 0.55rem 0;
+    border-radius: 16px;
+    background: #efe9dd;
+
+    .product-image {
+      border-radius: 0;
+      transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+  }
+
+  .product-info {
+    .product-category {
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+    }
+
+    .product-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.25;
+      color: $dark-green;
+    }
+
+    .product-description {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .product-footer {
+      .product-price .price-container .price-row {
+        .current-price {
+          font-size: 1.25rem;
+          font-weight: 700;
+          color: $dark-green;
+        }
+
+        .original-price {
+          font-size: 0.85rem;
+          color: rgba($dark-green, 0.45);
+        }
+
+        .discount-badge {
+          background: $yellow;
+          color: $dark-green;
+          border-radius: 6px;
+        }
+      }
+
+      .add-to-cart-button {
+        width: 44px;
+        height: 44px;
+        padding: 0;
+        justify-content: center;
+        border-radius: 46% 54% 50% 50% / 55% 50% 50% 45%; // a slightly irregular pebble
+        @include stone;
+
+        &.disabled {
+          width: auto;
+          padding: 0 0.85rem;
+          border-radius: 999px;
+          @include pebble;
+          opacity: 0.8;
+        }
+      }
+    }
+  }
+
+  &.list .product-info .product-footer .add-to-cart-button:not(.disabled) {
+    width: auto;
+    padding: 0 1rem;
+    border-radius: 999px;
   }
 }

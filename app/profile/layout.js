@@ -3,6 +3,11 @@ import Navbar from "@/components/general/Navbar";
 import Footer from "@/components/general/Footer";
 import WhatsAppButton from "@/components/general/WhatsAppButton";
 
+export const metadata = {
+  title: "Your Profile",
+  robots: { index: false, follow: false },
+};
+
 export default function ProfileLayout({ children }) {
   return (
     <>

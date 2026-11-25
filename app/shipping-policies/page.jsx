@@ -20,9 +20,9 @@ export default function ShippingPolicies() {
       {/* Hero Banner */}
       <div className="hero-banner shipping-policies-hero" ref={bannerRef}>
         <picture>
-          <source media="(max-width: 768px)" srcSet="/ShippingPoliciesMobile.png" />
+          <source media="(max-width: 768px)" srcSet="/pages/ShippingPoliciesMobile.webp" />
           <Image
-            src="/ShippingPoliciesDesktop.png"
+            src="/pages/ShippingPoliciesDesktop.webp"
             alt="Shipping Policies - Vriksh Valley"
             fill
             priority

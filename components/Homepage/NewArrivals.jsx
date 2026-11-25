@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { useBreakpoint } from '@/lib/hooks/useBreakpoint';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import { getProducts } from '@/lib/services/productService';
@@ -37,7 +38,7 @@ const cardVariants = {
 export default function NewArrivals() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [viewportWidth, setViewportWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
+  const breakpoint = useBreakpoint();
   const viewAllLink = '/products?filter=new-arrivals';
   const { ref } = useMouseGlow();
 
@@ -60,20 +61,8 @@ export default function NewArrivals() {
     fetchProducts();
   }, []);
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (typeof window !== 'undefined') {
-        setViewportWidth(window.innerWidth);
-      }
-    };
-
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  const isMobile = viewportWidth < 768;
-  const isDesktop = viewportWidth >= 1024;
+  const isMobile = breakpoint === 'mobile';
+  const isDesktop = breakpoint === 'desktop';
   const itemsPerSlide = isDesktop ? 4 : 2;
   const slides = [];
   for (let i = 0; i < products.length; i += itemsPerSlide) {
@@ -86,15 +75,22 @@ export default function NewArrivals() {
     const wrapper = ref.current.closest('.new-arrivals-section-wrapper');
     if (!wrapper) return;
 
+    // One update per animation frame instead of a layout read on every mousemove
+    let frame = 0;
+    let lastEvent = null;
     const handleMouseMove = (e) => {
-      const rect = wrapper.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-
-      if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
-        wrapper.style.setProperty('--glow-x', `${x}px`);
-        wrapper.style.setProperty('--glow-y', `${y}px`);
-      }
+      lastEvent = e;
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        const rect = wrapper.getBoundingClientRect();
+        const x = lastEvent.clientX - rect.left;
+        const y = lastEvent.clientY - rect.top;
+        if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
+          wrapper.style.setProperty('--glow-x', `${x}px`);
+          wrapper.style.setProperty('--glow-y', `${y}px`);
+        }
+      });
     };
 
     const handleMouseLeave = () => {
@@ -106,6 +102,7 @@ export default function NewArrivals() {
     wrapper.addEventListener('mouseleave', handleMouseLeave);
 
     return () => {
+      cancelAnimationFrame(frame);
       wrapper.removeEventListener('mousemove', handleMouseMove);
       wrapper.removeEventListener('mouseleave', handleMouseLeave);
     };
@@ -117,7 +114,7 @@ export default function NewArrivals() {
       className="featured-products"
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: false, amount: 0.2, margin: '0px 0px -100px 0px' }}
+      viewport={{ once: true, amount: 0.2, margin: '0px 0px -100px 0px' }}
       variants={containerVariants}
     >
       <div className="featured-header">
@@ -169,7 +166,7 @@ export default function NewArrivals() {
                     key={product.id}
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: false, amount: 0.2 }}
+                    viewport={{ once: true, amount: 0.2 }}
                     transition={{ 
                       delay: cardIndex * 0.15,
                       duration: 0.6,

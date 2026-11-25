@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { requireAdmin } from "@/lib/serverAuth";
 import * as delhiveryService from "@/lib/services/delhiveryService";
 
 /**
@@ -7,6 +8,9 @@ import * as delhiveryService from "@/lib/services/delhiveryService";
  * Supports: reattempt, return, reschedule, instructions
  */
 export async function POST(request) {
+  const auth = await requireAdmin(request);
+  if (auth.response) return auth.response;
+
   try {
     const { waybill, action, reason, actionDetails } = await request.json();
 
@@ -46,6 +50,9 @@ export async function POST(request) {
  * Retrieves NDR status for a shipment
  */
 export async function GET(request) {
+  const auth = await requireAdmin(request);
+  if (auth.response) return auth.response;
+
   try {
     const { searchParams } = new URL(request.url);
     const waybill = searchParams.get("waybill");

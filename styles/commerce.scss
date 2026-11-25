@@ -1,0 +1,366 @@
+@use 'variables' as *;
+
+// ============================================
+// Commerce layer: live store status, offer countdowns, the plant-help nudge
+// and the "breathing" primary button. Loaded globally from globals.scss.
+// ============================================
+
+// ---- Breathing button: a soft halo that pulses every few seconds ----
+.breathe {
+  animation: vvBreathe 2.8s ease-in-out infinite;
+}
+
+@keyframes vvBreathe {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba($teal, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba($teal, 0);
+  }
+}
+
+// ---- Offer countdown (only renders for a real promotion) ----
+.offer-countdown {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem 1.25rem;
+  padding: 0.85rem 1.25rem;
+  background: $yellow;
+  color: $dark-green;
+  text-align: center;
+
+  &--card {
+    border-radius: 16px;
+    justify-content: flex-start;
+    text-align: left;
+  }
+}
+
+.offer-title {
+  font-weight: 700;
+  font-size: 0.98rem;
+}
+
+.offer-clock {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.offer-unit {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 44px;
+  padding: 0.3rem 0.4rem;
+  border-radius: 10px;
+  background: $dark-green;
+  color: $white;
+
+  strong {
+    font-size: 1.05rem;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.1;
+  }
+
+  small {
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.75;
+  }
+}
+
+.offer-cta {
+  padding: 0.55rem 1.1rem;
+  border-radius: 999px;
+  background: $dark-green;
+  color: $white;
+  font-weight: 700;
+  font-size: 0.9rem;
+
+  &:hover {
+    color: $white;
+    background: $deep-green;
+  }
+}
+
+// Banner: always a single row (title, clock, button), shrinking on small screens
+.offer-countdown--banner {
+  flex-wrap: nowrap;
+
+  .offer-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+    white-space: nowrap;
+  }
+
+  .offer-badge {
+    margin-right: 0;
+  }
+
+  .offer-title-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .offer-cta {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 760px) {
+    gap: 0.6rem;
+    padding: 0.6rem 0.75rem;
+
+    .offer-title-text {
+      display: none;
+    }
+
+    .offer-unit {
+      min-width: 36px;
+      padding: 0.22rem 0.3rem;
+      border-radius: 8px;
+
+      strong {
+        font-size: 0.92rem;
+      }
+
+      small {
+        font-size: 0.52rem;
+      }
+    }
+
+    .offer-cta {
+      padding: 0.5rem 0.85rem;
+      font-size: 0.82rem;
+    }
+  }
+
+  @media (max-width: 400px) {
+    gap: 0.4rem;
+    padding: 0.55rem 0.5rem;
+
+    .offer-clock {
+      gap: 0.25rem;
+    }
+
+    .offer-unit {
+      min-width: 32px;
+    }
+
+    .offer-cta-long {
+      display: none;
+    }
+  }
+}
+
+// ---- Plant-help nudge: the only pop-up, small and non-blocking ----
+.plant-nudge {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 960;
+  width: min(340px, calc(100vw - 2rem));
+  padding: 1.25rem 1.25rem 1.1rem;
+  border-radius: 20px;
+  background: $white;
+  color: $dark-green;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  animation: vvNudgeIn 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+
+  h2 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1.25;
+    margin: 0.25rem 2rem 0.5rem 0;
+  }
+
+  p {
+    font-size: 0.92rem;
+    line-height: 1.5;
+    color: rgba($dark-green, 0.8);
+    margin-bottom: 1rem;
+  }
+
+  @media (max-width: 600px) {
+    left: 0.75rem;
+    right: 0.75rem;
+    bottom: 0.75rem;
+    width: auto;
+  }
+}
+
+.plant-nudge-eyebrow {
+  font-size: 0.72rem !important;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: $teal !important;
+  margin-bottom: 0 !important;
+}
+
+.plant-nudge-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba($dark-green, 0.08);
+  color: $dark-green;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba($dark-green, 0.15);
+  }
+
+  &:focus-visible {
+    outline: 3px solid $yellow;
+    outline-offset: 2px;
+  }
+}
+
+.plant-nudge-cta {
+  display: inline-flex;
+  width: 100%;
+  justify-content: center;
+  padding: 0.8rem 1rem;
+  border-radius: 999px;
+  background: $dark-green;
+  color: $white;
+  font-weight: 700;
+
+  &:hover {
+    background: $deep-green;
+    color: $white;
+  }
+
+  &:focus-visible {
+    outline: 3px solid $yellow;
+    outline-offset: 3px;
+  }
+}
+
+@keyframes vvNudgeIn {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .breathe,
+  .plant-nudge {
+    animation: none !important;
+  }
+}
+
+// ---- Offer badge inside countdowns ----
+.offer-badge {
+  display: inline-block;
+  margin-right: 0.5rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 6px;
+  background: $dark-green;
+  color: $yellow;
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+}
+
+.offer-ends {
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+// ---- Top-bar ticker ----
+.offer-ticker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-width: 0;
+  font-size: 0.82rem;
+  color: $white;
+  white-space: nowrap;
+
+  &:hover {
+    color: $white;
+
+    .offer-ticker-title {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+  }
+}
+
+.offer-ticker-badge {
+  padding: 0.12rem 0.45rem;
+  border-radius: 5px;
+  background: $yellow;
+  color: $dark-green;
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  animation: vvRibbonTop 2.6s ease-in-out infinite;
+}
+
+@keyframes vvRibbonTop {
+  0%, 100% { box-shadow: 0 0 0 0 rgba($yellow, 0.55); }
+  50% { box-shadow: 0 0 0 5px rgba($yellow, 0); }
+}
+
+.offer-ticker-title {
+  font-weight: 700;
+}
+
+.offer-ticker-time {
+  color: $yellow;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 480px) {
+  .offer-ticker-sep,
+  .offer-ticker-ends {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .offer-ticker-badge {
+    animation: none;
+  }
+}
+
+// (shared by the product page and the cart page)
+// Floating buttons step aside while the phone buy bar is visible
+@media (max-width: 900px) {
+  body.pdp-bar-open .whatsapp-float {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.8);
+  }
+
+  body.pdp-bar-open .scroll-to-top {
+    bottom: calc(88px + env(safe-area-inset-bottom)) !important;
+  }
+}
+
+
+@media (max-width: 960px) {
+  body.cart-bar-open .whatsapp-float {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.8);
+  }
+
+  body.cart-bar-open .scroll-to-top {
+    bottom: calc(88px + env(safe-area-inset-bottom)) !important;
+  }
+}

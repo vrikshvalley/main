@@ -21,9 +21,9 @@ export default function ContactUs() {
       {/* Hero Banner */}
       <div className="hero-banner contact-us-hero" ref={bannerRef}>
         <picture>
-          <source media="(max-width: 768px)" srcSet="/ContactUsMobile.png" />
+          <source media="(max-width: 768px)" srcSet="/pages/ContactUsMobile.webp" />
           <Image
-            src="/ContactUsDesktop.png"
+            src="/pages/ContactUsDesktop.webp"
             alt="Contact Us - Vriksh Valley"
             fill
             priority
@@ -66,7 +66,7 @@ export default function ContactUs() {
                 <Mail size={28} />
               </div>
               <h3>Email Us</h3>
-              <p><a href="mailto:support@vrikshvalley.com">support@vrikshvalley.com</a></p>
+              <p><a href="mailto:contact@vrikshvalley.com">contact@vrikshvalley.com</a></p>
               <p>We'll respond within 24 hours</p>
             </div>
 

@@ -19,6 +19,7 @@ import ProductListCard from '@/components/products/ProductListCard';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import '@/styles/products.scss';
+import { subcategoryImage } from '@/lib/subcategoryImages';
 
 export default function CategoryPage() {
   const params = useParams();
@@ -261,7 +262,7 @@ export default function CategoryPage() {
           <aside className={`filters-sidebar ${showFilters ? 'show' : 'hide'}`}>
             <div className="filters-header">
                 <h3>
-                  <img src="/hamMenu.png" alt="Filters" width={16} height={16} />
+                  <img src="/icons/hamMenu.webp" alt="Filters" width={16} height={16} />
                   Filters
                 </h3>
                 <button 
@@ -360,7 +361,7 @@ export default function CategoryPage() {
                   className="mobile-filter-toggle"
                   onClick={() => setShowFilters(!showFilters)}
                 >
-                  <img src="/hamMenu.png" alt="Filters" width={18} height={18} />
+                  <img src="/icons/hamMenu.webp" alt="Filters" width={18} height={18} />
                   Filters {getActiveFiltersCount() > 0 && `(${getActiveFiltersCount()})`}
                 </button>
                 <p className="results-count">
@@ -472,7 +473,7 @@ export default function CategoryPage() {
                       disabled={currentPage === 1}
                       className="pagination-button"
                     >
-                      Previous
+                      ‹ Previous
                     </button>
                     
                     <div className="page-numbers">
@@ -491,6 +492,8 @@ export default function CategoryPage() {
                                 
                               }}
                               className={currentPage === page ? 'active' : ''}
+                            aria-current={currentPage === page ? 'page' : undefined}
+                            aria-label={`Page ${page}`}
                             >
                               {page}
                             </button>
@@ -510,7 +513,7 @@ export default function CategoryPage() {
                       disabled={currentPage === totalPages}
                       className="pagination-button"
                     >
-                      Next
+                      Next ›
                     </button>
                   </div>
                 )}
@@ -568,21 +571,21 @@ export default function CategoryPage() {
                     href={`/category/${categorySlug}/${subcat.slug}`}
                     className="subcategory-card"
                   >
-                    {(subcat.imageUrl?.desktop || subcat.imageUrl?.mobile) && (
-                      <div className="subcat-image">
-                        <picture>
-                          {subcat.imageUrl?.mobile && (
-                            <source media="(max-width: 768px)" srcSet={subcat.imageUrl.mobile} />
-                          )}
-                          <img 
-                            src={subcat.imageUrl.desktop || subcat.imageUrl.mobile} 
-                            alt={subcat.name}
-                            width={200}
-                            height={200}
+                    {(() => {
+                      const img = subcategoryImage(subcat);
+                      if (!img.desktop && !img.mobile) return null;
+                      return (
+                        <div className="subcat-image">
+                          <Image
+                            src={img.desktop || img.mobile}
+                            alt=""
+                            fill
+                            sizes="(max-width: 768px) 45vw, 200px"
+                            quality={75}
                           />
-                        </picture>
-                      </div>
-                    )}
+                        </div>
+                      );
+                    })()}
                     <h3>{subcat.name}</h3>
                   </Link>
                 </SwiperSlide>

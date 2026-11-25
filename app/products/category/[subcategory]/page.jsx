@@ -97,13 +97,13 @@ export default function SubcategoryPage() {
         <div 
           className="products-header"
           style={{
-            backgroundImage: 'url(/ProductsDesktop.png)',
+            backgroundImage: 'url(/pages/ProductsDesktop.webp)',
           }}
         >
           <style jsx>{`
             @media (max-width: 768px) {
               .products-header {
-                background-image: url(/ProductsMobile.png);
+                background-image: url(/pages/ProductsMobile.webp) !important;
               }
             }
           `}</style>
@@ -228,7 +228,7 @@ export default function SubcategoryPage() {
                       disabled={currentPage === 1}
                       className="pagination-button"
                     >
-                      Previous
+                      ‹ Previous
                     </button>
                     
                     <div className="page-numbers">
@@ -247,6 +247,8 @@ export default function SubcategoryPage() {
                                 window.scrollTo({ top: 0, behavior: 'smooth' });
                               }}
                               className={currentPage === page ? 'active' : ''}
+                            aria-current={currentPage === page ? 'page' : undefined}
+                            aria-label={`Page ${page}`}
                             >
                               {page}
                             </button>
@@ -266,7 +268,7 @@ export default function SubcategoryPage() {
                       disabled={currentPage === totalPages}
                       className="pagination-button"
                     >
-                      Next
+                      Next ›
                     </button>
                   </div>
                 )}

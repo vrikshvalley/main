@@ -3,27 +3,24 @@
 import Link from 'next/link';
 import Image from '@/components/general/ImgWithLoader';
 import "@/styles/topbar.scss";
-import  {showWarningToast} from '@/lib/toastHelpers';
+import OfferCountdown from '@/components/general/OfferCountdown';
 
 export default function Topbar() {
-
-  const handleClick = () => {
-    showWarningToast("This feature is coming soon!");
-  };
 
   return (
     <div className="topbar">
       <div className="topbar-container">
         
         <div className="topbar-logo">
-          <Image src="/white-logo.png" alt="Logo" width={30} height={30} />
+          <Image src="/icons/white-logo.webp" alt="" width={30} height={30} showLoader={false} />
+          <OfferCountdown variant="ticker" />
         </div>
         <nav className="topbar-links">
           <Link href="/blogs">Blog</Link>
           <span className="separator">|</span>
-          <Link onClick={handleClick} href="#" className="hide-on-mobile">Consulting</Link>
+          <Link href="/plant-doctor" className="hide-on-mobile">Consulting</Link>
           <span className="separator hide-on-mobile">|</span>
-          <Link href="/offers">Offers</Link>
+          <Link href="/offers" className="hide-on-mobile">Offers</Link>
           <span className="separator hide-on-mobile">|</span>
           <Link href="/testimonials" className="hide-on-mobile">Testimonials</Link>
           <span className="separator hide-on-mobile">|</span>

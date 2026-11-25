@@ -24,6 +24,8 @@ export default function OrdersPage() {
   // Status badge configuration
   const statusConfig = {
     pending: { label: 'Pending', color: 'yellow' },
+    pending_payment: { label: 'Awaiting payment', color: 'yellow' },
+    return_requested: { label: 'Return requested', color: 'orange' },
     confirmed: { label: 'Confirmed', color: 'blue' },
     shipped: { label: 'Shipped', color: 'purple' },
     delivered: { label: 'Delivered', color: 'green' },
@@ -80,15 +82,16 @@ export default function OrdersPage() {
 
   const fetchOrderStats = async () => {
     try {
-      const stats = await orderService.getOrderStats(user.uid);
-      setOrderStats(stats);
+      const { data: stats } = await orderService.getOrderStats(user.uid);
+      if (stats) setOrderStats(stats);
     } catch (error) {
       console.error('Error fetching order stats:', error);
     }
   };
 
   const formatPrice = (price) => {
-    return `₹${price.toFixed(2)}`;
+    const n = Number(price);
+    return `₹${(Number.isFinite(n) ? n : 0).toFixed(2)}`;
   };
 
   const formatDate = (dateString) => {
@@ -242,7 +245,7 @@ export default function OrdersPage() {
                         {order.items.slice(0, 3).map((item, idx) => (
                           <div key={idx} className="item-image-wrapper">
                             <Image
-                              src={item.image || '/placeholder-plant.jpg'}
+                              src={item.image || '/logo.webp'}
                               alt={item.name}
                               width={60}
                               height={60}

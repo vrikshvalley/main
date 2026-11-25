@@ -6,11 +6,14 @@ import { usePathname } from 'next/navigation';
 // Note: removed direct import of global SCSS to avoid Turbopack client-proxy issues
 // Styles are applied via global stylesheet in app layout instead.
 
+const NOTO_FONTS_URL =
+  'https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@600&family=Noto+Sans+Bengali:wght@600&family=Noto+Sans+Devanagari:wght@600&family=Noto+Sans+Gujarati:wght@600&family=Noto+Sans+Kannada:wght@600&family=Noto+Sans+Malayalam:wght@600&family=Noto+Sans+Meetei+Mayek:wght@600&family=Noto+Sans+Oriya:wght@600&family=Noto+Sans+Tamil:wght@600&family=Noto+Sans+Telugu:wght@600&family=Noto+Sans:wght@600&display=swap';
+const INTRO_SEEN_KEY = 'vv-intro-seen';
+
 export default function InitialLoader() {
   const pathname = usePathname();
   const [isLoading, setIsLoading] = useState(pathname === '/');
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
-  const [videoFailed, setVideoFailed] = useState(false);
   const MOTION_DURATION = 300; // ms - matches framer-motion transitions
   const VALLEY_DELAY = 80; // ms delay before showing 'Valley' so both texts match
 
@@ -32,13 +35,20 @@ export default function InitialLoader() {
 
   // Current active text object derived from the array and index.
   const currentText = textArray[currentTextIndex] || { text: '' };
+  // The word rolling out above it (the sequence only ever moves forward).
+  const prevText = currentTextIndex > 0 ? textArray[currentTextIndex - 1] : null;
 
   // Toggle loader whenever route changes to homepage.
   useLayoutEffect(() => {
-    if (pathname === '/') {
+    // The intro plays once per browser session; repeat visits go straight to the page.
+    let introSeen = false;
+    try {
+      introSeen = sessionStorage.getItem(INTRO_SEEN_KEY) === '1';
+    } catch (e) {}
+
+    if (pathname === '/' && !introSeen) {
       setCurrentTextIndex(0);
       setValleyShown(false);
-      setVideoFailed(false);
       setIsLoading(true);
       return;
     }
@@ -54,7 +64,21 @@ export default function InitialLoader() {
       document.documentElement.setAttribute('data-initial-loader', '1');
     } else {
       document.documentElement.removeAttribute('data-initial-loader');
+      try {
+        sessionStorage.setItem(INTRO_SEEN_KEY, '1');
+      } catch (e) {}
     }
+  }, [isLoading]);
+
+  // Load the multi-script Noto fonts only when the intro actually plays,
+  // instead of blocking every page with render-blocking @imports.
+  useEffect(() => {
+    if (!isLoading || document.getElementById('vv-noto-fonts')) return;
+    const link = document.createElement('link');
+    link.id = 'vv-noto-fonts';
+    link.rel = 'stylesheet';
+    link.href = NOTO_FONTS_URL;
+    document.head.appendChild(link);
   }, [isLoading]);
 
   // Start the text sequence only when the loader becomes visible.
@@ -121,56 +145,39 @@ export default function InitialLoader() {
           }}
         >
           <div className="loaderBackground">
-            <video
-              className="loaderBackgroundVideo"
-              autoPlay
-              muted
-              playsInline
-              onError={() => setVideoFailed(true)}
-            >
-              <source src="/hero.mp4" type="video/mp4" />
-            </video>
             <div className="loaderBackgroundOverlay" />
-            {videoFailed && <div className="loaderBackgroundFallback" />}
+            <div className="loaderBackgroundFallback" />
           </div>
 
           {/* Content Container */}
           <div className="loaderContent">
-            {/* Scrolling Text Animation */}
-            <motion.div className="scrollingTextContainer" initial={{ opacity: 1 }}>
-              <div className="brandWrapper">
-                <motion.span
-                  className={`scrollingText ${currentText.className || ''}`.trim()}
+            {/*
+              Two fixed halves meeting at the centre line: the word slot on the left is
+              right-aligned and clips its contents, so each local-language word rolls
+              up into place like a counter while "Valley" never moves.
+            */}
+            <div className="brandWrapper">
+              <span className="wordSlot" aria-hidden="true">
+                {prevText && (
+                  <span
+                    key={`out-${currentTextIndex}`}
+                    className={`scrollingText is-out ${prevText.className || ''}`.trim()}
+                    dir={prevText.dir || 'ltr'}
+                  >
+                    {prevText.text}
+                  </span>
+                )}
+                <span
+                  key={`in-${currentTextIndex}`}
+                  className={`scrollingText is-in ${currentText.className || ''}`.trim()}
                   dir={currentText.dir || 'ltr'}
-                  key={currentTextIndex}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    duration: MOTION_DURATION / 1000,
-                    ease: [0.25, 0.1, 0.25, 1],
-                  }}
                 >
                   {currentText.text}
-                </motion.span>
-
-                {!valleyShown ? (
-                  <motion.span
-                    className="valleyText"
-                    initial={{ opacity: 0, x: 30 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{
-                      duration: MOTION_DURATION / 1000,
-                      delay: VALLEY_DELAY / 1000,
-                      ease: [0.25, 0.1, 0.25, 1],
-                    }}
-                  >
-                    Valley
-                  </motion.span>
-                ) : (
-                  <span className="valleyText">Valley</span>
-                )}
-              </div>
-            </motion.div>
+                </span>
+              </span>
+              <span className={`valleyText${valleyShown ? ' is-in' : ''}`}>Valley</span>
+              <span className="sr-only">Vriksh Valley</span>
+            </div>
           </div>
         </motion.div>
       )}

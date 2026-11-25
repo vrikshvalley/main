@@ -6,7 +6,7 @@ import { Droplets, Leaf, TreeDeciduous } from 'lucide-react';
 import { useSplitType } from '@/lib/hooks/useSplitType';
 import '@/styles/impactCounter.scss';
 
-function Counter({ value }) {
+export function Counter({ value }) {
   const ref = useRef(null);
   const motionValue = useMotionValue(0);
   const springValue = useSpring(motionValue, {
@@ -14,28 +14,23 @@ function Counter({ value }) {
     stiffness: 60,
     restDelta: 0.001
   });
-  const isInView = useInView(ref, { once: false, margin: "-50px" });
-  const [displayValue, setDisplayValue] = useState(0);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
   const [randomOffset] = useState(() => Math.floor(Math.random() * 9) + 1);
   const targetValue = value + randomOffset;
 
   useEffect(() => {
-    if (isInView) {
-      motionValue.set(targetValue);
-    } else {
-      motionValue.set(0);
-    }
+    if (isInView) motionValue.set(targetValue);
   }, [motionValue, isInView, targetValue]);
 
+  // Write the number straight into the DOM: no React re-render per frame.
   useEffect(() => {
     const unsubscribe = springValue.on("change", (latest) => {
-      setDisplayValue(Math.floor(latest));
+      if (ref.current) ref.current.textContent = Math.floor(latest).toLocaleString();
     });
-    
     return () => unsubscribe();
   }, [springValue]);
 
-  return <span ref={ref}>{displayValue.toLocaleString()}</span>;
+  return <span ref={ref}>0</span>;
 }
 
 export default function ImpactCounter({ variant = 'default', showHeader = true }) {
@@ -51,10 +46,10 @@ export default function ImpactCounter({ variant = 'default', showHeader = true }
             className="section-header"
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false }}
+            viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <h1 className="section-title">Our Impact</h1>
+            <h2 className="section-title">Our Impact</h2>
           </motion.div>
         )}
         {showImpactHeader && (
@@ -62,10 +57,10 @@ export default function ImpactCounter({ variant = 'default', showHeader = true }
             className="section-header"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false }}
+            viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h1 className="section-title">Our Environmental Impact</h1>
+            <h2 className="section-title">Our Environmental Impact</h2>
             <p className="section-subtitle">
               Together, we're making a difference for our planet
             </p>
@@ -77,7 +72,7 @@ export default function ImpactCounter({ variant = 'default', showHeader = true }
             className="compact-card"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false }}
+            viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
             <div className="compact-item">
@@ -117,7 +112,7 @@ export default function ImpactCounter({ variant = 'default', showHeader = true }
               className="counter-card"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false }}
+              viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.1 }}
             >
               <div className="icon-wrapper water">
@@ -137,7 +132,7 @@ export default function ImpactCounter({ variant = 'default', showHeader = true }
               className="counter-card"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false }}
+              viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
               <div className="icon-wrapper organic">
@@ -157,7 +152,7 @@ export default function ImpactCounter({ variant = 'default', showHeader = true }
               className="counter-card"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false }}
+              viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.3 }}
             >
               <div className="icon-wrapper trees">

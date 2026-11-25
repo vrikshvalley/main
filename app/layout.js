@@ -1,3 +1,4 @@
+import Script from "next/script";
 import "../styles/globals.scss";
 import "../styles/initialLoader.scss";
 import Providers from "./providers";
@@ -8,8 +9,9 @@ import GlobalCartModal from "@/components/cart/GlobalCartModal";
 import ToastContainer from "@/components/general/ToastContainer";
 import ScrollToTop from "@/components/general/ScrollToTop";
 import SkipLink from "@/components/general/SkipLink";
-// ScrollProgress removed - using native scrollbar
 import HomeSidebar from "@/components/general/HomeSidebar";
+import PlantHelpNudge from "@/components/general/PlantHelpNudge";
+import RevealObserver from "@/components/general/RevealObserver";
 
 export const viewport = {
   width: "device-width",
@@ -54,7 +56,7 @@ export const metadata = {
     siteName: "Vriksh Valley",
     images: [
       {
-        url: "/big-logo.png",
+        url: "/big-logo.webp",
         width: 1200,
         height: 630,
         alt: "Vriksh Valley - Premium Plant Nursery",
@@ -66,7 +68,7 @@ export const metadata = {
     title: "Vriksh Valley – Where Nature Meets Nurture",
     description:
       "Elevate your home with handpicked, specially curated greenery and artisanal planters.",
-    images: ["/big-logo.png"],
+    images: ["/big-logo.webp"],
   },
   robots: {
     index: true,
@@ -86,13 +88,13 @@ export const metadata = {
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "any" },
-      { url: "/logo.png", sizes: "192x192", type: "image/png" },
+      { url: "/logo.webp", sizes: "192x192", type: "image/webp" },
     ],
-    apple: [{ url: "/logo.png", sizes: "180x180", type: "image/png" }],
+    apple: [{ url: "/logo.webp", sizes: "180x180", type: "image/webp" }],
     other: [
       {
         rel: "mask-icon",
-        url: "/logo.png",
+        url: "/logo.webp",
       },
     ],
   },
@@ -105,7 +107,7 @@ export default function RootLayout({ children }) {
     "@type": "Organization",
     name: "Vriksh Valley",
     url: "https://vrikshvalley.com",
-    logo: "https://vrikshvalley.com/big-logo.png",
+    logo: "https://vrikshvalley.com/big-logo.webp",
     description:
       "Elevate your home with handpicked, specially curated greenery and artisanal planters, creating a tranquil, nature-inspired haven.",
     contactPoint: {
@@ -179,9 +181,11 @@ export default function RootLayout({ children }) {
       data-scroll-behavior="smooth"
       crxlauncher=""
     >
-      <head>
+      <head suppressHydrationWarning>
         <meta name="apple-mobile-web-app-title" content="Vriksh Valley" />
-        <link rel="canonical" href="https://vrikshvalley.com" />
+        {/* Product photos come from Cloudinary: open the connection early */}
+        <link rel="preconnect" href="https://res.cloudinary.com" crossOrigin="" />
+        <link rel="dns-prefetch" href="https://res.cloudinary.com" />
         <meta name="theme-color" content="#073b22" />
         <link
           rel="icon"
@@ -193,6 +197,11 @@ export default function RootLayout({ children }) {
           rel="apple-touch-icon"
           href="https://vrikshvalley.com/favicon.ico"
         />
+      </head>
+      <body>
+        <Script id="vv-skip-intro" strategy="beforeInteractive">
+          {`try{if(sessionStorage.getItem('vv-intro-seen')==='1')document.documentElement.setAttribute('data-skip-intro','1')}catch(e){}`}
+        </Script>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
@@ -203,8 +212,6 @@ export default function RootLayout({ children }) {
             __html: JSON.stringify(siteNavigationData),
           }}
         />
-      </head>
-      <body>
         <SkipLink />
         <script
           dangerouslySetInnerHTML={{
@@ -215,7 +222,6 @@ export default function RootLayout({ children }) {
         `,
           }}
         />
-        {/* ScrollProgress removed - using native scrollbar */}
         <InitialLoader />
         <TheLoader fullscreen showOnRouteChange />
         <Providers>
@@ -224,6 +230,8 @@ export default function RootLayout({ children }) {
             <ToastContainer />
             <ScrollToTop />
             <HomeSidebar />
+            <PlantHelpNudge />
+            <RevealObserver />
             <div className="container" id="main-content">
               {children}
             </div>

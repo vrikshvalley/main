@@ -1,0 +1,55 @@
+@use 'variables' as *;
+
+.vv-divider {
+  position: relative;
+  height: clamp(110px, 14vw, 190px);
+  margin-bottom: 2.5rem;
+  overflow: hidden;
+  pointer-events: none;
+
+  svg {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    bottom: 0;
+  }
+
+  &__back {
+    fill: $dark-green;
+    opacity: 0.45;
+  }
+
+  &__mid {
+    fill: $deep-green;
+    opacity: 0.75;
+  }
+
+  &__front {
+    fill: $teal;
+    bottom: -18% !important;
+  }
+}
+
+// Each layer drifts at its own speed while the divider crosses the viewport.
+@supports (animation-timeline: view()) {
+  .vv-divider svg {
+    animation: vvHill linear both;
+    animation-timeline: view();
+  }
+
+  .vv-divider__back { --hill-shift: 45px; }
+  .vv-divider__mid { --hill-shift: 22px; }
+  .vv-divider__front { --hill-shift: -18px; }
+}
+
+@keyframes vvHill {
+  from { transform: translateY(0); }
+  to { transform: translateY(var(--hill-shift, 0)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vv-divider svg {
+    animation: none !important;
+  }
+}

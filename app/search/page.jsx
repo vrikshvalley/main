@@ -132,8 +132,8 @@ function SearchContent() {
           className={`products-header search-header ${searchResults.length === 0 ? 'no-results-header' : ''}`}
           style={{
             minHeight: '250px',
-            '--search-hero-desktop': `url(${"/SearchDesktop.png"})`,
-            '--search-hero-mobile': `url(${"/SearchMobile.png"})`
+            '--search-hero-desktop': `url(${"/pages/SearchDesktop.webp"})`,
+            '--search-hero-mobile': `url(${"/pages/SearchMobile.webp"})`
           }}
         >
           <motion.div 
@@ -174,7 +174,7 @@ function SearchContent() {
           <aside className={`filters-sidebar ${showFilters ? 'show' : 'hide'}`}>
             <div className="filters-header">
               <h3>
-                <img src="/hamMenu.png" alt="Filters" width={16} height={16} />
+                <img src="/icons/hamMenu.webp" alt="Filters" width={16} height={16} />
                 Filters
               </h3>
               <button 
@@ -252,7 +252,7 @@ function SearchContent() {
                   className="mobile-filter-toggle"
                   onClick={() => setShowFilters(!showFilters)}
                 >
-                  <img src="/hamMenu.png" alt="Filters" width={18} height={18} />
+                  <img src="/icons/hamMenu.webp" alt="Filters" width={18} height={18} />
                   Filters {getActiveFiltersCount() > 0 && `(${getActiveFiltersCount()})`}
                 </button>
                 <p className="results-count">

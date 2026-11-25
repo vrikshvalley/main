@@ -41,17 +41,17 @@ export default function AutoLogoutProvider({ children }) {
     if (!showWarning) return;
 
     const timer = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          handleLogout();
-          return 0;
-        }
-        return prev - 1;
-      });
+      setCountdown((prev) => (prev <= 1 ? 0 : prev - 1));
     }, 1000);
 
     return () => clearInterval(timer);
   }, [showWarning]);
+
+  useEffect(() => {
+    if (showWarning && countdown === 0) {
+      handleLogout();
+    }
+  }, [showWarning, countdown]);
 
   const handleStayLoggedIn = () => {
     setShowWarning(false);

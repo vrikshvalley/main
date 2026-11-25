@@ -22,10 +22,10 @@ export default function TermsConditions() {
         <picture>
           <source 
             media="(max-width: 768px)" 
-            srcSet="/TermsandConditionsMobile.png" 
+            srcSet="/pages/TermsandConditionsMobile.webp" 
           />
           <Image
-            src="/TermsandConditionsDesktop.png"
+            src="/pages/TermsandConditionsDesktop.webp"
             alt="Terms and Conditions - Vriksh Valley"
             fill
             priority

@@ -9,7 +9,6 @@ import "@/styles/profileIcon.scss";
 
 export default function ProfileIcon() {
   const [user, setUser] = useState(null);
-  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     // Listen for auth state changes
@@ -20,31 +19,23 @@ export default function ProfileIcon() {
     return () => unsubscribe();
   }, []);
 
+  // The whole icon + label is one link, so the picture is clickable too.
   return (
-    <div 
-      className="profile-icon"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+    <Link
+      href={user ? '/profile' : '/auth/signin'}
+      className="profile-icon nav-action"
+      aria-label={user ? 'Your profile' : 'Log in'}
     >
-      <div className="icon-wrapper">
-        <Image 
-          src={user ? "/profile.png" : "/login.png"}
-          alt={user ? "Profile" : "Sign in"}
+      <span className="icon-wrapper">
+        <Image
+          src={user ? "/icons/profile.webp" : "/icons/login.webp"}
+          alt=""
           width={24}
           height={24}
+          showLoader={false}
         />
-      </div>
-      <div className="profile-text">
-        {user ? (
-          <>
-            <Link href="/profile" className="profile-link">
-              Profile
-            </Link>
-          </>
-        ) : (
-          <Link href="/auth/signin" className="auth-link">Login</Link>
-        )}
-      </div>
-    </div>
+      </span>
+      <span className="profile-text nav-action-label">{user ? 'Profile' : 'Login'}</span>
+    </Link>
   );
 }

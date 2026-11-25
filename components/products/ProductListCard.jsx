@@ -7,6 +7,10 @@ import { useDispatch } from 'react-redux';
 import { addItem } from '@/lib/slices/cartSlice';
 import { createPortal } from 'react-dom';
 import ProductPage from '@/components/products/ProductPage';
+import { priceWithOffer } from '@/lib/offers';
+import { defaultOptions } from '@/lib/cartItems';
+import { getReviewSummary } from '@/lib/reviews';
+import { parseCareDetails } from '@/lib/productCare';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const getImageSrc = (img) => {
@@ -14,25 +18,13 @@ const getImageSrc = (img) => {
   return typeof img === 'string' ? img : (img.src || img.url || '');
 };
 
-// Generate a consistent random discount between 10-60% based on product ID
-const getProductDiscount = (productId) => {
-  if (!productId) return 0;
-  // Use product ID to seed the random number for consistency
-  const hash = productId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-  const discountOptions = [10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60];
-  return discountOptions[hash % discountOptions.length];
-};
-
-const calculateOriginalPrice = (currentPrice, discountPercent) => {
-  return Math.round(currentPrice / (1 - discountPercent / 100));
-};
-
-// Generate a consistent random review count between 15-250 based on product ID
-const getProductReviewCount = (productId) => {
-  if (!productId) return 15;
-  const hash = productId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-  // Generate review count between 15-250
-  return 15 + (hash % 236);
+// Real pricing only: a strikethrough price is shown solely when the product
+// record carries an actual MRP / compare-at price above the selling price.
+// (Previously a random 10-60% "discount" and a random review count were
+// generated from the product ID, which is misleading to customers.)
+const getReferencePrice = (product, currentPrice) => {
+  const ref = Number(product?.mrp ?? product?.compareAtPrice ?? product?.originalPrice);
+  return Number.isFinite(ref) && ref > currentPrice ? ref : null;
 };
 
 export default function ProductListCard({ product, viewMode = 'grid' }) {
@@ -70,15 +62,24 @@ export default function ProductListCard({ product, viewMode = 'grid' }) {
     e.preventDefault();
     e.stopPropagation();
     
-    const productPrice = typeof product.price === 'number' ? product.price : (product.variants?.[0]?.price || 0);
-    
+    const options = defaultOptions(product);
+    const chosenVariant = options.variant && Array.isArray(product.variants)
+      ? product.variants.find((v) => v && (v.label || v.name) === options.variant)
+      : null;
+    const basePrice = Number(chosenVariant?.price ?? product.price ?? 0);
+    const { price: productPrice, regularPrice, offer } = priceWithOffer(product, basePrice);
+
     dispatch(addItem({
       id: product.id,
+      slug: product.slug || null,
       name: product.name,
       price: productPrice,
+      regularPrice: offer ? regularPrice : null,
+      offerBadge: offer ? offer.badge : null,
       image: getImageSrc(product.images?.[0]),
       qty: 1,
       quantity: 1,
+      ...options,
     }));
   };
 
@@ -112,9 +113,14 @@ export default function ProductListCard({ product, viewMode = 'grid' }) {
   const isPlantProduct = categoryStr.includes('plant') || tags.includes('plant') || (product.type || '').toString().toLowerCase() === 'plant' || (product.productType || '').toString().toLowerCase() === 'plant';
 
   // Tag Logic - only apply these badges for plant products
-  const isPetFriendly = isPlantProduct && (product.petFriendly === 'Yes' || product.petFriendly === true || product.petFriendly === 'true' || tags.includes('pet-friendly') || tags.includes('pet friendly'));
-  // Mock Low Light based on ID if not present (for demo) but only for plants
-  const isLowLight = isPlantProduct && (product.light === 'Low' || product.light === 'low' || tags.includes('low-light') || tags.includes('low light') || (!product.light && (product.id || '').charCodeAt(0) % 3 === 0));
+  const petText = String(product.petFriendly || '');
+  const isPetFriendly = isPlantProduct && (product.petFriendly === true || (/pet[- ]?friendly|yes/i.test(petText) && !/not/i.test(petText)) || tags.includes('pet-friendly') || tags.includes('pet friendly'));
+  // Low light only when the product's own care data says so
+  const sunlight = parseCareDetails(product.additionalDetails).find((r) => r.key === 'light')?.value || product.light || '';
+  const isLowLight = isPlantProduct && (/low/i.test(sunlight) || tags.includes('low-light') || tags.includes('low light'));
+
+  const { price: offerPrice, regularPrice, offer } = priceWithOffer(product);
+  const reviewSummary = getReviewSummary(product.slug);
 
   return (
     <>
@@ -171,43 +177,23 @@ export default function ProductListCard({ product, viewMode = 'grid' }) {
           <div className="out-of-stock-badge">Out of Stock</div>
         )}
         
-        {product.featured && product.stock > 0 && (
-          <div className="featured-badge">Featured</div>
+        {offer && product.stock > 0 ? (
+          <div className="featured-badge offer-ribbon">{offer.badge}</div>
+        ) : (
+          product.featured && product.stock > 0 && <div className="featured-badge">Featured</div>
         )}
 
         {product.new_arrivals && product.stock > 0 && (
           <div className="new-arrivals-badge">New Arrival</div>
         )}
 
-        {/* Dynamic Glowing Tags */}
-        <div style={{ position: 'absolute', bottom: '10px', left: '10px', zIndex: 5, display: 'flex', gap: '5px', flexDirection: 'column', alignItems: 'flex-start' }}>
-            {isPetFriendly && (
-              <motion.div 
-                animate={{ boxShadow: ["0 0 0px rgba(28, 158, 91, 0)", "0 0 10px rgba(28, 158, 91, 0.6)", "0 0 0px rgba(28, 158, 91, 0)"] }}
-                transition={{ duration: 2, repeat: Infinity }}
-                style={{ 
-                    background: 'rgba(28, 158, 91, 0.9)', color: 'white', 
-                    padding: '4px 8px', borderRadius: '4px', fontSize: '0.7rem',
-                    backdropFilter: 'blur(4px)', fontWeight: '500'
-                }}
-              >
-               🐾 Pet Friendly
-              </motion.div>
-            )}
-             {isLowLight && (
-              <motion.div 
-                animate={{ boxShadow: ["0 0 0px rgba(13, 110, 253, 0)", "0 0 10px rgba(13, 110, 253, 0.6)", "0 0 0px rgba(13, 110, 253, 0)"] }}
-                transition={{ duration: 2, repeat: Infinity, delay: 1 }}
-                style={{ 
-                    background: 'rgba(13, 110, 253, 0.9)', color: 'white', 
-                    padding: '4px 8px', borderRadius: '4px', fontSize: '0.7rem',
-                    backdropFilter: 'blur(4px)', fontWeight: '500'
-                }}
-              >
-               🌑 Low Light
-              </motion.div>
-            )}
-        </div>
+        {/* Care tags (CSS glow, no per-card JS animation) */}
+        {(isPetFriendly || isLowLight) && (
+          <div className="card-care-tags">
+            {isPetFriendly && <span className="card-care-tag card-care-tag--pet">🐾 Pet friendly</span>}
+            {isLowLight && <span className="card-care-tag card-care-tag--low">🌑 Low light</span>}
+          </div>
+        )}
 
         <button 
           className={`wishlist-button ${isWishlisted ? 'active' : ''}`}
@@ -223,12 +209,14 @@ export default function ProductListCard({ product, viewMode = 'grid' }) {
         <h3 className="product-name">{product.name}</h3>
         <p className="product-description">{product.description}</p>
 
-        <div className="product-rating">
-          <div className="stars">{renderStars(product.rating || 4.5)}</div>
-          <span className="rating-text">
-            {(product.rating || 4.5).toFixed(1)} ({getProductReviewCount(product.id)})
-          </span>
-        </div>
+        {reviewSummary && (
+          <div className="product-rating" aria-label={`Rated ${reviewSummary.average} out of 5 from ${reviewSummary.count} reviews`}>
+            <div className="stars">{renderStars(reviewSummary.average)}</div>
+            <span className="rating-text">
+              {reviewSummary.average.toFixed(1)} ({reviewSummary.count})
+            </span>
+          </div>
+        )}
 
         <div className="product-footer">
           <div className="product-price">
@@ -237,16 +225,18 @@ export default function ProductListCard({ product, viewMode = 'grid' }) {
             ) : (
               <>
                 {(() => {
-                  const currentPrice = typeof product.price === 'number' ? product.price : (product.variants?.[0]?.price || 0);
-                  const discount = getProductDiscount(product.id);
-                  const originalPrice = calculateOriginalPrice(currentPrice, discount);
-                  
+                  // Strikethrough = real regular price when an offer applies,
+                  // otherwise a catalogue MRP if the product record has one.
+                  const mrp = getReferencePrice(product, regularPrice);
+                  const strike = offer ? regularPrice : mrp;
+                  const pct = strike ? Math.round((1 - offerPrice / strike) * 100) : 0;
+
                   return (
                     <div className="price-container">
                       <div className="price-row">
-                        <span className="current-price">₹{currentPrice}</span>
-                        <span className="original-price">₹{originalPrice}</span>
-                        <span className="discount-badge">{discount}% OFF</span>
+                        <span className="current-price">₹{offerPrice}</span>
+                        {strike && strike > offerPrice && <span className="original-price">₹{strike}</span>}
+                        {pct > 0 && <span className="discount-badge">{pct}% OFF</span>}
                       </div>
                       {product.variants && product.variants.length > 1 && <span className="price-suffix">onwards</span>}
                     </div>
@@ -345,7 +335,7 @@ export default function ProductListCard({ product, viewMode = 'grid' }) {
                 Open full page
               </Link>
             </div>
-            <ProductPage product={product} />
+            <ProductPage product={product} variant="quickview" />
           </div>
         </div>
       </div>,

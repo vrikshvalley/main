@@ -1,237 +1,713 @@
 @use './variables' as *;
 
-.heroContainer {
+// ============================================
+// LIVING SHELF HERO
+// A vine garland, a giant wordmark and a wooden shelf of real plants.
+// Every animation here is CSS and only touches transform/opacity, so the
+// browser can run it on the compositor without any per-frame JavaScript.
+// ============================================
+
+.heroContainer.vvHero {
   position: relative;
   width: 100%;
   max-width: 100vw;
-  height: 700px; // Increased from 600px to prevent cropping
   overflow: hidden;
+  isolation: isolate;
+  // layered "mesh" gradient: emerald base, a mint glow behind the shelf,
+  // warm sunlight from the top-right and a deep pool bottom-left
+  background:
+    radial-gradient(ellipse 55% 42% at 50% 66%, rgba(#35e498, 0.34), transparent 70%),
+    radial-gradient(ellipse 42% 38% at 90% 4%, rgba($yellow, 0.3), transparent 70%),
+    radial-gradient(ellipse 34% 30% at 78% 40%, rgba(#2ad1c9, 0.16), transparent 70%),
+    radial-gradient(ellipse 50% 55% at 4% 96%, rgba(#021a12, 0.8), transparent 70%),
+    radial-gradient(ellipse 40% 35% at 10% 16%, rgba(#35e498, 0.22), transparent 70%),
+    linear-gradient(160deg, #0f5a3b 0%, $dark-green 36%, $deep-green 70%, #08301f 100%);
+  padding-bottom: 2.5rem;
 
-  @media (max-width: 768px) {
-    height: 550px; // Increased from 500px
+  // a slow aurora drifting across the backdrop (transform-only, so it stays on the compositor)
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -20% -10%;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse 30% 25% at 30% 40%, rgba(#35e498, 0.16), transparent 70%),
+      radial-gradient(ellipse 28% 22% at 72% 30%, rgba($yellow, 0.1), transparent 70%);
+    animation: vvAurora 22s ease-in-out infinite alternate;
   }
 
-  @media (max-width: 400px) {
-    height: 450px; // Increased from 400px
-  }
-
-  @media (max-width: 400px) {
-    height: 400px;
-  }
-}
-
-.sliderWrapper {
-  position: relative;
-  width: 100%;
-  height: 100%;
-
-  .heroVideo {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    display: block;
-  }
-
-  // Gradient overlay for better text readability
+  // fine grain so the gradient never bands
   &::after {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(
-      135deg,
-      rgba($dark-green, 0.15) 0%,
-      rgba($deep-green, 0.1) 30%,
-      rgba($dark-green, 0.08) 60%,
-      rgba($dark-green, 0.12) 100%
-    );
-    z-index: 2;
+    inset: 0;
+    z-index: -1;
     pointer-events: none;
-  }
-
-  // Swiper overrides
-  .swiper {
-    width: 100%;
-    height: 100%;
-  }
-
-  // Slider images
-  .swiper-slide {
-    position: relative;
-
-    img,
-    picture {
-      transition: transform 0.4s ease;
-    }
-
-    picture,
-    img {
-      width: 100%;
-      height: 100%;
-    }
-  }
-
-  // Pagination styling
-.swiper-pagination{
-    bottom: 10px;
-    z-index: 3;
-  }
-
-  // Navigation arrows - small and minimal with green theme
-  .swiper-button-prev,
-  .swiper-button-next {
-    width: 40px;
-    height: 40px;
-    background: rgba($accent-primary, 0.85);
-    backdrop-filter: blur(10px);
-    border-radius: 50%;
-    z-index: 4;
-    transition: all 0.3s ease;
-    border: 2px solid rgba($text-primary, 0.3);
-    box-shadow: 0 4px 12px rgba($primary-bg, 0.3);
-    cursor: pointer;
-    pointer-events: auto;
-
-    &::after {
-      font-size: 16px;
-      font-weight: 900;
-      color: $text-primary;
-      pointer-events: none;
-    }
-
-    &:hover {
-      background: rgba($yellow, 0.95);
-      transform: scale(1.1);
-      box-shadow: 0 6px 20px rgba($teal, 0.5);
-      border-color: $text-primary;
-    }
-
-    @media (max-width: 768px) {
-      display: none;
-    }
-  }
-
-  .swiper-button-prev {
-    left: 20px;
-  }
-
-  .swiper-button-next {
-    right: 20px;
+    opacity: 0.06;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 }
-.swiper-pagination-bullet{
-  background: rgb(0, 255, 0);
-  transition: all 0.3s ease;
-  border: 1px solid  rgb(0, 255, 0);
-}
-.swiper-pagination-bullet-active{
- 
-  width: 35px;
-  border-radius: 6px;
+
+@keyframes vvAurora {
+  from { transform: translate3d(-4%, 0, 0) scale(1); }
+  to { transform: translate3d(5%, 3%, 0) scale(1.08); }
 }
 
-.heroContent {
+@media (prefers-reduced-motion: reduce) {
+  .heroContainer.vvHero::before {
+    animation: none;
+  }
+}
+
+// ---- Vines ----
+
+.vvGarland {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 3;
-  text-align: center;
-  color: white;
-  padding: 0;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 700px;
-  background: linear-gradient(150deg, rgba(0, 0, 0, 0.326), rgba(0, 0, 0, 0.249));
+  height: auto;
+  z-index: 3;
+  pointer-events: none;
+  filter: drop-shadow(0 6px 6px rgba(0, 0, 0, 0.25));
+}
+
+.vineStem {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: vvDraw 1.8s cubic-bezier(0.45, 0, 0.2, 1) 0.1s forwards;
+}
+
+.vineLeaves path {
+  opacity: 0;
+  animation: vvFadeIn 0.5s ease-out forwards;
+  animation-delay: calc(0.3s + var(--i) * 22ms);
+}
+
+.vvShelfVine {
+  position: absolute;
+  top: calc(100% - 4px);
+  width: clamp(60px, 9vw, 120px);
+  height: auto;
+  pointer-events: none;
+  z-index: 1;
+
+  &--left {
+    left: clamp(-40px, -3vw, -12px);
+  }
+
+  &--right {
+    right: clamp(-40px, -3vw, -12px);
+  }
+}
+
+// ---- Stage and copy ----
+
+.vvStage {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: clamp(6rem, 8.5vw, 7.5rem) 1.25rem 0;
+  text-align: center;
+  color: $text-primary;
+}
+
+.vvIntro {
+  max-width: 720px;
+  margin: 0 auto;
+
+  @media (min-width: 1101px) {
+    // the garland droops ~10vw at the edges; start the intro below it
+    padding-top: clamp(0rem, 2.2vw, 2rem);
+  }
+
+  .badge {
+    margin-bottom: 1rem;
+  }
+
+  .heroTitle {
+    font-family: var(--font-heading), 'Helvetica', Arial, sans-serif;
+    font-size: clamp(1.9rem, 4.4vw, 3.6rem);
+    letter-spacing: -0.01em;
+    line-height: 1.08;
+    margin-bottom: 0;
+    text-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+  }
+}
+
+.heroAccent {
+  color: #35e498;
+}
+
+.vvOutro {
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
+  margin: clamp(2.25rem, 4vw, 3rem) auto 0;
+
+  .heroSubtitle {
+    margin: 0 auto 1.5rem;
+    padding: 0;
+  }
+
+  .ctaButtons {
+    justify-content: center;
+    margin: 0 0 1.5rem;
+  }
+
+  .features {
+    justify-content: center;
+    margin-bottom: 0;
+  }
+}
+
+// ---- Wordmark + shelf scene ----
+
+.vvScene {
+  position: relative;
+  margin: clamp(1.25rem, 3vw, 2.25rem) auto 0;
+  width: 100%;
+
+  &:has(.isOpen) {
+    z-index: 20;
+  }
+}
+
+.vvWordmark {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  box-sizing: border-box;
-  overflow-x: hidden;
-  
-  // Animated entrance
-  animation: fadeInUp 1s ease-out;
-
-  @media (max-width: 768px) {
-    height: 550px;
-  }
-
-  @media (max-width: 400px) {
-    height: 400px;
-    gap: 0.5rem;
-  }
+  font-family: var(--font-heading), sans-serif;
+  font-weight: 800;
+  font-size: clamp(4.6rem, 13vw, 11.5rem);
+  line-height: 0.84;
+  letter-spacing: -0.035em;
+  color: rgba($white, 0.94);
+  text-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+  user-select: none;
+  pointer-events: none;
+  padding-bottom: 0.06em;
 }
 
-.heroInner {
-  width: 100%;
-  max-width: 1400px;
+.vvShelf {
+  position: absolute;
+  left: 50%;
+  bottom: -14px;
+  transform: translateX(-50%);
+  width: min(92%, 1080px);
+  z-index: 2;
+}
+
+.vvShelfPlants {
   display: flex;
-  gap: 3rem;
   align-items: flex-end;
-  justify-content: space-evenly;
-  text-align: left;
- 
-  box-sizing: border-box;
+  justify-content: space-around;
+  padding: 0 4%;
+}
 
-  @media (max-width: 1024px) {
-    grid-template-columns: 1fr;
-    padding: 0 1.5rem;
+.vvPlank {
+  position: relative;
+  height: 16px;
+  margin-top: -4px;
+  border-radius: 4px;
+  background: linear-gradient(180deg, #a87449 0%, #8a5a34 55%, #6d4426 100%);
+  box-shadow: 0 14px 24px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+
+  // brackets
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    width: 14px;
+    height: 34px;
+    background: linear-gradient(180deg, #6d4426, #4f301a);
+    clip-path: polygon(0 0, 100% 0, 100% 15%, 20% 100%, 0 100%);
   }
 
-  @media (max-width: 768px) {
-    padding: 0 1rem;
-    gap: 1rem;
+  &::before {
+    left: 12%;
+  }
+
+  &::after {
+    right: 12%;
+    transform: scaleX(-1);
   }
 }
 
-.heroLeft {
-  text-align: left;
-  align-items: flex-start;
+// ---- Plants ----
 
-  .features,
-  .ctaButtons {
-    justify-content: flex-start;
+.vvPlant {
+  position: relative;
+
+  &.isOpen {
+    z-index: 20;
   }
 
-  @media (max-width: 1024px) {
-    text-align: center;
-    align-items: center;
+  &--shelf {
+    flex: 0 0 auto;
+  }
 
-    .features,
-    .ctaButtons {
-      justify-content: center;
+  &--hanging {
+    position: absolute;
+    z-index: 4;
+    left: 8%;
+    top: calc(5.4vw - 6px);
+    width: clamp(70px, 10.5vw, 150px);
+  }
+
+  // shelf plant widths (relative sizes come from the real pot sizes)
+  &--areca-palm { width: clamp(90px, 15vw, 215px); }
+  &--snake-plant { width: clamp(52px, 8.5vw, 120px); }
+  &--african-violet { width: clamp(90px, 14.5vw, 205px); }
+  &--zz-plant { width: clamp(74px, 12.5vw, 175px); }
+}
+
+.vvPlantSway {
+  transform-origin: 50% 100%;
+  animation: vvSway var(--sway-duration, 7s) ease-in-out var(--sway-delay, 0s) infinite alternate;
+
+  .vvPlant--hanging & {
+    transform-origin: 50% 0;
+    animation-name: vvSwing;
+  }
+
+  .vvPlant--edge & {
+    transform-origin: 61% calc(var(--pot-base, 0.5) * 100%);
+    animation-name: vvSwaySoft;
+  }
+}
+
+.vvPlantLink {
+  display: block;
+  border-radius: 14px;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+
+  &:hover,
+  &:focus-visible {
+    transform: translateY(-8px) scale(1.04);
+  }
+
+  &:focus-visible {
+    outline: 3px solid $yellow;
+    outline-offset: 4px;
+  }
+}
+
+.vvPlantImg {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 12px 10px rgba(0, 0, 0, 0.35));
+}
+
+// ---- Money plant on the right end of the shelf, vine over the edge ----
+.vvShelf {
+  --edge-w: clamp(120px, 15vw, 210px);
+}
+
+.vvShelfPlants {
+  padding-right: calc(var(--edge-w) * 0.62);
+}
+
+.vvShelfVine--right {
+  display: none; // the real trailing vine replaces the drawn one
+}
+
+.vvPlant--edge {
+  position: absolute;
+  z-index: 3;
+  width: var(--edge-w);
+  right: calc(1% - var(--edge-w) * 0.14);
+  // pot base on the plank's top surface (plank is 16px tall)
+  bottom: calc(16px - var(--edge-w) * var(--aspect, 1.5) * (1 - var(--pot-base, 0.5)));
+
+  .plantCard {
+    left: auto;
+    right: 62%;
+    bottom: auto;
+    top: 8%;
+    transform: translate(0, 8px);
+  }
+
+  &.isOpen .plantCard {
+    transform: translate(0, 0);
+  }
+}
+
+// ---- Impact, centered below the hero CTA across all screen sizes ----
+.vvImpact {
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto 1.5rem;
+  text-align: left;
+
+  ul {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+    column-gap: 0.65rem;
+    align-items: center;
+    padding: 0.5rem 0.85rem;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba($white, 0.14), rgba($white, 0.05));
+    border: 1px solid rgba($white, 0.16);
+    box-shadow: inset 0 1px 0 rgba($white, 0.12);
+  }
+
+  .vvImpactTitle {
+    text-align: center;
+  }
+
+  // phones: icon above number above label, three narrow tiles
+  @media (max-width: 640px) {
+    max-width: 100%;
+
+    ul {
+      gap: 0.4rem;
+    }
+
+    li {
+      grid-template-columns: 1fr;
+      justify-items: center;
+      row-gap: 0.15rem;
+      padding: 0.55rem 0.3rem;
+      text-align: center;
+    }
+
+    .vvImpactIcon {
+      grid-row: auto;
+      width: 28px;
+      height: 28px;
+      border-radius: 9px;
+
+      svg {
+        width: 15px;
+        height: 15px;
+      }
+    }
+
+    .vvImpactValue {
+      font-size: 1.1rem;
+    }
+
+    .vvImpactLabel {
+      font-size: 0.68rem;
+      line-height: 1.2;
     }
   }
 }
 
-.heroRight {
+.vvImpactTitle {
+  margin-bottom: 0.45rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba($white, 0.7);
+}
+
+.vvImpactIcon {
+  grid-row: span 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: $white;
+  color: $dark-green;
+}
+
+.vvImpactValue {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: $white;
+  font-variant-numeric: tabular-nums;
+
+  small {
+    margin-left: 0.15rem;
+    font-size: 0.78rem;
+    color: #35e498;
+  }
+}
+
+.vvImpactLabel {
+  font-size: 0.76rem;
+  color: rgba($white, 0.75);
+}
+
+// ---- Hover / tap card ----
+
+.plantCard {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  transform: translate(-50%, 8px);
+  width: 260px;
+  max-width: 80vw;
+  padding: 0.85rem 0.95rem;
+  border-radius: 16px;
+  background: $white;
+  color: $dark-green;
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.35);
+  text-align: left;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+  z-index: 30;
+
+  strong {
+    display: block;
+    font-family: var(--font-heading), sans-serif;
+    font-size: 1.05rem;
+    margin-bottom: 0.45rem;
+  }
+
+  ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    margin-bottom: 0.7rem;
+  }
+
+  li {
+    font-size: 0.72rem;
+    padding: 0.18rem 0.55rem;
+    border-radius: 999px;
+    background: rgba($teal, 0.16);
+    color: $deep-green;
+  }
+}
+
+.plantCardActions {
   display: flex;
-  justify-content: flex-end;
-  align-items: flex-end;
-  padding: 0;
-  text-align: right;
+  flex-wrap: wrap;
+  gap: 0.4rem;
 
-  @media (max-width: 1024px) {
-    display: none;
+  a {
+    flex: 1;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    white-space: nowrap;
+    text-decoration: none;
+
+    &:focus-visible {
+      outline: 3px solid $yellow;
+      outline-offset: 2px;
+    }
+  }
+
+  .plantCardLink {
+    border: 1.5px solid $dark-green;
+    color: $dark-green;
+
+    &:hover {
+      background: rgba($teal, 0.12);
+      color: $dark-green;
+    }
+  }
+
+  .plantCardCta {
+    background: $dark-green;
+    color: $white;
+
+    &:hover {
+      background: $teal;
+      color: $white;
+    }
   }
 }
 
-.heroImpact {
-  width: 100%;
-  max-width: 100%;
+.vvPlant.isOpen .plantCard {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translate(-50%, 0);
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -40%);
+// Cards for the wall plants open sideways so they stay on screen
+.vvPlant--hanging .plantCard {
+  left: 100%;
+  bottom: auto;
+  top: 30%;
+  transform: translate(0, 8px);
+}
+
+.vvPlant--hanging.isOpen .plantCard {
+  transform: translate(8px, 0);
+}
+
+
+
+// ---- Entrance + motion ----
+
+.vvFade {
+  opacity: 0;
+  transform: translateY(16px);
+  animation: vvUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: var(--d, 0s);
+}
+
+// Hold the entrance until the intro splash has gone, so it is actually seen.
+html[data-initial-loader='1'] .vvHero *,
+html[data-initial-loader='1'] .vvHero *::before,
+html[data-initial-loader='1'] .vvHero *::after {
+  animation-play-state: paused !important;
+}
+
+// Wordmark drifts down as the page scrolls: CSS scroll-driven animation,
+// ignored by browsers that do not support it.
+@supports (animation-timeline: scroll()) {
+  .vvWordmark {
+    animation: vvParallax linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 100vh;
   }
-  to {
+}
+
+@keyframes vvDraw {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes vvFadeIn {
+  to { opacity: 1; }
+}
+
+@keyframes vvUp {
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes vvSway {
+  from { transform: rotate(-1.4deg); }
+  to { transform: rotate(1.4deg); }
+}
+
+@keyframes vvSwaySoft {
+  from { transform: rotate(-0.6deg); }
+  to { transform: rotate(0.6deg); }
+}
+
+@keyframes vvSwing {
+  from { transform: rotate(-3deg); }
+  to { transform: rotate(3deg); }
+}
+
+@keyframes vvParallax {
+  to { transform: translateY(70px); }
+}
+
+// ---- Small screens ----
+
+@media (max-width: 640px) {
+  .vvStage {
+    padding-top: 7.25rem;
+  }
+
+  .vvPlant--hanging {
+    left: 4%;
+    top: 10px;
+    width: 78px;
+  }
+
+  .vvWordmark {
+    font-size: 23vw;
+  }
+
+  .vvShelf {
+    width: 96%;
+  }
+
+  .vvShelf {
+    --edge-w: 22vw;
+  }
+
+  .vvShelfPlants {
+    padding: 0 calc(var(--edge-w) * 0.62) 0 2%;
+  }
+
+  .vvPlant--areca-palm { width: 27vw; }
+  .vvPlant--snake-plant { width: 14vw; }
+  .vvPlant--african-violet { width: 26vw; }
+  .vvPlant--zz-plant { width: 22vw; }
+
+  .vvShelfVine {
+    width: 46px;
+  }
+
+  // clear the money plant's trailing vine
+  .vvOutro {
+    margin-top: 4.75rem;
+  }
+
+  // keep edge cards inside the viewport
+  .vvShelfPlants .vvPlant:first-child .plantCard {
+    left: 0;
+    transform: translate(0, 8px);
+  }
+
+  .vvShelfPlants .vvPlant:last-child .plantCard {
+    left: auto;
+    right: 0;
+    transform: translate(0, 8px);
+  }
+
+  .vvShelfPlants .vvPlant:first-child.isOpen .plantCard,
+  .vvShelfPlants .vvPlant:last-child.isOpen .plantCard {
+    transform: translate(0, 0);
+  }
+
+  .plantCard {
+    width: 230px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vvPlantSway,
+  .vvWordmark,
+  .vineStem,
+  .vineLeaves path,
+  .vvFade {
+    animation: none !important;
+  }
+
+  .vineStem {
+    stroke-dashoffset: 0;
+  }
+
+  .vineLeaves path,
+  .vvFade {
     opacity: 1;
-    transform: translate(-50%, -50%);
+    transform: none;
+  }
+
+  .vvPlantLink,
+  .plantCard {
+    transition: none;
+  }
+
+  .badge {
+    animation: none !important;
   }
 }
 
@@ -321,7 +797,7 @@
   line-height: 1.6;
   color: $text-primary;
   max-width: 700px;
-  font-family: 'Source Sans 3', sans-serif;
+  font-family: var(--font-body), sans-serif;
 
 
   @media (max-width: 768px) {
@@ -419,7 +895,7 @@
 }
 
 .ctaButton {
-  font-family: 'Bricolage Grotesque', sans-serif;
+  font-family: var(--font-heading), sans-serif;
   background: $dark-green;
   color: $white;
   border: 2px solid $white;
@@ -487,7 +963,7 @@
   border: 2px solid $white;
   padding: 0.875rem 2rem;
   font-size: 1rem;
-  font-family: 'Bricolage Grotesque', sans-serif;
+  font-family: var(--font-heading), sans-serif;
   line-height: 1.2;
   font-weight: 600;
   border-radius: 999px;
@@ -527,20 +1003,22 @@
   }
 }
 
-// Decorative elements
-.heroContent::before {
-  content: '';
-  position: absolute;
-  top: -50px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80px;
-  height: 4px;
-  background: linear-gradient(90deg, transparent, $accent-primary, transparent);
-  border-radius: 2px;
 
-  @media (max-width: 768px) {
-    top: -30px;
-    width: 60px;
-  }
+// Links styled as hero buttons
+a.ctaButton,
+a.ctaButtonSecondary,
+a.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+a.ctaButton:hover { color: $accent-primary; }
+a.ctaButtonSecondary:hover { color: $accent-primary; }
+a.ctaButton:focus-visible,
+a.ctaButtonSecondary:focus-visible,
+a.badge:focus-visible {
+  outline: 3px solid $yellow;
+  outline-offset: 3px;
 }

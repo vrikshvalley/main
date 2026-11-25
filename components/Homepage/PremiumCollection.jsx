@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { useBreakpoint } from '@/lib/hooks/useBreakpoint';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import { getProducts } from '@/lib/services/productService';
@@ -19,7 +20,7 @@ import '@/styles/products.scss';
 export default function PremiumCollection() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [viewportWidth, setViewportWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
+  const breakpoint = useBreakpoint();
   const viewAllLink = '/premium-collection';
 
   useEffect(() => {
@@ -41,50 +42,39 @@ export default function PremiumCollection() {
   }, []);
 
   useEffect(() => {
-    const handleResize = () => {
-      if (typeof window !== 'undefined') {
-        setViewportWidth(window.innerWidth);
-      }
-    };
+    const wrapper = document.querySelector('.premium-section-wrapper');
+    if (!wrapper) return;
 
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  useEffect(() => {
+    // One update per animation frame instead of a layout read on every mousemove
+    let frame = 0;
+    let lastEvent = null;
     const handleMouseMove = (e) => {
-      const wrapper = document.querySelector('.premium-section-wrapper');
-      if (wrapper) {
+      lastEvent = e;
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
         const rect = wrapper.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        wrapper.style.setProperty('--glow-x', `${x}px`);
-        wrapper.style.setProperty('--glow-y', `${y}px`);
-      }
+        wrapper.style.setProperty('--glow-x', `${lastEvent.clientX - rect.left}px`);
+        wrapper.style.setProperty('--glow-y', `${lastEvent.clientY - rect.top}px`);
+      });
     };
 
     const handleMouseLeave = () => {
-      const wrapper = document.querySelector('.premium-section-wrapper');
-      if (wrapper) {
-        wrapper.style.setProperty('--glow-x', '-999px');
-        wrapper.style.setProperty('--glow-y', '-999px');
-      }
+      wrapper.style.setProperty('--glow-x', '-999px');
+      wrapper.style.setProperty('--glow-y', '-999px');
     };
 
-    const wrapper = document.querySelector('.premium-section-wrapper');
-    if (wrapper) {
-      wrapper.addEventListener('mousemove', handleMouseMove);
-      wrapper.addEventListener('mouseleave', handleMouseLeave);
-      return () => {
-        wrapper.removeEventListener('mousemove', handleMouseMove);
-        wrapper.removeEventListener('mouseleave', handleMouseLeave);
-      };
-    }
+    wrapper.addEventListener('mousemove', handleMouseMove);
+    wrapper.addEventListener('mouseleave', handleMouseLeave);
+    return () => {
+      cancelAnimationFrame(frame);
+      wrapper.removeEventListener('mousemove', handleMouseMove);
+      wrapper.removeEventListener('mouseleave', handleMouseLeave);
+    };
   }, []);
 
-  const isMobile = viewportWidth < 768;
-  const isDesktop = viewportWidth >= 1024;
+  const isMobile = breakpoint === 'mobile';
+  const isDesktop = breakpoint === 'desktop';
   const itemsPerSlide = isDesktop ? 4 : 2;
   const slides = [];
   for (let i = 0; i < products.length; i += itemsPerSlide) {
@@ -96,7 +86,7 @@ export default function PremiumCollection() {
       className="featured-products"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: false, amount: 0.2, margin: '0px 0px -100px 0px' }}
+      viewport={{ once: true, amount: 0.2, margin: '0px 0px -100px 0px' }}
       transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
     >
       <div className="featured-header">
@@ -148,7 +138,7 @@ export default function PremiumCollection() {
                     key={product.id}
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: false, amount: 0.2 }}
+                    viewport={{ once: true, amount: 0.2 }}
                     transition={{
                       delay: cardIndex * 0.15,
                       duration: 0.6,

@@ -11,9 +11,33 @@ import {
 } from 'simple-icons';
 import '@/styles/footer.scss';
 import { useState } from 'react';
+import { showErrorToast, showSuccessToast } from '@/lib/toastHelpers';
 
 export default function Footer() {
   const [openSections, setOpenSections] = useState([]);
+  const [subscribing, setSubscribing] = useState(false);
+
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const email = new FormData(form).get('email');
+    setSubscribing(true);
+    try {
+      const res = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(json?.error?.message || 'Could not subscribe. Please try again.');
+      showSuccessToast("You're subscribed. Welcome to the valley!");
+      form.reset();
+    } catch (err) {
+      showErrorToast(err.message);
+    } finally {
+      setSubscribing(false);
+    }
+  };
 
   const toggleSection = (key) => {
     setOpenSections((prev) => (prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]));
@@ -136,9 +160,9 @@ export default function Footer() {
           transition={{ duration: 0.6, delay: 0.3 }}
         >
           <h3>Sign up for Newsletter</h3>
-          <form>
-            <input type="email" placeholder="Enter your email" />
-            <button type="submit">Subscribe</button>
+          <form onSubmit={handleSubscribe}>
+            <input type="email" name="email" placeholder="Enter your email" required autoComplete="email" />
+            <button type="submit" disabled={subscribing}>{subscribing ? "Subscribing..." : "Subscribe"}</button>
           </form>
           <div className="social-icons">
             <a href="http://www.facebook.com/people/Vriksh-Valley/61569081213347/" aria-label="Facebook">

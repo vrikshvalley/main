@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { requireAdmin } from "@/lib/serverAuth";
 import * as delhiveryService from "@/lib/services/delhiveryService";
 
 /**
@@ -6,6 +7,9 @@ import * as delhiveryService from "@/lib/services/delhiveryService";
  * Creates reverse pickup request (RVP QC 3.0) for returns with quality checks
  */
 export async function POST(request) {
+  const auth = await requireAdmin(request);
+  if (auth.response) return auth.response;
+
   try {
     const {
       originalWaybill,

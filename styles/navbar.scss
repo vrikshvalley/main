@@ -1,6 +1,5 @@
 @use "sass:color";
 @use 'variables' as *;
-@import url('https://fonts.googleapis.com/css2?family=Alumni+Sans+SC:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 
 .navbar {
   border-bottom: 1px solid rgba($text-secondary, 0.3);
@@ -710,16 +709,20 @@ color.adjust($accent-primary, $lightness: -5%);
     }
   }
 
+  html:has(body.mobile-menu-open),
+  body.mobile-menu-open {
+    overflow: hidden;
+  }
+
   .mobile-menu {
     display: none;
     flex-direction: column;
     align-items: flex-start;
     padding: 0;
     background: linear-gradient(135deg, 
-      rgba($text-primary, 0.98) 0%, 
-      rgba($text-primary, 0.95) 100%
+      rgba($text-primary, 0.99) 0%, 
+      rgba($text-primary, 0.97) 100%
     );
-    backdrop-filter: blur(20px);
     border-top: 2px solid rgba($accent-primary, 0.3);
     box-shadow: 0 10px 30px rgba($primary-bg, 0.15);
     /* Make the mobile menu an overlay that covers the viewport below the sticky navbar */
@@ -729,11 +732,13 @@ color.adjust($accent-primary, $lightness: -5%);
     right: 0;
     height: calc(100vh - 60px);
     overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
     z-index: 100050;
-    animation: slideDown 0.3s ease-out;
+    animation: slideDown 0.2s ease-out;
 
     .mobile-nav-title {
-      font-family: 'Alumni Sans', sans-serif;
+      font-family: var(--font-heading), sans-serif;
       font-size: 0.8rem;
       font-weight: 700;
       text-transform: uppercase;
@@ -754,7 +759,7 @@ color.adjust($accent-primary, $lightness: -5%);
         width: 100%;
         padding: 0.75rem 1rem;
         color: $primary-bg;
-        font-family: 'Alumni Sans', sans-serif;
+        font-family: var(--font-heading), sans-serif;
         font-size: 1.3rem;
         font-weight: 500;
         text-decoration: none;
@@ -828,7 +833,7 @@ color.adjust($accent-primary, $lightness: -5%);
         width: 100%;
         padding: 0.75rem 1rem;
         color: $primary-bg;
-        font-family: 'Alumni Sans', sans-serif;
+        font-family: var(--font-heading), sans-serif;
         font-size: 1.3rem;
         font-weight: 500;
         text-decoration: none;
@@ -887,7 +892,7 @@ color.adjust($accent-primary, $lightness: -5%);
           flex: 1;
           padding: 0.75rem 1rem;
           color: $primary-bg;
-          font-family: 'Alumni Sans', sans-serif;
+          font-family: var(--font-heading), sans-serif;
           font-size: 1.3rem;
           font-weight: 500;
           /* Reset native button appearance so it looks like a text link */
@@ -911,7 +916,7 @@ color.adjust($accent-primary, $lightness: -5%);
           flex: 1;
           padding: 0.75rem 1rem;
           color: $accent-primary;
-          font-family: 'Alumni Sans', sans-serif;
+          font-family: var(--font-heading), sans-serif;
           font-size: 1.3rem;
           font-weight: 500;
           text-decoration: none;
@@ -1224,3 +1229,273 @@ color.adjust($accent-primary, $lightness: -5%);
       z-index: 2000;
     }
   }
+
+// ============================================
+// Tablet / small laptop: the six categories + search/cart/login do not fit
+// below ~1180px (labels wrapped and the actions were pushed off-screen),
+// so the hamburger takes over from here instead of only at 768px.
+// ============================================
+.navbar .category-link {
+  white-space: nowrap;
+}
+
+@media (min-width: 1181px) and (max-width: 1400px) {
+  .navbar {
+    .nav-categories {
+      gap: 1.4rem;
+      font-size: 1.15rem;
+    }
+
+    .category-link {
+      font-size: 1.15rem;
+    }
+  }
+}
+
+@media (max-width: 1180px) {
+  .navbar {
+    .desktop-only {
+      display: none !important;
+    }
+
+    .mobile-only {
+      display: inline-flex !important;
+    }
+
+    .nav-logo {
+      margin-right: auto;
+    }
+
+    .nav-actions {
+      margin-left: auto;
+    }
+  }
+}
+
+// The menu is portaled to <body>, so it is targeted at the top level here.
+@media (max-width: 1180px) {
+  .mobile-menu {
+    display: flex;
+    font-size: 1.2rem;
+  }
+}
+
+.navbar .dropdown-item--all {
+  font-weight: 700;
+  border-top: 1px solid rgba(7, 59, 34, 0.12);
+  margin-top: 0.25rem;
+  padding-top: 0.6rem;
+}
+
+// ============================================
+// Search / Cart / Login: one consistent set of micro-interactions.
+// The icon sits in a soft "seed" bubble that swells on hover, each icon has
+// its own small gesture, and the label gets a growing underline.
+// ============================================
+html .navbar .nav-actions .nav-action {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-width: 48px;
+  min-height: 48px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: $dark-green;
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transform: none;
+  -webkit-tap-highlight-color: transparent;
+
+  .icon-wrapper {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 34px;
+    margin: 0;
+    border-radius: 14px;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    // the bubble behind the icon
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      border-radius: inherit;
+      background: radial-gradient(circle at 35% 30%, rgba(#35e498, 0.35), rgba($teal, 0.16));
+      transform: scale(0.4);
+      opacity: 0;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease;
+    }
+
+    img,
+    svg {
+      width: 24px;
+      height: 24px;
+      margin: 0;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+  }
+
+  .nav-action-label {
+    position: relative;
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 0.86rem;
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: 0.01em;
+    color: $dark-green;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      right: 50%;
+      bottom: -3px;
+      height: 2px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, $teal, #35e498);
+      transition: left 0.3s ease, right 0.3s ease;
+    }
+  }
+
+  &:hover,
+  &:focus-visible,
+  &.is-active {
+    color: $dark-green;
+    transform: none;
+
+    .icon-wrapper::before {
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    .nav-action-label::after {
+      left: 12%;
+      right: 12%;
+    }
+  }
+
+  &:focus-visible {
+    outline: none;
+
+    .icon-wrapper {
+      box-shadow: 0 0 0 2px $yellow;
+    }
+  }
+
+  &:active .icon-wrapper {
+    transform: scale(0.88);
+  }
+
+  // per-icon gestures
+  &.search-icon-button:hover .icon-wrapper img {
+    transform: rotate(-14deg) scale(1.1);
+  }
+
+  &.cart-icon:hover .icon-wrapper img {
+    animation: vvCartRoll 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  &.profile-icon:hover .icon-wrapper img {
+    transform: translateY(-2px) scale(1.1);
+  }
+}
+
+@keyframes vvCartRoll {
+  0% { transform: translateX(0) rotate(0); }
+  35% { transform: translateX(4px) rotate(-8deg); }
+  65% { transform: translateX(-2px) rotate(4deg); }
+  100% { transform: translateX(0) rotate(0); }
+}
+
+// cart count: a bright berry badge with a ring, popping on every change
+html .navbar .nav-actions .cart-icon .cart-count {
+  position: absolute;
+  top: -7px;
+  right: -9px;
+  display: grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: linear-gradient(145deg, #ff8a3d, #e8452c);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 800;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  box-shadow:
+    0 0 0 2px #f7f3ea,
+    0 4px 10px rgba(232, 69, 44, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  animation: vvCountPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  // a soft ring that pulses outward when the count changes
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    border: 2px solid rgba(232, 69, 44, 0.55);
+    animation: vvCountRing 0.9s ease-out;
+    opacity: 0;
+  }
+}
+
+@keyframes vvCountPop {
+  0% { transform: scale(0.3); }
+  60% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+
+@keyframes vvCountRing {
+  from { transform: scale(1); opacity: 1; }
+  to { transform: scale(2); opacity: 0; }
+}
+
+@media (max-width: 768px) {
+  html .navbar .nav-actions .nav-action {
+    min-width: 44px;
+
+    .icon-wrapper {
+      width: 32px;
+      height: 30px;
+
+      img,
+      svg {
+        width: 21px;
+        height: 21px;
+      }
+    }
+
+    .nav-action-label {
+      font-size: 0.72rem;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html .navbar .nav-actions .nav-action .icon-wrapper img,
+  html .navbar .nav-actions .cart-icon .cart-count,
+  html .navbar .nav-actions .cart-icon .cart-count::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+html .navbar .nav-actions {
+  gap: 0.9rem;
+
+  @media (max-width: 768px) {
+    gap: 0.25rem;
+  }
+}

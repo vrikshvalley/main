@@ -1,96 +1,57 @@
-'use client';
-
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef } from 'react';
-import Image from '@/components/general/ImgWithLoader';
+import Image from 'next/image';
+import Link from 'next/link';
 import AnimatedText from '@/components/general/AnimatedText';
 import '@/styles/bringNatureHome.scss';
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      duration: 0.8,
-      ease: [0.22, 1, 0.36, 1]
-    }
-  }
-};
-
-const textVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.8,
-      delay: 0.2,
-      ease: [0.22, 1, 0.36, 1]
-    }
-  }
-};
-
-const imageVariants = {
-  hidden: { opacity: 0, x: 30 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: {
-      duration: 0.8,
-      delay: 0.4,
-      ease: [0.22, 1, 0.36, 1]
-    }
-  }
-};
-
+/**
+ * "Bring Nature Home": story block. Server component; the only motion is the
+ * CSS scroll-linked fade (.scroll-fade) and AnimatedText's one-time reveal.
+ */
 export default function BringNatureHome() {
-  const sectionRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start end', 'end start']
-  });
-  const imageY = useTransform(scrollYProgress, [0, 1], [30, -30]);
-
   return (
-    <motion.section
-      ref={sectionRef}
-      className="bring-nature-home"
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: false, amount: 0.3 }}
-      variants={containerVariants}
-    >
+    <section className="bring-nature-home">
       <div className="content-container">
-        <div className="content-wrapper">
-          <p className="cursive-subtitle ">Garden Living</p>
-          <motion.h2 variants={textVariants}>
-            Bring Nature Home, <br />
-            <span className="highlight">One Leaf at a Time</span> 🌿
-          </motion.h2>
+        <div className="content-wrapper scroll-fade">
+          <p className="cursive-subtitle left">Garden Living</p>
+          <h2>
+            Bring nature home, <span className="highlight">one leaf at a time</span>
+          </h2>
           <AnimatedText
             as="p"
-            text="We don't just deliver plants-we bring the essence of nature into your life. Each plant is handpicked, nurtured with care, and packed with the freshness of earth. From lush greens to vibrant blooms, let nature breathe life into your space. Grow nature, and connect with the beauty that surrounds us-because every leaf tells a story, and yours is just beginning."
-            delay={0.15}
-            stagger={0.02}
+            className="lead"
+            text="We don't just deliver plants. We bring the essence of nature into your life. Each plant is handpicked, nurtured with care and packed with the freshness of earth."
+            delay={0.1}
           />
+          <AnimatedText
+            as="p"
+            text="From lush greens to vibrant blooms, let nature breathe life into your space. Every leaf tells a story, and yours is just beginning."
+            delay={0.2}
+          />
+          <ul className="nature-points">
+            <li>Handpicked</li>
+            <li>Nurtured with care</li>
+            <li>Packed fresh</li>
+          </ul>
+          <Link href="/products" className="nature-cta">
+            Start your green story
+          </Link>
         </div>
-        
-        <motion.div className="image-card" variants={imageVariants} style={{ y: imageY }}>
-          <div className="image-wrapper">
+
+        <figure className="image-card scroll-fade">
+          <div className="image-arch">
             <Image
-              src="/bringNature.jpg"
-              alt="Nature is our home"
-              width={400}
-              height={500}
+              src="/sections/bringNature.webp"
+              alt="Potted plants arranged in a bright corner of a home"
+              fill
+              sizes="(max-width: 768px) 90vw, 480px"
               className="nature-image"
-              priority={false}
             />
           </div>
-          <p className="nature-quote">
-            "In every walk with nature, one receives far more than he seeks. Nature is not a place to visit, it is home."
-          </p>
-        </motion.div>
+          <figcaption className="nature-quote">
+            “Nature is not a place to visit. It is home.”
+          </figcaption>
+        </figure>
       </div>
-    </motion.section>
+    </section>
   );
 }

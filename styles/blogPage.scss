@@ -1,7 +1,9 @@
 @use 'variables' as *;
 
 .blog-page {
-  width: 1400px;
+  width: 100%;
+  max-width: 1400px;
+  box-sizing: border-box;
   margin: 0 auto;
   padding: 3rem 1rem;
   min-height: 60vh;
@@ -27,7 +29,7 @@
   text-align: center;
   margin-bottom: 3rem;
   /* Banner background images for desktop and mobile */
-  background-image: url('/BlogsDesktop.png');
+  background-image: url('/pages/BlogsDesktop.webp');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -82,7 +84,7 @@
   }
 
   @media (max-width: 768px) {
-    background-image: url('/BlogsMobile.png');
+    background-image: url('/pages/BlogsMobile.webp');
     min-height: 220px;
     padding: 2rem 1rem;
     margin-bottom: 2rem;

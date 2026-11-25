@@ -1,56 +1,50 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { useEffect, useRef } from 'react';
+import { observeOnce } from '@/lib/inView';
 import '@/styles/animatedText.scss';
 
+const MAX_SPLIT_WORDS = 10;
+
+/**
+ * Text that fades up once when it scrolls into view.
+ *
+ * Short text (headings) is split into words that stagger in; long text
+ * (paragraphs) animates as one block, so a paragraph never turns into
+ * hundreds of animated nodes. Pure CSS transitions (opacity + transform),
+ * triggered once by a shared IntersectionObserver.
+ *
+ * `viewport` is accepted for backwards compatibility and ignored.
+ */
 export default function AnimatedText({
   text,
-  as = 'p',
+  as: Tag = 'p',
   className = '',
   delay = 0,
-  stagger = 0.08,
-  duration = 0.9,
-  viewport = { once: false, amount: 0.2 }
+  stagger = 0.06,
+  duration = 0.7,
+  viewport,
 }) {
+  const ref = useRef(null);
   const words = String(text).split(' ');
-  const MotionTag = motion[as] || motion.p;
+  const split = words.length <= MAX_SPLIT_WORDS;
 
-  const container = {
-    hidden: { opacity: 0, y: 10 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        delay,
-        staggerChildren: stagger
-      }
-    }
-  };
-
-  const child = {
-    hidden: { opacity: 0, y: 20, filter: 'blur(10px)' },
-    visible: {
-      opacity: 1,
-      y: 0,
-      filter: 'blur(0px)',
-      transition: { duration, ease: [0.22, 1, 0.36, 1] }
-    }
-  };
+  useEffect(() => observeOnce(ref.current), []);
 
   return (
-    <MotionTag
-      className={`animated-text ${className}`}
-      variants={container}
-      initial="hidden"
-      whileInView="visible"
-      viewport={viewport}
+    <Tag
+      ref={ref}
+      className={`animated-text ${split ? 'is-split' : 'is-block'} ${className}`}
+      style={{ '--at-delay': `${delay}s`, '--at-stagger': `${stagger}s`, '--at-duration': `${duration}s` }}
     >
-      {words.map((word, index) => (
-        <motion.span className="word" variants={child} key={`${word}-${index}`}>
-          {word}
-          {index < words.length - 1 ? '\u00A0' : ''}
-        </motion.span>
-      ))}
-    </MotionTag>
+      {split
+        ? words.map((word, index) => (
+            <span className="word" style={{ '--i': index }} key={`${word}-${index}`}>
+              {word}
+              {index < words.length - 1 ? ' ' : ''}
+            </span>
+          ))
+        : text}
+    </Tag>
   );
 }

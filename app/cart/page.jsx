@@ -1,308 +1,182 @@
 "use client";
 
-import { useSelector, useDispatch } from "react-redux";
-import {
-  selectItemsArray,
-  selectCount,
-  selectItemsMap,
-  selectSubtotal,
-  addItem,
-  decrementItem,
-  removeItem,
-  removeItemAsync,
-  updateItemAsync,
-  loadCart,
-  setCart,
-  loadUserCart,
-} from "@/lib/slices/cartSlice";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { Plus, Minus, Trash2, ShoppingBag, ArrowLeft } from "lucide-react";
-import { auth } from "@/lib/firebaseConfig";
-import { onAuthStateChanged } from "firebase/auth";
-import {
-  loadCartFromLocalStorage,
-  mergeAndSyncCart,
-} from "@/lib/cartUtils";
-import TheLoader from "@/components/general/TheLoader";
+import { useEffect } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { ArrowLeft, Leaf, Sparkles, ShoppingBag, CreditCard } from "lucide-react";
+import { ONLINE_PAYMENTS_ENABLED, PAYMENTS_COMING_SOON } from "@/lib/commerce";
 import Navbar from "@/components/general/Navbar";
 import Topbar from "@/components/general/Topbar";
 import Footer from "@/components/general/Footer";
-import Link from "next/link";
-import Image from "next/image";
-import Button from "@/components/general/Button";
-import "@/styles/cartPage.scss";
+import CartLine from "@/components/cart/CartLine";
+import WhatsAppGlyph from "@/components/general/WhatsAppGlyph";
+import OfferCountdown from "@/components/general/OfferCountdown";
+import { useCartLines, formatINR } from "@/lib/hooks/useCartLines";
+import "@/styles/cart.scss";
 
+/**
+ * Cart page: a roomy list of lines on the left and a sticky summary card on
+ * the right (a bottom bar on phones). Orders go through WhatsApp only.
+ */
 export default function CartPage() {
-  const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const cart = useCartLines();
+  const { items, count, subtotal, savings, isLoading } = cart;
+  const hasItems = items.length > 0;
 
-  const items = useSelector(selectItemsArray);
-  const itemsMap = useSelector(selectItemsMap);
-  const count = useSelector(selectCount);
-  const subtotal = useSelector(selectSubtotal);
-  const dispatch = useDispatch();
-  const router = useRouter();
-
-  // Load cart on mount and listen for auth state changes
+  // Phones show a sticky order bar; move the floating buttons out of its way
+  // (like the product page does).
   useEffect(() => {
-    let isInitialLoad = true;
-
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      setUser(currentUser);
-
-      if (isInitialLoad) {
-        // Initial load
-        if (currentUser) {
-          // User is logged in - load from Firebase
-          const guestCart = loadCartFromLocalStorage();
-
-          if (Object.keys(guestCart).length > 0) {
-            // Merge guest cart with user cart
-            const mergedCart = await mergeAndSyncCart(
-              currentUser.uid,
-              guestCart
-            );
-            dispatch(setCart(mergedCart));
-          } else {
-            // Just load user cart
-            dispatch(loadUserCart(currentUser.uid));
-          }
-        } else {
-          // Guest user - load from localStorage
-          const guestCart = loadCartFromLocalStorage();
-          dispatch(loadCart(guestCart));
-        }
-        setIsLoading(false);
-        isInitialLoad = false;
-      } else {
-        // Auth state changed after initial load
-        if (currentUser) {
-          // User just logged in - merge carts
-          const guestCart = loadCartFromLocalStorage();
-
-          if (Object.keys(guestCart).length > 0) {
-            const mergedCart = await mergeAndSyncCart(
-              currentUser.uid,
-              guestCart
-            );
-            dispatch(setCart(mergedCart));
-          } else {
-            dispatch(loadUserCart(currentUser.uid));
-          }
-        } else {
-          // User logged out - cart already in localStorage from reducers
-          const guestCart = loadCartFromLocalStorage();
-          dispatch(loadCart(guestCart));
-        }
-      }
-    });
-
-    return () => unsubscribe();
-  }, [dispatch]);
-
-  const handleIncrement = (product) => {
-    if (user) {
-      dispatch(updateItemAsync({ 
-        userId: user.uid, 
-        productId: product.id, 
-        quantity: product.qty + 1 
-      }));
-    } else {
-      dispatch(addItem({ ...product, qty: 1 }));
-    }
-  };
-
-  const handleDecrement = (productId) => {
-    const product = itemsMap[productId];
-    if (user) {
-      const newQty = product.qty - 1;
-      if (newQty <= 0) {
-        dispatch(removeItemAsync({ userId: user.uid, productId }));
-      } else {
-        dispatch(updateItemAsync({ 
-          userId: user.uid, 
-          productId, 
-          quantity: newQty 
-        }));
-      }
-    } else {
-      dispatch(decrementItem(productId));
-    }
-  };
-
-  const handleRemove = (productId) => {
-    if (user) {
-      dispatch(removeItemAsync({ userId: user.uid, productId }));
-    } else {
-      dispatch(removeItem(productId));
-    }
-  };
-
-  const handleCheckout = () => {
-    if (!user) {
-      router.push("/auth/signin?redirect=/checkout");
-    } else {
-      router.push("/checkout");
-    }
-  };
-
-  if (isLoading) {
-    return <TheLoader fullscreen />;
-  }
+    if (!hasItems) return;
+    document.body.classList.add("cart-bar-open");
+    return () => document.body.classList.remove("cart-bar-open");
+  }, [hasItems]);
 
   return (
     <>
       <Topbar />
       <Navbar />
-      <div className="cart-page">
-        <div className="cart-page-container">
-          {/* Header */}
-          <div className="cart-header">
-            <Button variant="ghost" size="md" onClick={() => router.back()}>
-              <ArrowLeft size={20} />
-              Continue Shopping
-            </Button>
-            <h1 className="cart-title">
-              <ShoppingBag size={32} />
-              Your Cart
+      <main className="vv-cartpage">
+        <div className="vv-cartpage__glow" aria-hidden="true" />
+        <div className="vv-cartpage__inner">
+          <header className="vv-cartpage__head">
+            <Link href="/products" className="vv-cartpage__back">
+              <ArrowLeft size={18} aria-hidden="true" /> Continue Shopping
+            </Link>
+            <h1>
+              <ShoppingBag size={36} aria-hidden="true" /> Your Cart
             </h1>
-            <p className="cart-count">{count} {count === 1 ? "item" : "items"}</p>
-          </div>
+            {!isLoading && (
+              <p className="vv-cartpage__count">
+                {count} {count === 1 ? "item" : "items"}
+              </p>
+            )}
+          </header>
 
-          {items.length === 0 ? (
-            <div className="empty-cart">
-              <ShoppingBag size={80} />
-              <h2>Your cart is empty</h2>
-              <p>Looks like you haven't added anything to your cart yet.</p>
-              <Link href="/" className="shop-now-btn">
-                Start Shopping
-              </Link>
-            </div>
-          ) : (
-            <div className="cart-content">
-              {/* Cart Items */}
-              <div className="cart-items-section">
-                {items.map((item) => (
-                  <div key={item.id} className="cart-item-card">
-                    <div className="item-image">
-                      <Image
-                        src={item.image || "/placeholder.jpg"}
-                        alt={item.name}
-                        width={120}
-                        height={120}
-                        style={{ objectFit: "cover" }}
-                      />
-                    </div>
-
-                    <div className="item-details">
-                      <h3 className="item-name">{item.name}</h3>
-                      {item.size && (
-                        <p className="item-size">Size: {item.size}</p>
-                      )}
-                      <p className="item-price">₹{typeof item.price === 'number' ? item.price : 0}</p>
-                    </div>
-
-                    <div className="item-actions">
-                      <div className="quantity-controls">
-                        <button
-                          className="qty-btn"
-                          onClick={() => handleDecrement(item.id)}
-                          aria-label="Decrease quantity"
-                        >
-                          <Minus size={16} />
-                        </button>
-                        <span className="quantity">{item.quantity}</span>
-                        <button
-                          className="qty-btn"
-                          onClick={() => handleIncrement(item)}
-                          aria-label="Increase quantity"
-                        >
-                          <Plus size={16} />
-                        </button>
-                      </div>
-
-                      <div className="item-total">
-                        ₹{((typeof item.price === 'number' ? item.price : 0) * item.quantity).toFixed(2)}
-                      </div>
-
-                      <button
-                        className="remove-btn"
-                        onClick={() => handleRemove(item.id)}
-                        aria-label="Remove item"
-                      >
-                        <Trash2 size={18} />
-                      </button>
-                    </div>
-                  </div>
+          {isLoading ? (
+            <div className="vv-cartpage__grid" aria-busy="true">
+              <div className="vv-cartpage__list">
+                {[0, 1, 2].map((i) => (
+                  <div key={i} className="vv-skeleton-line vv-skeleton-line--tall" />
                 ))}
               </div>
-
-              {/* Order Summary */}
-              <div className="order-summary">
-                <h2>Order Summary</h2>
-
-                <div className="summary-row">
-                  <span>Subtotal ({count} items)</span>
-                  <span>₹{subtotal.toFixed(2)}</span>
-                </div>
-
-                <div className="summary-row">
-                  <span>Shipping</span>
-                  <span className="free-badge">FREE</span>
-                </div>
-
-                <div className="summary-row">
-                  <span>Tax</span>
-                  <span>Calculated at checkout</span>
-                </div>
-
-                <div className="summary-divider"></div>
-
-                <div className="summary-row total">
-                  <span>Total</span>
-                  <span>₹{subtotal.toFixed(2)}</span>
-                </div>
-
-                <div className="mini-summary" aria-hidden="true">
-                  <span className="label">Total</span>
-                  <span className="value">₹{subtotal.toFixed(2)}</span>
-                  <span className="note">Includes free shipping</span>
-                </div>
-
-                <Button variant="primary" size="lg" fullWidth onClick={handleCheckout}>
-                  Proceed to Checkout
-                </Button>
-
-                {!user && (
-                  <p className="login-prompt">
-                    Have an account?{" "}
-                    <Link href="/auth/signin?redirect=/checkout">
-                      Sign in
-                    </Link>{" "}
-                    for faster checkout
+            </div>
+          ) : items.length === 0 ? (
+            <div className="vv-cart-empty vv-cart-empty--page">
+              <div className="vv-cart-empty__art" aria-hidden="true">
+                <span className="vv-cart-empty__halo" />
+                <Image src="/hero/money-plant-cutout.webp" alt="" width={180} height={272} priority />
+              </div>
+              <h2>Your cart is empty</h2>
+              <p>Looks like you haven&apos;t added anything to your cart yet.</p>
+              <div className="vv-cart-empty__actions">
+                <Link href="/products" className="vv-btn vv-btn--stone">
+                  <Leaf size={18} aria-hidden="true" /> Start Shopping
+                </Link>
+                <Link href="/offers" className="vv-btn vv-btn--pebble">
+                  <Sparkles size={18} aria-hidden="true" /> See offers
+                </Link>
+              </div>
+            </div>
+          ) : (
+            <div className="vv-cartpage__grid">
+              <section className="vv-cartpage__list" aria-label="Items in your cart">
+                {savings > 0 && (
+                  <p className="vv-drawer__savings">
+                    <Sparkles size={16} aria-hidden="true" /> You are saving <strong>{formatINR(savings)}</strong> with this week’s offers
                   </p>
                 )}
+                <ul>
+                  {items.map((item) => (
+                    <CartLine
+                      key={item.key || item.id}
+                      size="roomy"
+                      item={item}
+                      qty={cart.qtyOf(item)}
+                      unit={cart.unitPrice(item)}
+                      onIncrement={() => cart.increment(item)}
+                      onDecrement={() => cart.decrement(item)}
+                      onRemove={() => cart.remove(item)}
+                    />
+                  ))}
+                </ul>
+                <OfferCountdown variant="card" />
+              </section>
 
-                <div className="benefits">
-                  <div className="benefit">
-                    <span className="icon">🚚</span>
-                    <span>Free Delivery</span>
+              <aside className="vv-summary" aria-label="Order summary">
+                <h2>Order Summary</h2>
+                <dl>
+                  <div>
+                    <dt>Subtotal ({count} items)</dt>
+                    <dd>{formatINR(subtotal)}</dd>
                   </div>
-                  <div className="benefit">
-                    <span className="icon">🔒</span>
-                    <span>Secure Payment</span>
+                  {savings > 0 && (
+                    <div className="is-saving">
+                      <dt>You save</dt>
+                      <dd>{formatINR(savings)}</dd>
+                    </div>
+                  )}
+                  <div>
+                    <dt>Shipping</dt>
+                    <dd><span className="vv-free">FREE</span></dd>
                   </div>
-                  <div className="benefit">
-                    <span className="icon">🌱</span>
-                    <span>Quality Assured</span>
+                  <div>
+                    <dt>Tax</dt>
+                    <dd className="is-muted">Confirmed on WhatsApp</dd>
                   </div>
+                  <div className="vv-summary__total">
+                    <dt>Total</dt>
+                    <dd>{formatINR(subtotal)}</dd>
+                  </div>
+                </dl>
+                <p className="vv-drawer__note">Includes free shipping</p>
+
+                {ONLINE_PAYMENTS_ENABLED ? (
+                  <>
+                    <Link href="/checkout" className="vv-btn vv-btn--stone breathe">
+                      <CreditCard size={18} aria-hidden="true" /> Proceed to Checkout
+                    </Link>
+                    <a className="vv-btn vv-btn--whatsapp" href={cart.whatsappUrl} target="_blank" rel="noopener noreferrer">
+                      <WhatsAppGlyph /> Order on WhatsApp
+                    </a>
+                  </>
+                ) : (
+                  <>
+                    <a className="vv-btn vv-btn--whatsapp breathe" href={cart.whatsappUrl} target="_blank" rel="noopener noreferrer">
+                      <WhatsAppGlyph /> Order on WhatsApp
+                    </a>
+                    <p className="vv-drawer__note">
+                      <CreditCard size={14} aria-hidden="true" /> {PAYMENTS_COMING_SOON}
+                    </p>
+                  </>
+                )}
+
+                <ul className="vv-summary__benefits">
+                  <li><span aria-hidden="true">🚚</span> Free Delivery</li>
+                  <li><span aria-hidden="true">🔒</span> Easy WhatsApp Ordering</li>
+                  <li><span aria-hidden="true">🌱</span> Quality Assured</li>
+                </ul>
+              </aside>
+
+              {/* phones: the total and the order button stay in reach */}
+              <div className="vv-cartpage__bar">
+                <div>
+                  <small>Total · Free shipping</small>
+                  <strong>{formatINR(subtotal)}</strong>
                 </div>
+                {ONLINE_PAYMENTS_ENABLED ? (
+                  <Link href="/checkout" className="vv-btn vv-btn--stone">
+                    <CreditCard size={18} aria-hidden="true" /> Checkout
+                  </Link>
+                ) : (
+                  <a className="vv-btn vv-btn--whatsapp" href={cart.whatsappUrl} target="_blank" rel="noopener noreferrer">
+                    <WhatsAppGlyph size={18} /> Order
+                  </a>
+                )}
               </div>
             </div>
           )}
         </div>
-      </div>
+      </main>
       <Footer />
     </>
   );

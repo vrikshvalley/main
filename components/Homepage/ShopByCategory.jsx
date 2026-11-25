@@ -1,36 +1,31 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import Image from '@/components/general/ImgWithLoader';
 import AnimatedText from '@/components/general/AnimatedText';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
+import { observeOnce } from '@/lib/inView';
 import '@/styles/shopByCategory.scss';
 
 // Top-level categories are replaced by subcategories for the "Shop By Category" display
 
 const getImageForSubcategory = (name) => {
   const imageMap = {
-    'Indoor Plants': '/subcategories/IndoorPlantsMobile.png',
-    'Succulents': '/subcategories/SucculentsMobile.png',
-    'Flowering Plants': '/subcategories/FloweringPlantsMobile.png',
-    'Foliage Plants': '/subcategories/FoliagePlantsMobile.png',
-    'Hanging Plants': '/subcategories/HangingPlantsMobile.png',
-    'Air Plants': '/subcategories/AirPlantsMobile.png',
-    'Cactus': '/subcategories/CactusMobile.png',
-    'Herbs': '/subcategories/MedicinalandHerbPlantsMobile.png',
-    'Vegetables': '/subcategories/VegetableSeedsMobile.png',
-    'Herbs & Microgreens': '/subcategories/MicrogreenandHerbsMobile.png',
-    'Bonsai': '/subcategories/BonsaiMobile.png',
-    'Aquatic Plants': '/subcategories/AquaticPlantsMobile.png'
+    'Indoor Plants': '/subcategories/IndoorPlantsMobile.webp',
+    'Succulents': '/subcategories/SucculentsMobile.webp',
+    'Flowering Plants': '/subcategories/FloweringPlantsMobile.webp',
+    'Foliage Plants': '/subcategories/FoliagePlantsMobile.webp',
+    'Hanging Plants': '/subcategories/HangingPlantsMobile.webp',
+    'Air Plants': '/subcategories/AirPlantsMobile.webp',
+    'Cactus': '/subcategories/CactusMobile.webp',
+    'Herbs': '/subcategories/MedicinalandHerbPlantsMobile.webp',
+    'Vegetables': '/subcategories/VegetableSeedsMobile.webp',
+    'Herbs & Microgreens': '/subcategories/MicrogreenandHerbsMobile.webp',
+    'Bonsai': '/subcategories/BonsaiMobile.webp',
+    'Aquatic Plants': '/subcategories/AquaticPlantsMobile.webp'
   };
-  return imageMap[name] || '/subcategories/Plants.png';
+  return imageMap[name] || '/subcategories/IndoorPlantsDesktop.webp';
 };
 
 const allSubcategories = [
@@ -48,11 +43,6 @@ const allSubcategories = [
   { name: 'Aquatic Plants', tagline: 'Create your underwater oasis' }
 ];
 
-const getRandomSubcategories = () => {
-  const shuffled = [...allSubcategories].sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, 12);
-};
-
 const slugify = (str) =>
   str
     .toLowerCase()
@@ -61,106 +51,47 @@ const slugify = (str) =>
     .trim()
     .replace(/\s+/g, '-');
 
-const pascalize = (str) =>
-  str
-    .split(/\s+|&/)
-    .map(s => s.replace(/[^a-z0-9]/gi, ''))
-    .filter(Boolean)
-    .map(s => s.charAt(0).toUpperCase() + s.slice(1))
-    .join('');
-
-// Prefer images located in `/subcategories/` (mobile variant first)
-const imagePathFromName = (name) => {
-  const pascal = pascalize(name);
-  return `/subcategories/${pascal}Mobile.png`;
-};
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.2
-    }
-  }
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, scale: 0.9 },
-  visible: { 
-    opacity: 1, 
-    scale: 1,
-    transition: {
-      duration: 0.5,
-      ease: [0.22, 1, 0.36, 1]
-    }
-  }
-};
-
-// Bento Span Pattern
-const BENTO_PATTERNS = [
-  'span-2x1', 'span-1x1', 'span-1x1', 
-  'span-1x1', 'span-2x1', 'span-1x1',
-  'span-1x1', 'span-1x1', 'span-2x1',
-  'span-1x1', 'span-1x1', 'span-1x1'
-];
-
 export default function ShopByCategory() {
-  const [categories, setCategories] = useState([]);
-  
-  useEffect(() => {
-    // Determine categories to show
-    setCategories(allSubcategories.slice(0, 12));
-  }, []);
+  const gridRef = useRef(null);
+  useEffect(() => observeOnce(gridRef.current), []);
 
   return (
     <section className="shop-by-category">
       <div className="category-container">
         <div className="category-header">
           <AnimatedText text="Curated Collections" className="cursive-subtitle" />
-          <h2 className="category-title">Shop by Category</h2>
+          <AnimatedText as="h2" text="Shop by Category" className="category-title" delay={0.1} stagger={0.05} />
           <p className="category-description">Explore our hand-picked selections for every space.</p>
         </div>
 
-        <motion.div 
-          className="bento-grid"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
-        >
-          {categories.map((cat, index) => {
-            const spanClass = BENTO_PATTERNS[index % BENTO_PATTERNS.length];
-            const linkHref = `/category/${slugify(cat.name)}`;
-            
-            return (
-              <motion.div 
-                key={cat.name}
-                className={`bento-item ${spanClass}`}
-                variants={cardVariants}
-              >
-                <Link href={linkHref} style={{ position: 'absolute', inset: 0, display: 'block' }}>
-                  <Image 
-                    src={getImageForSubcategory(cat.name)}
-                    alt={cat.name}
-                    fill
-                    sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                    className="category-image"
-                    style={{ objectFit: 'cover', objectPosition: 'center' }}
-                  />
-                  <div className="bento-content">
-                    <h3>{cat.name}</h3>
-                    {cat.tagline && <p className="bento-tagline">{cat.tagline}</p>}
-                    <div className="explore-link">
-                      Explore <ArrowRight size={16} style={{ marginLeft: '4px' }} />
-                    </div>
-                  </div>
-                </Link>
-              </motion.div>
-            );
-          })}
-        </motion.div>
+        <div className="bento-grid" ref={gridRef}>
+          {allSubcategories.map((cat, index) => (
+            <Link
+              key={cat.name}
+              href={`/category/${slugify(cat.name)}`}
+              className="bento-item"
+              style={{ '--i': index }}
+            >
+              <Image
+                src={getImageForSubcategory(cat.name)}
+                alt=""
+                fill
+                showLoader={false}
+                sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                className="bento-media"
+                imgClassName="category-image"
+                style={{ position: 'absolute', inset: 0, display: 'block' }}
+              />
+              <div className="bento-content">
+                <h3>{cat.name}</h3>
+                {cat.tagline && <p className="bento-tagline">{cat.tagline}</p>}
+              </div>
+              <span className="bento-arrow" aria-hidden="true">
+                <ArrowUpRight size={18} />
+              </span>
+            </Link>
+          ))}
+        </div>
       </div>
     </section>
   );

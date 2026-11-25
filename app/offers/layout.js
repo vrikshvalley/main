@@ -4,9 +4,9 @@ import Footer from "@/components/general/Footer";
 import WhatsAppButton from "@/components/general/WhatsAppButton";
 
 export const metadata = {
-  title: "Exclusive Offers - Up to 60% OFF",
+  title: "Offers on Plants, Planters & Seeds",
   description:
-    "Discover amazing deals on plants, pots, and gardening essentials. Limited time offers with discounts up to 60% OFF on premium quality products.",
+    "Limited-time offers from Vriksh Valley: featured plants, premium picks, planters and seeds at offer prices. Order on WhatsApp.",
   keywords: [
     "plant offers",
     "gardening deals",
@@ -15,10 +15,11 @@ export const metadata = {
     "offers",
   ],
   openGraph: {
-    title: "Exclusive Plant Offers - Vriksh Valley",
-    description: "Grab amazing deals on your favorite plants - up to 60% OFF!",
+    title: "Plant Offers - Vriksh Valley",
+    description: "Limited-time offers on featured plants, premium picks, planters and seeds.",
     url: "https://vrikshvalley.com/offers",
   },
+  alternates: { canonical: "/offers" },
 };
 
 export default function OffersLayout({ children }) {

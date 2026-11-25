@@ -1,54 +1,42 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import NextImage from "next/image";
-import Lottie from "lottie-react";
 
+/**
+ * next/image with a lightweight placeholder: a CSS shimmer (compositor-only,
+ * no JavaScript animation) while the image loads, then a short fade-in.
+ *
+ * This replaces a per-image Lottie loader, which ran a JS animation for every
+ * image still loading. In a scrolling product grid that meant dozens at once,
+ * exactly when the browser was busiest decoding images, which caused stutter.
+ *
+ * `loaderSize` and `loaderClassName` are accepted for backwards compatibility.
+ */
 export default function ImgWithLoader({
   className,
   style,
   imgClassName,
   showLoader = true,
-  loaderSize = 72,
+  loaderSize,
   loaderClassName,
   priority,
-  onLoadingComplete, // deprecated from next/image; kept for backward-compat only
+  onLoadingComplete, // deprecated in next/image; still honoured
   onLoad,
   onError,
   ...imgProps
 }) {
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
-  const [lottieData, setLottieData] = useState(null);
+  const srcRef = useRef(imgProps.src);
+  srcRef.current = imgProps.src;
   const imageClass = imgClassName ?? className;
 
-  const shouldShowLoader = showLoader && !loaded && !error;
-
-  useEffect(() => {
-    if (!showLoader) return;
-    let cancelled = false;
-    const fetchLottie = async () => {
-      try {
-        const res = await fetch("/imgLoader.json", { cache: "force-cache" });
-        if (!res.ok) return;
-        const data = await res.json();
-        if (!cancelled) setLottieData(data);
-      } catch (_) {
-        // ignore; loader will just not render
-      }
-    };
-    fetchLottie();
-    return () => {
-      cancelled = true;
-    };
-  }, [showLoader]);
-
-  const handleOnLoad = useMemo(() => {
-    return (e) => {
+  const handleLoad = useCallback(
+    (e) => {
       setLoaded(true);
       setError(false);
-      if (typeof onLoad === "function") onLoad(e);
-      // best-effort compatibility: call deprecated callback without passing it to NextImage
+      onLoad?.(e);
       if (typeof onLoadingComplete === "function") {
         try {
           onLoadingComplete(e?.currentTarget);
@@ -56,111 +44,53 @@ export default function ImgWithLoader({
           onLoadingComplete();
         }
       }
-    };
-  }, [onLoad, onLoadingComplete]);
+    },
+    [onLoad, onLoadingComplete]
+  );
 
-  const handleOnError = useMemo(() => {
-    return (e) => {
-      const currentSrc = imgProps && imgProps.src;
-      if (typeof onError === "function") {
-        try { onError(e); } catch (_) {}
-      }
-      // Give parent a short moment to update the `src` (fallback). If the
-      // src remains unchanged after a tick, mark as error so the placeholder
-      // is shown. This prevents the component from short-circuiting parent
-      // fallback logic by immediately setting error state.
+  const handleError = useCallback(
+    (e) => {
+      const failedSrc = srcRef.current;
+      try {
+        onError?.(e);
+      } catch (_) {}
+      // Let a parent swap in a fallback src first; only show the error state
+      // if the src is still the one that failed.
       setTimeout(() => {
-        const newSrc = imgProps && imgProps.src;
-        if (newSrc === currentSrc) {
+        if (srcRef.current === failedSrc) {
           setError(true);
           setLoaded(true);
         }
       }, 50);
-    };
-  }, [onError]);
+    },
+    [onError]
+  );
+
+  const src =
+    imgProps.src && typeof imgProps.src === "object"
+      ? imgProps.src.src || imgProps.src.url || String(imgProps.src)
+      : imgProps.src || "/logo.webp";
 
   return (
-    <div
-      className={className}
-      style={{ position: "relative", display: "inline-block", ...style }}
-    >
-      {shouldShowLoader && (
-        <div
-          className={loaderClassName}
-          style={{
-            position: "absolute",
-            inset: 0,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 1,
-            background: "transparent",
-          }}
-          aria-hidden
-        >
-          {lottieData ? (
-            <Lottie
-              animationData={lottieData}
-              loop
-              autoplay
-              style={{ width: loaderSize, height: loaderSize }}
-            />
-          ) : (
-            <div
-              style={{
-                width: loaderSize,
-                height: loaderSize,
-                borderRadius: "50%",
-                border: "3px solid rgba(0,0,0,0.1)",
-                borderTopColor: "#2e7d5a",
-                animation: "imgWithLoaderSpin 1s linear infinite",
-              }}
-            />
-          )}
-        </div>
+    <div className={className} style={{ position: "relative", display: "inline-block", ...style }}>
+      {showLoader && !loaded && !error && (
+        <div className={`img-shimmer ${loaderClassName || ""}`} aria-hidden="true" />
       )}
 
-      {
-        // Normalize src: some product images are objects like { src, newest }
-        // Next Image requires a string src or a static import object with width/height.
-        // Coerce object -> string here to avoid runtime errors.
-      }
       {error ? (
-        <div
-          style={{
-            width: imgProps.width || "100%",
-            height: imgProps.height || "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            background: "#f0f0f0",
-            color: "#999",
-            fontSize: "14px",
-          }}
-        >
+        <div className="img-unavailable" style={{ width: imgProps.width || "100%", height: imgProps.height || "100%" }}>
           Image unavailable
         </div>
       ) : (
         <NextImage
-          {...{
-            ...imgProps,
-            src:
-              imgProps && imgProps.src && typeof imgProps.src === "object"
-                ? imgProps.src.src || imgProps.src.url || String(imgProps.src)
-                : imgProps.src || "/1.png",
-          }}
-          className={imageClass}
+          {...imgProps}
+          src={src}
+          className={`${imageClass || ""} img-fade ${loaded || priority ? "is-loaded" : ""}`.trim()}
           priority={priority}
-          onLoad={handleOnLoad}
-          onError={handleOnError}
+          onLoad={handleLoad}
+          onError={handleError}
         />
       )}
-
-      <style jsx global>{`
-        @keyframes imgWithLoaderSpin {
-          to { transform: rotate(360deg); }
-        }
-      `}</style>
     </div>
   );
 }

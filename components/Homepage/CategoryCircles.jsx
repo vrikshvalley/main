@@ -86,7 +86,7 @@ export default function CategoryCircles() {
       className="category-circles"
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: false, amount: 0.2, margin: "0px 0px -100px 0px" }}
+      viewport={{ once: true, amount: 0.2, margin: "0px 0px -100px 0px" }}
       variants={containerVariants}
     >
       <motion.div className="circle-container" variants={containerVariants}>
@@ -95,12 +95,12 @@ export default function CategoryCircles() {
           // Map category names to their image files in public folder
           // These are the fixed images that will always be used
           const imageMap = {
-            'Plants': '/categories/Plants.jpg',
-            'Seeds': '/categories/seeds.png',
-            'Planters': '/categories/Pots.png',
-            'Plant Care': '/categories/Plant care.jpg', 
-            'Decor': '/categories/Decor.jpg',
-            'Accessories': '/categories/Plant tools.jpg'
+            'Plants': '/categories/Plants.webp',
+            'Seeds': '/categories/seeds.webp',
+            'Planters': '/categories/Pots.webp',
+            'Plant Care': '/categories/Plant care.webp', 
+            'Decor': '/categories/Decor.webp',
+            'Accessories': '/categories/Plant tools.webp'
           };
           // Display name overrides for UI (original name -> display label)
           const displayNameMap = {
@@ -112,7 +112,7 @@ export default function CategoryCircles() {
             'Plant Care': 'Nourishment'
           };
           
-          const imagePath = imageMap[category.name] || '/logo.png';
+          const imagePath = imageMap[category.name] || '/logo.webp';
           
           return (
             <Link key={category.slug} href={`/category/${category.slug}`} passHref>

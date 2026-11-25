@@ -12,7 +12,7 @@ import { createPortal } from 'react-dom';
 import ProfileIcon from '@/components/auth/ProfileIcon';
 import CartIcon from '@/components/cart/CartIcon';
 import SearchBar from '@/components/general/SearchBar';
-import { getCategories } from '@/lib/services/productService';
+import { getCategories, getProducts } from '@/lib/services/productService';
 import { useCart } from '@/lib/CartContext';
 import "@/styles/navbar.scss";
 
@@ -25,6 +25,10 @@ export default function Navbar() {
   const [hoveredCategory, setHoveredCategory] = useState(null);
   const [expandedMobileCategory, setExpandedMobileCategory] = useState(null);
   const [categories, setCategories] = useState([]);
+  const [menuTop, setMenuTop] = useState(60);
+  // Accessories has no subcategories: its menu lists the products themselves,
+  // fetched the first time the menu is opened.
+  const [accessoryItems, setAccessoryItems] = useState(null);
 
   useEffect(() => {
     async function fetchCategories() {
@@ -59,6 +63,11 @@ export default function Navbar() {
     if (typeof document !== 'undefined') {
       if (menuOpen) {
         document.body.classList.add('mobile-menu-open');
+        // Open the menu right under the header, whatever its height at this width
+        requestAnimationFrame(() => {
+          const nav = document.querySelector('.navbar');
+          if (nav) setMenuTop(Math.max(0, Math.round(nav.getBoundingClientRect().bottom)));
+        });
       } else {
         document.body.classList.remove('mobile-menu-open');
       }
@@ -107,15 +116,46 @@ export default function Navbar() {
     })
   };
 
+  const loadAccessories = () => {
+    if (accessoryItems) return;
+    setAccessoryItems([]);
+    getProducts({ category: 'Accessories', pageSize: 5 })
+      .then(({ data }) => setAccessoryItems((data || []).slice(0, 5)))
+      .catch(() => setAccessoryItems([]));
+  };
+
+  const hasMenu = (category) => category.slug === 'accessories' || (category.subcategories?.length > 0);
+
+  const menuItemsFor = (category) =>
+    category.slug === 'accessories'
+      ? (accessoryItems || []).map((p) => ({ slug: p.slug, name: p.name, href: `/products/${p.slug}` }))
+      : (category.subcategories || []).map((sc) => ({ slug: sc.slug, name: sc.name, href: `/category/${category.slug}/${sc.slug}` }));
+
   const toggleMobileCategory = (slug) => {
+    if (slug === 'accessories') loadAccessories();
     setExpandedMobileCategory(expandedMobileCategory === slug ? null : slug);
   };
 
   const isCategoryActive = (slug) => pathname === `/category/${slug}`;
   const isSubcategoryActive = (categorySlug, subcategorySlug) => pathname === `/category/${categorySlug}/${subcategorySlug}`;
 
+  const handleAnchorClick = (e, hash) => {
+    setMenuOpen(false);
+    if (pathname === '/') {
+      e.preventDefault();
+      requestAnimationFrame(() => {
+        const target = document.getElementById(hash);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          window.history.replaceState(null, '', `/#${hash}`);
+        }
+      });
+    }
+  };
+
   const handleMobileCategoryPress = (category) => {
-    const hasSubs = category.subcategories && category.subcategories.length > 0 && category.slug !== 'accessories';
+    const hasSubs = hasMenu(category);
+    if (category.slug === 'accessories') loadAccessories();
     if (!hasSubs) {
       setMenuOpen(false);
       router.push(`/category/${category.slug}`);
@@ -136,7 +176,7 @@ export default function Navbar() {
         {/* Left: Logo */}
         <div className="nav-logo">
           <Link href="/">
-            <Image src="/big-logo.png" alt="Logo" width={204} height={42} />
+            <Image src="/big-logo.webp" alt="Logo" width={204} height={40} style={{ width: 'auto', height: 'auto' }} />
           </Link>
         </div>
 
@@ -146,7 +186,10 @@ export default function Navbar() {
             <div 
               key={category.slug}
               className="category-item"
-              onMouseEnter={() => setHoveredCategory(category.slug)}
+              onMouseEnter={() => {
+                if (category.slug === 'accessories') loadAccessories();
+                setHoveredCategory(category.slug);
+              }}
               onMouseLeave={() => setHoveredCategory(null)}
             >
                 <Link
@@ -158,7 +201,7 @@ export default function Navbar() {
 
               {/* Dropdown Menu */}
               <AnimatePresence>
-                {hoveredCategory === category.slug && category.subcategories && category.subcategories.length > 0 && category.slug !== 'accessories' && (
+                {hoveredCategory === category.slug && menuItemsFor(category).length > 0 && (
                   <motion.div
                     className="dropdown-menu"
                     variants={dropdownVariants}
@@ -167,22 +210,27 @@ export default function Navbar() {
                     exit="exit"
                   >
                     <div className="dropdown-content">
-                      {category.subcategories.map((subcategory, index) => (
+                      {menuItemsFor(category).map((item, index) => (
                         <motion.div
-                          key={subcategory.slug}
+                          key={item.slug}
                           custom={index}
                           variants={itemVariants}
                           initial="hidden"
                           animate="visible"
                         >
-                          <Link 
-                            href={`/category/${category.slug}/${subcategory.slug}`}
-                            className={`dropdown-item${isSubcategoryActive(category.slug, subcategory.slug) ? ' is-active' : ''}`}
+                          <Link
+                            href={item.href}
+                            className={`dropdown-item${pathname === item.href ? ' is-active' : ''}`}
                           >
-                            {subcategory.name}
+                            {item.name}
                           </Link>
                         </motion.div>
                       ))}
+                      {category.slug === 'accessories' && (
+                        <Link href="/category/accessories" className="dropdown-item dropdown-item--all">
+                          View all accessories
+                        </Link>
+                      )}
                       {/* Add Plant Doctor under Plant Care */}
                       {category.slug === 'plant-care' && (
                         <motion.div
@@ -223,7 +271,7 @@ export default function Navbar() {
             {menuOpen ? (
               <X size={24} />
             ) : (
-              <img src="/hamMenu.png" alt="Menu" width={24} height={24} />
+              <img src="/icons/hamMenu.webp" alt="Menu" width={24} height={24} />
             )}
           </button>
         </div>
@@ -231,52 +279,75 @@ export default function Navbar() {
 
       {/* Mobile dropdown rendered into document.body to avoid stacking context issues */}
       {menuOpen && (typeof document !== 'undefined' ? createPortal(
-        <div className="mobile-menu" role="dialog" aria-modal="true">
+        <div
+          className="mobile-menu"
+          data-lenis-prevent
+          role="dialog"
+          aria-modal="true"
+          aria-label="Site menu"
+          style={{ top: menuTop, height: `calc(100dvh - ${menuTop}px)` }}
+        >
           {/* Home Navigation Section */}
           <div className="mobile-nav-section">
             <h3 className="mobile-nav-title">Navigation</h3>
             <Link 
               href="/#hero" 
               className="mobile-nav-item" 
-              onClick={() => setMenuOpen(false)}
+              onClick={(e) => handleAnchorClick(e, 'hero')}
             >
               Home
             </Link>
             <Link 
               href="/#featured" 
               className="mobile-nav-item" 
-              onClick={() => setMenuOpen(false)}
+              onClick={(e) => handleAnchorClick(e, 'featured')}
             >
               Featured
             </Link>
             <Link 
               href="/#new-arrivals" 
               className="mobile-nav-item" 
-              onClick={() => setMenuOpen(false)}
+              onClick={(e) => handleAnchorClick(e, 'new-arrivals')}
             >
               New Arrivals
             </Link>
             <Link 
               href="/#why-choose" 
               className="mobile-nav-item" 
-              onClick={() => setMenuOpen(false)}
+              onClick={(e) => handleAnchorClick(e, 'why-choose')}
             >
               Why Us
             </Link>
             <Link 
               href="/#testimonials" 
               className="mobile-nav-item" 
-              onClick={() => setMenuOpen(false)}
+              onClick={(e) => handleAnchorClick(e, 'testimonials')}
             >
               Reviews
             </Link>
             <Link 
               href="/#team" 
               className="mobile-nav-item" 
-              onClick={() => setMenuOpen(false)}
+              onClick={(e) => handleAnchorClick(e, 'team')}
             >
               Team
             </Link>
+            {/* On phones these live here instead of the top bar */}
+            <Link href="/blogs" className="mobile-nav-item" onClick={() => setMenuOpen(false)}>
+              Blog
+            </Link>
+            <Link href="/faqs" className="mobile-nav-item" onClick={() => setMenuOpen(false)}>
+              FAQs
+            </Link>
+            <a
+              href="https://wa.me/919204745612?text=I%20am%20interested%20in%20bulk%20orders"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mobile-nav-item"
+              onClick={() => setMenuOpen(false)}
+            >
+              Corporate orders
+            </a>
           </div>
 
           {/* Categories Section */}
@@ -285,7 +356,7 @@ export default function Navbar() {
           {categories.map((category) => (
             <div key={category.slug} className="mobile-category">
               <div className="mobile-category-header">
-                {category.subcategories && category.subcategories.length > 0 && category.slug !== 'accessories' ? (
+                {hasMenu(category) ? (
                   <div className="mobile-category-with-subs">
                       {expandedMobileCategory === category.slug ? (
                       <Link
@@ -328,7 +399,7 @@ export default function Navbar() {
 
               {/* Mobile Subcategories */}
               <AnimatePresence>
-                {expandedMobileCategory === category.slug && category.subcategories && category.slug !== 'accessories' && (
+                {expandedMobileCategory === category.slug && hasMenu(category) && (
                   <motion.div
                     className="mobile-subcategories"
                     initial={{ height: 0, opacity: 0 }}
@@ -336,14 +407,14 @@ export default function Navbar() {
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.3 }}
                   >
-                    {category.subcategories.map((subcategory) => (
+                    {menuItemsFor(category).map((item) => (
                       <Link
-                        key={subcategory.slug}
-                        href={`/category/${category.slug}/${subcategory.slug}`}
-                        className={`mobile-subcategory-item${isSubcategoryActive(category.slug, subcategory.slug) ? ' is-active' : ''}`}
+                        key={item.slug}
+                        href={item.href}
+                        className={`mobile-subcategory-item${pathname === item.href ? ' is-active' : ''}`}
                         onClick={() => setMenuOpen(false)}
                       >
-                        {subcategory.name}
+                        {item.name}
                       </Link>
                     ))}
                     {/* Add Plant Doctor under Plant Care mobile menu */}

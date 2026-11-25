@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, HelpCircle } from 'lucide-react';
+import Link from 'next/link';
+import { ChevronDown } from 'lucide-react';
 import AnimatedText from '@/components/general/AnimatedText';
 import '@/styles/plantFAQs.scss';
 
@@ -72,13 +72,7 @@ export default function PlantFAQs() {
   return (
     <section className="plant-faqs">
       <div className="faqs-container">
-        <motion.div 
-          className="section-header"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, margin: "-50px" }}
-          transition={{ duration: 0.6 }}
-        >
+        <div className="section-header">
           <p className="cursive-subtitle">Quick Answers</p>
           <AnimatedText
             as="h2"
@@ -92,61 +86,44 @@ export default function PlantFAQs() {
             text="Find answers to the most common questions about plant care"
             className="section-subtitle"
             delay={0.2}
-            stagger={0.02}
           />
-        </motion.div>
+        </div>
 
         <div className="faqs-grid">
-          {faqs.map((faq, index) => (
-            <motion.div
-              key={faq.id}
-              className={`faq-item ${openFAQs.includes(faq.id) ? 'active' : ''}`}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false, margin: "-50px" }}
-              transition={{ duration: 0.5, delay: index * 0.05 }}
-            >
-              <button
-                className="faq-question"
-                onClick={() => toggleFAQ(faq.id)}
-                aria-expanded={openFAQs.includes(faq.id)}
-              >
-                <span className="question-number">{String(index + 1).padStart(2, '0')}</span>
-                <span className="question-text">{faq.question}</span>
-                <ChevronDown 
-                  className={`chevron ${openFAQs.includes(faq.id) ? 'rotated' : ''}`}
-                  size={20}
-                />
-              </button>
+          {faqs.map((faq, index) => {
+            const isOpen = openFAQs.includes(faq.id);
+            const answerId = `faq-answer-${faq.id}`;
+            return (
+              <div key={faq.id} className={`faq-item ${isOpen ? 'active' : ''}`}>
+                <button
+                  className="faq-question"
+                  onClick={() => toggleFAQ(faq.id)}
+                  aria-expanded={isOpen}
+                  aria-controls={answerId}
+                >
+                  <span className="question-number">{String(index + 1).padStart(2, '0')}</span>
+                  <span className="question-text">{faq.question}</span>
+                  <ChevronDown className={`chevron ${isOpen ? 'rotated' : ''}`} size={20} aria-hidden="true" />
+                </button>
 
-              <AnimatePresence>
-                {openFAQs.includes(faq.id) && (
-                  <motion.div
-                    className="faq-answer"
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                  >
+                {/* Always rendered; the grid-row trick animates height in CSS without measuring */}
+                <div className="faq-answer" id={answerId} role="region" aria-hidden={!isOpen}>
+                  <div className="answer-inner">
                     <div className="answer-content">
                       <p>{faq.answer}</p>
                     </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          ))}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
 
-        <motion.div 
-          className="faqs-footer"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-        >
-          <p>Still have questions? <a href="/contact">Contact our plant experts</a></p>
-        </motion.div>
+        <div className="faqs-footer">
+          <p>
+            Still have questions? <Link href="/contact-us">Contact our plant experts</Link>
+          </p>
+        </div>
       </div>
     </section>
   );

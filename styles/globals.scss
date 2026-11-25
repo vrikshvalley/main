@@ -2,9 +2,22 @@
 @use 'variables' as *;
 @use 'animatedText' as *;
 @use 'accessibility' as *;
+@use 'commerce';
 
 
 :root {
+  // Brand tokens (single source: _variables.scss)
+  --vv-green-900: #{$dark-green};
+  --vv-green-700: #{$deep-green};
+  --vv-leaf: #{$teal};
+  --vv-cream: #{$white};
+  --vv-sun: #{$yellow};
+
+  // Type: Helvetica only (self-hosted below), with its closest system relatives.
+  --font-heading: 'Helvetica', 'Helvetica Neue', Arial, sans-serif;
+  --font-body: 'Helvetica', 'Helvetica Neue', Arial, sans-serif;
+  --font-accent: 'Helvetica', 'Helvetica Neue', Arial, sans-serif;
+
   --bg: #{$primary-bg};
   --fg: #{$text-primary};
   --brand: #{$accent-primary};
@@ -48,18 +61,21 @@
   font-display: swap;
 }
 
-/* Import Bricolage Grotesque and Italianno from Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Italianno&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@100..900&family=Noto+Sans+Bengali:wght@100..900&family=Noto+Sans+Devanagari:wght@100..900&family=Noto+Sans+Gujarati:wght@100..900&family=Noto+Sans+Kannada:wght@100..900&family=Noto+Sans+Malayalam:wght@100..900&family=Noto+Sans+Meetei+Mayek:wght@100..900&family=Noto+Sans+Oriya:wght@100..900&family=Noto+Sans+Tamil:wght@100..900&family=Noto+Sans+Telugu:wght@100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 * { 
   box-sizing: border-box; 
   margin: 0;
   padding: 0;
-  -ms-user-select: none;
+}
+
+// UI chrome should not be text-selectable, but content (phone numbers,
+// addresses, order IDs, prices) must stay copyable.
+button,
+[role="button"],
+.swiper,
+.swiper-button-next,
+.swiper-button-prev,
+.ads-marquee {
   -webkit-user-select: none;
-  -moz-user-select: none;
   user-select: none;
 }
 
@@ -90,9 +106,8 @@ h1,h2,h3,h4,h5,h6, p, a, span, li {
   text-shadow: rgba(0,0,0,0.01) 0 0 0; /* forces subpixel text rasterization in some browsers */
 }
 
-/* Apply Source Sans 3 font to all p tags */
 p {
-  font-family: 'Source Sans 3', sans-serif;
+  font-family: var(--font-body);
 }
 
 // Ensure images and media preserve aspect ratio when resized via CSS
@@ -177,7 +192,7 @@ body {
   margin: 0;
   font-family: 'Helvetica', Arial, sans-serif;
   color: var(--fg);
-  background: linear-gradient(rgba(19, 23, 0, 0.703), rgba(0, 0, 0, 0.367)), url('/1.jpg');
+  background: linear-gradient(rgba(19, 23, 0, 0.703), rgba(0, 0, 0, 0.367)), url('/1.webp?v=2');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -196,8 +211,8 @@ body {
 }
 
 :root {
-  --sb-track-color: #2d4634;
-  --sb-thumb-color: #3a7f22;
+  --sb-track-color: var(--vv-green-700);
+  --sb-thumb-color: var(--vv-leaf);
   --sb-size: 10px;
 }
 
@@ -273,7 +288,7 @@ a:hover {
   color: $text-dark;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-family: 'Bricolage Grotesque', sans-serif;
+  font-family: var(--font-heading), sans-serif;
   font-size: 1.1rem;
   font-weight: 600;
 }
@@ -371,4 +386,147 @@ a:hover {
   }
 .left {
   text-align: left;
+}
+
+// ============================================
+// Scroll reveal utilities (cheap: opacity + transform only)
+// ============================================
+
+// .reveal: fades up once when it enters the viewport ([data-inview] from lib/inView.js)
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0s);
+
+  &[data-inview='true'] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+// .scroll-fade: opacity tied to scroll position as the element enters,
+// using CSS scroll-driven animations (runs off the main thread).
+// Browsers without support fall back to the one-time .reveal behaviour.
+.scroll-fade {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+
+  &[data-inview='true'] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@supports (animation-timeline: view()) {
+  .scroll-fade,
+  .scroll-fade[data-inview='true'] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    animation: vvScrollFade linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 30%;
+  }
+}
+
+@keyframes vvScrollFade {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .scroll-fade {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+// ============================================
+// Phones: frosted-glass blur over the page photo is the single most expensive
+// thing to paint while scrolling (each blurred panel re-samples what is behind
+// it every frame). Page content drops the blur on touch/small screens and keeps
+// its translucent background; fixed overlays (modals, cart) are outside
+// #main-content and keep theirs.
+// ============================================
+@media (max-width: 768px), (pointer: coarse) {
+  #main-content *,
+  #main-content *::before,
+  #main-content *::after {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+}
+
+// ============================================
+// Image placeholder (ImgWithLoader): compositor-only shimmer + fade-in
+// ============================================
+.img-shimmer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  border-radius: inherit;
+  background: rgba($teal, 0.1);
+  pointer-events: none;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(100deg, transparent 20%, rgba(255, 255, 255, 0.45) 50%, transparent 80%);
+    transform: translateX(-100%);
+    animation: vvShimmer 1.4s ease-in-out infinite;
+  }
+}
+
+@keyframes vvShimmer {
+  to { transform: translateX(100%); }
+}
+
+.img-fade {
+  opacity: 0;
+  transition: opacity 0.35s ease;
+
+  &.is-loaded {
+    opacity: 1;
+  }
+}
+
+.img-unavailable {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba($teal, 0.08);
+  color: rgba($dark-green, 0.6);
+  font-size: 0.85rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .img-shimmer::after {
+    animation: none;
+  }
+
+  .img-fade {
+    transition: none;
+  }
+}
+
+// Below-the-fold homepage sections skip rendering work until they approach
+// the viewport (keeps scrolling smooth on long pages).
+@supports (content-visibility: auto) {
+  #main-content > .scroll-section.home-section:not(#categories):not(#featured) {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 900px;
+  }
 }

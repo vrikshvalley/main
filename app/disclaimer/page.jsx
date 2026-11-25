@@ -20,9 +20,9 @@ export default function Disclaimer() {
       {/* Hero Banner */}
       <div className="hero-banner" ref={bannerRef}>
         <picture>
-          <source media="(max-width: 768px)" srcSet="/DisclaimerMobile.png" />
+          <source media="(max-width: 768px)" srcSet="/pages/DisclaimerMobile.webp" />
           <Image
-            src="/DisclaimerDesktop.png"
+            src="/pages/DisclaimerDesktop.webp"
             alt="Disclaimer - Vriksh Valley"
             fill
             priority

@@ -5,7 +5,10 @@ import WhatsAppButton from "@/components/general/WhatsAppButton";
 
 
 export const metadata = {
-  title: "Shop Plants Online - Indoor & Outdoor Plants",
+  title: {
+    default: "Shop Plants Online - Indoor & Outdoor Plants",
+    template: "%s | Vriksh Valley",
+  },
   description:
     "Browse our premium collection of indoor plants, outdoor plants, succulents, bonsai, and organic gardening products. High-quality plants with expert care tips and home delivery.",
   keywords: [

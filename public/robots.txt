@@ -3,48 +3,19 @@
 
 User-agent: *
 Allow: /
-Crawl-delay: 1
-
-# Allow search engines to crawl CSS and JS (required for rendering)
 Allow: /_next/static/css/
 Allow: /_next/static/js/
 
-# Disallow admin and internal pages
 Disallow: /admin/
 Disallow: /api/
 Disallow: /_next/
 Disallow: /profile/
 Disallow: /checkout/
 Disallow: /cart/
-
-# Allow crawling of specific bots
-User-agent: Googlebot
-Allow: /
+Disallow: /orders/
+Disallow: /auth/
 
 User-agent: Googlebot-Image
-Allow: /public/
-Allow: /*.jpg
-Allow: /*.png
-Allow: /*.webp
-Allow: /*.avif
-
-User-agent: Bingbot
 Allow: /
 
-User-agent: Slurp
-Allow: /
-
-# Sitemaps
-Sitemap: https://vrikshvalley.com/sitemap.xml
-Disallow: /profile/
-
-# Allow important pages
-Allow: /products
-Allow: /category
-Allow: /blog
-Allow: /about
-Allow: /contact-us
-Allow: /faqs
-
-# Sitemap location
 Sitemap: https://vrikshvalley.com/sitemap.xml

@@ -81,13 +81,25 @@
   .scrollingText {
     // Use Unicode-first fonts so all Indic scripts render reliably.
     font-family: "Noto Sans", "Nirmala UI", "Segoe UI", "Noto Sans Devanagari", "Noto Sans Bengali", "Noto Sans Odia", "Noto Sans Gujarati", "Noto Sans Arabic", "Noto Sans Kannada", "Noto Sans Telugu", "Noto Sans Tamil", "Noto Sans Malayalam", "Noto Sans Meetei Mayek", system-ui, sans-serif;
-    font-size: clamp(4rem, 15vw, 10rem);
+    font-size: var(--loader-size);
     font-weight: 600;
+    line-height: 1.25;
     color: rgba($white, 0.95);
     letter-spacing: 0.02em;
-    will-change: transform, opacity;
     white-space: nowrap;
-    display: inline-block;
+    // every word sits in the same spot: right edge pinned to the centre line
+    position: absolute;
+    right: 0;
+    top: 0;
+    will-change: transform, opacity;
+
+    &.is-in {
+      animation: vvRollIn 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    &.is-out {
+      animation: vvRollOut 0.38s cubic-bezier(0.55, 0, 0.45, 1) both;
+    }
 
     &.script-devanagari {
       font-family: "Noto Sans Devanagari", "Nirmala UI", "Noto Sans", sans-serif;
@@ -141,55 +153,100 @@
 
   .valleyText {
     font-family: $font-primary, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", sans-serif;
-    font-size: clamp(4rem, 15vw, 10rem);
+    font-size: var(--loader-size);
     font-weight: 600;
+    line-height: 1.25;
     letter-spacing: 0.02em;
-    will-change: transform, opacity;
     white-space: nowrap;
-    background: linear-gradient(
-      120deg,
-      rgba($white, 0.95) 0%,
-      rgba($white, 0.85) 50%,
-      rgba($white, 0.95) 100%
-    );
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    position: relative;
+    color: rgba($white, 0.95);
+    justify-self: start;
+    opacity: 0;
+    transform: translateX(24px);
+    transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+
+    &.is-in {
+      opacity: 1;
+      transform: none;
+    }
   }
 
-  // Brand Container
-  .brandContainer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-  }
-
+  // Two equal halves meeting at the centre: the left slot is a fixed-height
+  // window, so changing word widths never push "Valley" around.
   .brandWrapper {
-    display: flex;
+    --loader-size: clamp(3.4rem, 12vw, 9rem);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     align-items: center;
-    justify-content: center;
-    gap: 1rem;
+    column-gap: 0.3em;
+    width: 100%;
+    font-size: var(--loader-size);
+  }
+
+  .wordSlot {
     position: relative;
+    justify-self: stretch;
+    height: 1.25em;
+    overflow: hidden;
+    // soften the roll at the window's top and bottom edges
+    mask-image: linear-gradient(180deg, transparent, #000 18%, #000 82%, transparent);
+    -webkit-mask-image: linear-gradient(180deg, transparent, #000 18%, #000 82%, transparent);
   }
 
-  // Mobile Responsiveness
-  @media (max-width: 768px) {
-    .scrollingText,
-    .valleyText {
-      font-size: clamp(3rem, 12vw, 6rem);
-    }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
   }
 
-  @media (max-width: 400px) {
-    .scrollingText,
-    .valleyText {
-      font-size: clamp(2.5rem, 10vw, 4rem);
-    }
-
+  @media (max-width: 480px) {
     .brandWrapper {
-      gap: 0.5rem;
+      --loader-size: clamp(2.4rem, 12.5vw, 3.6rem);
     }
   }
+}
+
+@keyframes vvRollIn {
+  from {
+    opacity: 0;
+    transform: translateY(85%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes vvRollOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-85%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .initialLoader .scrollingText.is-in,
+  .initialLoader .scrollingText.is-out {
+    animation-duration: 0.01ms;
+  }
+}
+
+
+// Repeat visits in the same session skip the intro entirely (set by an inline script in <head>)
+html[data-skip-intro] .initialLoader {
+  display: none !important;
+}
+
+html[data-skip-intro][data-initial-loader='1'] body {
+  overflow: visible;
+}
+
+html[data-skip-intro][data-initial-loader='1'] #main-content {
+  visibility: visible;
 }

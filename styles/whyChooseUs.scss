@@ -1,22 +1,20 @@
-@use "sass:color";
 @use 'variables' as *;
 
 .why-choose-us {
-  padding: 5rem 0;
-  overflow: hidden;
+  padding: 5rem 1.5rem;
 
   @media (max-width: 768px) {
-    padding: 3rem 0;
+    padding: 3.5rem 1rem;
   }
 }
 
 .why-choose-header {
   text-align: center;
-  margin-bottom: 2.5rem;
+  margin-bottom: 3rem;
 
   .why-choose-title {
-    font-family: 'Helvetica', Arial, sans-serif;
-    font-size: 2.5rem;
+    font-family: var(--font-heading), 'Helvetica', Arial, sans-serif;
+    font-size: clamp(2rem, 4vw, 2.75rem);
     font-weight: 700;
     color: $text-primary;
     margin: 0.5rem 0 0.8rem;
@@ -29,11 +27,7 @@
   }
 
   @media (max-width: 768px) {
-    margin-bottom: 1.5rem;
-
-    .why-choose-title {
-      font-size: 2rem;
-    }
+    margin-bottom: 2rem;
 
     .why-choose-subtitle {
       font-size: 0.95rem;
@@ -41,54 +35,110 @@
   }
 }
 
-.scroll-container {
-  width: 100%;
-  overflow: hidden;
-  cursor: pointer;
-  padding: 4rem 0 0;
+.why-grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+  max-width: 1180px;
+  margin: 0 auto;
+
+  @media (max-width: 900px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.9rem;
+  }
 }
 
-.scroll-content {
-  display: flex;
-  gap: 2rem;
-  width: max-content;
-}
-
-.why-item {
+.why-card {
+  position: relative;
+  padding: 1.75rem 1.6rem 1.6rem;
+  border-radius: 22px;
   background: $white;
-  padding: 1.5rem 2rem;
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  white-space: wrap;
-  transition: all 0.3s ease;
-  min-width: 100px;
-  
+  color: $dark-green;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
 
-  &:hover {
-    transform: translateY(-5px);
+  // reveal: staggered once the grid scrolls into view
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.3s ease;
+  transition-delay: calc(var(--i, 0) * 80ms), calc(var(--i, 0) * 80ms), 0s;
+
+  .why-grid[data-inview='true'] & {
+    opacity: 1;
+    transform: none;
   }
 
-  .emoji {
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-    display: block;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.046));
-    background-color: $white;
-    border-radius: 12px;
+  // soft leaf-coloured corner wash
+  &::after {
+    content: '';
+    position: absolute;
+    right: -40px;
+    bottom: -40px;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba($teal, 0.18), transparent 70%);
+    pointer-events: none;
+  }
+
+  &:hover {
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+  }
+
+  h3 {
+    font-family: var(--font-heading), sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 1rem 0 0.4rem;
+    line-height: 1.25;
   }
 
   p {
     font-size: 0.95rem;
-    font-weight: 600;
-    color: $text-secondary;
-    margin: 0;
-    line-height: 1.2;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-    max-width: 200px;
+    line-height: 1.5;
+    color: rgba($dark-green, 0.75);
+  }
+
+  @media (max-width: 900px) {
+    padding: 1.25rem 1.1rem;
+    border-radius: 18px;
+
+    h3 {
+      font-size: 1rem;
+      margin-top: 0.75rem;
+    }
+
+    p {
+      font-size: 0.85rem;
+    }
   }
 }
 
+.why-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background: $dark-green;
+  color: $white;
+
+  @media (max-width: 900px) {
+    width: 44px;
+    height: 44px;
+    border-radius: 13px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .why-card {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
