@@ -42,7 +42,15 @@ export default function CheckoutPage() {
   const [pin, setPin] = useState({ state: 'idle' }); // idle | checking | ok | bad
   const [paying, setPaying] = useState(false);
   const [done, setDone] = useState(null);
+  const [otpState, setOtpState] = useState({ sent: false, sending: false, verifying: false, code: '', token: null, verifiedEmail: '' });
   const pendingRef = useRef(null); // reuse the same order if the customer retries unchanged
+
+  const emailMatchesVerifiedUser = Boolean(
+    user?.emailVerified &&
+    email.trim() &&
+    user.email?.toLowerCase() === email.trim().toLowerCase()
+  );
+  const emailVerified = emailMatchesVerifiedUser || (otpState.token && otpState.verifiedEmail === email.trim().toLowerCase());
 
   // Prefill from the signed-in profile
   useEffect(() => {
@@ -141,6 +149,7 @@ export default function CheckoutPage() {
     try {
       const body = {
         email: validEmail,
+        emailToken: otpState.verifiedEmail === validEmail.toLowerCase() ? otpState.token : null,
         address: value,
         saveAddress: saveForLater,
         items: items.map((i) => ({ id: i.id, quantity: i.qty ?? i.quantity, variant: i.variant || null, size: i.size || null, color: i.color || null })),
@@ -299,9 +308,95 @@ export default function CheckoutPage() {
 
             <label className={`ck-field${errors.email ? ' has-error' : ''}`}>
               <span>Email (for your receipt)</span>
-              <input type="email" value={email} onChange={(e) => { setEmail(e.target.value); setErrors((er) => ({ ...er, email: undefined })); }} autoComplete="email" required aria-invalid={Boolean(errors.email)} />
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setErrors((er) => ({ ...er, email: undefined }));
+                  if (otpState.sent || otpState.token) {
+                    setOtpState({ sent: false, sending: false, verifying: false, code: '', token: null, verifiedEmail: '' });
+                  }
+                }}
+                autoComplete="email"
+                required
+                aria-invalid={Boolean(errors.email)}
+              />
               {errors.email && <small role="alert">{errors.email}</small>}
             </label>
+
+            {validateEmail(email) && !emailVerified && (
+              <div style={{ marginTop: '-0.35rem', marginBottom: '0.85rem', display: 'flex', flexWrap: 'wrap', gap: '0.5rem', alignItems: 'center' }}>
+                {!otpState.sent ? (
+                  <button
+                    type="button"
+                    className="vv-btn vv-btn--pebble"
+                    style={{ padding: '0.35rem 0.8rem', fontSize: '0.8rem' }}
+                    disabled={otpState.sending}
+                    onClick={async () => {
+                      const clean = validateEmail(email);
+                      if (!clean) return;
+                      setOtpState((s) => ({ ...s, sending: true }));
+                      try {
+                        const res = await fetch('/api/orders/send-otp', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ email: clean }),
+                        }).then((r) => r.json());
+                        if (!res.success) throw new Error(res.error?.message || 'Could not send code');
+                        setOtpState((s) => ({ ...s, sent: true, sending: false }));
+                      } catch (err) {
+                        showErrorToast(err.message);
+                        setOtpState((s) => ({ ...s, sending: false }));
+                      }
+                    }}
+                  >
+                    {otpState.sending ? 'Sending code…' : 'Verify email (OTP) to link order to account'}
+                  </button>
+                ) : (
+                  <>
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      maxLength={6}
+                      placeholder="6-digit OTP"
+                      value={otpState.code}
+                      onChange={(e) => setOtpState((s) => ({ ...s, code: e.target.value.replace(/\D/g, '').slice(0, 6) }))}
+                      style={{ width: '115px', padding: '0.35rem 0.6rem', borderRadius: 8, border: '1px solid #d1d5db' }}
+                    />
+                    <button
+                      type="button"
+                      className="vv-btn vv-btn--stone"
+                      style={{ padding: '0.35rem 0.8rem', fontSize: '0.8rem' }}
+                      disabled={otpState.verifying || otpState.code.length !== 6}
+                      onClick={async () => {
+                        const clean = validateEmail(email);
+                        setOtpState((s) => ({ ...s, verifying: true }));
+                        try {
+                          const res = await fetch('/api/orders/verify-otp', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ email: clean, code: otpState.code }),
+                          }).then((r) => r.json());
+                          if (!res.success) throw new Error(res.error?.message || 'Invalid code');
+                          setOtpState((s) => ({ ...s, verifying: false, token: res.emailToken, verifiedEmail: clean.toLowerCase() }));
+                        } catch (err) {
+                          showErrorToast(err.message);
+                          setOtpState((s) => ({ ...s, verifying: false }));
+                        }
+                      }}
+                    >
+                      {otpState.verifying ? 'Verifying…' : 'Verify'}
+                    </button>
+                  </>
+                )}
+              </div>
+            )}
+            {validateEmail(email) && emailVerified && (
+              <p style={{ marginTop: '-0.35rem', marginBottom: '0.85rem', fontSize: '0.8rem', color: '#15803d', fontWeight: 600 }}>
+                ✓ Email verified — order will be linked to your account
+              </p>
+            )}
 
             <div className="ck-row">
               {field('name', 'Full name', { autoComplete: 'name', required: true })}

@@ -24,6 +24,15 @@ pnpm-debug.log*
 
 # firebase credentials
 serviceAccountKey.json
+*firebase-adminsdk*.json
+
+# backups
+/backups/
+
+# internal docs, agent files, and local tooling
+AGENTS.md
+/docs/
+.hintrc
 
 # firebase data
 firestore-ready-products.json

@@ -43,7 +43,16 @@ export async function POST(request) {
       const phone = body.contact?.phone ? normalisePhone(body.contact.phone) : "";
       if (body.contact?.phone && !phone) return jsonError("Enter a valid 10-digit mobile number", 400, "PHONE");
 
-      const result = await startCheckout({ kind: "service", user, service: body.service, email, contact: { name, phone }, appointment, saveAddress: false });
+      const result = await startCheckout({
+        kind: "service",
+        user,
+        service: body.service,
+        email,
+        emailToken: typeof body.emailToken === "string" ? body.emailToken : null,
+        contact: { name, phone },
+        appointment,
+        saveAddress: false,
+      });
       return NextResponse.json({ success: true, ...result });
     }
 
@@ -60,7 +69,15 @@ export async function POST(request) {
         }))
       : [];
 
-    const result = await startCheckout({ kind: "cart", user, items, address, email, saveAddress: body.saveAddress !== false });
+    const result = await startCheckout({
+      kind: "cart",
+      user,
+      items,
+      address,
+      email,
+      emailToken: typeof body.emailToken === "string" ? body.emailToken : null,
+      saveAddress: body.saveAddress !== false,
+    });
     return NextResponse.json({ success: true, ...result });
   } catch (error) {
     return handleRouteError(error, "create-order");
