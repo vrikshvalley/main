@@ -33,6 +33,8 @@ serviceAccountKey.json
 AGENTS.md
 /docs/
 .hintrc
+firestore.rules
+firestore.indexes.json
 
 # firebase data
 firestore-ready-products.json

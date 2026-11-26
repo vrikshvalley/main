@@ -94,19 +94,16 @@ export default function SubcategoryPage() {
         ]} />
 
         {/* Page Header */}
-        <div 
-          className="products-header"
-          style={{
-            backgroundImage: 'url(/pages/ProductsDesktop.webp)',
-          }}
-        >
-          <style jsx>{`
-            @media (max-width: 768px) {
-              .products-header {
-                background-image: url(/pages/ProductsMobile.webp) !important;
-              }
-            }
-          `}</style>
+        <div className="products-header">
+          <picture>
+            <source media="(max-width: 768px)" srcSet="/pages/ProductsMobile.webp" />
+            <img
+              src="/pages/ProductsDesktop.webp"
+              alt=""
+              fetchPriority="high"
+              decoding="async"
+            />
+          </picture>
           <div className="header-content">
             <h1>{subcategory.charAt(0).toUpperCase() + subcategory.slice(1)}</h1>
             <p>Explore our collection of {subcategory} plants and products</p>

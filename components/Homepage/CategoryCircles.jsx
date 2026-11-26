@@ -102,16 +102,6 @@ export default function CategoryCircles() {
             'Decor': '/categories/Decor.webp',
             'Accessories': '/categories/Plant tools.webp'
           };
-          // Display name overrides for UI (original name -> display label)
-          const displayNameMap = {
-            'Plants': 'Botanicals',
-            'Seeds': 'Propagules',
-            'Planters': 'Vessels',
-            'Decor': 'Accents',
-            'Accessories': 'Essentials',
-            'Plant Care': 'Nourishment'
-          };
-          
           const imagePath = imageMap[category.name] || '/logo.webp';
           
           return (
@@ -126,7 +116,7 @@ export default function CategoryCircles() {
                     className="category-image"
                   />
                 </div>
-                <p>{displayNameMap[category.name] || category.name}</p>
+                <p>{category.name}</p>
               </motion.div>
             </Link>
           );

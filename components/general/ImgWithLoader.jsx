@@ -1,7 +1,17 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import NextImage from "next/image";
+
+function optimizeCloudinaryUrl(url) {
+  if (typeof url !== "string" || !url.includes("res.cloudinary.com") || !url.includes("/image/upload/")) {
+    return url;
+  }
+  // Inject automatic format + quality so NextImage `sizes` handles responsive mobile/desktop widths.
+  const [, rest] = url.split("/image/upload/");
+  if (!rest || /^(?:[a-z_]+,|[a-z]{1,2}_)/.test(rest)) return url;
+  return url.replace("/image/upload/", "/image/upload/f_auto,q_auto:good/");
+}
 
 /**
  * next/image with a lightweight placeholder: a CSS shimmer (compositor-only,
@@ -32,17 +42,37 @@ export default function ImgWithLoader({
   srcRef.current = imgProps.src;
   const imageClass = imgClassName ?? className;
 
+  const rawSrc =
+    imgProps.src && typeof imgProps.src === "object"
+      ? imgProps.src.src || imgProps.src.url || String(imgProps.src)
+      : imgProps.src || "/logo.webp";
+  const src = optimizeCloudinaryUrl(rawSrc);
+
+  useEffect(() => {
+    setLoaded(false);
+    setError(false);
+  }, [src]);
+
   const handleLoad = useCallback(
     (e) => {
-      setLoaded(true);
-      setError(false);
-      onLoad?.(e);
-      if (typeof onLoadingComplete === "function") {
-        try {
-          onLoadingComplete(e?.currentTarget);
-        } catch (_) {
-          onLoadingComplete();
+      const target = e?.currentTarget;
+      const reveal = () => {
+        setLoaded(true);
+        setError(false);
+        onLoad?.(e);
+        if (typeof onLoadingComplete === "function") {
+          try {
+            onLoadingComplete(target);
+          } catch (_) {
+            onLoadingComplete();
+          }
         }
+      };
+      // Wait for full bitmap decode before fading in so images never paint top-to-bottom.
+      if (target && typeof target.decode === "function") {
+        target.decode().catch(() => {}).finally(reveal);
+      } else {
+        reveal();
       }
     },
     [onLoad, onLoadingComplete]
@@ -54,8 +84,6 @@ export default function ImgWithLoader({
       try {
         onError?.(e);
       } catch (_) {}
-      // Let a parent swap in a fallback src first; only show the error state
-      // if the src is still the one that failed.
       setTimeout(() => {
         if (srcRef.current === failedSrc) {
           setError(true);
@@ -65,11 +93,6 @@ export default function ImgWithLoader({
     },
     [onError]
   );
-
-  const src =
-    imgProps.src && typeof imgProps.src === "object"
-      ? imgProps.src.src || imgProps.src.url || String(imgProps.src)
-      : imgProps.src || "/logo.webp";
 
   return (
     <div className={className} style={{ position: "relative", display: "inline-block", ...style }}>
@@ -85,7 +108,8 @@ export default function ImgWithLoader({
         <NextImage
           {...imgProps}
           src={src}
-          className={`${imageClass || ""} img-fade ${loaded || priority ? "is-loaded" : ""}`.trim()}
+          decoding="async"
+          className={`${imageClass || ""} img-fade ${loaded ? "is-loaded" : ""}`.trim()}
           priority={priority}
           onLoad={handleLoad}
           onError={handleError}

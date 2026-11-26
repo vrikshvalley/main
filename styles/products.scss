@@ -22,11 +22,13 @@ $grey-dark: #374151;
   .products-header {
     position: relative;
     margin-bottom: 0;
+    background-color: $dark-green;
+    background-image: linear-gradient(135deg, #073b22 0%, #0d4a2b 60%, #145a36 100%);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     aspect-ratio: 16 / 9;
-    overflow: visible;
+    overflow: hidden;
     display: flex;
     align-items: flex-end;
 

@@ -87,12 +87,13 @@ test("rejects bad quantities, unknown products and price-on-request items", asyn
   await assert.rejects(priceCart([], lookup), (e) => e.code === "EMPTY_CART");
 });
 
-test("applies a running offer exactly as the site shows it", async () => {
-  // Featured offer from lib/offers.js (15% off featured products) while it runs.
+test("applies a running offer as a crossed-out anchor while charging the exact Firestore price", async () => {
+  // Featured offer from lib/offers.js (15% off badge): selling price stays ₹249, crossed-out anchor is round(249 / 0.85) = ₹293.
   const featured = { p9: { id: "p9", name: "Fern", price: 249, stock: 9, featured: true } };
   const r = await priceCart([{ id: "p9", quantity: 1 }], async (id) => featured[id], { now: new Date("2026-11-26T12:00:00+05:30") });
-  assert.equal(r.lines[0].unitPaise, 21200); // round(249 * 0.85) = 212
-  assert.equal(r.savingsPaise, 3700);
+  assert.equal(r.lines[0].unitPaise, 24900);
+  assert.equal(r.lines[0].regularPaise, 29300);
+  assert.equal(r.savingsPaise, 4400);
 });
 
 test("services are priced from the server list only", () => {

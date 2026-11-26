@@ -71,11 +71,11 @@ test("a cart item is rebuilt from the live product with the current price and of
   assert.equal(during.id, "p9");
   assert.equal(during.qty, 2);
   assert.equal(during.image, "https://img/x.jpg");
-  assert.ok(during.price <= 249 && during.price > 0);
+  assert.equal(during.price, 249);
   if (during.regularPrice) assert.ok(during.regularPrice > during.price);
 
   const variant = buildCartItem({ id: "p2", name: "Pot", price: 100, variants: [{ label: "Large", price: 350 }] }, { variant: "Large" });
-  assert.equal(variant.regularPrice === null ? variant.price : variant.regularPrice, 350);
+  assert.equal(variant.price, 350);
 });
 
 test("saved addresses are not duplicated", () => {
