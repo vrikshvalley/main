@@ -2161,7 +2161,7 @@ html .product-list-card {
         padding: 0;
         justify-content: center;
         border-radius: 46% 54% 50% 50% / 55% 50% 50% 45%; // a slightly irregular pebble
-        @include stone;
+        @include stone(#2b7a58);
 
         &.disabled {
           width: auto;
